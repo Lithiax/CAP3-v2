@@ -8,15 +8,20 @@ using TMPro;
 public class ChatUser : MonoBehaviour
 {
     [SerializeField] ChatCollectionSO initialChatCollection;
-    ChatCollectionSO currentCollection;
+    [HideInInspector] public ChatCollectionSO currentCollection;
     List<GameObject> chats = new List<GameObject>();
     Toggle toggle;
     [SerializeField] ChatManagerUI chatManager;
     [SerializeField] TextMeshProUGUI lastMessageText;
 
     public Action OnPrompt;
-    public bool inResponse = false;
+    [HideInInspector] public bool inResponse = false;
+
+    [Header("Notification")]
+    [SerializeField] GameObject notifObj;
+    [SerializeField] TextMeshProUGUI notifText;
     public bool isToggled { get; private set; }
+    int notifNum = 0;
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
@@ -33,23 +38,31 @@ public class ChatUser : MonoBehaviour
         //SwitchChat(toggle.isOn);
     }
 
+    public void SetNotif()
+    {
+        notifNum++;
+
+        notifText.text = notifNum.ToString();
+        notifObj.SetActive(true);
+    }
+
+    public void ResetNotif()
+    {
+        notifObj.SetActive(false);
+        notifNum = 0;
+    }
+
     public void OnChatSpawned(GameObject spawnedObj, string text)
     {
         chats.Add(spawnedObj);
         lastMessageText.text = text;
     }
 
-    void ReplyClicked(int num)
-    {
-        currentCollection = currentCollection.Prompts[num];
-        chatManager.StartSpawningChat(this, currentCollection);
-    }
-
     public void SwitchChat(bool toggle)
     {
         isToggled = toggle;
         chatManager.HandleResponse(this, currentCollection);
-
+        ResetNotif();
         foreach (GameObject chat in chats)
         {
             chat.SetActive(toggle);

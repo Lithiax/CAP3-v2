@@ -57,6 +57,7 @@ public class ChatManagerUI : MonoBehaviour
     public void ResponseClicked(ChatUser parent, ChatCollectionSO SelectedChats)
     {
         StartSpawningChat(parent, SelectedChats);
+        parent.currentCollection = SelectedChats;
         HideResponse();
     }
     IEnumerator PlayChat(List<GameObject> SelectedChats)
@@ -80,19 +81,23 @@ public class ChatManagerUI : MonoBehaviour
     {
         foreach (ChatBubble chat in ChatCollection.ChatBubbles)
         {
-            yield return new WaitForSeconds(1f);
             GameObject chatObj = SpawnChatBubble(chat, parent);
             parent.OnChatSpawned(chatObj, chat.chatText);
 
             chatObj.SetActive(parent.isToggled);
-
+            
             if (parent.isToggled)
             {
+                parent.ResetNotif();
                 ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
                 StartCoroutine(reset(chatText));
 
                 StartCoroutine(ScrollDown());
             }
+            else if (!chat.isUser)
+                parent.SetNotif();
+
+            yield return new WaitForSeconds(1f);
         }
 
         HandleResponse(parent, ChatCollection);

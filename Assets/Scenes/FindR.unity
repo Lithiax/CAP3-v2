@@ -683,7 +683,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1527805614}
   m_HandleRect: {fileID: 1527805613}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -967,17 +967,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568553912}
   m_CullTransparentMesh: 1
---- !u!114 &598803886 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1280425108283711705, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-  m_PrefabInstance: {fileID: 1280425108859315575}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,17 +1083,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1280425108106135032, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
   m_PrefabInstance: {fileID: 1280425108859315575}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &757375123 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-  m_PrefabInstance: {fileID: 1280425108859315575}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1872866328028204b9a8a6835e0affd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &800504508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,62 +2730,10 @@ PrefabInstance:
       propertyPath: chatManager
       value: 
       objectReference: {fileID: 307853793}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: lastMessageText
-      value: 
-      objectReference: {fileID: 598803886}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: chatData.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: initialChatCollection
-      value: 
-      objectReference: {fileID: 11400000, guid: ce7293bde165c8943ab03d6b78f00a23, type: 2}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: chatData.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 10f19e92063fb5349bcc98965b9b4c22, type: 2}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: chatData.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: a8b4557879818c24c93e3b8d14f0c03d, type: 2}
-    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: chatData.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 428bffde5bd94614589d7d43c8f18065, type: 2}
     - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: m_Group
       value: 
       objectReference: {fileID: 1931278375}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 757375123}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SwitchChat
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ChatUser, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 1280425108106135032, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2895,14 +2821,6 @@ PrefabInstance:
     - target: {fileID: 1280425108106135033, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: m_Name
       value: User
-      objectReference: {fileID: 0}
-    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 97.7066
-      objectReference: {fileID: 0}
-    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 24.29129
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
