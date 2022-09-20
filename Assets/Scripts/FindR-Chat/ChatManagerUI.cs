@@ -77,6 +77,19 @@ public class ChatManagerUI : MonoBehaviour
         }
     }
 
+    public void ActivateChat(List<GameObject> chats, bool con)
+    { 
+        foreach (GameObject chat in chats)
+        {
+            chat.SetActive(con);
+        }
+
+        ChatBubbleUI chatText = chats[chats.Count - 1].GetComponent<ChatBubbleUI>();
+        StartCoroutine(reset(chatText));
+
+        StartCoroutine(ScrollDown());
+    }
+
     IEnumerator SpawnChats(ChatUser parent, ChatCollectionSO ChatCollection)
     {
         foreach (ChatBubble chat in ChatCollection.ChatBubbles)
@@ -99,6 +112,8 @@ public class ChatManagerUI : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
+
+        parent.OnPrompt = ChatCollection.isPrompt;
 
         HandleResponse(parent, ChatCollection);
     }
@@ -130,7 +145,7 @@ public class ChatManagerUI : MonoBehaviour
 
     public void HandleResponse(ChatUser parent, ChatCollectionSO ChatCollection)
     {
-        if (ChatCollection.isPrompt && parent.isToggled)
+        if (ChatCollection.isPrompt && parent.isToggled && parent.OnPrompt)
         {
             replyButton1Comp.onClick.RemoveAllListeners();
             replyButton2Comp.onClick.RemoveAllListeners();

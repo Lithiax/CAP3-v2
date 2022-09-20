@@ -10,32 +10,46 @@ public class ChatUser : MonoBehaviour
     [SerializeField] ChatCollectionSO initialChatCollection;
     [HideInInspector] public ChatCollectionSO currentCollection;
     List<GameObject> chats = new List<GameObject>();
-    Toggle toggle;
-    [SerializeField] ChatManagerUI chatManager;
-    [SerializeField] TextMeshProUGUI lastMessageText;
+    public Toggle toggle;
 
-    public Action OnPrompt;
+    ChatManagerUI chatManager;
+    [SerializeField] TextMeshProUGUI profileName;
+    [SerializeField] TextMeshProUGUI lastMessageText;
+    [SerializeField] Image profileImage;
+
     [HideInInspector] public bool inResponse = false;
 
     [Header("Notification")]
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
     public bool isToggled { get; private set; }
+    public bool OnPrompt = false;
     int notifNum = 0;
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
-        isToggled = toggle.isOn;
-        chatManager.chatUsers.Add(this);
 
         currentCollection = initialChatCollection;
     }
 
-    private void Start()
+    public void Init(ChatCollectionSO initCol, string name, Sprite img, ChatManagerUI manager, ToggleGroup toggleGroup)
     {
-        chatManager.StartSpawningChat(this, initialChatCollection);
+        chatManager = manager;
+        chatManager.chatUsers.Add(this);
+        toggle.group = toggleGroup;
 
-        //SwitchChat(toggle.isOn);
+        isToggled = toggle.isOn;
+
+        initialChatCollection = initCol;
+        profileName.text = name;
+        profileImage.sprite = img;
+        chatManager.StartSpawningChat(this, initialChatCollection);
+    }
+
+    private void OnEnable()
+    {
+        if (OnPrompt)
+            chatManager.HandleResponse(this, currentCollection);
     }
 
     public void SetNotif()
@@ -63,9 +77,7 @@ public class ChatUser : MonoBehaviour
         isToggled = toggle;
         chatManager.HandleResponse(this, currentCollection);
         ResetNotif();
-        foreach (GameObject chat in chats)
-        {
-            chat.SetActive(toggle);
-        }
+
+        chatManager.ActivateChat(chats, toggle);
     }
 }
