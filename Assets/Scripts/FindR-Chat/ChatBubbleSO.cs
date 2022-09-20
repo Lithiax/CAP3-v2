@@ -6,7 +6,6 @@ using UnityEngine;
 public class ChatBubbleSO : ScriptableObject
 {
     public bool isUser;
-    public bool isPrompt;
 
     [TextArea(5, 15)]
     public string chatText;

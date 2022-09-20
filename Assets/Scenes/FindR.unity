@@ -468,16 +468,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b2edec980a556438cf2f9139663c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatData:
-  - {fileID: 11400000, guid: 10f19e92063fb5349bcc98965b9b4c22, type: 2}
-  - {fileID: 11400000, guid: a8b4557879818c24c93e3b8d14f0c03d, type: 2}
-  - {fileID: 11400000, guid: 428bffde5bd94614589d7d43c8f18065, type: 2}
   scrollBar: {fileID: 461777065}
   chatParent: {fileID: 1082451831}
   chatPrefab: {fileID: 5333776925348523784, guid: 67bdc588dae9cc74f8081653d06ab065, type: 3}
+  chatUsers: []
   chatElements: {fileID: 1751302633}
   replyBoxTransform: {fileID: 800504509}
-  replyButtons: {fileID: 820201828}
+  replyButtonsParent: {fileID: 820201828}
+  ReplyButton1: {fileID: 568553912}
+  ReplyButton2: {fileID: 406434172}
   AllChats: []
 --- !u!1 &406434172
 GameObject:
@@ -968,6 +967,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568553912}
   m_CullTransparentMesh: 1
+--- !u!114 &598803886 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1280425108283711705, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+  m_PrefabInstance: {fileID: 1280425108859315575}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,9 +1232,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 307853793}
     - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: lastMessageText
+      value: 
+      objectReference: {fileID: 2124149347}
+    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: chatData.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: initialChatCollection
+      value: 
+      objectReference: {fileID: 11400000, guid: 113913845c33f1b4ca0c8d514b7c2415, type: 2}
     - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: chatData.Array.data[0]
       value: 
@@ -1237,6 +1255,10 @@ PrefabInstance:
       propertyPath: chatData.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 428bffde5bd94614589d7d43c8f18065, type: 2}
+    - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: m_IsOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 757375124, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: m_Group
       value: 
@@ -1361,6 +1383,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 97.7066
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 24.29129
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
 --- !u!224 &1048874357 stripped
@@ -1415,7 +1445,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.3399658, y: -0.0000076293945}
+  m_AnchoredPosition: {x: -2.3399658, y: -0.000015258789}
   m_SizeDelta: {x: -4.674408, y: 0}
   m_Pivot: {x: 0.49999997, y: 1}
 --- !u!114 &1082451830
@@ -1576,7 +1606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10.23851, y: -1.7369308}
+  m_AnchoredPosition: {x: -10.238525, y: -1.7369308}
   m_SizeDelta: {x: -39.059998, y: -13.279999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1416067966
@@ -2700,6 +2730,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2124149347 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1280425108283711705, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+  m_PrefabInstance: {fileID: 1048874356}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1280425108859315575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2712,9 +2753,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 307853793}
     - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: lastMessageText
+      value: 
+      objectReference: {fileID: 598803886}
+    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: chatData.Array.size
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: initialChatCollection
+      value: 
+      objectReference: {fileID: 11400000, guid: ce7293bde165c8943ab03d6b78f00a23, type: 2}
     - target: {fileID: 757375123, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: chatData.Array.data[0]
       value: 
@@ -2846,6 +2895,14 @@ PrefabInstance:
     - target: {fileID: 1280425108106135033, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
       propertyPath: m_Name
       value: User
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 97.7066
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280425108283711706, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 24.29129
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ca217191fd0d1428d2018ba7016383, type: 3}
