@@ -5,10 +5,11 @@ using System;
 using System.Linq;
 using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEditor.UIElements;
 
 public class DialogueGraphView : GraphView
 {
-    private readonly Vector2 defaultNodeSize = new Vector2(150, 200);
+    public readonly Vector2 defaultNodeSize = new Vector2(150, 200);
     public DialogueGraphView()
     {
         styleSheets.Add(Resources.Load<StyleSheet>("DialogueGraph"));
@@ -57,13 +58,31 @@ public class DialogueGraphView : GraphView
             GUID = Guid.NewGuid().ToString()
         };
 
+        //Create input Port
         var inputPort = GeneratePort(dialogueNode, Direction.Input, Port.Capacity.Multi);
         inputPort.portName = "Input";
         dialogueNode.inputContainer.Add(inputPort);
 
+        //Create new choice buttons
         var button = new Button(() => AddChoicePort(dialogueNode));
         button.text = "New Choice";
         dialogueNode.titleContainer.Add(button);
+
+        //Create scriptable object housing
+        var objField_ScriptableObject = new ObjectField
+        {
+            objectType = typeof(ChatCollectionSO),
+            allowSceneObjects = false,
+            value = dialogueNode.chatCollection,
+        };
+
+        objField_ScriptableObject.RegisterValueChangedCallback(v =>
+        {
+            dialogueNode.chatCollection = objField_ScriptableObject.value as ChatCollectionSO;
+            dialogueNode.title = objField_ScriptableObject.value.name;
+        });
+
+        dialogueNode.mainContainer.Add(objField_ScriptableObject);
 
         dialogueNode.RefreshExpandedState();
         dialogueNode.RefreshPorts();
@@ -112,6 +131,12 @@ public class DialogueGraphView : GraphView
             return;
 
         var edge = targetEdge.First();
+        edge.input.Disconnect(edge);
+        RemoveElement(targetEdge.First());
+
+        node.outputContainer.Remove(generatedPort);
+        node.RefreshPorts();
+        node.RefreshExpandedState();
     }
 
     DialogueNode GenerateEntryPointNode()
@@ -126,6 +151,9 @@ public class DialogueGraphView : GraphView
         var generatePort = GeneratePort(node, Direction.Output);
         generatePort.portName = "Next";
         node.outputContainer.Add(generatePort);
+
+        node.capabilities &= ~Capabilities.Movable;
+        node.capabilities &= Capabilities.Deletable;
 
         node.RefreshExpandedState();
         node.RefreshPorts();

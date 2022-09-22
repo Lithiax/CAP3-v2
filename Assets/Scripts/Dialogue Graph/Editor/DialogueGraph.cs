@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class DialogueGraph : EditorWindow
     {
         ConstructGraphView();
         GenerateToolbar();
+        GenerateMinimap();
     }
 
     private void OnDisable()
@@ -78,5 +80,12 @@ public class DialogueGraph : EditorWindow
 
         graphView.StretchToParentSize();
         rootVisualElement.Add(graphView);
+    }
+
+    void GenerateMinimap()
+    {
+        var miniMap = new MiniMap{anchored = true,};
+        miniMap.SetPosition(new Rect(10, 30, 200, 140));
+        graphView.Add(miniMap);
     }
 }
