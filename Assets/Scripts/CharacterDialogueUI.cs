@@ -74,7 +74,6 @@ public class CharacterDialogueUI : MonoBehaviour
     //private new List<IEnumerator> cachedCoroutines = new List<IEnumerator>();// canSkip = false;
     private int runningCoroutines = 0;
     private bool isSkipping = false;
-    private bool isReady = false;
     private string id;
 
     bool isStartTransitionEnabled = true;
@@ -146,7 +145,6 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         currentDialogueIndex = 0;
         isSkipping = false;
-        isReady = false;
         runningCoroutines = 0;
         isAlreadyEnded = false;
         nextDialogueButton.SetActive(true);
@@ -599,8 +597,6 @@ public class CharacterDialogueUI : MonoBehaviour
         if (runningCoroutines == 0)
         {
             Debug.Log("READYING");
-            //isReady = true;
-            //isSkipping
             isSkipping = true;
         }
     }
@@ -611,7 +607,7 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
                 + " iS: " + isSkipping
-                + " iR: " + isReady);
+                + " iR: ");
             Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
             
             if (runningCoroutines > 0 && !isSkipping)
@@ -620,27 +616,18 @@ public class CharacterDialogueUI : MonoBehaviour
                 StopAllCoroutines();
                 runningCoroutines=0;
                 Debug.Log("READYING");
+            
             }
           
             else if (isSkipping)// && !isReady)
             {
                 Debug.Log("READIED");
                 frame.SetActive(true);
-                isReady = false;
                 NextDialogue();
+                OnNextButtonUIPressed();
                 return;
-                //Debug.Log("READYING");
-                //isReady = true;
-               
+
             }
-            //else if (isReady)
-            //{
-            //    Debug.Log("READIED");
-            //    frame.SetActive(true);
-            //    isReady = false;
-            //    NextDialogue();
-            //    return;
-            //}
            
             CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
             for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
