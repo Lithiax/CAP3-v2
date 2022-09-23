@@ -42,7 +42,7 @@ public class CharacterDialogueUI : MonoBehaviour
     [SerializeField] private ChoiceUI choiceUIPrefab;
 
     [SerializeField]
-    private List<CharacterUI> characterPresetDatas = new List<CharacterUI>();
+    private List<CharacterUI> savedCharacterUIs = new List<CharacterUI>();
    // [SerializeField] private List<SO_Character> oldCharacters = new List<SO_Character>();
     [SerializeField] private RectTransform leftCharacterPresetRectTransform;
     [SerializeField] private RectTransform centerCharacterPresetRectTransform;
@@ -74,6 +74,7 @@ public class CharacterDialogueUI : MonoBehaviour
     //private new List<IEnumerator> cachedCoroutines = new List<IEnumerator>();// canSkip = false;
     private int runningCoroutines = 0;
     private bool isSkipping = false;
+    private bool isReady = false;
     private string id;
 
     bool isStartTransitionEnabled = true;
@@ -138,12 +139,14 @@ public class CharacterDialogueUI : MonoBehaviour
             yield return new WaitForSeconds(typewriterSpeed);
         }
         runningCoroutines--;
+        CheckIfReady();
     }
 
     void ResetCharacterDialogueUI()
     {
         currentDialogueIndex = 0;
-        //canSkip = false;
+        isSkipping = false;
+        isReady = false;
         runningCoroutines = 0;
         isAlreadyEnded = false;
         nextDialogueButton.SetActive(true);
@@ -154,10 +157,11 @@ public class CharacterDialogueUI : MonoBehaviour
     void NextDialogue()
     {
         Debug.Log("NEXT DIALOGUE");
-        currentDialogueIndex++;
-        //canSkip = false;
-        runningCoroutines = 0;
         isSkipping = false;
+        
+        currentDialogueIndex++;
+        runningCoroutines = 0;
+     
         if (currentDialogueIndex == currentSO_Dialogues.dialogues.Count)
         {
             if (isAdvancedonWorldEventEndedEvent)
@@ -176,6 +180,7 @@ public class CharacterDialogueUI : MonoBehaviour
         fadeInSequence.Play();
         yield return fadeInSequence.WaitForCompletion();
         runningCoroutines--;
+        CheckIfReady();
     }
 
     IEnumerator AvatarFadeOut(Image p_avatarImage, CharacterUI p_newCharacter)
@@ -187,8 +192,9 @@ public class CharacterDialogueUI : MonoBehaviour
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
         runningCoroutines--;
-        characterPresetDatas.Remove(p_newCharacter);
+        savedCharacterUIs.Remove(p_newCharacter);
         Destroy(p_newCharacter.gameObject);
+        CheckIfReady();
     }
 
     IEnumerator SpeakerTintIn(Image p_avatarImage)
@@ -199,6 +205,7 @@ public class CharacterDialogueUI : MonoBehaviour
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
         runningCoroutines--;
+        CheckIfReady();
     }
 
     IEnumerator SpeakerTintOut(Image p_avatarImage)
@@ -209,6 +216,7 @@ public class CharacterDialogueUI : MonoBehaviour
         fadeInSequence.Play();
         yield return fadeInSequence.WaitForCompletion();
         runningCoroutines--;
+        CheckIfReady();
     }
     void CreateChoiceUIs()
     {  
@@ -309,19 +317,18 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void RemoveAvatar(List<SO_Character> p_charactersToBeRemoved)
     {
+        //Debug.Log("-----REMOVING " + isSkipping);
         //Do functions to characters to be Added
         for (int i = 0; i < p_charactersToBeRemoved.Count; i++)
         {
-            Debug.Log("REMOVING " + p_charactersToBeRemoved[i] + " - " + p_charactersToBeRemoved.Count);
             CharacterUI foundPreset = FindPreset(p_charactersToBeRemoved[i]);
-
-            Debug.Log("REMOVINGDD ");
             if (foundPreset != null)
             {
                 if (isSkipping)
                 {
                 
-                    Debug.Log("REMOVINGRR " + foundPreset);
+                   // Debug.Log("REMOVINGRR " + foundPreset);
+                    savedCharacterUIs.Remove(foundPreset);
                     Destroy(foundPreset.gameObject);
                 }
                 else
@@ -338,11 +345,12 @@ public class CharacterDialogueUI : MonoBehaviour
     void AddAvatar(List<SO_Character> p_charactersToBeAdded)
     {
         //Do functions to characters to be Added
+        //Debug.Log("-----ADDING " + isSkipping);
         if (isSkipping)
         {
-            for (int i = 0; i < characterPresetDatas.Count; i++)
+            for (int i = 0; i < savedCharacterUIs.Count; i++)
             {
-                characterPresetDatas[i].avatarImage.color = new Color(1, 1, 1, 1);
+                savedCharacterUIs[i].avatarImage.color = new Color(1, 1, 1, 1);
             }
 
         }
@@ -351,8 +359,9 @@ public class CharacterDialogueUI : MonoBehaviour
             for (int i = 0; i < p_charactersToBeAdded.Count; i++)
             {
                 CharacterUI newCharacter = Instantiate(staticCharacterPrefab,characterContainerTransform);
-                characterPresetDatas.Add(newCharacter);
+                savedCharacterUIs.Add(newCharacter);
                 newCharacter.so_Character = p_charactersToBeAdded[i];
+                //Debug.Log("ADDING " + newCharacter);
                 StartCoroutine(AvatarFadeIn(newCharacter.avatarImage, p_charactersToBeAdded[i].avatar));
             }
         }
@@ -371,6 +380,8 @@ public class CharacterDialogueUI : MonoBehaviour
         .Append(p_avatarImage.DOFade(1, avatarFadeTime));
         fadeInSequence.Play();
         yield return fadeInSequence.WaitForCompletion();
+
+        CheckIfReady();
     }
    
 
@@ -401,16 +412,24 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
     {
-        for (int i = 0; i < p_characterDatas.Count; i++)
+        if (p_characterDatas.Count > 0)
         {
-            
-            if (p_characterDatas[i].isSpeaking)
+            for (int i = 0; i < p_characterDatas.Count; i++)
             {
-                characterNameText.text = p_characterDatas[i].character.name;
+
+                if (p_characterDatas[i].isSpeaking)
+                {
+                    characterNameText.text = p_characterDatas[i].character.name;
+
+                }
 
             }
-
         }
+        else
+        {
+            characterNameText.text = "NO CHARACTER ASSIGNED";
+        }
+      
     }
     void IdentifyCharactersToAdd(List<SO_Character> newList, List<SO_Character> oldList,List<SO_Character> charactersToBeAdded)
     {
@@ -422,10 +441,14 @@ public class CharacterDialogueUI : MonoBehaviour
             {
                 for (int x = 0; x < oldList.Count;)
                 {
+                    if (newList[i] == oldList[x])//matching
+                    {
+                        break;
+                    }
                     x++;
                     if (x >= oldList.Count)//new
                     {
-                        charactersToBeAdded.Add(oldList[x]);
+                        charactersToBeAdded.Add(newList[i]);
                     }
                 }
             }
@@ -437,28 +460,28 @@ public class CharacterDialogueUI : MonoBehaviour
         }
 
     }
-    void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> p_currentCharacter, List<SO_Character> charactersToBeRemoved)
+    void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> newList, List<SO_Character> charactersToBeRemoved)
     {
         //Mark the Characters to Remove
         for (int oldIndex = 0; oldIndex < oldList.Count; oldIndex++)
         {
-            if (p_currentCharacter.Count > 0)
+            if (newList.Count > 0)
             {
-                for (int currentIndex = 0; currentIndex < p_currentCharacter.Count;)
+                for (int currentIndex = 0; currentIndex < newList.Count;)
                 {
-                    if (oldList[oldIndex] == p_currentCharacter[currentIndex])
+                    if (oldList[oldIndex] == newList[currentIndex]) //If Old Element in Old List Matches New Element in New List, it means it stays
                     {
                         break;
                     }
 
                     currentIndex++;
-                    if (currentIndex >= p_currentCharacter.Count)
+                    if (currentIndex >= newList.Count)
                     {
                         if (charactersToBeRemoved.Count > 0)
                         {
                             for (int removedIndex = 0; removedIndex < charactersToBeRemoved.Count;)
                             {
-                                if (charactersToBeRemoved[removedIndex] == oldList[currentIndex])
+                                if (charactersToBeRemoved[removedIndex] == oldList[oldIndex])
                                 {
                                     //It already is marked to be removed
                                     break;
@@ -467,7 +490,7 @@ public class CharacterDialogueUI : MonoBehaviour
                                 if (currentIndex >= charactersToBeRemoved.Count)
                                 {
                                     //It has not been already marked to be removed
-                                    charactersToBeRemoved.Add(oldList[currentIndex]);
+                                    charactersToBeRemoved.Add(oldList[oldIndex]);
                                 }
 
 
@@ -475,20 +498,20 @@ public class CharacterDialogueUI : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log(oldList.Count);
-                            Debug.Log(oldList[currentIndex]);
-                            charactersToBeRemoved.Add(oldList[currentIndex]);
+                            charactersToBeRemoved.Add(oldList[oldIndex]);
                         }
 
 
 
                     }
                 }
+                
             }
             else
             {
                 charactersToBeRemoved.Add(oldList[oldIndex]);
             }
+
 
         }
 
@@ -506,58 +529,37 @@ public class CharacterDialogueUI : MonoBehaviour
             newCharacters.Add(p_characterDatas[i].character);
             //Debug.Log("CURRENT: " + newCharacters[i].name);
         }
-        for (int i = 0; i < characterPresetDatas.Count; i++)
+        for (int i = 0; i < savedCharacterUIs.Count; i++)
         {
-            oldCharacters.Add(characterPresetDatas[i].so_Character);
+            oldCharacters.Add(savedCharacterUIs[i].so_Character);
             //Debug.Log("saved: " + characterPresetDatas[i].name);
         }
-        if (newCharacters.Count > characterPresetDatas.Count)
-        {
-            //Mark the Characters to Add and Characters that Exists
-            IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
-        }
-        else
-        {
-            //Mark the Characters to Remove
-            IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
-         
-        }
+        //Mark the Characters to Add and Characters that Exists
+        IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
+        //Mark the Characters to Remove
+        IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
         for (int i = 0; i < charactersToBeAdded.Count; i++)
         {
 
-            Debug.Log("ADD: " + charactersToBeAdded[i].name);
+           // Debug.Log("ADD: " + charactersToBeAdded[i].name);
         }
         for (int i = 0; i < charactersToBeRemoved.Count; i++)
         {
-            Debug.Log("REMOVE: " + charactersToBeRemoved[i].name);
+           // Debug.Log("REMOVE: " + charactersToBeRemoved[i].name);
         }
 
         RemoveAvatar(charactersToBeRemoved);
         AddAvatar(charactersToBeAdded);
-        
-     
-
-        //so_Characters.Clear();
-        //for (int i = 0; i < characterPresetDatas.Count; i++)
-        //{
-        //    so_Characters.Add(characterPresetDatas[i].so_Character);
-        //    //if (characterPresetDatas[i].so_Character != null)
-        //    //{
-        //    //    SetSpeakerTint(currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].isSpeaking, currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].character);
-        //    //}
-        //}
-
-
     }
 
     CharacterUI FindPreset(SO_Character p_so_Character)
     {
        
-        for (int x = 0; x < characterPresetDatas.Count; x++)
+        for (int x = 0; x < savedCharacterUIs.Count; x++)
         {
-            if (characterPresetDatas[x].so_Character == p_so_Character)
+            if (savedCharacterUIs[x].so_Character == p_so_Character)
             {
-                return characterPresetDatas[x];
+                return savedCharacterUIs[x];
                    
             }
 
@@ -585,55 +587,61 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void SetCueBank(Dialogue p_characterDatas)
     {
-        //for (int i =0; i < p_characterDatas.Count; i++)
-        //{
-        //    if (p_characterDatas[i].isSpeaking)
-        //    {
-        //        hapticText.text = p_characterDatas[i].hapticType.ToString();
-        //        vocalicText.text = p_characterDatas[i].vocalicType.ToString();
-        //        kinesicText.text = p_characterDatas[i].kinesicType.ToString();
-        //        oculesicText.text = p_characterDatas[i].oculesicType.ToString();
-        //        physicalAppearanceText.text = p_characterDatas[i].physicalApperanceType.ToString();
-        //        break;
-        //    }
-
-        //}
-       
         hapticText.text = p_characterDatas.hapticType.ToString();
         vocalicText.text = p_characterDatas.vocalicType.ToString();
         kinesicText.text = p_characterDatas.kinesicType.ToString();
         oculesicText.text = p_characterDatas.oculesicType.ToString();
         physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
-          
+    }
 
+    public void CheckIfReady()
+    {
+        if (runningCoroutines == 0)
+        {
+            Debug.Log("READYING");
+            //isReady = true;
+            //isSkipping
+            isSkipping = true;
+        }
     }
     public void OnNextButtonUIPressed()
     {
         
         if (currentDialogueIndex < currentSO_Dialogues.dialogues.Count)
         {
+            Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
+                + " iS: " + isSkipping
+                + " iR: " + isReady);
             Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
             
-            if (runningCoroutines > 0)
+            if (runningCoroutines > 0 && !isSkipping)
             {
                 isSkipping = true;
                 StopAllCoroutines();
                 runningCoroutines=0;
+                Debug.Log("READYING");
             }
-            else
+          
+            else if (isSkipping)// && !isReady)
             {
+                Debug.Log("READIED");
                 frame.SetActive(true);
-                //oldCharacters.Clear();
-                //for (int i = 0; i < characterPresetDatas.Count; i++)
-                //{
-                //    oldCharacters.Add(characterPresetDatas[i].so_Character);
-                //    //if (characterPresetDatas[i].so_Character != null)
-                //    //{
-                //    //    SetSpeakerTint(currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].isSpeaking, currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].character);
-                //    //}
-                //}
+                isReady = false;
                 NextDialogue();
+                return;
+                //Debug.Log("READYING");
+                //isReady = true;
+               
             }
+            //else if (isReady)
+            //{
+            //    Debug.Log("READIED");
+            //    frame.SetActive(true);
+            //    isReady = false;
+            //    NextDialogue();
+            //    return;
+            //}
+           
             CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
             for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
             {
@@ -641,7 +649,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 //Position
                 SetRectTransformToPreset(currentDialogue.characterDatas[i].characterPosition, currentDialogue.characterDatas[i].character);
                 SetAvatarFlipOrientation(currentDialogue.characterDatas[i]);
-               // SetSpeakerTint(currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].isSpeaking, currentSO_Dialogues.dialogues[currentDialogueIndex].characterDatas[i].character);
+                SetSpeakerTint(currentDialogue.characterDatas[i].isSpeaking, currentDialogue.characterDatas[i].character);
             }
 
             SetSpeakerName(currentDialogue.characterDatas);
@@ -649,30 +657,30 @@ public class CharacterDialogueUI : MonoBehaviour
             SetSpeech(currentDialogue.speechTransitionType, currentDialogue.words);
             SetCueBank(currentDialogue);
         }
-        else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
-        {
-            if (!isAlreadyEnded)
-            {
-                if (currentSO_Dialogues.choiceDatas.Count > 1)
-                {
-                    CreateChoiceUIs();
-                }
-                else if (currentSO_Dialogues.choiceDatas.Count == 1)
-                {
-                    if (isEndTransitionEnabled)
-                    {
-                        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, OnCloseCharacterDialogueUI);
-                    }
-                    else
-                    {
-                        OnCloseCharacterDialogueUI();
-                    }
-                }
-                else
-                {
-                    ResetCharacterDialogueUI();
-                }
-            }
-        }
+        //else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
+        //{
+        //    if (!isAlreadyEnded)
+        //    {
+        //        if (currentSO_Dialogues.choiceDatas.Count > 1)
+        //        {
+        //            CreateChoiceUIs();
+        //        }
+        //        else if (currentSO_Dialogues.choiceDatas.Count == 1)
+        //        {
+        //            if (isEndTransitionEnabled)
+        //            {
+        //                TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, OnCloseCharacterDialogueUI);
+        //            }
+        //            else
+        //            {
+        //                OnCloseCharacterDialogueUI();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ResetCharacterDialogueUI();
+        //        }
+        //    }
+        //}
     }
 }
