@@ -1,0 +1,320 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "ParamGroup",
+			"Name": "EyeR Open"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "ParamGroup",
+			"Name": "EyeL Open"
+		},
+		{
+			"Id": "ParamEyeRSmile",
+			"GroupId": "ParamGroup",
+			"Name": "EyeR Smile"
+		},
+		{
+			"Id": "ParamEyeLSmile",
+			"GroupId": "ParamGroup",
+			"Name": "EyeL Smile"
+		},
+		{
+			"Id": "ParamBrowLAngle",
+			"GroupId": "ParamGroup2",
+			"Name": "BrowL Angle"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "ParamGroup2",
+			"Name": "BrowL Form"
+		},
+		{
+			"Id": "ParamBrowRAngle",
+			"GroupId": "ParamGroup2",
+			"Name": "BrowR Angle"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "ParamGroup2",
+			"Name": "BrowR Form"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "ParamGroup3",
+			"Name": "Eyeball X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "ParamGroup3",
+			"Name": "Eyeball Y"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "ParamGroup4",
+			"Name": "Mouth Open"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "ParamGroup4",
+			"Name": "Mouth Form"
+		},
+		{
+			"Id": "ParamTopBangX",
+			"GroupId": "ParamGroup5",
+			"Name": "Top Bang X"
+		},
+		{
+			"Id": "ParamBackBangX",
+			"GroupId": "ParamGroup5",
+			"Name": "Back Bang X"
+		},
+		{
+			"Id": "ParamRUnderBangX",
+			"GroupId": "ParamGroup6",
+			"Name": "R Under Bang"
+		},
+		{
+			"Id": "ParamLUnderBangX",
+			"GroupId": "ParamGroup6",
+			"Name": "L Under Bang X"
+		},
+		{
+			"Id": "ParamPonytailX",
+			"GroupId": "ParamGroup7",
+			"Name": "Ponytail X"
+		},
+		{
+			"Id": "ParamDisgust",
+			"GroupId": "ParamGroup8",
+			"Name": "Disgust"
+		},
+		{
+			"Id": "ParamBlush",
+			"GroupId": "ParamGroup8",
+			"Name": "Blush"
+		},
+		{
+			"Id": "ParamREarringX",
+			"GroupId": "ParamGroup9",
+			"Name": "R Earring X"
+		},
+		{
+			"Id": "ParamLEarringX",
+			"GroupId": "ParamGroup9",
+			"Name": "L Earring X"
+		},
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "Angle X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "Angle Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "Angle Z"
+		},
+		{
+			"Id": "ParamCheek",
+			"GroupId": "",
+			"Name": "Cheek"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "Body X"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "Body Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "Body Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "Breath"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "Hair Move Front"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "Hair Move Side"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "Hair Move Back"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "Eyes"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "Brows"
+		},
+		{
+			"Id": "ParamGroup3",
+			"GroupId": "",
+			"Name": "Eyeball"
+		},
+		{
+			"Id": "ParamGroup4",
+			"GroupId": "",
+			"Name": "Mouth"
+		},
+		{
+			"Id": "ParamGroup5",
+			"GroupId": "",
+			"Name": "Front Bangs Physics"
+		},
+		{
+			"Id": "ParamGroup6",
+			"GroupId": "",
+			"Name": "Back Bangs Physics"
+		},
+		{
+			"Id": "ParamGroup7",
+			"GroupId": "",
+			"Name": "Ponytail Physics"
+		},
+		{
+			"Id": "ParamGroup8",
+			"GroupId": "",
+			"Name": "Expressions"
+		},
+		{
+			"Id": "ParamGroup9",
+			"GroupId": "",
+			"Name": "Earrings Physics"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "Part12",
+			"Name": "Maeve Expressions.psd"
+		},
+		{
+			"Id": "Part11",
+			"Name": "maeve only lips.psd"
+		},
+		{
+			"Id": "Part",
+			"Name": "Front Hair"
+		},
+		{
+			"Id": "Earrings",
+			"Name": "Earrings"
+		},
+		{
+			"Id": "Face",
+			"Name": "Face"
+		},
+		{
+			"Id": "Part5",
+			"Name": "Back Hair"
+		},
+		{
+			"Id": "Part6",
+			"Name": "Right Arm"
+		},
+		{
+			"Id": "Part7",
+			"Name": "New group"
+		},
+		{
+			"Id": "Part8",
+			"Name": "Left Arm"
+		},
+		{
+			"Id": "Expressions",
+			"Name": "Expressions"
+		},
+		{
+			"Id": "Face2",
+			"Name": "Face"
+		},
+		{
+			"Id": "Eyebrows",
+			"Name": "Eyebrows"
+		},
+		{
+			"Id": "Part2",
+			"Name": "Right Eye"
+		},
+		{
+			"Id": "Part3",
+			"Name": "Left Eye"
+		},
+		{
+			"Id": "Lips",
+			"Name": "Lips"
+		},
+		{
+			"Id": "Part4",
+			"Name": "Inside Mouth"
+		},
+		{
+			"Id": "Disgust",
+			"Name": "Disgust"
+		},
+		{
+			"Id": "Blush",
+			"Name": "Blush"
+		},
+		{
+			"Id": "Part9",
+			"Name": "Right Eye"
+		},
+		{
+			"Id": "Part10",
+			"Name": "Left Eye"
+		},
+		{
+			"Id": "Lips2",
+			"Name": "Lips"
+		},
+		{
+			"Id": "Teeth",
+			"Name": "Teeth"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamBrowLAngle",
+			"ParamBrowLForm"
+		],
+		[
+			"ParamBrowRAngle",
+			"ParamBrowRForm"
+		],
+		[
+			"ParamEyeBallX",
+			"ParamEyeBallY"
+		],
+		[
+			"ParamDisgust",
+			"ParamBlush"
+		]
+	]
+}

@@ -1,0 +1,25 @@
+{
+	"Type": "Live2D Expression",
+	"Parameters": [
+		{
+			"Id": "ParamLBottomWingX",
+			"Value": 0,
+			"Blend": "Add"
+		},
+		{
+			"Id": "ParamRBottomWingX",
+			"Value": 0,
+			"Blend": "Add"
+		},
+		{
+			"Id": "ParamRTopWingX",
+			"Value": 0,
+			"Blend": "Add"
+		},
+		{
+			"Id": "ParamLTopWingX",
+			"Value": 0,
+			"Blend": "Add"
+		}
+	]
+}

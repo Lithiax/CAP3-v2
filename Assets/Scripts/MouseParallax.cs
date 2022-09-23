@@ -66,7 +66,7 @@ public class MouseParallax : MonoBehaviour
 
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
-            pz = cam.ScreenToViewportPoint(Input.mousePosition);
+            pz = cam.ScreenToViewportPoint(Input.mousePosition)*0.1f;
         }
         else
         {
