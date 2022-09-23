@@ -9,6 +9,7 @@ using UnityEditor.UIElements;
 
 public class DialogueGraphView : GraphView
 {
+    public Action<DialogueNode> OnNodeSelected;
     public readonly Vector2 defaultNodeSize = new Vector2(150, 200);
     public DialogueGraphView()
     {
@@ -45,17 +46,20 @@ public class DialogueGraphView : GraphView
         return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
     }
 
-    public void CreateNode(string nodeName)
+    public void CreateNode(string nodeName, ChatCollectionSO chatCollection)
     {
-        AddElement(CreateDialogueNode(nodeName));
+        AddElement(CreateDialogueNode(nodeName, chatCollection));
     }
 
-    public DialogueNode CreateDialogueNode(string nodeName)
+    public DialogueNode CreateDialogueNode(string nodeName, ChatCollectionSO chatCollectionSO)
     {
+        string tempName = chatCollectionSO == null ? nodeName : chatCollectionSO.name;
+
         var dialogueNode = new DialogueNode
         {
             title = nodeName,
-            GUID = Guid.NewGuid().ToString()
+            GUID = Guid.NewGuid().ToString(),
+            Name = tempName
         };
 
         //Create input Port
@@ -73,13 +77,29 @@ public class DialogueGraphView : GraphView
         {
             objectType = typeof(ChatCollectionSO),
             allowSceneObjects = false,
-            value = dialogueNode.chatCollection,
+            value = chatCollectionSO,
         };
 
+        if (chatCollectionSO != null)
+        {
+            objField_ScriptableObject.value = chatCollectionSO;
+            dialogueNode.chatCollection = chatCollectionSO;
+        }
+
+        //On DialogueObject Changed
         objField_ScriptableObject.RegisterValueChangedCallback(v =>
         {
-            dialogueNode.chatCollection = objField_ScriptableObject.value as ChatCollectionSO;
-            dialogueNode.title = objField_ScriptableObject.value.name;
+            //dialogueNode.chatCollection = objField_ScriptableObject.value as ChatCollectionSO;
+            dialogueNode.chatCollection = v.newValue as ChatCollectionSO;
+            if (dialogueNode.chatCollection == null)
+            {
+                dialogueNode.title = "Dialogue Node";
+            }
+            else
+            {
+                //dialogueNode.title = objField_ScriptableObject.value.name;
+                dialogueNode.title = v.newValue.name;
+            }
         });
 
         dialogueNode.mainContainer.Add(objField_ScriptableObject);
@@ -95,8 +115,10 @@ public class DialogueGraphView : GraphView
     public void AddChoicePort(DialogueNode node, string overriddenPortName = "")
     {
         var generatedPort = GeneratePort(node, Direction.Output);
+
         var oldLabel = generatedPort.contentContainer.Q<Label>("type");
         generatedPort.contentContainer.Remove(oldLabel);
+
         var outputPortCount = node.outputContainer.Query("connector").ToList().Count;
         var choicePortName = string.IsNullOrEmpty(overriddenPortName) ? $"Choice {outputPortCount + 1}" : overriddenPortName;
 
@@ -127,12 +149,12 @@ public class DialogueGraphView : GraphView
         var targetEdge = edges.ToList().Where(x => x.output.portName == generatedPort.portName
         && x.output.node == generatedPort.node);
 
-        if (targetEdge.Any()) 
-            return;
-
-        var edge = targetEdge.First();
-        edge.input.Disconnect(edge);
-        RemoveElement(targetEdge.First());
+        if (targetEdge.Any())
+        {
+            var edge = targetEdge.First();
+            edge.input.Disconnect(edge);
+            RemoveElement(targetEdge.First());
+        }
 
         node.outputContainer.Remove(generatedPort);
         node.RefreshPorts();

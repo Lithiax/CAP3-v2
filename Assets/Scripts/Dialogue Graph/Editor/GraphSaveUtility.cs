@@ -47,13 +47,14 @@ public class GraphSaveUtility
         {
             dialogueContainer.DialogueNodeData.Add(new DialogueNodeData
             {
+                Name = dialogueNode.Name,
                 NodeGUID = dialogueNode.GUID,
                 chatCollection = dialogueNode.chatCollection,
                 Position = dialogueNode.GetPosition().position
             });
         }
 
-        AssetDatabase.CreateAsset(dialogueContainer, $"Assets/Scripts/Dialogue Graph/Resources/{fileName}.asset");
+        AssetDatabase.CreateAsset(dialogueContainer, $"Assets/Scriptable Objects/Resources/{fileName}.asset");
         AssetDatabase.SaveAssets();
     }
 
@@ -92,7 +93,7 @@ public class GraphSaveUtility
         foreach (var nodeData in containerCache.DialogueNodeData)
         {
             //TO CHANGE ***************************************************************
-            var tempNode = targetGraphView.CreateDialogueNode(nodeData.NodeGUID);
+            var tempNode = targetGraphView.CreateDialogueNode(nodeData.Name, nodeData.chatCollection);
 
             tempNode.GUID = nodeData.NodeGUID;
             targetGraphView.AddElement(tempNode);
@@ -107,7 +108,7 @@ public class GraphSaveUtility
         for (int i = 0; i < Nodes.Count; i++)
         {
             var connections = containerCache.NodeLinks.Where(x => x.BaseNodeGuid == Nodes[i].GUID).ToList();
-            for (int j = 9; j < connections.Count; j++)
+            for (int j = 0; j < connections.Count; j++)
             {
                 var targetNodeGuid = connections[j].TargetNodeGuid;
                 var targetNode = Nodes.First(x => x.GUID == targetNodeGuid);

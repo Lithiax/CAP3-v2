@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 public class ChatManagerUI : MonoBehaviour
 {
+    FindREventsManager EventManager;
     [SerializeField] Scrollbar scrollBar;
     [SerializeField] VerticalLayoutGroup chatParent;
     [SerializeField] GameObject chatPrefab;
@@ -15,6 +16,15 @@ public class ChatManagerUI : MonoBehaviour
     [SerializeField] RectTransform chatElements;
     [SerializeField] RectTransform replyBoxTransform;
     [SerializeField] GameObject replyButtonsParent;
+
+    struct ReplyButton
+    {
+        public GameObject buttonObj;
+        public TextMeshProUGUI replyButtonText;
+        public Button replyButtonComp;
+    }
+    List<GameObject> replyButtonObjs = new List<GameObject>();
+    List<ReplyButton> replyButtonData = new List<ReplyButton>();
     [SerializeField] GameObject ReplyButton1;
     [SerializeField] GameObject ReplyButton2;
     TextMeshProUGUI replyButton1Text;
@@ -27,15 +37,29 @@ public class ChatManagerUI : MonoBehaviour
     Vector2 oldreplyBoxTransform;
     Vector2 oldchatElementsTransform;
 
-    bool chatHasPrompt = false;
-
     private void Awake()
     {
-        replyButton1Text = ReplyButton1.GetComponentInChildren<TextMeshProUGUI>();
-        replyButton2Text = ReplyButton2.GetComponentInChildren<TextMeshProUGUI>();
+        EventManager = GameObject.FindObjectOfType<FindREventsManager>();
+        replyButtonObjs.Add(ReplyButton1);
+        replyButtonObjs.Add(ReplyButton2);
 
-        replyButton1Comp = ReplyButton1.GetComponent<Button>();
-        replyButton2Comp = ReplyButton2.GetComponent<Button>();
+        foreach (GameObject button in replyButtonObjs)
+        {
+            ReplyButton data = new ReplyButton
+            {
+                buttonObj = button,
+                replyButtonText = button.GetComponentInChildren<TextMeshProUGUI>(),
+                replyButtonComp = button.GetComponent<Button>()
+            };
+
+            replyButtonData.Add(data);
+        }
+
+        //replyButton1Text = ReplyButton1.GetComponentInChildren<TextMeshProUGUI>();
+        //replyButton2Text = ReplyButton2.GetComponentInChildren<TextMeshProUGUI>();
+
+        //replyButton1Comp = ReplyButton1.GetComponent<Button>();
+        //replyButton2Comp = ReplyButton2.GetComponent<Button>();
     }
 
     public void ReplyClicked(int num)
@@ -51,30 +75,19 @@ public class ChatManagerUI : MonoBehaviour
 
     public void StartSpawningChat(ChatUser parent, ChatCollectionSO SelectedChats)
     {
+        parent.currentChatComplete = false;
         StartCoroutine(SpawnChats(parent, SelectedChats));
     }
 
-    public void ResponseClicked(ChatUser parent, ChatCollectionSO SelectedChats)
+    void ResponseClicked(ChatUser parent, ChatCollectionSO SelectedChats)
     {
         StartSpawningChat(parent, SelectedChats);
         parent.currentCollection = SelectedChats;
         HideResponse();
     }
-    IEnumerator PlayChat(List<GameObject> SelectedChats)
+    void EventClicked(ChatUser parent, ChatEvent chatCollection)
     {
-        foreach (GameObject chat in SelectedChats)
-        {
-            yield return new WaitForSeconds(1f);
-            chat.SetActive(true);
-
-            if (chat.activeSelf)
-            {
-                ChatBubbleUI chatText = chat.GetComponent<ChatBubbleUI>();
-                StartCoroutine(reset(chatText));
-
-                StartCoroutine(ScrollDown());
-            }
-        }
+        chatCollection.RaiseEvent();
     }
 
     public void ActivateChat(List<GameObject> chats, bool con)
@@ -113,10 +126,17 @@ public class ChatManagerUI : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        parent.OnPrompt = ChatCollection.isPrompt;
+        parent.currentChatComplete = true;
 
-        HandleResponse(parent, ChatCollection);
-    }
+        //if event, register
+        foreach (ChatEvent ev in ChatCollection.ChatEvents)
+        {
+            EventManager.RegisterEvent(ev);
+        }
+        
+        if (parent.isToggled)
+            HandleResponse(parent, ChatCollection);
+    }   
 
     public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent)
     {
@@ -145,15 +165,57 @@ public class ChatManagerUI : MonoBehaviour
 
     public void HandleResponse(ChatUser parent, ChatCollectionSO ChatCollection)
     {
-        if (ChatCollection.isPrompt && parent.isToggled && parent.OnPrompt)
+        if (!parent.currentChatComplete)
         {
-            replyButton1Comp.onClick.RemoveAllListeners();
-            replyButton2Comp.onClick.RemoveAllListeners();
+            HideResponse();
+            return;
+        }
 
-            replyButton1Comp.onClick.AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[0]); });
-            replyButton2Comp.onClick.AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[1]); });
+        if (ChatCollection.isPrompt() || ChatCollection.isEvent())
+        {
+            //Clear button on click events
+            foreach (ReplyButton bData in replyButtonData)
+            {
+                bData.replyButtonComp.onClick.RemoveAllListeners();
+                bData.replyButtonText.text = "";
+                bData.buttonObj.SetActive(false);
+            }
 
-            ShowResponse(ChatCollection.Prompts[0].PromptText, ChatCollection.Prompts[1].PromptText);
+            //Set button on click functions
+            for (int i = 0; i < ChatCollection.Prompts.Count; i++)
+            {
+                //WTF ?????, today I learned about closure problems : )
+                int copy = i;
+
+                replyButtonData[copy].replyButtonComp.onClick.
+                    AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[copy]); });
+
+                //replyButtonData[i].replyButtonComp.onClick.
+                //    AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[i]); });
+            }
+
+            //Add events
+            for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
+            {
+                int copy = i;
+
+                replyButtonData[copy].replyButtonComp.onClick.
+                    AddListener(delegate { EventClicked(parent, ChatCollection.ChatEvents[copy]); });
+            }
+
+            for (int i = 0; i < ChatCollection.Prompts.Count; i++)
+            {
+                replyButtonData[i].replyButtonText.text = ChatCollection.Prompts[i].PromptText;
+                replyButtonData[i].buttonObj.SetActive(true);
+            }
+
+            for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
+            {
+                replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
+                replyButtonData[i].buttonObj.SetActive(true);
+            }
+
+            ShowResponseBox(ChatCollection.Prompts);
         }
         else
         {
@@ -161,15 +223,12 @@ public class ChatManagerUI : MonoBehaviour
         }
     }
 
-    void ShowResponse(string firstReply, string secondReply)
+    void ShowResponseBox(List<ChatCollectionSO> prompts)
     {
         /*Left rectTransform.offsetMin.x;
         /*Right rectTransform.offsetMax.x;
         /*Top rectTransform.offsetMax.y;
         /*Bottom rectTransform.offsetMin.y;*/
-
-        replyButton1Text.text = firstReply;
-        replyButton2Text.text = secondReply;
 
         replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, 60.255f);
 

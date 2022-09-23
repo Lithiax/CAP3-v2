@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 [System.Serializable]
 public class ChatBubble
 {
@@ -14,14 +14,24 @@ public class ChatBubble
 [CreateAssetMenu(fileName = "New Chat Collection", menuName = "Chat Collection")]
 public class ChatCollectionSO : ScriptableObject
 {
-    public string PromptText;
+
+    [Header("Chat Bubbles")]
     public List<ChatBubble> ChatBubbles;
 
+    [Header("Prompts")]
+    public string PromptText;
     public List<ChatCollectionSO> Prompts;
-    public bool isPrompt;
 
-    private void Awake()
+    [Header("Event Parameters")]
+
+    public List<ChatEvent> ChatEvents;
+
+    public bool isPrompt()
     {
-        isPrompt = (Prompts.Count >= 2);
+        return Prompts.Count >= 1;
+    }
+    public bool isEvent()
+    {
+        return ChatEvents.Count >= 1;
     }
 }

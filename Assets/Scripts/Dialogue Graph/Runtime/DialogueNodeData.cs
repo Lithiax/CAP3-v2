@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class DialogueNodeData
 {
+    public string Name;
     public string NodeGUID;
     public ChatCollectionSO chatCollection;
     public Vector2 Position;

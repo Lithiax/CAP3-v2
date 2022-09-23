@@ -43,7 +43,7 @@ public class DialogueGraph : EditorWindow
         toolbar.Add(new Button(() => RequestDataOperation(true)) { text = "Save Data" });
         toolbar.Add(new Button(() => RequestDataOperation(false)) { text = "Load Data" });
 
-        var nodeCreateButton = new Button(() => graphView.CreateNode("Dialogue Node"));
+        var nodeCreateButton = new Button(() => graphView.CreateNode("Dialogue Node", null));
         nodeCreateButton.text = "Create Node";
 
         toolbar.Add(nodeCreateButton);
@@ -84,7 +84,7 @@ public class DialogueGraph : EditorWindow
 
     void GenerateMinimap()
     {
-        var miniMap = new MiniMap{anchored = true,};
+        var miniMap = new MiniMap{anchored = true};
         miniMap.SetPosition(new Rect(10, 30, 200, 140));
         graphView.Add(miniMap);
     }

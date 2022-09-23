@@ -8,28 +8,27 @@ using TMPro;
 public class ChatUser : MonoBehaviour
 {
     [SerializeField] ChatCollectionSO initialChatCollection;
-    [HideInInspector] public ChatCollectionSO currentCollection;
+
+     public ChatCollectionSO currentCollection;
     List<GameObject> chats = new List<GameObject>();
-    public Toggle toggle;
+    [HideInInspector] public Toggle toggle;
 
     ChatManagerUI chatManager;
     [SerializeField] TextMeshProUGUI profileName;
     [SerializeField] TextMeshProUGUI lastMessageText;
     [SerializeField] Image profileImage;
 
-    [HideInInspector] public bool inResponse = false;
+    [HideInInspector] public bool currentChatComplete = false;
 
     [Header("Notification")]
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
     public bool isToggled { get; private set; }
-    public bool OnPrompt = false;
+
     int notifNum = 0;
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
-
-        currentCollection = initialChatCollection;
     }
 
     public void Init(ChatCollectionSO initCol, string name, Sprite img, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -41,15 +40,10 @@ public class ChatUser : MonoBehaviour
         isToggled = toggle.isOn;
 
         initialChatCollection = initCol;
+        currentCollection = initCol;
         profileName.text = name;
         profileImage.sprite = img;
         chatManager.StartSpawningChat(this, initialChatCollection);
-    }
-
-    private void OnEnable()
-    {
-        if (OnPrompt)
-            chatManager.HandleResponse(this, currentCollection);
     }
 
     public void SetNotif()
@@ -75,9 +69,12 @@ public class ChatUser : MonoBehaviour
     public void SwitchChat(bool toggle)
     {
         isToggled = toggle;
-        chatManager.HandleResponse(this, currentCollection);
-        ResetNotif();
 
+        ResetNotif();
         chatManager.ActivateChat(chats, toggle);
+
+        if (!toggle) return;
+        Debug.Log(profileName.text);
+        chatManager.HandleResponse(this, currentCollection);
     }
 }
