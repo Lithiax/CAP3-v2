@@ -1,0 +1,38 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Lily.moc3",
+		"Textures": [
+			"Lily.8192/texture_00.png"
+		],
+		"Physics": "Lily.physics3.json",
+		"DisplayInfo": "Lily.cdi3.json",
+		"Expressions": [
+			{
+				"Name": "Blush",
+				"File": "Blush.exp3.json"
+			},
+			{
+				"Name": "Gloom",
+				"File": "Gloom.exp3.json"
+			},
+			{
+				"Name": "Idle Animation",
+				"File": "expressions/Idle Animation.exp3.json"
+			}
+		]
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	],
+	"HitAreas": []
+}

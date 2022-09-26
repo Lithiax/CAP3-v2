@@ -12,18 +12,9 @@ public class FirstTimeFoodOnEndEvent : UnityEvent { }
 [System.Serializable]
 public class CharacterPresetData
 {
+    public CharacterPositionType characterPositionType;
     public RectTransform avatarRectTransform;
-    [HideInInspector] public Image avatarImage;
-
-    public RectTransform emoteBubbleStartRectTransform;
-
-    public RectTransform emoteBubbleEndRectTransform;
-
-
-    public void Initialize()
-    {
-        avatarImage = avatarRectTransform.GetComponent<Image>();
-    }
+    public Transform avatarTransform;
 }
 
 public class CharacterDialogueUI : MonoBehaviour
@@ -35,27 +26,27 @@ public class CharacterDialogueUI : MonoBehaviour
 
     [SerializeField] private Image backgroundImage;
 
-    private GameObject emoticonObject;
-    private Image emoticonImage;
-    private RectTransform emoticonRectTransform;
-    [SerializeField] private Image emoticonBubbleImage;
-    private RectTransform emoticonBubbleRectTransform;
-
-    [SerializeField] private Animator emoticonAnim;
-
     [SerializeField] public GameObject nextDialogueButton;
     [SerializeField] private GameObject choiceUIsContainer;
     private Transform choiceUIsContainerTransform;
     private RectTransform choiceUIsContainerRectTransform;
+
+    [SerializeField] private Transform characterUIContainerTransform;
+    [SerializeField] private Transform characterObjectContainerTransform;
     [SerializeField] private ChoiceUI choiceUIPrefab;
 
     [SerializeField]
+    private List<Character> savedCharacters = new List<Character>();
+    [SerializeField]
     private List<CharacterPresetData> characterPresetDatas = new List<CharacterPresetData>();
-    [SerializeField] private List<Image> charactersAvatarImage = new List<Image>();
 
-    [SerializeField] private RectTransform leftCharacterPresetRectTransform;
-    [SerializeField] private RectTransform centerCharacterPresetRectTransform;
-    [SerializeField] private RectTransform rightCharacterPresetRectTransform;
+    [SerializeField] private TMP_Text hapticText;
+    [SerializeField] private TMP_Text vocalicText;
+    [SerializeField] private TMP_Text kinesicText;
+    [SerializeField] private TMP_Text oculesicText;
+    [SerializeField] private TMP_Text physicalAppearanceText;
+
+    [SerializeField] private CharacterUI staticCharacterPrefab;
 
     [HeaderAttribute("ADJUSTABLE VALUES")]
 
@@ -67,32 +58,14 @@ public class CharacterDialogueUI : MonoBehaviour
     [SerializeField]
     private float avatarDelayTime;
 
-    [SerializeField]
-    private float emoticonFadeTime;
-    [SerializeField] private RectTransform defaultEmoticonSize;
-    [SerializeField] private RectTransform targetEmoticonSize;
-    [SerializeField] private float emoticonSizeTime;
-
-    [SerializeField]
-    private float emoticonBubbleFadeTime;
-    [SerializeField] private RectTransform defaultEmoticonBubbleSize;
-    [SerializeField] private RectTransform targetEmoticonBubbleSize;
-    [SerializeField] private float emoticonBubbleSizeTime;
-
-
-    [HideInInspector]
-    public SO_Character character;
-
     [HideInInspector]
     public SO_Dialogues currentSO_Dialogues;
 
-
-
     private int currentDialogueIndex;
 
-    private bool isPaused = false;
-    private bool allowNext;
-
+    //private new List<IEnumerator> cachedCoroutines = new List<IEnumerator>();// canSkip = false;
+    private int runningCoroutines = 0;
+    private bool isSkipping = false;
     private string id;
 
     bool isStartTransitionEnabled = true;
@@ -101,52 +74,20 @@ public class CharacterDialogueUI : MonoBehaviour
     bool isAdvancedonWorldEventEndedEvent = false;
 
     bool isAlreadyEnded = false;
-    //bool firstTime = true;
-    Sprite cachedSprite;
-    int lastCharacterData;
 
-    bool firstfirstTimeTutorial = false;
-    public bool firstTimeTutorial = false;
-    public bool firstTimeTut = false;
-
-    public IEnumerator runningCoroutine;
-    public IEnumerator runningEmotionCoroutine;
-    public IEnumerator runningAvatarCoroutine;
     public static CharacterSpokenToEvent onCharacterSpokenToEvent = new CharacterSpokenToEvent();
-    public static FirstTimeFoodOnEndEvent onFirstTimeFoodOnEndEvent = new FirstTimeFoodOnEndEvent();
-    bool canDo = false;
+  
 
-   [SerializeField] private bool isFoodFirstTime = false;
-    //public void Skip()
-    //{
-    //    firstfirstTimeTutorial = true;
-    //}
-    //void FirstTimeFoodOnEndEvent()
-    //{
-    //    isFoodFirstTime = true;
-    //}
     private void Awake()
     {
-        emoticonRectTransform = emoticonAnim.GetComponent<RectTransform>();
-        emoticonObject = emoticonAnim.gameObject;
-        emoticonImage = emoticonAnim.GetComponent<Image>();
-        //onFirstTimeFoodOnEndEvent.AddListener(FirstTimeFoodOnEndEvent);
-        emoticonBubbleRectTransform = emoticonBubbleImage.GetComponent<RectTransform>();
-
-        firstfirstTimeTutorial = false;
-        isFoodFirstTime = false;
         onCharacterSpokenToEvent.AddListener(OnCharacterSpokenTo);
-
         choiceUIsContainerTransform = choiceUIsContainer.transform;
         choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
 
-        for (int i =0; i< characterPresetDatas.Count; i++)
-        {
-            characterPresetDatas[i].Initialize();
-        }
-        
-        //Panday.onPandaySpokenToEvent.AddListener(UniqueGameplayModeChangedEvent);
-        //UIManager.onGameplayModeChangedEvent.AddListener(GameplayModeChangedEvent);
+        //for (int i =0; i< characterPresetDatas.Count; i++)
+        //{
+        //    characterPresetDatas[i].Initialize();
+        //}
 
     }
 
@@ -154,7 +95,6 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         id = p_id;
         currentSO_Dialogues = p_SO_Dialogue;
-        // Debug.Log(id + " EVENT WITH NAME " + currentSO_Dialogues.name + " IS CURRENT DIALOGUE " + " IS CHARACTERSPOKENTO CALLED");
 
         if (isStartTransitionEnabled)
         {
@@ -162,7 +102,6 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else
         {
-
             OnOpenCharacterDialogueUI();
         }
 
@@ -171,35 +110,18 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnOpenCharacterDialogueUI()
     {
-        //PlayerManager.instance.canPressPanel = false;
- 
-        //PlayerJoystick.onUpdateJoystickEnabledEvent.Invoke(false);
-        //PlayerManager.instance.playerMovement.enabled = false;
-        //PlayerManager.instance.playerMovement.joystick.gameObject.SetActive(false);
-        canDo = true;
-        // Debug.Log("WHO IS CALLING");
         frame.SetActive(true);
-        //Debug.Log(id + " EVENT WITH NAME " + currentSO_Dialogues.name + " IS CURRENT DIALOGUE " + " OPENING");
         ResetCharacterDialogueUI();
-        //TimeManager.onPauseGameTime.Invoke(false);
-
-        //UIManager.onGameplayModeChangedEvent.Invoke(true);
     }
 
     public void OnCloseCharacterDialogueUI()
     {
-
-        
-
-     
         frame.SetActive(false);
-
-        //UIManager.onGameplayModeChangedEvent.Invoke(false);
-
     }
 
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
     {
+        runningCoroutines++;
         string p_currentText;
         for (int i = 0; i <= p_fullText.Length; i++)
         {
@@ -207,364 +129,653 @@ public class CharacterDialogueUI : MonoBehaviour
             p_textUI.text = p_currentText;
             yield return new WaitForSeconds(typewriterSpeed);
         }
-    }
-
-
-    void ResetEmotionUI()
-    {
-
-        emoticonImage.color = new Color(emoticonImage.color.r, emoticonImage.color.g, emoticonImage.color.b, 0);
-
-        emoticonRectTransform.sizeDelta = defaultEmoticonSize.sizeDelta;
-
-        emoticonObject.SetActive(false);
-
-        emoticonBubbleImage.color = new Color(emoticonBubbleImage.color.r, emoticonBubbleImage.color.g, emoticonBubbleImage.color.b, 0);
-
-        emoticonBubbleRectTransform.sizeDelta = defaultEmoticonBubbleSize.sizeDelta;
+        runningCoroutines--;
+        CheckIfReady();
     }
 
     void ResetCharacterDialogueUI()
     {
-        cachedSprite = null;
-        //  firstTime = true;
         currentDialogueIndex = 0;
-        allowNext = false;
+        isSkipping = false;
+        runningCoroutines = 0;
         isAlreadyEnded = false;
         nextDialogueButton.SetActive(true);
         choiceUIsContainer.SetActive(false);
-        // Debug.Log("WHO IS CALLING");
-
-        ResetAllCharacterAvatarImage();
-
-
-
-        ResetEmotionUI();
         OnNextButtonUIPressed();
     }
 
-    void ResetAllCharacterAvatarImage()
-    {
-        for (int i = 0; i < charactersAvatarImage.Count; i++)
-        {
-            charactersAvatarImage[i].color = new Color(charactersAvatarImage[i].color.r, charactersAvatarImage[i].color.g, charactersAvatarImage[i].color.b, 0);
-
-        }
-    }
     void NextDialogue()
     {
         Debug.Log("NEXT DIALOGUE");
+        isSkipping = false;
+        
         currentDialogueIndex++;
-        //ResetEmotionUI();
-        //  Debug.Log("WHO IS CALLING");
-
+        runningCoroutines = 0;
+     
         if (currentDialogueIndex == currentSO_Dialogues.dialogues.Count)
         {
             if (isAdvancedonWorldEventEndedEvent)
             {
-                //event
-                //int currentQuestChainIndex = storylineData.currentQuestChainIndex;
-                //int currentQuestLineIndex = storylineData.currentQuestLineIndex;
-                //StorylineManager.onWorldEventEndedEvent.Invoke(id, currentQuestChainIndex, currentQuestLineIndex);
-                //Debug.Log("ADVANCE CALLING");
                 isAlreadyEnded = true;
-
-
             }
         }
     }
 
-    public IEnumerator AvatarFade(Image p_avatarImage,Sprite p_sprite)
+    IEnumerator AvatarFadeIn(Image p_avatarImage, Sprite p_sprite)
     {
-        var sequence = DOTween.Sequence()
-       .Append(p_avatarImage.DOFade(0, avatarFadeTime));
-        sequence.Play();
-
-        yield return sequence.WaitForCompletion();
+        runningCoroutines++;
         p_avatarImage.sprite = p_sprite;
-        var sequence2 = DOTween.Sequence()
+        var fadeInSequence = DOTween.Sequence()
         .Append(p_avatarImage.DOFade(1, avatarFadeTime));
-        sequence2.Play();
-
-        yield return sequence2.WaitForCompletion();
+        fadeInSequence.Play();
+        yield return fadeInSequence.WaitForCompletion();
+        runningCoroutines--;
+        CheckIfReady();
     }
-    public void CreateChoiceUIs()
+
+    IEnumerator AvatarFadeOut(Image p_avatarImage, Character p_newCharacter)
     {
-        
+        Debug.Log("FADING OUT");
+        runningCoroutines++;
+        var fadeOutSequence = DOTween.Sequence()
+       .Append(p_avatarImage.DOFade(0, avatarFadeTime));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+        runningCoroutines--;
+        savedCharacters.Remove(p_newCharacter);
+        Destroy(p_newCharacter.gameObject);
+        CheckIfReady();
+    }
+
+    IEnumerator SpeakerTintIn(Image p_avatarImage)
+    {
+        runningCoroutines++;
+        var fadeOutSequence = DOTween.Sequence()
+        .Append(p_avatarImage.DOColor(Color.white, avatarFadeTime));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+        runningCoroutines--;
+        CheckIfReady();
+    }
+
+    IEnumerator SpeakerTintOut(Image p_avatarImage)
+    {
+        runningCoroutines++;
+        var fadeInSequence = DOTween.Sequence()
+        .Append(p_avatarImage.DOColor(nonSpeakerTintColor, avatarFadeTime));
+        fadeInSequence.Play();
+        yield return fadeInSequence.WaitForCompletion();
+        runningCoroutines--;
+        CheckIfReady();
+    }
+    void CreateChoiceUIs()
+    {  
         nextDialogueButton.SetActive(false);
         choiceUIsContainer.SetActive(true);
-        for (int i =0; i <currentSO_Dialogues.so_Choices.Count; i++)
+        for (int i =0; i <currentSO_Dialogues.choiceDatas.Count; i++)
         {
             ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
-            newChoiceUI.InitializeValues(currentSO_Dialogues.so_Choices[i].choiceName, "");
-            //newChoiceUI.transform.SetParent(choiceUIsContainer.transform);
+            newChoiceUI.InitializeValues(currentSO_Dialogues.choiceDatas[i].words, "");
             int index = i;
             newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(index); });
             LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
-           
         }
-
-        
     }
 
     public void ChooseChoiceUI(int index)
     {
         nextDialogueButton.SetActive(true);
         choiceUIsContainer.SetActive(false);
-        currentSO_Dialogues = currentSO_Dialogues.so_Choices[index].so_choiceBranchDialogue;
+        currentSO_Dialogues = currentSO_Dialogues.choiceDatas[index].so_branchDialogue;
         ResetCharacterDialogueUI();
     }
 
-    public void OnNextButtonUIPressed()
+    void SetRectTransformToPreset(CharacterPositionType p_characterPositionType, SO_Character p_index)
     {
-        Debug.Log("Next Button UI Clicked");
-        if (runningEmotionCoroutine != null)
+        Character foundCharacter = FindPreset(p_index);
+
+        if (foundCharacter != null)
         {
-            StopCoroutine(runningEmotionCoroutine);
-            runningEmotionCoroutine = null;
-
-            runningEmotionCoroutine = Co_EmotionOut(lastCharacterData);
-            StartCoroutine(runningEmotionCoroutine);
-        }
-
-        if (currentDialogueIndex < currentSO_Dialogues.dialogues.Count)
-        {
-
-            Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
-
-            int currentSpeakingCharacterIndex = -1;
-            if (currentDialogue.characterDatas.Count < charactersAvatarImage.Count)
+           
+            for (int i = 0; i < characterPresetDatas.Count; i++)
             {
-                ResetAllCharacterAvatarImage();
-                
+                if (p_characterPositionType == characterPresetDatas[i].characterPositionType)
+                {
+                    if (foundCharacter is CharacterUI)
+                    {
+                        CharacterUI foundPreset = foundCharacter as CharacterUI;
+                        foundPreset.avatarRectTransform.anchoredPosition = characterPresetDatas[i].avatarRectTransform.anchoredPosition;
+                    }
+                    else if (foundCharacter is CharacterObject)
+                    {
+                        CharacterObject foundPreset = foundCharacter as CharacterObject;
+                        foundPreset.transform.position = characterPresetDatas[i].avatarTransform.position;
+                    }
+                }
             }
-            for (int i = 0; i < currentDialogue.characterDatas.Count;i++)
-            {
-            
-                //Set Character UI Rect Transform
-                //Position
-                if (currentDialogue.characterDatas[i].characterPosition == CharacterPositionType.left)
-                {
-                    charactersAvatarImage[i].GetComponent<RectTransform>().position = leftCharacterPresetRectTransform.position;
-
-                }
-                else if (currentDialogue.characterDatas[i].characterPosition == CharacterPositionType.center)
-                {
-                    charactersAvatarImage[i].GetComponent<RectTransform>().position = centerCharacterPresetRectTransform.position;
-
-                }
-                else if (currentDialogue.characterDatas[i].characterPosition == CharacterPositionType.right)
-                {
-                    charactersAvatarImage[i].GetComponent<RectTransform>().position = rightCharacterPresetRectTransform.position;
-
-                }
-                //Scale
-
-                //Tint
-                if (currentDialogue.characterDatas[i].isSpeaking)
-                {
-                    currentSpeakingCharacterIndex = i;
                
-                    charactersAvatarImage[i].color = new Color(255,255,255);
+            
+                
+        }
+    }
+
+    void SetSpeakerTint(bool p_isSpeaking, SO_Character p_index)
+    {
+
+        Character foundCharacter = FindPreset(p_index);
+
+        if (foundCharacter != null)
+        {
+            if (foundCharacter is CharacterUI)
+            {
+                CharacterUI foundPreset = foundCharacter as CharacterUI;
+                if (isSkipping)
+                {
+                    //Tint
+                    if (p_isSpeaking)
+                    {
+                        //Add reference coroutine so when player skips it can be referenced and stopped
+                        foundPreset.avatarImage.color = new Color(1, 1, 1, 1);
+                    }
+                    else
+                    {
+                        foundPreset.avatarImage.color = nonSpeakerTintColor;
+
+                    }
                 }
                 else
                 {
-                    charactersAvatarImage[i].color = nonSpeakerTintColor;
-                }
-                characterNameText.text = currentDialogue.characterDatas[i].character.name;
-                if (currentDialogue.backgroundSprite != null)
-                {
-                    backgroundImage.sprite = currentDialogue.backgroundSprite;
-                    backgroundImage.color = new Color32(255, 255, 255, 255);
-                }
-                else if (currentDialogue.backgroundSprite == null)
-                {
-                    backgroundImage.color = new Color32(0, 0, 0, 0);
-                }
-                //if (cachedSprite != currentDialogue.characterDatas[i].character.avatar)
-                //{
-
-              
-                    //if (runningAvatarCoroutine != null)
-                    //{
-                    //    StopCoroutine(runningAvatarCoroutine);
-                    //    runningAvatarCoroutine = null;
-                    //}
-         
-                    runningAvatarCoroutine = AvatarFade(charactersAvatarImage[i], currentDialogue.characterDatas[i].character.avatar);
-                    StartCoroutine(runningAvatarCoroutine);
-                    cachedSprite = currentDialogue.characterDatas[i].character.avatar;
-               // }
-
-                CharacterData currentSpeakingCharacter = null;
-                if (currentSpeakingCharacterIndex != -1)
-                {
-                    currentSpeakingCharacter = currentSpeakingCharacter = currentDialogue.characterDatas[currentSpeakingCharacterIndex];
-                }
-
-                if (currentSpeakingCharacter != null)
-                {
-                    if ((int)currentSpeakingCharacter.emotion == 10)
+                    //Tint
+                    if (p_isSpeaking)
                     {
-                        emoticonObject.SetActive(false);
-                        emoticonAnim.SetInteger("enum", (int)(int)currentSpeakingCharacter.emotion);
-
-                     
+                        //Add reference coroutine so when player skips it can be referenced and stopped
+                        StartCoroutine(SpeakerTintIn(foundPreset.avatarImage));
 
                     }
                     else
                     {
-                        lastCharacterData = currentSpeakingCharacterIndex;
-                        runningEmotionCoroutine = Co_EmotionIn(charactersAvatarImage[currentSpeakingCharacterIndex], currentDialogue.characterDatas[currentSpeakingCharacterIndex].character.avatar, currentSpeakingCharacterIndex, currentDialogue.characterDatas[currentSpeakingCharacterIndex].emotion);
-                        StartCoroutine(runningEmotionCoroutine);
+                        StartCoroutine(SpeakerTintOut(foundPreset.avatarImage));
+
                     }
-                  
+                }
+                
+            }
+        }
+        
+    }
+
+    void SetBackground(Sprite p_backgroundSprite)
+    {
+        if (p_backgroundSprite != null)
+        {
+            backgroundImage.sprite = p_backgroundSprite;
+            backgroundImage.color = new Color32(255, 255, 255, 255);
+        }
+        else if (p_backgroundSprite == null)
+        {
+            backgroundImage.color = new Color32(0, 0, 0, 0);
+        }
+    }
+
+    void SetFacialEmotion(CharacterData p_characterData)
+    {
+        Character foundCharacter = FindPreset(p_characterData.character);
+        if (foundCharacter != null)
+        {
+            //if (foundCharacter is CharacterUI)
+            //{
+            //    CharacterUI foundPreset = foundCharacter as CharacterUI;
+               
+            //    for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; i++)
+            //    {
+            //        if (foundPreset.so_Character.faceEmotionDatas[i].type == p_characterData.faceEmotion)
+            //        {
+            //            foundPreset.avatarImage.sprite = foundPreset.so_Character.faceEmotionDatas[i].image;
+            //            break;
+            //        }
+            //    }
+            //}
+            //else 
+            if (foundCharacter is CharacterObject)
+            {
+                CharacterObject foundPreset = foundCharacter as CharacterObject;
+
+                for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; i++)
+                {
+                    if (foundPreset.so_Character.faceEmotionDatas[i].type == p_characterData.faceEmotion)
+                    {
+                        foundPreset.expressionController.CurrentExpressionIndex = foundPreset.so_Character.faceEmotionDatas[i].index;
+                        break;
+                    }
                 }
             }
-          
-            if (runningCoroutine != null)
+        }
+    }
+
+    void SetBodyEmotion(CharacterData p_characterData)
+    {
+        Character foundCharacter = FindPreset(p_characterData.character);
+        if (foundCharacter != null)
+        {
+            //if (foundCharacter is CharacterUI)
+            //{
+            //    CharacterUI foundPreset = foundCharacter as CharacterUI;
+
+            //    for (int i = 0; i < foundPreset.so_Character.bodyEmotionDatas.Count; i++)
+            //    {
+            //        if (foundPreset.so_Character.bodyEmotionDatas[i].type == p_characterData.bodyEmotion)
+            //        {
+            //            foundPreset.avatarImage.sprite = foundPreset.so_Character.bodyEmotionDatas[i].image;
+            //            break;
+            //        }
+            //    }
+            //}
+            //else 
+            if (foundCharacter is CharacterObject)
             {
-                StopCoroutine(runningCoroutine);
-                runningCoroutine = null;
+      
+                if (p_characterData.bodyEmotion != CharacterEmotionType.none)
+                {
+                    CharacterObject foundPreset = foundCharacter as CharacterObject;
+                    foundPreset.charAnim.SetTrigger(p_characterData.bodyEmotion.ToString());
+                }
+           
             }
-            if (currentDialogue.speechTransitionType == SpeechTransitionType.Typewriter)
+        }
+    }
+
+    void RemoveAvatar(List<SO_Character> p_charactersToBeRemoved)
+    {
+        //Debug.Log("-----REMOVING " + isSkipping);
+        //Do functions to characters to be Added
+        for (int i = 0; i < p_charactersToBeRemoved.Count; i++)
+        {
+            Character foundCharacter = FindPreset(p_charactersToBeRemoved[i]);
+
+            if (foundCharacter != null)
             {
-                if (runningCoroutine == null)
+                if (foundCharacter is CharacterUI)
+                {
+                    CharacterUI foundPreset = foundCharacter as CharacterUI;
+                 
+                    if (isSkipping)
+                    {
+
+                        // Debug.Log("REMOVINGRR " + foundPreset);
+                        savedCharacters.Remove(foundPreset);
+                        Destroy(foundPreset.gameObject);
+                    }
+                    else
+                    {
+                        StartCoroutine(AvatarFadeOut(foundPreset.avatarImage, foundPreset));
+                    }
+                    
+                }
+                else if (foundCharacter is CharacterObject)
                 {
 
-                    dialogueText.text = currentDialogue.words;
+                    CharacterObject foundPreset = foundCharacter as CharacterObject;
+                    savedCharacters.Remove(foundPreset);
+                    Destroy(foundPreset.gameObject);
+                }
+               
+            }
+        }
+    }
 
-                    if (allowNext == true)
-                    {
-                        NextDialogue();
-                    }
+  
 
+    void AddAvatar(List<SO_Character> p_charactersToBeAdded)
+    {
+        //Do functions to characters to be Added
+        //Debug.Log("-----ADDING " + isSkipping);
+        if (isSkipping)
+        {
+            for (int i = 0; i < savedCharacters.Count; i++)
+            {
+                if (savedCharacters[i] is CharacterUI)
+                {
+                    CharacterUI currentCharacterUI = savedCharacters[i] as CharacterUI;
+                    currentCharacterUI.avatarImage.color = new Color(1, 1, 1, 1);
+                }
+                
+            }
+
+        }
+        else
+        {
+            for (int i = 0; i < p_charactersToBeAdded.Count; i++)
+            {
+                Character newCharacter;
+                if (p_charactersToBeAdded[i].prefab) //Live 2D
+                {
+                    newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
+                    //NO TRANSITION//StartCoroutine(AvatarFadeIn(newCharacter.avatarImage, p_charactersToBeAdded[i].avatar));
+
+                }
+                else //UI
+                {
+                    newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform) ;
+                    CharacterUI newCharacterUI = newCharacter as CharacterUI;
+                    newCharacter.so_Character = p_charactersToBeAdded[i];
+                    StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+
+                }
+                savedCharacters.Add(newCharacter);
+            }
+        }
+    }
+
+    public IEnumerator AvatarFlipSequence(Image p_avatarImage, RectTransform p_avatarRectTransform, Quaternion p_quaternion)
+    {
+        var fadeOutSequence = DOTween.Sequence()
+        .Append(p_avatarImage.DOFade(0, avatarFadeTime));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+        
+        p_avatarRectTransform.rotation = p_quaternion;
+    
+        var fadeInSequence = DOTween.Sequence()
+        .Append(p_avatarImage.DOFade(1, avatarFadeTime));
+        fadeInSequence.Play();
+        yield return fadeInSequence.WaitForCompletion();
+
+        CheckIfReady();
+    }
+   
+
+    void SetAvatarFlipOrientation(CharacterData p_characterData) // work on this
+    {
+
+        Character foundCharacter = FindPreset(p_characterData.character);
+        if (foundCharacter != null)
+        {
+            if (foundCharacter is CharacterUI)
+            {
+                CharacterUI foundPreset = foundCharacter as CharacterUI;
+                Quaternion target;
+                if (p_characterData.isFlipped)
+                {
+                    target = Quaternion.Euler(0f, 180f, 0f);
                 }
                 else
                 {
+                    target = Quaternion.Euler(0f, 0f, 0f);
+                }
+                if (foundPreset.avatarRectTransform.rotation != target)
+                {
+                    StartCoroutine(AvatarFlipSequence(foundPreset.avatarImage, foundPreset.avatarRectTransform, target));
+                }
+            }
+            
+               
+        }
+        
+        
+    }
 
-                    if (runningCoroutine != null)
-                    {
-                        StopCoroutine(runningCoroutine);
-                        runningCoroutine = null;
-                    }
-                    runningCoroutine = Co_TypeWriterEffect(dialogueText, currentDialogue.words);
-                    StartCoroutine(runningCoroutine);
+    void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
+    {
+        if (p_characterDatas.Count > 0)
+        {
+            for (int i = 0; i < p_characterDatas.Count; i++)
+            {
+
+                if (p_characterDatas[i].isSpeaking)
+                {
+                    characterNameText.text = p_characterDatas[i].character.name;
+
                 }
 
+            }
+        }
+        else
+        {
+            characterNameText.text = "NO CHARACTER ASSIGNED";
+        }
+      
+    }
+    void IdentifyCharactersToAdd(List<SO_Character> newList, List<SO_Character> oldList,List<SO_Character> charactersToBeAdded)
+    {
+       
+        //Mark the Characters to Add and Characters that Exists
+        for (int i = 0; i < newList.Count; i++)
+        {
+            if (oldList.Count > 0)
+            {
+                for (int x = 0; x < oldList.Count;)
+                {
+                    if (newList[i] == oldList[x])//matching
+                    {
+                        break;
+                    }
+                    x++;
+                    if (x >= oldList.Count)//new
+                    {
+                        charactersToBeAdded.Add(newList[i]);
+                    }
+                }
             }
             else
             {
-                dialogueText.text = currentDialogue.words;
-
-                if (allowNext == true)
-                {
-                    NextDialogue();
-                }
-            }
-
-            if (allowNext == false) //check this ITS HAPPENS FIRST TIME
-            {
-                frame.SetActive(true);
-                allowNext = true;
-                NextDialogue();
-
+                charactersToBeAdded.Add(newList[i]);
             }
 
         }
-        else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)        //TEMPORARY END CONVO, BUT EVENTUALLY SHOW AND GIVE QUEST
+
+    }
+    void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> newList, List<SO_Character> charactersToBeRemoved)
+    {
+        //Mark the Characters to Remove
+        for (int oldIndex = 0; oldIndex < oldList.Count; oldIndex++)
         {
-            if (canDo)
+            if (newList.Count > 0)
             {
-                canDo = false;
-                if (!isAlreadyEnded)
+                for (int currentIndex = 0; currentIndex < newList.Count;)
                 {
-                    //Debug.Log("OUTSIDE");
+                    if (oldList[oldIndex] == newList[currentIndex]) //If Old Element in Old List Matches New Element in New List, it means it stays
+                    {
+                        break;
+                    }
 
-                    if (!isAdvancedonWorldEventEndedEvent)
+                    currentIndex++;
+                    if (currentIndex >= newList.Count)
                     {
-                        //Debug.Log("NORMAL");
-                        //event
-                        //StorylineData storylineData = StorylineManager.GetStorylineDataFromID(id);
-                        //int currentQuestChainIndex = storylineData.currentQuestChainIndex;
-                        //int currentQuestLineIndex = storylineData.currentQuestLineIndex;
-                        //StorylineManager.onWorldEventEndedEvent.Invoke(id, currentQuestChainIndex, currentQuestLineIndex);
-                    }
-                    if (currentSO_Dialogues.so_Choices.Count > 0)
-                    {
-   
-                        CreateChoiceUIs();
-                    }
-                    else
-                    {
-                        if (currentSO_Dialogues.nextChapterDialogue == null)
+                        if (charactersToBeRemoved.Count > 0)
                         {
-                            // Debug.Log("AUTO CLOSE BEING DONE");
-                            if (isEndTransitionEnabled)
+                            for (int removedIndex = 0; removedIndex < charactersToBeRemoved.Count;)
                             {
+                                if (charactersToBeRemoved[removedIndex] == oldList[oldIndex])
+                                {
+                                    //It already is marked to be removed
+                                    break;
+                                }
+                                removedIndex++;
+                                if (currentIndex >= charactersToBeRemoved.Count)
+                                {
+                                    //It has not been already marked to be removed
+                                    charactersToBeRemoved.Add(oldList[oldIndex]);
+                                }
 
-                                //Debug.Log("END TRANSIONING");
-                                // TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, OnCloseCharacterDialogueUI);
-                                TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, OnCloseCharacterDialogueUI);
 
-                            }
-                            else
-                            {
-                                // Debug.Log("END WITHOUT TRANSIONING");
-                                OnCloseCharacterDialogueUI();
                             }
                         }
                         else
                         {
-                            ResetCharacterDialogueUI();
+                            charactersToBeRemoved.Add(oldList[oldIndex]);
                         }
-                       
-                    }
 
+
+
+                    }
                 }
+                
+            }
+            else
+            {
+                charactersToBeRemoved.Add(oldList[oldIndex]);
+            }
+
+
+        }
+
+    }
+
+    void CheckCachedCharacters(List<CharacterData> p_characterDatas) //Rename and chop things into functions
+    {
+        List<SO_Character> newCharacters = new List<SO_Character>();
+        List<SO_Character> oldCharacters = new List<SO_Character>();
+        List<SO_Character> charactersToBeRemoved = new List<SO_Character>();
+        List<SO_Character> charactersToBeAdded = new List<SO_Character>();
+
+        for (int i = 0; i < p_characterDatas.Count; i++)
+        {
+            newCharacters.Add(p_characterDatas[i].character);
+            //Debug.Log("CURRENT: " + newCharacters[i].name);
+        }
+        for (int i = 0; i < savedCharacters.Count; i++)
+        {
+            oldCharacters.Add(savedCharacters[i].so_Character);
+            //Debug.Log("saved: " + characterPresetDatas[i].name);
+        }
+        //Mark the Characters to Add and Characters that Exists
+        IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
+        //Mark the Characters to Remove
+        IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
+        for (int i = 0; i < charactersToBeAdded.Count; i++)
+        {
+
+           // Debug.Log("ADD: " + charactersToBeAdded[i].name);
+        }
+        for (int i = 0; i < charactersToBeRemoved.Count; i++)
+        {
+           // Debug.Log("REMOVE: " + charactersToBeRemoved[i].name);
+        }
+
+        RemoveAvatar(charactersToBeRemoved);
+        AddAvatar(charactersToBeAdded);
+    }
+
+    Character FindPreset(SO_Character p_so_Character)
+    {
+       
+        for (int x = 0; x < savedCharacters.Count; x++)
+        {
+            if (savedCharacters[x].so_Character == p_so_Character)
+            {
+                return savedCharacters[x];
+                   
             }
 
         }
+        return null;
+
+      
     }
-    IEnumerator Co_EmotionIn(Image p_avatarImage,Sprite p_avatar,int p_characterDataIndex, CharacterEmotionType p_emotion)
+    void SetSpeech(SpeechTransitionType p_Type, string p_words)
     {
-        p_avatarImage.color = new Color(p_avatarImage.color.r, p_avatarImage.color.g, p_avatarImage.color.b, 0);
-        p_avatarImage.sprite = p_avatar;// currentDialogue.character.avatars[(int)currentDialogue.emotion];
-
-        var sequence = DOTween.Sequence()
-        .Append(p_avatarImage.DOFade(1, avatarFadeTime));
-        sequence.Play();
-        yield return sequence.WaitForCompletion();
-        yield return new WaitForSeconds(avatarDelayTime);
-        var sequenceTwo = DOTween.Sequence()
-        .Append(emoticonBubbleImage.DOFade(1, emoticonBubbleFadeTime));
-        sequenceTwo.Join(emoticonBubbleRectTransform.DOSizeDelta(characterPresetDatas[p_characterDataIndex].emoteBubbleEndRectTransform.sizeDelta, emoticonBubbleSizeTime, false));
-        sequenceTwo.Play();
-        yield return new WaitForSeconds(emoticonSizeTime / 2);//sequence.WaitForCompletion();
-        emoticonObject.SetActive(true);
-        var sequenceThree = DOTween.Sequence()
-        .Append(emoticonImage.DOFade(1, emoticonFadeTime));
-        sequenceThree.Join(emoticonRectTransform.DOSizeDelta(targetEmoticonSize.sizeDelta, emoticonSizeTime, false));
-        sequenceThree.Play();
-        emoticonAnim.SetInteger("enum", (int)p_emotion);
-    
-
+        if (isSkipping || p_Type == SpeechTransitionType.None)
+        {
+            SetWords(p_words);
+        }
+        else if (p_Type == SpeechTransitionType.Typewriter)
+        {
+            StartCoroutine(Co_TypeWriterEffect(dialogueText, p_words));
+        }
+   
+    }
+    void SetWords(string p_words)
+    {
+        dialogueText.text = p_words;
     }
 
-
-    IEnumerator Co_EmotionOut(int p_characterDataIndex)
+    void SetCueBank(Dialogue p_characterDatas)
     {
-        var sequenceThree = DOTween.Sequence()
-         .Append(emoticonImage.DOFade(0, emoticonFadeTime));
-        sequenceThree.Join(emoticonRectTransform.DOSizeDelta(defaultEmoticonSize.sizeDelta, emoticonSizeTime, false));
-        sequenceThree.Play();
-        yield return new WaitForSeconds(emoticonSizeTime / 2);//sequence.WaitForCompletion();
+        hapticText.text = p_characterDatas.hapticType.ToString();
+        vocalicText.text = p_characterDatas.vocalicType.ToString();
+        kinesicText.text = p_characterDatas.kinesicType.ToString();
+        oculesicText.text = p_characterDatas.oculesicType.ToString();
+        physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
+    }
 
-        var sequenceTwo = DOTween.Sequence()
-         .Append(emoticonBubbleImage.DOFade(0, emoticonBubbleFadeTime));
-        sequenceTwo.Join(emoticonBubbleRectTransform.DOSizeDelta(characterPresetDatas[p_characterDataIndex].emoteBubbleStartRectTransform.sizeDelta, emoticonBubbleSizeTime, false));
-        sequenceTwo.Play();
-        yield return sequenceTwo.WaitForCompletion();
-        emoticonObject.SetActive(false);
+    public void CheckIfReady()
+    {
+        if (runningCoroutines == 0)
+        {
+            //Debug.Log("READYING");
+            isSkipping = true;
+        }
+    }
+    public void OnNextButtonUIPressed()
+    {
+        
+        if (currentDialogueIndex < currentSO_Dialogues.dialogues.Count)
+        {
+            //Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
+           //     + " iS: " + isSkipping
+            //    + " iR: ");
+            Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
+            
+            if (runningCoroutines > 0 && !isSkipping)
+            {
+                isSkipping = true;
+                StopAllCoroutines();
+                runningCoroutines=0;
+               // Debug.Log("READYING");
+            
+            }
+          
+            else if (isSkipping)// && !isReady)
+            {
+              //  Debug.Log("READIED");
+                frame.SetActive(true);
+                NextDialogue();
+                OnNextButtonUIPressed();
+                return;
+
+            }
+           
+            CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
+            for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
+            {
+                //Set Character UI Rect Transform
+                //Position
+                SetRectTransformToPreset(currentDialogue.characterDatas[i].characterPosition, currentDialogue.characterDatas[i].character);
+                SetAvatarFlipOrientation(currentDialogue.characterDatas[i]);
+                SetFacialEmotion(currentDialogue.characterDatas[i]);
+                SetBodyEmotion(currentDialogue.characterDatas[i]);
+                SetSpeakerTint(currentDialogue.characterDatas[i].isSpeaking, currentDialogue.characterDatas[i].character);
+            }
+
+            SetSpeakerName(currentDialogue.characterDatas);
+            SetBackground(currentDialogue.backgroundSprite);
+            SetSpeech(currentDialogue.speechTransitionType, currentDialogue.words);
+            SetCueBank(currentDialogue);
+        }
+        else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
+        {
+            if (!isAlreadyEnded)
+            {
+                if (currentSO_Dialogues.choiceDatas.Count > 1)
+                {
+                    CreateChoiceUIs();
+                }
+                else if (currentSO_Dialogues.choiceDatas.Count == 1)
+                {
+                    if (isEndTransitionEnabled)
+                    {
+                        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, OnCloseCharacterDialogueUI);
+                    }
+                    else
+                    {
+                        OnCloseCharacterDialogueUI();
+                    }
+                }
+                else
+                {
+                    ResetCharacterDialogueUI();
+                }
+            }
+        }
     }
 }
