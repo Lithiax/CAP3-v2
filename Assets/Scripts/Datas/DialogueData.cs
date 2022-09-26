@@ -70,7 +70,8 @@ public enum PhysicalApperanceType
 public class CharacterData
 {
     public SO_Character character;
-    public CharacterEmotionType emotion;
+    public CharacterEmotionType faceEmotion;
+    public CharacterEmotionType bodyEmotion;
 
     public CharacterPositionType characterPosition;
     public bool isFlipped;

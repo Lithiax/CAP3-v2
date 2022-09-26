@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterUI : MonoBehaviour
+public class CharacterUI : Character
 {
-    public SO_Character so_Character;
-    public RectTransform avatarRectTransform;
 
+    public RectTransform avatarRectTransform;
     public Image avatarImage;
 
     private void Awake()
@@ -15,15 +14,5 @@ public class CharacterUI : MonoBehaviour
         avatarRectTransform = avatarRectTransform ? avatarRectTransform : GetComponent<RectTransform>();
         avatarImage = avatarImage ? avatarImage : GetComponent<Image>();
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-  
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

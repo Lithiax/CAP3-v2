@@ -14,7 +14,7 @@ public class CharacterAnim : MonoBehaviour
     {
         charAnim = GetComponent<Animator>();
         expressionController = GetComponent<Live2D.Cubism.Framework.Expression.CubismExpressionController>();
-        StartCoroutine(test());
+        //StartCoroutine(test());
     }
 
     private void Update()
@@ -27,20 +27,28 @@ public class CharacterAnim : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            charAnim.SetTrigger("madTrigger");
+            Debug.Log("look around");
+            charAnim.SetTrigger("lookAround");
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
-            charAnim.SetTrigger("embarassedTrigger");
+            Debug.Log("laughing");
+            charAnim.SetTrigger("laughing");
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("MIX");
+            charAnim.SetTrigger("laughing");
+            expressionController.CurrentExpressionIndex = 4;
         }
     }
 
-    IEnumerator test()
-    {
-        charAnim.SetTrigger("madTrigger");
-        yield return new WaitForSeconds(5f);
-        charAnim.SetTrigger("embarassedTrigger");
-    }
+    //IEnumerator test()
+    //{
+    //    charAnim.SetTrigger("madTrigger");
+    //    yield return new WaitForSeconds(5f);
+    //    charAnim.SetTrigger("embarassedTrigger");
+    //}
     void FacialExpressions()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -55,6 +63,14 @@ public class CharacterAnim : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             expressionController.CurrentExpressionIndex = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            expressionController.CurrentExpressionIndex = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            expressionController.CurrentExpressionIndex = 4;
         }
     }
 }
