@@ -7,6 +7,6 @@ public class DialogueNodeData
 {
     public string Name;
     public string NodeGUID;
-    public ChatCollectionSO chatCollection;
+    public ScriptableObject chatCollection;
     public Vector2 Position;
 }

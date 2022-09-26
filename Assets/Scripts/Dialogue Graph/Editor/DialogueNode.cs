@@ -9,7 +9,7 @@ public class DialogueNode : Node
     public string GUID;
     public string Name;
 
-    public ChatCollectionSO chatCollection;
+    public ScriptableObject chatCollection;
 
     public bool EntryPoint = false;
 }

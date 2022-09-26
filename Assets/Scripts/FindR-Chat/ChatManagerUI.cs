@@ -9,6 +9,7 @@ public class ChatManagerUI : MonoBehaviour
     FindREventsManager EventManager;
     [SerializeField] Scrollbar scrollBar;
     [SerializeField] VerticalLayoutGroup chatParent;
+    [SerializeField] RectTransform chatParentTransform;
     [SerializeField] GameObject chatPrefab;
     [HideInInspector] public List<ChatUser> chatUsers;
 
@@ -73,16 +74,16 @@ public class ChatManagerUI : MonoBehaviour
         oldchatElementsTransform = chatElements.offsetMin;
     }
 
-    public void StartSpawningChat(ChatUser parent, ChatCollectionSO SelectedChats)
+    public void StartSpawningChat(ChatUser parent, DialogueGraphAPI Tree)
     {
         parent.currentChatComplete = false;
-        StartCoroutine(SpawnChats(parent, SelectedChats));
+        StartCoroutine(SpawnChats(parent, Tree));
     }
 
-    void ResponseClicked(ChatUser parent, ChatCollectionSO SelectedChats)
+    void ResponseClicked(ChatUser parent, DialogueGraphAPI Tree, DialogueNodeData nodeData)
     {
-        StartSpawningChat(parent, SelectedChats);
-        parent.currentCollection = SelectedChats;
+        parent.DialogueTree.MoveToNode(nodeData.chatCollection);
+        StartSpawningChat(parent, Tree);
         HideResponse();
     }
     void EventClicked(ChatUser parent, ChatEvent chatCollection)
@@ -91,21 +92,24 @@ public class ChatManagerUI : MonoBehaviour
     }
 
     public void ActivateChat(List<GameObject> chats, bool con)
-    { 
+    {
+        if (chats.Count <= 0) { Debug.Log("chat collection empty"); return; }
         foreach (GameObject chat in chats)
         {
             chat.SetActive(con);
         }
 
         ChatBubbleUI chatText = chats[chats.Count - 1].GetComponent<ChatBubbleUI>();
-        StartCoroutine(reset(chatText));
+        StartCoroutine(RebuildUI());
 
         StartCoroutine(ScrollDown());
     }
 
-    IEnumerator SpawnChats(ChatUser parent, ChatCollectionSO ChatCollection)
+    IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
-        foreach (ChatBubble chat in ChatCollection.ChatBubbles)
+        ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
+
+        foreach (ChatBubble chat in ChatCollection.ChatData)
         {
             GameObject chatObj = SpawnChatBubble(chat, parent);
             parent.OnChatSpawned(chatObj, chat.chatText);
@@ -116,7 +120,7 @@ public class ChatManagerUI : MonoBehaviour
             {
                 parent.ResetNotif();
                 ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
-                StartCoroutine(reset(chatText));
+                StartCoroutine(RebuildUI());
 
                 StartCoroutine(ScrollDown());
             }
@@ -135,7 +139,7 @@ public class ChatManagerUI : MonoBehaviour
         }
         
         if (parent.isToggled)
-            HandleResponse(parent, ChatCollection);
+            HandleResponse(parent, Tree);
     }   
 
     public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent)
@@ -156,14 +160,16 @@ public class ChatManagerUI : MonoBehaviour
         scrollBar.value = 0;
     }
 
-    IEnumerator reset(ChatBubbleUI chatText)
+    IEnumerator RebuildUI()
     {
-        yield return new WaitForSeconds(0.1f);
-        chatText.andchorFitter.enabled = false;
+        yield return new WaitForSeconds(0.01f);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(chatParentTransform);
+        //scrollAreaSizeFitter.enabled = true;
+        //chatText.andchorFitter.enabled = false;
         StartCoroutine(ScrollDown());
     }
 
-    public void HandleResponse(ChatUser parent, ChatCollectionSO ChatCollection)
+    public void HandleResponse(ChatUser parent, DialogueGraphAPI Tree)
     {
         if (!parent.currentChatComplete)
         {
@@ -171,7 +177,9 @@ public class ChatManagerUI : MonoBehaviour
             return;
         }
 
-        if (ChatCollection.isPrompt() || ChatCollection.isEvent())
+        ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
+
+        if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
             //Clear button on click events
             foreach (ReplyButton bData in replyButtonData)
@@ -182,13 +190,13 @@ public class ChatManagerUI : MonoBehaviour
             }
 
             //Set button on click functions
-            for (int i = 0; i < ChatCollection.Prompts.Count; i++)
+            for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
             {
                 //WTF ?????, today I learned about closure problems : )
                 int copy = i;
 
                 replyButtonData[copy].replyButtonComp.onClick.
-                    AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[copy]); });
+                    AddListener(delegate { ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[copy]); });
 
                 //replyButtonData[i].replyButtonComp.onClick.
                 //    AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[i]); });
@@ -203,9 +211,10 @@ public class ChatManagerUI : MonoBehaviour
                     AddListener(delegate { EventClicked(parent, ChatCollection.ChatEvents[copy]); });
             }
 
-            for (int i = 0; i < ChatCollection.Prompts.Count; i++)
+            for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
             {
-                replyButtonData[i].replyButtonText.text = ChatCollection.Prompts[i].PromptText;
+                ChatCollectionSO collectionSO = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
+                replyButtonData[i].replyButtonText.text = collectionSO.PromptText;
                 replyButtonData[i].buttonObj.SetActive(true);
             }
 
@@ -215,7 +224,8 @@ public class ChatManagerUI : MonoBehaviour
                 replyButtonData[i].buttonObj.SetActive(true);
             }
 
-            ShowResponseBox(ChatCollection.Prompts);
+ 
+            ShowResponseBox();
         }
         else
         {
@@ -223,7 +233,7 @@ public class ChatManagerUI : MonoBehaviour
         }
     }
 
-    void ShowResponseBox(List<ChatCollectionSO> prompts)
+    void ShowResponseBox()
     {
         /*Left rectTransform.offsetMin.x;
         /*Right rectTransform.offsetMax.x;

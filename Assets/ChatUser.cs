@@ -7,10 +7,11 @@ using TMPro;
 
 public class ChatUser : MonoBehaviour
 {
-    [SerializeField] ChatCollectionSO initialChatCollection;
+    //[SerializeField] ChatCollectionSO initialChatCollection;
+    public DialogueGraphAPI DialogueTree { get; private set; }
 
-     public ChatCollectionSO currentCollection;
-    List<GameObject> chats = new List<GameObject>();
+    //public ChatCollectionSO currentCollection;
+    List<GameObject> chatsObj = new List<GameObject>();
     [HideInInspector] public Toggle toggle;
 
     ChatManagerUI chatManager;
@@ -29,21 +30,24 @@ public class ChatUser : MonoBehaviour
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
+        DialogueTree = GetComponent<DialogueGraphAPI>();
     }
 
-    public void Init(ChatCollectionSO initCol, string name, Sprite img, ChatManagerUI manager, ToggleGroup toggleGroup)
+    public void Init(DialogueContainer tree, string name, Sprite img, ChatManagerUI manager, ToggleGroup toggleGroup)
     {
+        DialogueTree.SetDialogueTree(tree);
         chatManager = manager;
         chatManager.chatUsers.Add(this);
         toggle.group = toggleGroup;
 
         isToggled = toggle.isOn;
 
-        initialChatCollection = initCol;
-        currentCollection = initCol;
+        //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
+        //currentCollection = initialChatCollection;
+
         profileName.text = name;
         profileImage.sprite = img;
-        chatManager.StartSpawningChat(this, initialChatCollection);
+        chatManager.StartSpawningChat(this, DialogueTree);
     }
 
     public void SetNotif()
@@ -62,7 +66,7 @@ public class ChatUser : MonoBehaviour
 
     public void OnChatSpawned(GameObject spawnedObj, string text)
     {
-        chats.Add(spawnedObj);
+        chatsObj.Add(spawnedObj);
         lastMessageText.text = text;
     }
 
@@ -71,10 +75,10 @@ public class ChatUser : MonoBehaviour
         isToggled = toggle;
 
         ResetNotif();
-        chatManager.ActivateChat(chats, toggle);
+        chatManager.ActivateChat(chatsObj, toggle);
 
         if (!toggle) return;
         Debug.Log(profileName.text);
-        chatManager.HandleResponse(this, currentCollection);
+        chatManager.HandleResponse(this, DialogueTree);
     }
 }

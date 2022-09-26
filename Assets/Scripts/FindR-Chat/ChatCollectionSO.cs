@@ -16,20 +16,20 @@ public class ChatCollectionSO : ScriptableObject
 {
 
     [Header("Chat Bubbles")]
-    public List<ChatBubble> ChatBubbles;
+    public List<ChatBubble> ChatData;
 
     [Header("Prompts")]
     public string PromptText;
-    public List<ChatCollectionSO> Prompts;
+    //public List<ChatCollectionSO> Prompts;
 
     [Header("Event Parameters")]
 
     public List<ChatEvent> ChatEvents;
 
-    public bool isPrompt()
-    {
-        return Prompts.Count >= 1;
-    }
+    //public bool isPrompt()
+    //{
+    //    return Prompts.Count >= 1;
+    //}
     public bool isEvent()
     {
         return ChatEvents.Count >= 1;

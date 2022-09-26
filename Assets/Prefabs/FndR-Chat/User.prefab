@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 1280425108106135014}
   - component: {fileID: 757375123}
   - component: {fileID: 757375124}
+  - component: {fileID: -7319150554765499538}
   m_Layer: 5
   m_Name: User
   m_TagString: Untagged
@@ -403,10 +404,9 @@ MonoBehaviour:
   profileName: {fileID: 1280425108910947902}
   lastMessageText: {fileID: 1280425108283711705}
   profileImage: {fileID: 3810570312977778659}
-  inResponse: 0
+  currentChatComplete: 0
   notifObj: {fileID: 104694925}
   notifText: {fileID: 341488702}
-  OnPrompt: 0
 --- !u!114 &757375124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,6 +467,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &-7319150554765499538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280425108106135033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3849edb3b9d2a144af6fd7b2711a632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1280425108283711707
 GameObject:
   m_ObjectHideFlags: 0

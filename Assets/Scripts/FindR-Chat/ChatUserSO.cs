@@ -7,5 +7,6 @@ public class ChatUserSO : ScriptableObject
 {
     public Sprite profileImage;
     public string profileName;
-    public ChatCollectionSO initialChatCollection;
+    //public ChatCollectionSO initialChatCollection;
+    public DialogueContainer dialogueTree;
 }

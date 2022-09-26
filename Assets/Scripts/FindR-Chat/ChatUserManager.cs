@@ -24,6 +24,6 @@ public class ChatUserManager : MonoBehaviour
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
 
-        UserComp.Init(data.initialChatCollection, data.profileName, data.profileImage, chatManager, toggleGroup);
+        UserComp.Init(data.dialogueTree, data.profileName, data.profileImage, chatManager, toggleGroup);
     }
 }

@@ -32,7 +32,7 @@ public class DialogueGraphView : GraphView
 
         ports.ForEach(port => 
         {
-            if (startPort != port && startPort.node != port.node)
+            if (startPort != port /*&& startPort.node != port.node*/)
             {
                 compatiblePorts.Add(port);
             }
@@ -46,12 +46,12 @@ public class DialogueGraphView : GraphView
         return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
     }
 
-    public void CreateNode(string nodeName, ChatCollectionSO chatCollection)
+    public void CreateNode(string nodeName, ScriptableObject chatCollection)
     {
         AddElement(CreateDialogueNode(nodeName, chatCollection));
     }
 
-    public DialogueNode CreateDialogueNode(string nodeName, ChatCollectionSO chatCollectionSO)
+    public DialogueNode CreateDialogueNode(string nodeName, ScriptableObject chatCollectionSO)
     {
         string tempName = chatCollectionSO == null ? nodeName : chatCollectionSO.name;
 
@@ -75,7 +75,7 @@ public class DialogueGraphView : GraphView
         //Create scriptable object housing
         var objField_ScriptableObject = new ObjectField
         {
-            objectType = typeof(ChatCollectionSO),
+            objectType = typeof(ScriptableObject),
             allowSceneObjects = false,
             value = chatCollectionSO,
         };
@@ -90,7 +90,7 @@ public class DialogueGraphView : GraphView
         objField_ScriptableObject.RegisterValueChangedCallback(v =>
         {
             //dialogueNode.chatCollection = objField_ScriptableObject.value as ChatCollectionSO;
-            dialogueNode.chatCollection = v.newValue as ChatCollectionSO;
+            dialogueNode.chatCollection = v.newValue as ScriptableObject;
             if (dialogueNode.chatCollection == null)
             {
                 dialogueNode.title = "Dialogue Node";
