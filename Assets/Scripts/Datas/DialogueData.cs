@@ -20,13 +20,16 @@ public enum CharacterEmotionType
     mad,
     misc,
     none,
+    laugh,
+    smile,
 }
 
 public enum CharacterPositionType
 {
     left,
     center,
-    right
+    right,
+    none
 }
 
 public enum HapticType

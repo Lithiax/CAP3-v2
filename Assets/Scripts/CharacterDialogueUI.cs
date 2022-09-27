@@ -40,6 +40,8 @@ public class CharacterDialogueUI : MonoBehaviour
     [SerializeField]
     private List<CharacterPresetData> characterPresetDatas = new List<CharacterPresetData>();
 
+    [SerializeField]
+    private GameObject cueBankContainer;
     [SerializeField] private TMP_Text hapticText;
     [SerializeField] private TMP_Text vocalicText;
     [SerializeField] private TMP_Text kinesicText;
@@ -83,11 +85,6 @@ public class CharacterDialogueUI : MonoBehaviour
         onCharacterSpokenToEvent.AddListener(OnCharacterSpokenTo);
         choiceUIsContainerTransform = choiceUIsContainer.transform;
         choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
-
-        //for (int i =0; i< characterPresetDatas.Count; i++)
-        //{
-        //    characterPresetDatas[i].Initialize();
-        //}
 
     }
 
@@ -397,17 +394,19 @@ public class CharacterDialogueUI : MonoBehaviour
                 if (foundCharacter is CharacterUI)
                 {
                     CharacterUI foundPreset = foundCharacter as CharacterUI;
-                 
-                    if (isSkipping)
+                    if (p_charactersToBeRemoved[i].avatar != null)
                     {
+                        if (isSkipping)
+                        {
 
-                        // Debug.Log("REMOVINGRR " + foundPreset);
-                        savedCharacters.Remove(foundPreset);
-                        Destroy(foundPreset.gameObject);
-                    }
-                    else
-                    {
-                        StartCoroutine(AvatarFadeOut(foundPreset.avatarImage, foundPreset));
+                            // Debug.Log("REMOVINGRR " + foundPreset);
+                            savedCharacters.Remove(foundPreset);
+                            Destroy(foundPreset.gameObject);
+                        }
+                        else
+                        {
+                            StartCoroutine(AvatarFadeOut(foundPreset.avatarImage, foundPreset));
+                        }
                     }
                     
                 }
@@ -435,8 +434,11 @@ public class CharacterDialogueUI : MonoBehaviour
             {
                 if (savedCharacters[i] is CharacterUI)
                 {
-                    CharacterUI currentCharacterUI = savedCharacters[i] as CharacterUI;
-                    currentCharacterUI.avatarImage.color = new Color(1, 1, 1, 1);
+                    if (savedCharacters[i].so_Character.avatar != null)
+                    {
+                        CharacterUI currentCharacterUI = savedCharacters[i] as CharacterUI;
+                        currentCharacterUI.avatarImage.color = new Color(1, 1, 1, 1);
+                    }
                 }
                 
             }
@@ -446,7 +448,7 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             for (int i = 0; i < p_charactersToBeAdded.Count; i++)
             {
-                Character newCharacter;
+                Character newCharacter = null;
                 if (p_charactersToBeAdded[i].prefab) //Live 2D
                 {
                     newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
@@ -455,13 +457,22 @@ public class CharacterDialogueUI : MonoBehaviour
                 }
                 else //UI
                 {
-                    newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform) ;
-                    CharacterUI newCharacterUI = newCharacter as CharacterUI;
-                    newCharacter.so_Character = p_charactersToBeAdded[i];
-                    StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                    if (p_charactersToBeAdded[i].avatar != null)
+                    {
+                        newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform) ;
+                        CharacterUI newCharacterUI = newCharacter as CharacterUI;
+                        newCharacter.so_Character = p_charactersToBeAdded[i];
+                   
+                        StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                    }
+               
 
                 }
-                savedCharacters.Add(newCharacter);
+                if (newCharacter != null)
+                {
+                    savedCharacters.Add(newCharacter);
+                }
+            
             }
         }
     }
@@ -494,6 +505,7 @@ public class CharacterDialogueUI : MonoBehaviour
             {
                 CharacterUI foundPreset = foundCharacter as CharacterUI;
                 Quaternion target;
+                
                 if (p_characterData.isFlipped)
                 {
                     target = Quaternion.Euler(0f, 180f, 0f);
@@ -506,6 +518,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 {
                     StartCoroutine(AvatarFlipSequence(foundPreset.avatarImage, foundPreset.avatarRectTransform, target));
                 }
+                
             }
             
                
@@ -691,11 +704,23 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void SetCueBank(Dialogue p_characterDatas)
     {
-        hapticText.text = p_characterDatas.hapticType.ToString();
-        vocalicText.text = p_characterDatas.vocalicType.ToString();
-        kinesicText.text = p_characterDatas.kinesicType.ToString();
-        oculesicText.text = p_characterDatas.oculesicType.ToString();
-        physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
+        if (p_characterDatas.hapticType == HapticType.none &&
+            p_characterDatas.vocalicType == VocalicType.none &&
+            p_characterDatas.kinesicType == KinesicType.none &&
+            p_characterDatas.oculesicType == OculesicType.none &&
+            p_characterDatas.physicalApperanceType == PhysicalApperanceType.none)
+        {
+            cueBankContainer.gameObject.SetActive(true);
+            hapticText.text = p_characterDatas.hapticType.ToString();
+            vocalicText.text = p_characterDatas.vocalicType.ToString();
+            kinesicText.text = p_characterDatas.kinesicType.ToString();
+            oculesicText.text = p_characterDatas.oculesicType.ToString();
+            physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
+        }
+        else
+        {
+            cueBankContainer.gameObject.SetActive(false);
+        }
     }
 
     public void CheckIfReady()

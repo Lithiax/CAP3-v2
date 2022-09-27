@@ -11,6 +11,6 @@ public class ChoiceData
 [CreateAssetMenu(fileName = "New Dialogues Scriptable Object", menuName = "Scriptable Objects/Dialogues")]
 public class SO_Dialogues : ScriptableObject
 {
-    [NonReorderable] public List<Dialogue> dialogues = new List<Dialogue>();
+    public List<Dialogue> dialogues = new List<Dialogue>();
     public List<ChoiceData> choiceDatas = new List<ChoiceData>();
 }
