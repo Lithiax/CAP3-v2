@@ -29,7 +29,7 @@ public class AudioManager : MonoBehaviour
     void Awake()
     {
         _instance = this;
-        isFirstEnterRoomTime = true;
+      
         foreach (SoundData currentSoundData in sounds)
         {
             currentSoundData.source = gameObject.AddComponent<AudioSource>();
