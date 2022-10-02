@@ -20,11 +20,12 @@ public class SpreadSheetAPI : MonoBehaviour
 
     [SerializeField] private string fileName;
 
-    [SerializeField]
-    private int currentIndex;
+    [SerializeField] private string sheetNameTester = "1 - Maeve - Start";
+    //[SerializeField]
+    //public int currentIndex;
 
-    [SerializeField]
-    private List<string> sheets = new List<string>();
+    //[SerializeField]
+    //public List<string> sheets = new List<string>();
 
     bool isUpdatingEditorValues = true;
     public static Action OnFinishedLoadingValues;
@@ -35,13 +36,19 @@ public class SpreadSheetAPI : MonoBehaviour
     public void Awake()
     {
         instance = this;
-        StartCoroutine(Co_LoadValues());
+        StartCoroutine(Co_LoadValues(sheetNameTester));
     
     }
 
     public void Reload()
     {
-        StartCoroutine(Co_LoadValues());
+        StartCoroutine(Co_LoadValues(sheetNameTester));
+    }
+
+    public static void SetCurrentIndexToSheet(string p_sheetName)
+    {
+        instance.StartCoroutine(instance.Co_LoadValues(p_sheetName));
+
     }
 
     public static string[] GetCurrentSheetRow(int p_desiredSheetRowCell)
@@ -52,7 +59,7 @@ public class SpreadSheetAPI : MonoBehaviour
     public static string GetCellString(int p_desiredSheetRowCell, int p_desiredSheetCollumnCell)
     {
         string[] currentSheetRow = GetCurrentSheetRow(p_desiredSheetRowCell);
-
+        //Debug.Log(p_desiredSheetRowCell + " GETTING " + p_desiredSheetCollumnCell);
         return currentSheetRow[p_desiredSheetCollumnCell];
     }
 
@@ -74,12 +81,12 @@ public class SpreadSheetAPI : MonoBehaviour
     }
 
 
-    public IEnumerator Co_LoadValues()
+    public IEnumerator Co_LoadValues(string p_sheetName)
     {
         if (isUpdatingEditorValues)
         {
             string rawJson = "";
-            UnityWebRequest www = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/18Z4onzDE8gProsuP7TYJBkRCdYykBw9IstRoFffS_KM/values/" + sheets[currentIndex] + "?key=AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM");
+            UnityWebRequest www = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/18Z4onzDE8gProsuP7TYJBkRCdYykBw9IstRoFffS_KM/values/" + p_sheetName + "?key=AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM");
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.ConnectionError ||
                 www.result == UnityWebRequest.Result.ProtocolError ||
@@ -119,7 +126,7 @@ public class SpreadSheetAPI : MonoBehaviour
         {
 
         }
-        OnFinishedLoadingValues.Invoke();
+        OnFinishedLoadingValues?.Invoke();
 
     }
 }

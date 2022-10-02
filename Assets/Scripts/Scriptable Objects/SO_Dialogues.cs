@@ -6,6 +6,7 @@ public class ChoiceData
 {
     public string words;
     public SO_Dialogues so_branchDialogue;
+    public string branchDialogueName;
 
 }
 [CreateAssetMenu(fileName = "New Dialogues Scriptable Object", menuName = "Scriptable Objects/Dialogues")]
