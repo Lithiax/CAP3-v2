@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainFindRUI : MonoBehaviour
 {
@@ -36,10 +37,12 @@ public class MainFindRUI : MonoBehaviour
             if (b == but)
             {
                 b.image.color = buttonActivatedColor;
+                b.GetComponentInChildren<TextMeshProUGUI>().color = buttonActivatedColor;
                 continue;
             }
 
             b.image.color = oldButtonColor;
+            b.GetComponentInChildren<TextMeshProUGUI>().color = oldButtonColor;
         }
     }
 }
