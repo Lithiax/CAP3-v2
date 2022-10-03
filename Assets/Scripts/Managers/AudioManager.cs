@@ -21,36 +21,26 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private bool isFirstTime = true;
-   // private Passageway currentAudioPassageway;
     [NonReorderable] public SoundData[] sounds;
     public AudioMixer mixer;
     string currentSongPlaying = "";
     string previousSongPlaying = "";
-    bool isFirstEnterRoomTime = true;
     // Start is called before the first frame update
     void Awake()
     {
         _instance = this;
-        isFirstEnterRoomTime = true;
-        foreach (SoundData s in sounds)
+      
+        foreach (SoundData currentSoundData in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.outputAudioMixerGroup = s.output;
-            s.source.clip = s.clip;
-            s.source.volume = s.volume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
+            currentSoundData.source = gameObject.AddComponent<AudioSource>();
+            currentSoundData.source.outputAudioMixerGroup = currentSoundData.output;
+            currentSoundData.source.clip = currentSoundData.clip;
+            currentSoundData.source.volume = currentSoundData.volume;
+            currentSoundData.source.pitch = currentSoundData.pitch;
+            currentSoundData.source.loop = currentSoundData.loop;
         }
-        //PlayerManager.onRoomEnteredEvent.AddListener(PlayOnRoomEnterPassageway);
-        //TimeManager.onDayChangingEvent.AddListener(OnDayChangingEvent);
     }
 
-    //private void OnDestroy()
-    //{
-    //    PlayerManager.onRoomEnteredEvent.RemoveListener(PlayOnRoomEnterPassageway);
-    //    TimeManager.onDayChangingEvent.RemoveListener(OnDayChangingEvent);
-    //}
     void Start()
     {
         if (PlayerPrefs.HasKey("MasterVolume"))
@@ -69,50 +59,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
-    //public void OnDayChangingEvent()
-    //{
-    //    PlayOnRoomEnterPassageway(PlayerManager.instance.startRoomPassageway);
-    //}
-
-    public SoundData GetSoundByName(string name)
+    public SoundData GetSoundByName(string p_name)
     {
-        SoundData sound = Array.Find(sounds, sound => sound.name == name);
+        SoundData sound = Array.Find(sounds, sound => sound.name == p_name);
         return sound;
-    }
-
-    public void PlayOnRoomEnterPassageway(Passageway p_passageway)
-    {
-        if (!isFirstTime)
-        {
-            if (p_passageway.room.roomDescription != currentSongPlaying) 
-                isFirstTime = true;
-        }
-        if (isFirstTime)
-        {
-            isFirstTime = false;
-            previousSongPlaying = currentSongPlaying;
-            currentSongPlaying = p_passageway.room.roomDescription;
-            StartCoroutine(Co_AudioFade());
-
-            //PlayByName(p_passageway.room.roomDescription);
-        }
-    }
-
-    public void PlayOnRoomEnterString(string p_passageway)
-    {
-        if (!isFirstTime)
-        {
-            if (p_passageway != currentSongPlaying)
-                isFirstTime = true;
-        }
-        if (isFirstTime)
-        {
-            isFirstTime = false;
-            previousSongPlaying = currentSongPlaying;
-            currentSongPlaying = p_passageway;
-            StartCoroutine(Co_AudioFade());
-        }
     }
 
     IEnumerator Co_AudioFade()
@@ -120,63 +70,60 @@ public class AudioManager : MonoBehaviour
         SoundData sound;
         string soundName = previousSongPlaying;
         sound = GetSoundByName(soundName);
-        //Debug.Log("PLAYYYINNG " + soundName);
+    
         if (soundName != "")
         {
-            //Debug.Log("REPLACE");
-            Sequence wee = DOTween.Sequence();
-            wee.Append(sound.source.DOFade(0, 1.25f));
-            wee.Play();
-            yield return wee.WaitForCompletion();
+            Sequence fadeOutSequence = DOTween.Sequence();
+            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+            fadeOutSequence.Play();
+            yield return fadeOutSequence.WaitForCompletion();
         }
 
         SoundData currentSound;
         string currentSoundName = currentSongPlaying;
         currentSound = GetSoundByName(currentSoundName);
-        //Debug.Log("NEWWWW PLAYYYINNG " + currentSoundName);
         currentSound.source.Play();
         if (currentSoundName != "")
         {
-            Sequence wee2 = DOTween.Sequence();
-            wee2.Append(currentSound.source.DOFade(1, 1.25f));
-            wee2.Play();
+            Sequence fadeInSequence = DOTween.Sequence();
+            fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
+            fadeInSequence.Play();
             Debug.Log("NEW");
         }
 
-        // yield return wee2.WaitForCompletion();
     }
 
-    public void StartCoFade(string song1, string song2)
+    public void TransitionAudio(string p_oldAudioClip, string p_newAudioClip)
     {
-        foreach (SoundData s in sounds)
+        foreach (SoundData currentSoundData in sounds)
         {
-            s.source.Stop();
+            currentSoundData.source.Stop();
         }
-        StartCoroutine(Co_AudioFade2(song1, song2));
+        StartCoroutine(Co_AudioFade(p_oldAudioClip, p_newAudioClip));
     }
 
-    public IEnumerator Co_AudioFade2(string song1, string song2)
+    public IEnumerator Co_AudioFade(string p_oldAudioClip, string p_newAudioClip)
     {
         SoundData sound;
-        string soundName = song1;
+        string soundName = p_oldAudioClip;
         sound = GetSoundByName(soundName);
         if (soundName != "")
         {
-            Sequence wee = DOTween.Sequence();
-            wee.Append(sound.source.DOFade(0, 1.25f));
-            wee.Play();
-            yield return wee.WaitForCompletion();
+            Sequence fadeOutSequence = DOTween.Sequence();
+            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+            fadeOutSequence.Play();
+            yield return fadeOutSequence.WaitForCompletion();
         }
 
         SoundData currentSound;
-        string currentSoundName = song2;
+        string currentSoundName = p_newAudioClip;
         currentSound = GetSoundByName(currentSoundName);
         currentSound.source.Play();
         if (currentSoundName != "")
         {
-            Sequence wee2 = DOTween.Sequence();
-            wee2.Append(currentSound.source.DOFade(1, 1.25f));
-            wee2.Play();
+            Sequence fadeInSequence = DOTween.Sequence();
+            fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
+            fadeInSequence.Play();
         }
     }
 }

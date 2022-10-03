@@ -20,13 +20,16 @@ public enum CharacterEmotionType
     mad,
     misc,
     none,
+    laugh,
+    smile,
 }
 
 public enum CharacterPositionType
 {
     left,
     center,
-    right
+    right,
+    none
 }
 
 public enum HapticType
@@ -82,11 +85,7 @@ public class Dialogue
 {
     public List< CharacterData >  characterDatas = new List< CharacterData >();
 
-    public HapticType hapticType;
-    public VocalicType vocalicType;
-    public KinesicType kinesicType;
-    public OculesicType oculesicType;
-    public PhysicalApperanceType physicalApperanceType;
+
     [TextArea]
     public string words;
 
