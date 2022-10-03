@@ -13,7 +13,7 @@ public class SpreadSheetAPI : MonoBehaviour
     //SimpleJSON JSON Parser Library Package https://drive.google.com/drive/folders/126VXfBnr-K6KCeTS4RqPJsatl_tfReiL
     //Published Google Sheet Format https://sheets.googleapis.com/v4/spreadsheets/<Spreadsheet id>/values/<Sheet name>?key=<API key>
 
-    //New:https://sheets.googleapis.com/v4/spreadsheets/18Z4onzDE8gProsuP7TYJBkRCdYykBw9IstRoFffS_KM/values/Sheet1?key=AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM
+    //New:https://sheets.googleapis.com/v4/spreadsheets/18Z4onzDE8gProsuP7TYJBkRCdYykBw9IstRoFffS_KM/values/Week1?key=AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM
     //new api key: AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM
 
     public static SpreadSheetAPI instance;
