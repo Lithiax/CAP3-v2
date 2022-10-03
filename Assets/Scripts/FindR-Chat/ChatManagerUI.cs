@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
+
 public class ChatManagerUI : MonoBehaviour
 {
     FindREventsManager EventManager;
@@ -240,23 +242,58 @@ public class ChatManagerUI : MonoBehaviour
         /*Top rectTransform.offsetMax.y;
         /*Bottom rectTransform.offsetMin.y;*/
 
-        replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, 60.255f);
+        //replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, 60.255f);
+
+        DOVirtual.Float(oldreplyBoxTransform.y, 60.255f, 0.1f, x =>
+        {
+            replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, x);
+        });
 
         //-0.1619987
-        chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, 96.326f);
+        //chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, 96.326f);
 
-        StartCoroutine(ScrollDown());
+        DOVirtual.Float(oldchatElementsTransform.y, 96.326f, 0.1f, x =>
+        {
+            chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, x);
+        })
+            .OnComplete(() =>
+        {
+            replyButtonsParent.SetActive(true);
+            StartCoroutine(ScrollDown());
+        });
 
-        replyButtonsParent.SetActive(true);
+
+        //replyButtonsParent.SetActive(true);
     }
 
     void HideResponse()
     {
         replyButtonsParent.SetActive(false);
 
-        replyBoxTransform.offsetMax = oldreplyBoxTransform;
+        if (replyBoxTransform.offsetMax != oldreplyBoxTransform)
+        {
+            DOVirtual.Float(60.255f, oldreplyBoxTransform.y, 0.1f, x =>
+            {
+                replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, x);
+            });
+        }
+        else
+            replyBoxTransform.offsetMax = oldreplyBoxTransform;
 
-        chatElements.offsetMin = oldchatElementsTransform;
+        if (chatElements.offsetMin != oldchatElementsTransform)
+        {
+            DOVirtual.Float(96.326f, oldchatElementsTransform.y, 0.1f, x =>
+            {
+                chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, x);
+            })
+                .OnComplete(() =>
+            {
+                StartCoroutine(ScrollDown());
+            });
+            return;
+        }
+        else
+            chatElements.offsetMin = oldchatElementsTransform;
 
         StartCoroutine(ScrollDown());
     }

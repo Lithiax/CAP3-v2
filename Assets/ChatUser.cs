@@ -13,6 +13,8 @@ public class ChatUser : MonoBehaviour
     //public ChatCollectionSO currentCollection;
     List<GameObject> chatsObj = new List<GameObject>();
     [HideInInspector] public Toggle toggle;
+    [SerializeField] Color toggleActivatedColor;
+    [SerializeField] Color toggleUnactiveColor;
 
     ChatManagerUI chatManager;
     [SerializeField] TextMeshProUGUI profileName;
@@ -70,14 +72,17 @@ public class ChatUser : MonoBehaviour
         lastMessageText.text = text;
     }
 
-    public void SwitchChat(bool toggle)
+    public void SwitchChat(bool tog)
     {
-        isToggled = toggle;
+        isToggled = tog;
 
         ResetNotif();
-        chatManager.ActivateChat(chatsObj, toggle);
+        chatManager.ActivateChat(chatsObj, tog);
 
-        if (!toggle) return;
+        toggle.image.color = tog ? toggleActivatedColor : toggleUnactiveColor;
+
+
+        if (!tog) return;
         Debug.Log(profileName.text);
         chatManager.HandleResponse(this, DialogueTree);
     }
