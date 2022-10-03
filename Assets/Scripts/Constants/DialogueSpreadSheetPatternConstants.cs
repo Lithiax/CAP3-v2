@@ -10,6 +10,17 @@ public class DialogueSpreadSheetPatternConstants
     public static string dialogueName = "[Dialogue]";
     public static string choiceName = "[Choice]";
 
+    [Header("Que Bank Collumn Patterns")]
+    public const int isEnabledCollumnPattern = 0;
+    public const int hapticTypeCollumnPattern = 1;
+    public const int vocalicTypeCollumnPattern = 2;
+    public const int kinesicCollumnPattern = 3;
+    public const int oculesicCollumnPattern = 4;
+    public const int physicalAppearanceCollumnPattern = 5;
+
+    [Header("Que Bank Row Patterns")]
+    public const int cueBankRowPattern = 2;
+
     [Header("Characters Collumn Patterns")]
     public const int characterCollumnPattern = 0;
     public const int faceEmotionCollumnPattern = 1;
@@ -23,28 +34,19 @@ public class DialogueSpreadSheetPatternConstants
     public const int characterTwoRowPattern = 3;
     public const int characterThreeRowPattern = 4;
 
-    [Header("Que Bank Collumn Patterns")]
-    public const int hapticTypeCollumnPattern = 0;
-    public const int vocalicTypeCollumnPattern = 1;
-    public const int kinesicCollumnPattern = 2;
-    public const int oculesicCollumnPattern = 3; 
-    public const int physicalAppearanceCollumnPattern = 4;
-
-    [Header("Que Bank Row Patterns")]
-    public const int cueBankRowPattern = 6;
-
     [Header("Words Row Patterns")]
-    public const int wordsRowPattern = 8;
+    public const int wordsRowPattern = 6;
 
     [Header("Misc Collumn Patterns")]
     public const int backgroundCollumnPattern = 0;
 
     [Header("Misc Row Patterns")]
-    public const int miscRowPattern = 10;
+    public const int miscRowPattern = 8;
 
     [Header("Choice Collumn Patterns")]
     public const int choiceNameCollumnPattern = 0;
     public const int nextDialogueSheetNameCollumnPattern = 1;
+    public const int choiceDamagePattern = 3;
 
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;

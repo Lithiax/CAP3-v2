@@ -85,11 +85,7 @@ public class Dialogue
 {
     public List< CharacterData >  characterDatas = new List< CharacterData >();
 
-    public HapticType hapticType;
-    public VocalicType vocalicType;
-    public KinesicType kinesicType;
-    public OculesicType oculesicType;
-    public PhysicalApperanceType physicalApperanceType;
+
     [TextArea]
     public string words;
 

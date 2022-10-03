@@ -665,23 +665,23 @@ public class teSTSA : MonoBehaviour
 
     void SetCueBank(Dialogue p_characterDatas)
     {
-        if (p_characterDatas.hapticType == HapticType.none &&
-            p_characterDatas.vocalicType == VocalicType.none &&
-            p_characterDatas.kinesicType == KinesicType.none &&
-            p_characterDatas.oculesicType == OculesicType.none &&
-            p_characterDatas.physicalApperanceType == PhysicalApperanceType.none)
-        {
-            cueBankContainer.gameObject.SetActive(true);
-            hapticText.text = p_characterDatas.hapticType.ToString();
-            vocalicText.text = p_characterDatas.vocalicType.ToString();
-            kinesicText.text = p_characterDatas.kinesicType.ToString();
-            oculesicText.text = p_characterDatas.oculesicType.ToString();
-            physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
-        }
-        else
-        {
-            cueBankContainer.gameObject.SetActive(false);
-        }
+        //if (p_characterDatas.hapticType == HapticType.none &&
+        //    p_characterDatas.vocalicType == VocalicType.none &&
+        //    p_characterDatas.kinesicType == KinesicType.none &&
+        //    p_characterDatas.oculesicType == OculesicType.none &&
+        //    p_characterDatas.physicalApperanceType == PhysicalApperanceType.none)
+        //{
+        //    cueBankContainer.gameObject.SetActive(true);
+        //    hapticText.text = p_characterDatas.hapticType.ToString();
+        //    vocalicText.text = p_characterDatas.vocalicType.ToString();
+        //    kinesicText.text = p_characterDatas.kinesicType.ToString();
+        //    oculesicText.text = p_characterDatas.oculesicType.ToString();
+        //    physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
+        //}
+        //else
+        //{
+        //    cueBankContainer.gameObject.SetActive(false);
+        //}
     }
 
     public void CheckIfReady()
