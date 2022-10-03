@@ -292,11 +292,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aff7873873628b842ab43062fc51ca94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChatUserParent: {fileID: 0}
   chatText: {fileID: 5333776925171198648}
   chatLayoutGroup: {fileID: 5333776925348523790}
   anchorLayoutGroup: {fileID: 5333776924861828389}
   andchorFitter: {fileID: 5333776924861828388}
   chatBG: {fileID: 5333776925968144410}
+  userChatColor: {r: 1, g: 0.4627451, b: 0.45882353, a: 1}
 --- !u!114 &247740976714187251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.69803923, g: 0.74509805, b: 0.7647059, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

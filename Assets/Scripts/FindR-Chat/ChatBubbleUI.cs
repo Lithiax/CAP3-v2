@@ -12,6 +12,7 @@ public class ChatBubbleUI : MonoBehaviour
     [SerializeField] VerticalLayoutGroup anchorLayoutGroup;
     public ContentSizeFitter andchorFitter;
     [SerializeField] Image chatBG;
+    [SerializeField] Color userChatColor;
 
     public void SetUpChat(ChatUser parent, string chat, bool user)
     {
@@ -20,7 +21,7 @@ public class ChatBubbleUI : MonoBehaviour
 
         if (user)
         {
-            chatBG.color = new Color32(115, 245, 130, 255);
+            chatBG.color = userChatColor;
             chatLayoutGroup.childAlignment = TextAnchor.UpperRight;
             anchorLayoutGroup.childAlignment = TextAnchor.UpperRight;
         }
