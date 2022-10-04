@@ -5,19 +5,21 @@ using System;
 
 public enum ChatEventTypes
 {
-    DateEvent
+    DateEvent,
+    BranchEvent
 };
 
 [System.Serializable]
 public class ChatEvent
 {
     public string EventData;
-    public Action<string, ChatEventTypes> onEvent;
+    public Action<ChatUserSO, string, ChatEventTypes> onEvent;
     public ChatEventTypes EventType;
+    public ChatUserSO userOwner;
 
     public void RaiseEvent()
     {
-        onEvent?.Invoke(EventData, EventType);
+        onEvent?.Invoke(userOwner, EventData, EventType);
     }
 
     public string GetResponse()

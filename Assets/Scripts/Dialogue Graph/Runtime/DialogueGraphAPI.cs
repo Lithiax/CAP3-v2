@@ -19,6 +19,9 @@ public class DialogueGraphAPI : MonoBehaviour
 
     public void SetDialogueTree(DialogueContainer tree)
     {
+        if (Nodes.Count > 0)
+            Nodes.Clear();
+
         DialogueTree = tree;
         //Create Nodes
         for (int i = 0; i < DialogueTree.DialogueNodeData.Count; i++)
@@ -62,6 +65,10 @@ public class DialogueGraphAPI : MonoBehaviour
         return objects;
     }
 
+    public void ClearTree()
+    {
+        Nodes.Clear();
+    }
     public ScriptableObject GetCurrentDialogueData()
     {
         return CurrentNode.BaseNodeData.chatCollection;

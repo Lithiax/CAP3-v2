@@ -10,5 +10,6 @@ public class ChatUserSO : ScriptableObject
     //public ChatCollectionSO initialChatCollection;
     public DialogueContainer dialogueTree;
 
+    public DialogueBranchesSO dialogueBranches;
     public ChatCollectionSO initialPreviousChat;
 }

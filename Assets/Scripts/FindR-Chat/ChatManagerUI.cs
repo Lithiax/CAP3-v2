@@ -30,6 +30,7 @@ public class ChatManagerUI : MonoBehaviour
     List<ReplyButton> replyButtonData = new List<ReplyButton>();
     [SerializeField] GameObject ReplyButton1;
     [SerializeField] GameObject ReplyButton2;
+    [SerializeField] GameObject ReplyButton3;
     [SerializeField] GameObject ReplyText;
     TextMeshProUGUI replyButton1Text;
     TextMeshProUGUI replyButton2Text;
@@ -41,11 +42,14 @@ public class ChatManagerUI : MonoBehaviour
     Vector2 oldreplyBoxTransform;
     Vector2 oldchatElementsTransform;
 
+    public Action OnCurrentNodeEnded;
+
     private void Awake()
     {
         EventManager = GameObject.FindObjectOfType<FindREventsManager>();
         replyButtonObjs.Add(ReplyButton1);
         replyButtonObjs.Add(ReplyButton2);
+        replyButtonObjs.Add(ReplyButton3);
 
         foreach (GameObject button in replyButtonObjs)
         {
@@ -64,6 +68,8 @@ public class ChatManagerUI : MonoBehaviour
 
         //replyButton1Comp = ReplyButton1.GetComponent<Button>();
         //replyButton2Comp = ReplyButton2.GetComponent<Button>();
+
+        DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
     }
 
     public void ReplyClicked(int num)
@@ -138,7 +144,7 @@ public class ChatManagerUI : MonoBehaviour
 
         foreach (ChatBubble chat in ChatCollection.ChatData)
         {
-            if (chat.isUser && ChatCollection.PromptText == "")
+            if (chat.isUser && chat != ChatCollection.ChatData[0])
             {
                 parent.SingleResponseChat = chat;
                 OneResponseButton(chat, parent);
@@ -169,7 +175,7 @@ public class ChatManagerUI : MonoBehaviour
             }
             else if (!chat.isUser)
                 parent.SetNotif();
-
+        
             yield return new WaitForSeconds(1f);
         }
 
@@ -179,8 +185,12 @@ public class ChatManagerUI : MonoBehaviour
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
             EventManager.RegisterEvent(ev);
+            if (ev.EventType == ChatEventTypes.BranchEvent)
+            {
+                ev.RaiseEvent();
+            }
         }
-        
+
         if (parent.isToggled)
             HandleResponse(parent, Tree);
     }   
@@ -241,8 +251,26 @@ public class ChatManagerUI : MonoBehaviour
 
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
+        //If dialogue tree is over
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
+        {
+            HideResponse();
+            OnCurrentNodeEnded?.Invoke();
+            Debug.Log("Choice END");
+            return;
+        }
+
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
+            if (ChatCollection.isEvent())
+            {
+                if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
+                {
+                    HideResponse();
+                    return;
+                }
+            }
+
             //Clear button on click events
             foreach (ReplyButton bData in replyButtonData)
             {

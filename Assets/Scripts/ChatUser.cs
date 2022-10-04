@@ -48,8 +48,9 @@ public class ChatUser : MonoBehaviour
         DialogueTree = GetComponent<DialogueGraphAPI>();
     }
 
-    public void Init(ChatUserSO data, ChatManagerUI manager, ToggleGroup toggleGroup)
+    public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
     {
+        eventManager.ChatUsers.Add(this);
         ChatUserSO = data;
         chatManager = manager;
         chatManager.chatUsers.Add(this);
@@ -60,9 +61,11 @@ public class ChatUser : MonoBehaviour
         //If ChatUser is new
         if (!StaticUserData.ChatUserData.Any(x => x.name == data.profileName))
         {
+            //ADD SAVING CHAT OBJECTS INTO THE CHAT USER DATA
             ChatData = new ChatUserData
             {
-                name = data.profileName
+                name = data.profileName,
+                CurrentTree = data.dialogueTree
             };
 
             if (data.initialPreviousChat)
@@ -92,7 +95,21 @@ public class ChatUser : MonoBehaviour
             }
             chatManager.RebuildAfterSpawning();
 
-            DialogueTree.SetDialogueTree(ChatData.CurrentTree);
+            //Get next container
+            DialogueContainer nextContainer = null;
+            foreach(string s in DialogueSpreadSheetPatternConstants.effects)
+            {
+                DialogueContainer d = data.dialogueBranches.GetBranch(s);
+                if (d)
+                {
+                    nextContainer = d;
+                    DialogueTree.SetDialogueTree(nextContainer);
+                    break;
+                }
+            }
+
+            if (nextContainer == null)
+                DialogueTree.SetDialogueTree(ChatData.CurrentTree);
         }
 
 
@@ -101,6 +118,54 @@ public class ChatUser : MonoBehaviour
 
         profileName.text = data.profileName;
         profileImage.sprite = data.profileImage;
+        chatManager.StartSpawningChat(this, DialogueTree);
+    }
+
+    public void SetNextTree()
+    {
+        DialogueContainer nextContainer = null;
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            DialogueContainer d = ChatUserSO.dialogueBranches.GetPostBranch(s);
+            if (d)
+            {
+                nextContainer = d;
+                DialogueTree.SetDialogueTree(nextContainer);
+                //TEMP TEMP CHANGE IF NECESSARY
+                DialogueSpreadSheetPatternConstants.effects.Remove(s);
+                break;
+            }
+        }
+
+        if (nextContainer == null)
+        {
+            Debug.Log("NO NEXT BRANCH FOUND!");
+            return;
+        }
+
+        chatManager.StartSpawningChat(this, DialogueTree);
+    }
+
+    public void SetNewEventTree()
+    {
+        DialogueContainer nextContainer = null;
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            DialogueContainer d = ChatUserSO.dialogueBranches.GetBranch(s);
+            if (d)
+            {
+                nextContainer = d;
+                DialogueTree.SetDialogueTree(nextContainer);
+                break;
+            }
+        }
+
+        if (nextContainer == null)
+        {
+            Debug.LogError("NO EVENT FOUND!");
+            return;
+        }
+        chatManager.OnCurrentNodeEnded += SetNextTree;
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
