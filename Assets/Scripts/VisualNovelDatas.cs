@@ -131,7 +131,7 @@ public class VisualNovelDatas : MonoBehaviour
                 }
             }
         }
-        
+        Debug.LogError(p_name + " NONE");
         return null;
     }
 

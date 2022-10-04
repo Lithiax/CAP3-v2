@@ -90,5 +90,4 @@ public class Dialogue
     public string words;
 
     public Sprite backgroundSprite;
-    public SpeechTransitionType speechTransitionType;
 }
