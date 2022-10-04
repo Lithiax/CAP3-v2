@@ -7,6 +7,7 @@ public class ChoiceData
     public string words;
     public string branchDialogueName;
     public int damage;
+    public string eventID;
 
 }
 [CreateAssetMenu(fileName = "New Dialogues Scriptable Object", menuName = "Scriptable Objects/Dialogues")]

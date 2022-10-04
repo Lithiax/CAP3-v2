@@ -21,7 +21,6 @@ public class BodyEmotionData
 public class SO_Character : ScriptableObject
 {
     public new string name;
-    public List<Sprite> avatars = new List<Sprite>();
     public Sprite avatar;
     public CharacterObject prefab;
     public List<FaceEmotionData> faceEmotionDatas;

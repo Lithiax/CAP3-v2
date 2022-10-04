@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DialogueSpreadSheetPatternConstants 
 {
+    public static List<string> effects = new List<string>();
     [Header("Google Sheet")]
 
     [Header("Settings")]
@@ -47,6 +48,7 @@ public class DialogueSpreadSheetPatternConstants
     public const int choiceNameCollumnPattern = 0;
     public const int nextDialogueSheetNameCollumnPattern = 1;
     public const int choiceDamagePattern = 3;
+    public const int eventID = 4;
 
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;

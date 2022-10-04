@@ -260,6 +260,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 int.TryParse(testnum, out test);
             }
             newChoiceData.damage = test;
+            newChoiceData.eventID = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.eventID);
         }
 
     }
@@ -329,7 +330,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void NextDialogue()
     {
-        //Debug.Log(currentDialogueIndex + " NEXT DIALOGUE");
+        Debug.Log(currentDialogueIndex + " NEXT DIALOGUE " + dialogueIndexInSheet[currentDialogueIndex]);
         isSkipping = false;
         
         currentDialogueIndex++;
@@ -451,7 +452,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void SetChoiceDamage(int p_modifier)
     {
-        healthUI.DamageHealthEvent.Invoke(p_modifier);
+        healthUI.ModifyHealthEvent.Invoke(p_modifier);
     }
     public void ChooseChoiceUI(int index)
     {
@@ -467,6 +468,12 @@ public class CharacterDialogueUI : MonoBehaviour
         choiceUIsContainer.SetActive(false);
         SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[index].branchDialogueName);
         SetChoiceDamage(currentSO_Dialogues.choiceDatas[index].damage);
+        DialogueSpreadSheetPatternConstants.effects.Add(currentSO_Dialogues.choiceDatas[index].eventID);
+        //TEMPORARY JUST TO SEE
+        for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+        {
+            Debug.Log("ALL THE LISTED EFFECTS: "+  DialogueSpreadSheetPatternConstants.effects[i]);
+        }
       
         ResetCharacterDialogueUI();
     }
@@ -676,8 +683,14 @@ public class CharacterDialogueUI : MonoBehaviour
             for (int i = 0; i < p_charactersToBeAdded.Count; i++)
             {
                 Character newCharacter = null;
-                if (p_charactersToBeAdded[i].prefab) //Live 2D
+                Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
+                if (p_charactersToBeAdded[i].prefab == null)
                 {
+                    Debug.Log("ELLO: " + p_charactersToBeAdded[i].name);
+                }
+                if (p_charactersToBeAdded[i].prefab != null) //Live 2D
+                {
+                  
                     newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
 
                 }
