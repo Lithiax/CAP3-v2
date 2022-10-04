@@ -212,7 +212,7 @@ public class teSTSA : MonoBehaviour
     {
         nextDialogueButton.SetActive(true);
         choiceUIsContainer.SetActive(false);
-        currentSO_Dialogues = currentSO_Dialogues.choiceDatas[index].so_branchDialogue;
+       // currentSO_Dialogues = currentSO_Dialogues.choiceDatas[index].so_branchDialogue;
         ResetCharacterDialogueUI();
     }
 
@@ -646,16 +646,16 @@ public class teSTSA : MonoBehaviour
 
 
     }
-    void SetSpeech(SpeechTransitionType p_Type, string p_words)
+    void SetSpeech(string p_words)
     {
-        if (isSkipping || p_Type == SpeechTransitionType.None)
-        {
-            SetWords(p_words);
-        }
-        else if (p_Type == SpeechTransitionType.Typewriter)
-        {
+        //if (isSkipping || p_Type == SpeechTransitionType.None)
+        //{
+        //    SetWords(p_words);
+        //}
+        //else if (p_Type == SpeechTransitionType.Typewriter)
+        //{
             StartCoroutine(Co_TypeWriterEffect(dialogueText, p_words));
-        }
+        //}
 
     }
     void SetWords(string p_words)
@@ -735,7 +735,7 @@ public class teSTSA : MonoBehaviour
 
             SetSpeakerName(currentDialogue.characterDatas);
             SetBackground(currentDialogue.backgroundSprite);
-            SetSpeech(currentDialogue.speechTransitionType, currentDialogue.words);
+            SetSpeech(currentDialogue.words);
             SetCueBank(currentDialogue);
         }
         else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)

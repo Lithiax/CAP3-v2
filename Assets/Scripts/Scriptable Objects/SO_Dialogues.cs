@@ -5,7 +5,6 @@ using UnityEngine;
 public class ChoiceData
 {
     public string words;
-    public SO_Dialogues so_branchDialogue;
     public string branchDialogueName;
     public int damage;
 

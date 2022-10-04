@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 94f5267ceea77004bac12ab0cce13cf2
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Muro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e25eac4e73882984ca25ab70a79f910d, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
