@@ -17,11 +17,16 @@ public enum CharacterEmotionType
     question,
     heart,
     sad,
-    mad,
+    angry,
     misc,
     none,
     laugh,
     smile,
+    blush,
+    disgust,
+    cry,
+    idle,
+    anxious,
 }
 
 public enum CharacterPositionType

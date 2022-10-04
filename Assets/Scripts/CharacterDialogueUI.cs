@@ -147,7 +147,6 @@ public class CharacterDialogueUI : MonoBehaviour
             OnOpenCharacterDialogueUI();
         }
 
-
     }
 
     public void TranslateIntoScriptableObject()
@@ -297,6 +296,7 @@ public class CharacterDialogueUI : MonoBehaviour
             //Debug.Log(currentDialogueIndex + "/" + currentSO_Dialogues.dialogues.Count);
             //currentDialogueIndex++;
         }
+    
         Debug.Log("Auto skipped " + currentDialogueIndex);
         //Debug.Log("Ended " + currentDialogueIndex);
 
@@ -430,6 +430,10 @@ public class CharacterDialogueUI : MonoBehaviour
             currentCharacterNameText = bigSpeakerText;
 
         }
+        if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
+        {
+            currentDialogueIndex = currentSO_Dialogues.dialogues.Count - 1;
+        }
         Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
         smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
         smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
@@ -445,8 +449,6 @@ public class CharacterDialogueUI : MonoBehaviour
 
         }
 
-
-     
         SetSpeech(currentDialogue.words);
  
         isBig = !isBig;
