@@ -28,6 +28,11 @@ public class ChatUserManager : MonoBehaviour
 
     void GenerateUser(ChatUserSO data)
     {
+        DialogueSpreadSheetPatternConstants.effects.Contains("drunk");
+
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+            Debug.Log(s);
+
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
