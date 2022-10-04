@@ -60,6 +60,10 @@ public class SpreadSheetAPI : MonoBehaviour
     {
         string[] currentSheetRow = GetCurrentSheetRow(p_desiredSheetRowCell);
         //Debug.Log(p_desiredSheetRowCell + " GETTING " + p_desiredSheetCollumnCell);
+        if (currentSheetRow.Length <= p_desiredSheetCollumnCell)
+        {
+            return "error";
+        }
         return currentSheetRow[p_desiredSheetCollumnCell];
     }
 
