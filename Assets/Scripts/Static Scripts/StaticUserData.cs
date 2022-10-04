@@ -9,4 +9,6 @@ public static class StaticUserData
     public static string b_day = "0";
     public static string b_month = "0";
     public static string b_year = "0";
+
+    public static List<ChatUserData> ChatUserData = new List<ChatUserData>();
 }

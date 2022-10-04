@@ -180,6 +180,13 @@ public class ChatManagerUI : MonoBehaviour
             HandleResponse(parent, Tree);
     }   
 
+    public void RebuildAfterSpawning()
+    {
+        StartCoroutine(RebuildUI());
+
+        StartCoroutine(ScrollDown());
+    }
+
     public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent)
     {
         GameObject chatBubble = GameObject.Instantiate(chatPrefab, chatParent.transform);
@@ -190,6 +197,12 @@ public class ChatManagerUI : MonoBehaviour
         chatText.SetUpChat(parent, data.chatText, data.isUser);
 
         return chatBubble;
+    }
+
+    public void SpawnChatObjects(GameObject chat, bool toggle)
+    {
+        GameObject chatBubble = GameObject.Instantiate(chat, chatParent.transform);
+        chatBubble.SetActive(toggle);
     }
 
     IEnumerator ScrollDown()

@@ -32,6 +32,6 @@ public class ChatUserManager : MonoBehaviour
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
 
-        UserComp.Init(data.dialogueTree, data.profileName, data.profileImage, chatManager, toggleGroup);
+        UserComp.Init(data, chatManager, toggleGroup);
     }
 }

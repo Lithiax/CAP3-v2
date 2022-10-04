@@ -4,6 +4,14 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+
+public class ChatUserData
+{
+    public List<GameObject> ChatObjects = new List<GameObject>();
+    public string name;
+    public DialogueContainer CurrentTree;
+}
 
 public class ChatUser : MonoBehaviour
 {
@@ -27,6 +35,8 @@ public class ChatUser : MonoBehaviour
     [Header("Notification")]
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
+
+    ChatUserData ChatData;
     public bool isToggled { get; private set; }
 
     int notifNum = 0;
@@ -36,20 +46,57 @@ public class ChatUser : MonoBehaviour
         DialogueTree = GetComponent<DialogueGraphAPI>();
     }
 
-    public void Init(DialogueContainer tree, string name, Sprite img, ChatManagerUI manager, ToggleGroup toggleGroup)
+    public void Init(ChatUserSO data, ChatManagerUI manager, ToggleGroup toggleGroup)
     {
-        DialogueTree.SetDialogueTree(tree);
         chatManager = manager;
         chatManager.chatUsers.Add(this);
         toggle.group = toggleGroup;
 
         isToggled = toggle.isOn;
 
+        //If ChatUser is new
+        if (!StaticUserData.ChatUserData.Any(x => x.name == data.profileName))
+        {
+            ChatData = new ChatUserData
+            {
+                name = data.profileName
+            };
+
+            if (data.initialPreviousChat)
+            {
+                foreach (ChatBubble chat in data.initialPreviousChat.ChatData)
+                {
+                    GameObject obj = chatManager.SpawnChatBubble(chat, this);
+                    chatsObj.Add(obj);
+                }
+
+                chatManager.RebuildAfterSpawning();
+            }
+
+            DialogueTree.SetDialogueTree(data.dialogueTree);
+
+            StaticUserData.ChatUserData.Add(ChatData);
+        }
+        //If ChatUser is not new (FOR TESTING)
+        else
+        {
+            ChatData = StaticUserData.ChatUserData.First(x => x.name == name);
+
+            foreach (GameObject chat in ChatData.ChatObjects)
+            {
+                chatManager.SpawnChatObjects(chat, isToggled);
+            }
+            chatManager.RebuildAfterSpawning();
+
+            DialogueTree.SetDialogueTree(ChatData.CurrentTree);
+        }
+
+
         //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
         //currentCollection = initialChatCollection;
 
-        profileName.text = name;
-        profileImage.sprite = img;
+        profileName.text = data.profileName;
+        profileImage.sprite = data.profileImage;
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 

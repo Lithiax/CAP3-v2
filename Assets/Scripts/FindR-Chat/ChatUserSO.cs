@@ -9,4 +9,6 @@ public class ChatUserSO : ScriptableObject
     public string profileName;
     //public ChatCollectionSO initialChatCollection;
     public DialogueContainer dialogueTree;
+
+    public ChatCollectionSO initialPreviousChat;
 }
