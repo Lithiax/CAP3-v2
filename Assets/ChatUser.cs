@@ -22,6 +22,7 @@ public class ChatUser : MonoBehaviour
     [SerializeField] Image profileImage;
 
     [HideInInspector] public bool currentChatComplete = false;
+    [HideInInspector] public ChatBubble SingleResponseChat = null;
 
     [Header("Notification")]
     [SerializeField] GameObject notifObj;

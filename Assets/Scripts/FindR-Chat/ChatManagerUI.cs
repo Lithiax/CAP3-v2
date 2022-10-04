@@ -107,14 +107,50 @@ public class ChatManagerUI : MonoBehaviour
         StartCoroutine(ScrollDown());
     }
 
+    //Dont use for now
+    void OneResponseButton(ChatBubble currChat, ChatUser parent)
+    {
+        if (!parent.isToggled)
+            return;
+
+        foreach (ReplyButton bData in replyButtonData)
+        {
+            bData.replyButtonComp.onClick.RemoveAllListeners();
+            bData.replyButtonText.text = "";
+            bData.buttonObj.SetActive(false);
+        }
+
+
+        replyButtonData[0].replyButtonText.text = currChat.chatText;
+        replyButtonData[0].buttonObj.SetActive(true);
+        replyButtonData[0].replyButtonComp.onClick.AddListener(() => { 
+            HideResponse(); 
+            parent.SingleResponseChat = null;
+        });
+
+        ShowResponseBox();
+    }
+
     IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
         foreach (ChatBubble chat in ChatCollection.ChatData)
         {
+            if (chat.isUser && ChatCollection.PromptText == "")
+            {
+                parent.SingleResponseChat = chat;
+                OneResponseButton(chat, parent);
+                while (parent.SingleResponseChat != null)
+                    yield return null;
+            }
+
+            float waitTime = UnityEngine.Random.Range(0.5f, 2f);
+
             GameObject chatObj = SpawnChatBubble(chat, parent);
+
             parent.OnChatSpawned(chatObj, chat.chatText);
+
 
             chatObj.SetActive(parent.isToggled);
             
@@ -173,6 +209,12 @@ public class ChatManagerUI : MonoBehaviour
 
     public void HandleResponse(ChatUser parent, DialogueGraphAPI Tree)
     {
+        if (parent.SingleResponseChat != null)
+        {
+            OneResponseButton(parent.SingleResponseChat, parent);
+            ShowResponseBox();
+            return;
+        }
         if (!parent.currentChatComplete)
         {
             HideResponse();
@@ -252,7 +294,7 @@ public class ChatManagerUI : MonoBehaviour
         //-0.1619987
         //chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, 96.326f);
 
-        DOVirtual.Float(oldchatElementsTransform.y, 96.326f, 0.1f, x =>
+        DOVirtual.Float(oldchatElementsTransform.y, 106.326f, 0.1f, x =>
         {
             chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, x);
         })
