@@ -68,8 +68,6 @@ public class ChatManagerUI : MonoBehaviour
 
         //replyButton1Comp = ReplyButton1.GetComponent<Button>();
         //replyButton2Comp = ReplyButton2.GetComponent<Button>();
-
-        DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
     }
 
     public void ReplyClicked(int num)
