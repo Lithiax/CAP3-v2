@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 public class CharacterSpokenToEvent : UnityEvent<string, SO_Dialogues> { }
 public class FirstTimeFoodOnEndEvent : UnityEvent { }
 
@@ -281,7 +282,8 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnCloseCharacterDialogueUI()
     {
-       
+        //Temporary
+        SceneManager.LoadScene("FindR");
         frame.SetActive(false);
     }
     public void SkipAll()
@@ -470,10 +472,10 @@ public class CharacterDialogueUI : MonoBehaviour
         SetChoiceDamage(currentSO_Dialogues.choiceDatas[index].damage);
         DialogueSpreadSheetPatternConstants.effects.Add(currentSO_Dialogues.choiceDatas[index].eventID);
         //TEMPORARY JUST TO SEE
-        for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-        {
-            Debug.Log("ALL THE LISTED EFFECTS: "+  DialogueSpreadSheetPatternConstants.effects[i]);
-        }
+        //for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+        //{
+        //    Debug.Log("ALL THE LISTED EFFECTS: "+  DialogueSpreadSheetPatternConstants.effects[i]);
+        //}
       
         ResetCharacterDialogueUI();
     }
@@ -683,11 +685,8 @@ public class CharacterDialogueUI : MonoBehaviour
             for (int i = 0; i < p_charactersToBeAdded.Count; i++)
             {
                 Character newCharacter = null;
-                Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
-                if (p_charactersToBeAdded[i].prefab == null)
-                {
-                    Debug.Log("ELLO: " + p_charactersToBeAdded[i].name);
-                }
+               // Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
+                
                 if (p_charactersToBeAdded[i].prefab != null) //Live 2D
                 {
                   
@@ -1024,6 +1023,14 @@ public class CharacterDialogueUI : MonoBehaviour
                     CreateChoiceUIs();
                     SetCueBank(currentSO_Dialogues);
                 }
+                else if (currentSO_Dialogues.choiceDatas.Count == 1)
+                {
+                    Debug.Log(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
+                    SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
+                    SetChoiceDamage(currentSO_Dialogues.choiceDatas[0].damage);
+                    ResetCharacterDialogueUI();
+
+                }
                 else if (currentSO_Dialogues.choiceDatas.Count == 0)
                 {
                     if (isEndTransitionEnabled)
@@ -1035,14 +1042,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         OnCloseCharacterDialogueUI();
                     }
                 }
-                else if (currentSO_Dialogues.choiceDatas.Count == 1)
-                {
-                    Debug.Log(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
-                    SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
-                    SetChoiceDamage(currentSO_Dialogues.choiceDatas[0].damage);
-                    ResetCharacterDialogueUI();
-                 
-                }
+                
             }
         }
     }
