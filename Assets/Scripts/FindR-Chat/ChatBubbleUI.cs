@@ -8,22 +8,42 @@ public class ChatBubbleUI : MonoBehaviour
 {
     [HideInInspector] public ChatUser ChatUserParent;
     [SerializeField] TextMeshProUGUI chatText;
-    [SerializeField] VerticalLayoutGroup chatLayoutGroup;
+    [SerializeField] HorizontalLayoutGroup chatLayoutGroup;
     [SerializeField] VerticalLayoutGroup anchorLayoutGroup;
     public ContentSizeFitter andchorFitter;
     [SerializeField] Image chatBG;
     [SerializeField] Color userChatColor;
+    [SerializeField] Sprite userChatBG;
 
-    public void SetUpChat(ChatUser parent, string chat, bool user)
+    [Header("Non-User Chat Elements")]
+    [SerializeField] GameObject NotUserElements;
+    [SerializeField] Image ProfileImage;
+    [SerializeField] GameObject ProfileNameObj;
+    [SerializeField] TextMeshProUGUI ProfileName;
+    public void SetUpChat(ChatUser parent, ChatBubble data)
     {
-        parent = ChatUserParent;
-        chatText.text = chat;
+        chatText.text = data.chatText;
 
-        if (user)
+        if (!data.isUser)
         {
-            chatBG.color = userChatColor;
-            chatLayoutGroup.childAlignment = TextAnchor.UpperRight;
+            ProfileImage.sprite = parent.ChatUserSO.profileImage;
+            ProfileName.text = parent.ChatUserSO.profileName;
+        }
+        else
+        {
+            NotUserElements.SetActive(false);
+            ProfileNameObj.SetActive(false);
+            chatBG.sprite = userChatBG;
+            chatText.color = userChatColor;
+            chatLayoutGroup.childAlignment = TextAnchor.LowerRight;
             anchorLayoutGroup.childAlignment = TextAnchor.UpperRight;
+        }
+
+        if (parent.PreviousChat == null) return;
+        if (!parent.PreviousChat.isUser)
+        {
+            ProfileImage.sprite = null;
+            ProfileNameObj.SetActive(false);
         }
     }
 }

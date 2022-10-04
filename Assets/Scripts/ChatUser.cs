@@ -31,11 +31,13 @@ public class ChatUser : MonoBehaviour
 
     [HideInInspector] public bool currentChatComplete = false;
     [HideInInspector] public ChatBubble SingleResponseChat = null;
+    [HideInInspector] public ChatBubble PreviousChat = null;
 
     [Header("Notification")]
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
 
+    [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     ChatUserData ChatData;
     public bool isToggled { get; private set; }
 
@@ -48,6 +50,7 @@ public class ChatUser : MonoBehaviour
 
     public void Init(ChatUserSO data, ChatManagerUI manager, ToggleGroup toggleGroup)
     {
+        ChatUserSO = data;
         chatManager = manager;
         chatManager.chatUsers.Add(this);
         toggle.group = toggleGroup;
@@ -68,6 +71,7 @@ public class ChatUser : MonoBehaviour
                 {
                     GameObject obj = chatManager.SpawnChatBubble(chat, this);
                     chatsObj.Add(obj);
+                    PreviousChat = chat;
                 }
 
                 chatManager.RebuildAfterSpawning();
@@ -114,9 +118,10 @@ public class ChatUser : MonoBehaviour
         notifNum = 0;
     }
 
-    public void OnChatSpawned(GameObject spawnedObj, string text)
+    public void OnChatSpawned(ChatBubble chat, GameObject spawnedObj, string text)
     {
         chatsObj.Add(spawnedObj);
+        PreviousChat = chat;
         lastMessageText.text = text;
     }
 

@@ -37,12 +37,12 @@ public class MainFindRUI : MonoBehaviour
             if (b == but)
             {
                 b.image.color = buttonActivatedColor;
-                b.GetComponentInChildren<TextMeshProUGUI>().color = buttonActivatedColor;
+                //b.GetComponentInChildren<TextMeshProUGUI>().color = buttonActivatedColor;
                 continue;
             }
 
             b.image.color = oldButtonColor;
-            b.GetComponentInChildren<TextMeshProUGUI>().color = oldButtonColor;
+            //b.GetComponentInChildren<TextMeshProUGUI>().color = oldButtonColor;
         }
     }
 }

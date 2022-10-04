@@ -30,6 +30,7 @@ public class ChatManagerUI : MonoBehaviour
     List<ReplyButton> replyButtonData = new List<ReplyButton>();
     [SerializeField] GameObject ReplyButton1;
     [SerializeField] GameObject ReplyButton2;
+    [SerializeField] GameObject ReplyText;
     TextMeshProUGUI replyButton1Text;
     TextMeshProUGUI replyButton2Text;
     Button replyButton1Comp;
@@ -144,12 +145,16 @@ public class ChatManagerUI : MonoBehaviour
                 while (parent.SingleResponseChat != null)
                     yield return null;
             }
+            else
+            {
+                parent.SingleResponseChat = null;
+            }
 
             float waitTime = UnityEngine.Random.Range(0.5f, 2f);
 
             GameObject chatObj = SpawnChatBubble(chat, parent);
 
-            parent.OnChatSpawned(chatObj, chat.chatText);
+            parent.OnChatSpawned(chat, chatObj, chat.chatText);
 
 
             chatObj.SetActive(parent.isToggled);
@@ -194,7 +199,7 @@ public class ChatManagerUI : MonoBehaviour
         ChatBubbleUI chatText = chatBubble.GetComponent<ChatBubbleUI>();
         allChatBubbles.Add(chatText);
 
-        chatText.SetUpChat(parent, data.chatText, data.isUser);
+        chatText.SetUpChat(parent, data);
 
         return chatBubble;
     }
@@ -299,6 +304,8 @@ public class ChatManagerUI : MonoBehaviour
 
         //replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, 60.255f);
 
+        ReplyText.SetActive(false);
+
         DOVirtual.Float(oldreplyBoxTransform.y, 60.255f, 0.1f, x =>
         {
             replyBoxTransform.offsetMax = new Vector2(oldreplyBoxTransform.x, x);
@@ -344,6 +351,7 @@ public class ChatManagerUI : MonoBehaviour
                 .OnComplete(() =>
             {
                 StartCoroutine(ScrollDown());
+                ReplyText.SetActive(true);
             });
             return;
         }

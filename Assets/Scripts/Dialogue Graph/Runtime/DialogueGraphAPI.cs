@@ -46,7 +46,8 @@ public class DialogueGraphAPI : MonoBehaviour
             Nodes.Add(node);
         }
 
-        CurrentNode = Nodes[0];
+        NodeLinkData nodeLink = DialogueTree.NodeLinks.First(x => x.PortName == "Next");
+        CurrentNode = Nodes.First(x => x.BaseNodeData.NodeGUID == nodeLink.TargetNodeGuid);
     }
 
     public List<ScriptableObject> GetConnectedDialogues()

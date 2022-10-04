@@ -13,7 +13,7 @@ public class ChatUserManager : MonoBehaviour
 
     List<ChatUser> SpawnedUsers = new List<ChatUser>();
 
-    private void Start()
+    private void Awake()
     {
         foreach (ChatUserSO user in UserData)
         {
