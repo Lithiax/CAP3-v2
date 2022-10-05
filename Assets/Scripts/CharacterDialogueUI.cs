@@ -136,7 +136,6 @@ public class CharacterDialogueUI : MonoBehaviour
     public void OnCharacterSpokenTo(string p_id, SO_Dialogues p_SO_Dialogue)
     {
         id = p_id;
-        TranslateIntoScriptableObject(); // FIX
 
         if (isStartTransitionEnabled)
         {
@@ -237,7 +236,7 @@ public class CharacterDialogueUI : MonoBehaviour
             //Debug.LogError(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
             newDialogue.backgroundSprite = VisualNovelDatas.FindBackgroundSprite(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
 
-         
+            
         }
 
         //Setting Choice
@@ -262,7 +261,7 @@ public class CharacterDialogueUI : MonoBehaviour
             newChoiceData.damage = test;
             newChoiceData.eventID = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.eventID);
         }
-
+        OnCharacterSpokenTo("",currentSO_Dialogues);
     }
     public void TranslateToCharacterData(CharacterData p_characterData, int p_currentGeneratedDialogueIndex, int p_characterRowPattern)
     {

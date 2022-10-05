@@ -19,7 +19,7 @@ public class MainMenuUI : MonoBehaviour
         float scaleheight = windowaspect / targetaspect;
 
         // obtain camera component so we can modify its viewport
-        Camera camera = GetComponent<Camera>();
+        Camera camera = Camera.main;//GetComponent<Camera>();
 
         // if scaled height is less than current height, add letterbox
         if (scaleheight < 1.0f)
