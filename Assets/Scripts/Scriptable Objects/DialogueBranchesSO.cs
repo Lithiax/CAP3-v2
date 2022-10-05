@@ -18,6 +18,10 @@ public class DialogueBranchesSO : ScriptableObject
 
     public DialogueContainer GetBranch(string prompt)
     {
+        Debug.Log(prompt);
+        if (!DialogueBranches.Any(x => x.prompt == prompt))
+            return null;
+
         DialogueBranch selectedBranch = DialogueBranches.First(x => x.prompt == prompt);
 
         if (selectedBranch == null)
@@ -28,6 +32,9 @@ public class DialogueBranchesSO : ScriptableObject
 
     public DialogueContainer GetPostBranch(string prompt)
     {
+        if (!DialogueBranches.Any(x => x.prompt == prompt))
+            return null;
+
         DialogueBranch selectedBranch = DialogueBranches.First(x => x.prompt == prompt);
 
         if (selectedBranch == null)
