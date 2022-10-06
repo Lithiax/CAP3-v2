@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using SimpleJSON;
 using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class SpreadSheetAPI : MonoBehaviour
 {
     //Google sheet >>> File >>> Share >>> Publish to web
@@ -22,6 +25,7 @@ public class SpreadSheetAPI : MonoBehaviour
 
     [SerializeField] private string sheetNameTester = "Settings";
 
+    public bool temp = false;
     //[SerializeField]
     //public int currentIndex;
 
@@ -43,6 +47,8 @@ public class SpreadSheetAPI : MonoBehaviour
 
     public bool firstTime = true;
     public string currentSheetName;
+
+    List<string> sheetNames = new List<string>();
     public void Awake()
     {
         instance = this;
@@ -109,7 +115,7 @@ public class SpreadSheetAPI : MonoBehaviour
                 www.timeout > 2)  //Computer has no internet access/cannot connect to website, opt to use json file saved
             {
 
-                Debug.Log("CURRENTLY OFFLINE DUE TO ERROR: " + www.error);
+                Debug.Log(p_sheetName + " CURRENTLY OFFLINE DUE TO ERROR: " + www.error);
                 rawJson = JSONFileHandler.ReadFromJSON(fileName);
 
             }
@@ -150,12 +156,18 @@ public class SpreadSheetAPI : MonoBehaviour
         }
         else
         {
-            if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + p_sheetName + ".asset"))
+            TransitionUI.instance.tester.text = "TRYING TO LOAD: ";
+            if (Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + p_sheetName)) //System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + p_sheetName + ".asset"))
             {
       
                 SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + p_sheetName);
                 TranslateIntoScriptableObject(roomCache);
                 Debug.Log("EXISTS");
+                TransitionUI.instance.tester.text = "EXISTS ";
+            }
+            else
+            {
+                TransitionUI.instance.tester.text = "doesnt exist ";
             }
         }
        
@@ -165,7 +177,7 @@ public class SpreadSheetAPI : MonoBehaviour
     public void CheckSheets()
     {
         currentSheetName = SpreadSheetAPI.instance.testerFormattedSheetRows[1].Substring(0, SpreadSheetAPI.instance.testerFormattedSheetRows[1].Length - 1);
-        List<string> sheetNames = new List<string>();
+        sheetNames.Clear();
         for (int i = 3; i < SpreadSheetAPI.instance.testerFormattedSheetRows.Length; i++)
         {
             if (SpreadSheetAPI.instance.testerFormattedSheetRows[i] != "")
@@ -218,19 +230,21 @@ public class SpreadSheetAPI : MonoBehaviour
                 //Create scriptable object if it doesnt exist
                 SO_Dialogues example = ScriptableObject.CreateInstance<SO_Dialogues>();
                 // path has to start at "Assets"
-      
-       
-                UnityEditor.AssetDatabase.CreateAsset(example, sheetNameFilePath +"/"+ sheetNames[i] + ".asset");
-                UnityEditor.AssetDatabase.SaveAssets();
-                UnityEditor.AssetDatabase.Refresh();
-                UnityEditor.EditorUtility.FocusProjectWindow();
-                UnityEditor.Selection.activeObject = example;
+
+                //#if UNITY_EDITOR
+                //AssetDatabase.CreateAsset(example, sheetNameFilePath + "/" + sheetNames[i] + ".asset");
+                //AssetDatabase.SaveAssets();
+                //AssetDatabase.Refresh();
+                //EditorUtility.FocusProjectWindow();
+                //Selection.activeObject = example;
+                //#endif //BRING BACK
+
 
                 Debug.Log("CREATED NEW SCRIPTABLE OBJECT: " + example.name + " IN PATH: " + sheetNameFilePath);
     
             }
             //Update sheet
-            if (System.IO.File.Exists(sheetNameFilePath + "/" + sheetNames[i] + ".asset"))
+            if (Resources.Load < SO_Dialogues >("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i]))//System.IO.File.Exists(sheetNameFilePath + "/" + sheetNames[i] + ".asset"))
             {
                 if (i == 0)
                 {
@@ -241,8 +255,10 @@ public class SpreadSheetAPI : MonoBehaviour
                 //SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i]);
                 //TranslateIntoScriptableObject(roomCache);
                 Debug.Log("try exist");
+
             }
         }
+        TransitionUI.instance.tester.text = "la: ";
 
         //SO_Dialogues[] roomCache;
 
@@ -254,11 +270,11 @@ public class SpreadSheetAPI : MonoBehaviour
 
         //}
         //OnFinishedLoadingValues?.Invoke();
-        OnFinishedLoadingValues?.Invoke();
+
     }
     public void TranslateIntoScriptableObject(SO_Dialogues p_soDialogue)
     {
-
+        TransitionUI.instance.tester.text = "traa: ";
         if (p_soDialogue != null)
         {
             dialogueIndexInSheet.Clear();
@@ -403,8 +419,75 @@ public class SpreadSheetAPI : MonoBehaviour
         {
             Debug.Log("NONE FOUND");
         }
-        
+        CheckAll();
 
+    }
+
+    public void CheckAll()
+    {
+        int count = 0;
+        if (!temp)
+        {
+            SO_Dialogues test = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/week1");
+            if (test) //System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + p_sheetName + ".asset"))
+            {
+                if (test.dialogues.Count==0 && test.choiceDatas.Count == 0)
+                {
+          
+                }
+                else
+                {
+                    temp = true;
+                    OnFinishedLoadingValues?.Invoke();
+                    TransitionUI.instance.tester.text = "good";
+                }
+      
+                //            temp = true;
+                //            OnFinishedLoadingValues?.Invoke();
+            }
+
+            //System.IO.DirectoryInfo d = new System.IO.DirectoryInfo("Assets/Resources/Scriptable Objects/" + currentSheetName);
+            //System.IO.FileInfo[] fis = d.GetFiles();
+            //foreach (System.IO.FileInfo fi in fis)
+            //{
+            //    if (fi.Extension.Equals(".asset", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        count++;
+            //    }
+
+            //}
+
+            //Debug.Log("COUNTER FOUND: " + count);
+            //TransitionUI.instance.tester.text = count.ToString();
+            //for (int i = 0; i < count;)
+            //{
+            //    if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + "week1" + ".asset"))
+            //    // if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + sheetNames[i] + ".asset"))
+            //    {
+            //        SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + "week1");
+            //        //SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i]);
+            //        if (roomCache.dialogues.Count == 0 && roomCache.choiceDatas.Count == 0)
+            //        {
+            //            Debug.Log(roomCache.name + "DDD");
+            //            break;
+            //        }
+            //        i++;
+            //        if (i >= count)
+            //        {
+            //            Debug.Log("TRYING TO START");
+            //            TransitionUI.instance.tester.text = "good";
+            //            temp = true;
+            //            OnFinishedLoadingValues?.Invoke();
+            //        }
+
+
+            //    }
+            //    Debug.Log("COUNTER ENDED: " + count);
+            //}
+        }
+       
+       
+  
     }
 
     public void TranslateToCharacterData(CharacterData p_characterData, int p_currentGeneratedDialogueIndex, int p_characterRowPattern)

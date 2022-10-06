@@ -22,13 +22,16 @@ public class TransitionUI : MonoBehaviour
                                             float p_postTransitionTime,
                                             Action p_preAction = null,
                                             Action p_postAction = null);
+    public static TransitionUI instance;
     public static FadeInAndOutTransition onFadeInAndOutTransition;
     [SerializeField] public Image transitionUI;
     public IEnumerator runningCoroutine;
     public static FadeTransition onFadeTransition;
+    public TMP_Text tester;
     //public static FadeInAndOutTransition onFadeInAndOutTransition = new FadeInAndOutTransition();
     private void Awake()
     {
+        instance = this;
         onFadeTransition=TransitionFade;
         onFadeInAndOutTransition=TransitionPreFadeAndPostFade;
     }
