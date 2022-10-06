@@ -7,7 +7,7 @@ public class StorylineManager : MonoBehaviour
     public static StorylineManager instance;
     [NonReorderable][SerializeField] public SO_Dialogues startSO_Dialogues;
     [NonReorderable][SerializeField] public List<SO_Dialogues> so_Dialogues;
-    [SerializeField] CharacterDialogueUI temp;
+    [SerializeField] public CharacterDialogueUI temp;
     private void Awake()
     {
         instance = this;

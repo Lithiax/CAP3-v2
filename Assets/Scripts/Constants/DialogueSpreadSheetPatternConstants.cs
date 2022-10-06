@@ -49,6 +49,7 @@ public class DialogueSpreadSheetPatternConstants
     public const int nextDialogueSheetNameCollumnPattern = 1;
     public const int choiceDamagePattern = 3;
     public const int eventID = 4;
+    public const int healthCondition = 5;
 
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;

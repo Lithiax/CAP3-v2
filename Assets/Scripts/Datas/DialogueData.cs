@@ -95,4 +95,8 @@ public class Dialogue
     public string words;
 
     public Sprite backgroundSprite;
+
+    public bool isTransition;
+    public string sfxName;
+   // public string 
 }

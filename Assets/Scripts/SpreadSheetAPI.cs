@@ -20,7 +20,8 @@ public class SpreadSheetAPI : MonoBehaviour
 
     [SerializeField] private string fileName;
 
-    [SerializeField] private string sheetNameTester = "1 - Maeve - Start";
+    [SerializeField] private string sheetNameTester = "Settings";
+
     //[SerializeField]
     //public int currentIndex;
 
@@ -33,6 +34,15 @@ public class SpreadSheetAPI : MonoBehaviour
     [SerializeField] public string[] testerFormattedSheetRows;
     [SerializeField] private static string[] formattedSheetRows;
 
+    [SerializeField]
+    public List<int> dialogueIndexInSheet = new List<int>();
+    [SerializeField]
+    public List<int> backgroundIndexInSheet = new List<int>();
+    [SerializeField]
+    public List<int> choiceIndexInSheet = new List<int>();
+
+    public bool firstTime = true;
+    public string currentSheetName;
     public void Awake()
     {
         instance = this;
@@ -84,12 +94,14 @@ public class SpreadSheetAPI : MonoBehaviour
         return resultText;
     }
 
-
     public IEnumerator Co_LoadValues(string p_sheetName)
     {
+        Debug.Log("HERE");
         if (isUpdatingEditorValues)
         {
             string rawJson = "";
+
+
             UnityWebRequest www = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/18Z4onzDE8gProsuP7TYJBkRCdYykBw9IstRoFffS_KM/values/" + p_sheetName + "?key=AIzaSyBsDkCdfQlc4nieOTYf6eAq3xYafiCiEOM");
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.ConnectionError ||
@@ -121,6 +133,7 @@ public class SpreadSheetAPI : MonoBehaviour
 
                 }
                 JSONFileHandler.SaveToJSON(fileName, rawJson);
+          
             }
             formattedSheetRows = rawJson.Split(new char[] { '\n' });
             testerFormattedSheetRows = formattedSheetRows;//tester;
@@ -130,7 +143,277 @@ public class SpreadSheetAPI : MonoBehaviour
         {
 
         }
-        OnFinishedLoadingValues?.Invoke();
+        if (firstTime)
+        {
+            firstTime = false;
+            CheckSheets();
+        }
+        else
+        {
+            if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + "/" + p_sheetName + ".asset"))
+            {
+      
+                SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + p_sheetName);
+                TranslateIntoScriptableObject(roomCache);
+                Debug.Log("EXISTS");
+            }
+        }
+       
 
+    }
+
+    public void CheckSheets()
+    {
+        currentSheetName = SpreadSheetAPI.instance.testerFormattedSheetRows[1].Substring(0, SpreadSheetAPI.instance.testerFormattedSheetRows[1].Length - 1);
+        List<string> sheetNames = new List<string>();
+        for (int i = 3; i < SpreadSheetAPI.instance.testerFormattedSheetRows.Length; i++)
+        {
+            if (SpreadSheetAPI.instance.testerFormattedSheetRows[i] != "")
+            {
+                if (!SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains("end sheets"))
+                {
+
+                    string newName = SpreadSheetAPI.instance.testerFormattedSheetRows[i].Substring(0, SpreadSheetAPI.instance.testerFormattedSheetRows[i].Length - 1);
+                    Debug.Log(SpreadSheetAPI.instance.testerFormattedSheetRows[i] + " - " + newName);
+                    sheetNames.Add(newName);
+                }
+                else if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains("end sheets"))
+                {
+                    Debug.Log("BREAKING");
+                    break;
+                }
+            }
+          
+        }
+       // currentSheetName = currentSheetName.Substring(0, currentSheetName.Length - 1);
+        string sheetNameFilePath = "Assets/Resources/Scriptable Objects/" + currentSheetName;
+        if (System.IO.Directory.Exists(sheetNameFilePath))
+        {
+
+        }
+        else
+        {
+            Debug.Log("CREATING NEW FOLDER");
+            System.IO.Directory.CreateDirectory(sheetNameFilePath);
+
+        }
+        
+  
+        for (int i = 0; i < sheetNames.Count; i++)
+        {
+            //if (System.IO.File.Exists(sheetNameFilePath+"/"+ sheetNames[i] +".asset"))
+            //{
+            //    SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i] + ".asset");
+            //    TranslateIntoScriptableObject(roomCache);
+            //    Debug.Log("EXISTS");
+            //}
+            //i++;
+            //if (i >= sheetNames.Count)
+            //    {
+
+            //}
+            //else 
+            if (!System.IO.File.Exists(sheetNameFilePath + "/" + sheetNames[i] + ".asset"))
+            {
+                //Create scriptable object if it doesnt exist
+                SO_Dialogues example = ScriptableObject.CreateInstance<SO_Dialogues>();
+                // path has to start at "Assets"
+      
+       
+                UnityEditor.AssetDatabase.CreateAsset(example, sheetNameFilePath +"/"+ sheetNames[i] + ".asset");
+                UnityEditor.AssetDatabase.SaveAssets();
+                UnityEditor.AssetDatabase.Refresh();
+                UnityEditor.EditorUtility.FocusProjectWindow();
+                UnityEditor.Selection.activeObject = example;
+
+                Debug.Log("CREATED NEW SCRIPTABLE OBJECT: " + example.name + " IN PATH: " + sheetNameFilePath);
+    
+            }
+            //Update sheet
+            if (System.IO.File.Exists(sheetNameFilePath + "/" + sheetNames[i] + ".asset"))
+            {
+                if (i == 0)
+                {
+                    StorylineManager.instance.temp.currentSO_Dialogues =Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i]);
+                }
+   
+                StartCoroutine(Co_LoadValues(sheetNames[i]));
+                //SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + sheetNames[i]);
+                //TranslateIntoScriptableObject(roomCache);
+                Debug.Log("try exist");
+            }
+        }
+
+        //SO_Dialogues[] roomCache;
+
+        //roomCache = Resources.LoadAll<SO_Dialogues>("ScriptableObject/" + currentSheetName);
+
+
+        //for (int i = 0; i < roomCache.Length; i++)
+        //{
+
+        //}
+        //OnFinishedLoadingValues?.Invoke();
+        OnFinishedLoadingValues?.Invoke();
+    }
+    public void TranslateIntoScriptableObject(SO_Dialogues p_soDialogue)
+    {
+
+        if (p_soDialogue != null)
+        {
+            dialogueIndexInSheet.Clear();
+            choiceIndexInSheet.Clear();
+            backgroundIndexInSheet.Clear();
+            for (int i = 0; i < SpreadSheetAPI.instance.testerFormattedSheetRows.Length; i++)
+            {
+                if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains(DialogueSpreadSheetPatternConstants.dialogueName))
+                {
+                    dialogueIndexInSheet.Add(i);
+                }
+                else if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains(DialogueSpreadSheetPatternConstants.choiceName))
+                {
+                    choiceIndexInSheet.Add(i);
+                }
+                else if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains("background sprite"))
+                {
+                    backgroundIndexInSheet.Add(i);
+                }
+            }
+
+            //for (int i = 0; i < dialogueIndexInSheet.Count; i++)
+            //{
+            //    Debug.Log("dialogue indexes: " + dialogueIndexInSheet[i]);
+            //}
+            //for (int i = 0; i < choiceIndexInSheet.Count; i++)
+            //{
+            //    Debug.Log("choice indexes: " + choiceIndexInSheet[i]);
+            //}
+
+            //Reset
+            if (p_soDialogue.dialogues.Count > 0)
+            {
+                p_soDialogue.dialogues.Clear();
+            }
+            if (p_soDialogue.choiceDatas.Count > 0)
+            {
+                p_soDialogue.choiceDatas.Clear();
+            }
+
+
+
+
+            for (int i = 0; i < dialogueIndexInSheet.Count; i++)
+            {
+                int currentGeneratedDialogueIndex = dialogueIndexInSheet[i];
+
+                Dialogue newDialogue = new Dialogue();
+                p_soDialogue.dialogues.Add(newDialogue);
+                //Debug.Log(dialogueIndexInSheet[i]);
+                //Debug.Log(backgroundIndexInSheet[i]);
+                //Setting Character Data
+                string characterOne = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterOneRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
+                string characterTwo = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterTwoRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
+                string characterThree = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterThreeRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
+
+                if (characterOne != "none")
+                {
+                    CharacterData newCharacterDataOne = new CharacterData();
+                    TranslateToCharacterData(newCharacterDataOne, currentGeneratedDialogueIndex, DialogueSpreadSheetPatternConstants.characterOneRowPattern);
+                    newDialogue.characterDatas.Add(newCharacterDataOne);
+                }
+                if (characterTwo != "none")
+                {
+                    CharacterData newCharacterDataTwo = new CharacterData();
+                    TranslateToCharacterData(newCharacterDataTwo, currentGeneratedDialogueIndex, DialogueSpreadSheetPatternConstants.characterTwoRowPattern);
+                    newDialogue.characterDatas.Add(newCharacterDataTwo);
+                }
+                if (characterThree != "none")
+                {
+                    CharacterData newCharacterDataThree = new CharacterData();
+                    TranslateToCharacterData(newCharacterDataThree, currentGeneratedDialogueIndex, DialogueSpreadSheetPatternConstants.characterThreeRowPattern);
+                    newDialogue.characterDatas.Add(newCharacterDataThree);
+                }
+
+                //Setting Que Bank
+                p_soDialogue.isEnabled = VisualNovelDatas.TranslateIsSpeaking(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isEnabledCollumnPattern));
+                p_soDialogue.hapticType = VisualNovelDatas.FindHapticType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.hapticTypeCollumnPattern));
+                p_soDialogue.vocalicType = VisualNovelDatas.FindVocalicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.vocalicTypeCollumnPattern));
+                p_soDialogue.kinesicType = VisualNovelDatas.FindKinesicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.kinesicCollumnPattern));
+                p_soDialogue.oculesicType = VisualNovelDatas.FindOculesicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.oculesicCollumnPattern));
+                p_soDialogue.physicalApperanceType = VisualNovelDatas.FindPhysicalAppearanceType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.physicalAppearanceCollumnPattern));
+
+                //Setting Words
+
+                string[] retrievedWords = SpreadSheetAPI.GetCurrentSheetRow(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.wordsRowPattern);
+                string finalWords = "";
+                for (int x = 0; x < retrievedWords.Length; x++)
+                {
+                    finalWords += retrievedWords[x];
+                }
+                newDialogue.words = finalWords;
+
+                //Setting Backgounrd
+                //Debug.LogError(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
+                newDialogue.backgroundSprite = VisualNovelDatas.FindBackgroundSprite(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
+
+
+            }
+
+            //Setting Choice
+            for (int i = 0; i < choiceIndexInSheet.Count; i++)
+            {
+                int currentGeneratedChoiceIndex = 0;
+                currentGeneratedChoiceIndex = choiceIndexInSheet[i];
+
+                ChoiceData newChoiceData = null;
+                newChoiceData = new ChoiceData();
+                p_soDialogue.choiceDatas.Add(newChoiceData);
+
+                //Setting Choice
+                newChoiceData.words = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceNameCollumnPattern);
+                //newChoiceData.branchDialogueName = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameCollumnPattern);
+                string branchingDialogueName = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameCollumnPattern);
+                if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + branchingDialogueName + ".asset"))
+                {
+                    SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + branchingDialogueName);
+                    newChoiceData.branchingToSO_Dialogues = roomCache;
+
+
+                }
+                    
+                int test = 0;
+                string testnum = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceDamagePattern);
+                if (testnum != "error")
+                {
+                    int.TryParse(testnum, out test);
+                }
+                newChoiceData.damage = test;
+                newChoiceData.eventID = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.eventID);
+                int healthCondition = 0;
+                string healthConditionString = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthCondition);
+                if (healthConditionString != "error")
+                {
+                    int.TryParse(healthConditionString, out healthCondition);
+                }
+                newChoiceData.healthCondition = healthCondition;
+            }
+            Debug.Log(" FOUND");
+        }
+        else
+        {
+            Debug.Log("NONE FOUND");
+        }
+        
+
+    }
+
+    public void TranslateToCharacterData(CharacterData p_characterData, int p_currentGeneratedDialogueIndex, int p_characterRowPattern)
+    {
+        p_characterData.character = VisualNovelDatas.FindCharacter(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern));
+        p_characterData.faceEmotion = VisualNovelDatas.FindFaceEmotion(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.faceEmotionCollumnPattern));
+        p_characterData.bodyEmotion = VisualNovelDatas.FindFaceEmotion(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.bodyEmotionCollumnPattern));
+        p_characterData.characterPosition = VisualNovelDatas.FindBodyPosition(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.characterPositionCollumnPattern));
+        p_characterData.isFlipped = VisualNovelDatas.TranslateIsFlipped(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.isFlippedCollumnPattern));
+        p_characterData.isSpeaking = VisualNovelDatas.TranslateIsSpeaking(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.isSpeakingCollumnPattern));
     }
 }

@@ -6,8 +6,8 @@ using System;
 public class HealthUI : MonoBehaviour
 {
     [SerializeField] private Image barUI;
-    public int currentHealth = 100;
-    public int maxHealth = 100;
+    public float currentHealth = 100f;
+    public float maxHealth = 100f;
     public Action<int> ModifyHealthEvent;
     private void Awake()
     {

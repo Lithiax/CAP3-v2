@@ -5,9 +5,11 @@ using UnityEngine;
 public class ChoiceData
 {
     public string words;
-    public string branchDialogueName;
+    //public string branchDialogueName;
     public int damage;
     public string eventID;
+    public int healthCondition;
+    public SO_Dialogues branchingToSO_Dialogues;
 
 }
 [CreateAssetMenu(fileName = "New Dialogues Scriptable Object", menuName = "Scriptable Objects/Dialogues")]
