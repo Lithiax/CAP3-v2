@@ -637,7 +637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &298116359
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1449,7 +1449,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &589179937
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2157,8 +2157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame: {fileID: 3910282879291571052}
-  currentCharacterNameText: {fileID: 3557692985552378929}
-  currentDialogueText: {fileID: 3557692985430210379}
+  currentCharacterNameText: {fileID: 1603769610}
+  currentDialogueText: {fileID: 1524647040}
   backgroundImage: {fileID: 1391407250665172309}
   nextDialogueButton: {fileID: 3557692985220972418}
   choiceUIsContainer: {fileID: 1976719753562116365}
@@ -4657,7 +4657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1737073140
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6481,7 +6481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3557692984683149732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6558,7 +6558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3557692985026528711
 RectTransform:
   m_ObjectHideFlags: 0

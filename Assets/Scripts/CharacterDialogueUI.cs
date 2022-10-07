@@ -286,6 +286,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
                 newChoiceUI.InitializeValues(currentSO_Dialogues.choiceDatas[i].words, "");
                 int index = i;
+ 
                 newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(index); });
                 LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
             //}
@@ -359,20 +360,21 @@ public class CharacterDialogueUI : MonoBehaviour
             }
         }
         choiceUIsContainer.SetActive(false);
-        currentSO_Dialogues = currentSO_Dialogues.choiceDatas[index].branchingToSO_Dialogues;
+
         //SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[index].branchDialogueName);
         SetChoiceDamage(currentSO_Dialogues.choiceDatas[index].damage);
+    
         if (currentSO_Dialogues.choiceDatas[index].eventID != "")
         {
             DialogueSpreadSheetPatternConstants.effects.Add(currentSO_Dialogues.choiceDatas[index].eventID);
         }
-  
+        currentSO_Dialogues = currentSO_Dialogues.choiceDatas[index].branchingToSO_Dialogues;
         //TEMPORARY JUST TO SEE
         //for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
         //{
         //    Debug.Log("ALL THE LISTED EFFECTS: "+  DialogueSpreadSheetPatternConstants.effects[i]);
         //}
-      
+
         ResetCharacterDialogueUI();
     }
 

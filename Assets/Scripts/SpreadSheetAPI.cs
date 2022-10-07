@@ -389,7 +389,8 @@ public class SpreadSheetAPI : MonoBehaviour
                 newChoiceData.words = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceNameCollumnPattern);
                 //newChoiceData.branchDialogueName = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameCollumnPattern);
                 string branchingDialogueName = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameCollumnPattern);
-                if (System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + branchingDialogueName + ".asset"))
+                SO_Dialogues testee = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/week1");
+                if (testee)//System.IO.File.Exists("Assets/Resources/Scriptable Objects/" + currentSheetName + branchingDialogueName + ".asset"))
                 {
                     SO_Dialogues roomCache = Resources.Load<SO_Dialogues>("Scriptable Objects/" + currentSheetName + "/" + branchingDialogueName);
                     newChoiceData.branchingToSO_Dialogues = roomCache;
