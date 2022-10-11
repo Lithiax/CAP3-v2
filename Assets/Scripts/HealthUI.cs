@@ -8,7 +8,7 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private Image barUI;
     public float currentHealth = 100f;
     public float maxHealth = 100f;
-    public Action<int> ModifyHealthEvent;
+    public static Action<int> ModifyHealthEvent;
     private void Awake()
     {
         ModifyHealthEvent += ModifyHealth;

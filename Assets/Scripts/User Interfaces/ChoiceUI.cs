@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
+using System;
 public class ChoiceUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text choiceText;
@@ -13,8 +15,4 @@ public class ChoiceUI : MonoBehaviour
         eventID = p_eventID;
     }
 
-    //public void OnButtonClicked()
-    //{
-    //    StorylineManager.onWorldEventEndedEvent.Invoke(eventID,0,0);
-    //}
 }

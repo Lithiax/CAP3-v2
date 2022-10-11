@@ -28,6 +28,7 @@ public class TransitionUI : MonoBehaviour
     public IEnumerator runningCoroutine;
     public static FadeTransition onFadeTransition;
     public TMP_Text tester;
+    public Color color;
     //public static FadeInAndOutTransition onFadeInAndOutTransition = new FadeInAndOutTransition();
     private void Awake()
     {
@@ -89,6 +90,7 @@ public class TransitionUI : MonoBehaviour
                                             Action p_preAction = null,
                                             Action p_postAction = null)
     {
+        transitionUI.color = color;
         if (runningCoroutine != null)
         {
             StopCoroutine(runningCoroutine);
@@ -113,6 +115,7 @@ public class TransitionUI : MonoBehaviour
                             Action p_preAction = null,
                             Action p_postAction = null)
     {
+        transitionUI.color = color;
         Sequence preSequence = DOTween.Sequence();
         //transitionUI.gameObject.SetActive(true);
         preSequence.Join(transitionUI.DOFade(p_preOpacity, p_preTransitionTime));
@@ -126,6 +129,7 @@ public class TransitionUI : MonoBehaviour
         yield return postSequence.WaitForCompletion();
 
         //transitionUI.gameObject.SetActive(false);
+
         p_postAction?.Invoke();
     }
 }

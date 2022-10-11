@@ -135,4 +135,15 @@ public class VisualNovelDatas : MonoBehaviour
         return null;
     }
 
+    public static SpecificEventType FindEventType(string p_name)
+    {
+        for (int i = 0; i < SpecificEventType.GetValues(typeof(SpecificEventType)).Length; i++)
+        {
+            if (((SpecificEventType)i).ToString().ToLower() == p_name.ToLower())
+            {
+                return (SpecificEventType)i;
+            }
+        }
+        return SpecificEventType.none;
+    }
 }

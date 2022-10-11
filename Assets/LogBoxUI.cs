@@ -8,26 +8,26 @@ public class LogBoxUI : MonoBehaviour
     [SerializeField]
     private GameObject logBox;
     [SerializeField] private Transform containerTransform;
+    [SerializeField]
+    private CharacterDialogueUI ui;
+    private void Awake()
+    {
+        CharacterDialogueUI.onNewDialogueEvent.AddListener(UpdateDialogueLog);
+    }
     public void ToggleLogBox()
     {
         if (logBox.activeSelf == false)
         {
             //Create
-            for (int i = 0; i <= StorylineManager.instance.temp.currentDialogueIndex; i++)
+            if (StorylineManager.instance.temp.currentDialogueIndex > 0)
             {
-                LogTextUI newPrefab = Instantiate(prefab,containerTransform);
-                //Find Speaker
-                string speakerFound = "";
-                for (int x = 0; x < StorylineManager.instance.temp.currentSO_Dialogues.dialogues[i].characterDatas.Count; x++)
+                for (int i = 0; i <= StorylineManager.instance.temp.currentDialogueIndex - 1; i++)
                 {
-                    if (StorylineManager.instance.temp.currentSO_Dialogues.dialogues[i].characterDatas[x].isSpeaking)
-                    {
-                        speakerFound = StorylineManager.instance.temp.currentSO_Dialogues.dialogues[i].characterDatas[x].character.name;
-                    }
-                }
-                newPrefab.Initialize(speakerFound,StorylineManager.instance.temp.currentSO_Dialogues.dialogues[i].words);
+                    UpdateDialogueLog(ui.currentSO_Dialogues.dialogues[i]);
 
+                }
             }
+           
         }
         else
         {
@@ -39,6 +39,21 @@ public class LogBoxUI : MonoBehaviour
         }
         logBox.SetActive(!logBox.activeSelf);
 
+    }
+
+    public void UpdateDialogueLog(Dialogue p_dialogue)
+    {
+        LogTextUI newPrefab = Instantiate(prefab, containerTransform);
+        //Find Speaker
+        string speakerFound = "";
+        for (int x = 0; x < p_dialogue.characterDatas.Count; x++)
+        {
+            if (p_dialogue.characterDatas[x].isSpeaking)
+            {
+                speakerFound = p_dialogue.characterDatas[x].character.name;
+            }
+        }
+        newPrefab.Initialize(speakerFound, p_dialogue.words);
     }
 
 }

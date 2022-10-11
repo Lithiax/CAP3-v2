@@ -73,6 +73,12 @@ public enum PhysicalApperanceType
     none
 }
 
+public enum SpecificEventType
+{
+    transitionEffect,
+    soundEffect,
+    none,
+}
 
 [System.Serializable]
 public class CharacterData
@@ -96,7 +102,7 @@ public class Dialogue
 
     public Sprite backgroundSprite;
 
-    public bool isTransition;
-    public string sfxName;
+    public SpecificEventType specificEventType;
+    public string specificEventParameter;
    // public string 
 }

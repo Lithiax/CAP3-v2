@@ -50,7 +50,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void NewGameButton()
     {
-        SceneManager.LoadScene("VisualNovel");
+        SceneManager.LoadScene("Update Values");
     }
 
     public void ExitButton()
