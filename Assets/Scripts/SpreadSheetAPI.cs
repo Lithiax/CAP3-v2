@@ -125,6 +125,7 @@ public class SpreadSheetAPI : MonoBehaviour
         }
         if (!allLoaded && !firstTime)
         {
+            yield return new WaitForSeconds(1f);
             LoadAllSheetNames();
             currentSheetIndex++;
         }

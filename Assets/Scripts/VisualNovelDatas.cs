@@ -15,7 +15,7 @@ public class VisualNovelDatas : MonoBehaviour
     {
         for (int i = 0; i < instance.characters.Count; i++)
         {
-            if (instance.characters[i].name.ToString().ToLower() == p_name.ToLower())
+            if (instance.characters[i].idName.ToString().ToLower() == p_name.ToLower())
             {
                 //Debug.Log("Returning " + instance.characters[i].name); 
                 return instance.characters[i];

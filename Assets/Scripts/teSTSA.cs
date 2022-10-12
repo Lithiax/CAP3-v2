@@ -496,7 +496,7 @@ public class teSTSA : MonoBehaviour
 
                 if (p_characterDatas[i].isSpeaking)
                 {
-                    characterNameText.text = p_characterDatas[i].character.name;
+                    characterNameText.text = p_characterDatas[i].character.idName;
 
                 }
 

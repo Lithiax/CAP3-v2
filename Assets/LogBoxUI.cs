@@ -50,7 +50,7 @@ public class LogBoxUI : MonoBehaviour
         {
             if (p_dialogue.characterDatas[x].isSpeaking)
             {
-                speakerFound = p_dialogue.characterDatas[x].character.name;
+                speakerFound = p_dialogue.characterDatas[x].character.idName;
             }
         }
         newPrefab.Initialize(speakerFound, p_dialogue.words);
