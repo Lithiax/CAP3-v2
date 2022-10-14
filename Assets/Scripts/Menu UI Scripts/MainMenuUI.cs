@@ -50,7 +50,11 @@ public class MainMenuUI : MonoBehaviour
 
     public void NewGameButton()
     {
-        SceneManager.LoadScene("Update Values");
+        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        mainCharacter.stageName = "You";
+        StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
+
+        SceneManager.LoadScene("VisualNovel");
     }
 
     public void ExitButton()

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 public class CueBankUI : MonoBehaviour
 {
     public GameObject frame;
-    [SerializeField] CharacterDialogueUI characterDialogueUI;
+
     [SerializeField]
     private GameObject cueBankContainer;
+    [SerializeField]
+    public GameObject blackOverlay;
     [SerializeField] private TMP_Text hapticText;
     [SerializeField] private TMP_Text vocalicText;
     [SerializeField] private TMP_Text kinesicText;
@@ -16,6 +19,19 @@ public class CueBankUI : MonoBehaviour
     [SerializeField] private TMP_Text physicalAppearanceText;
 
     [SerializeField] public bool cueBankOpenable = false;
+
+    [SerializeField]
+    public GameObject speakerDialogueUI;
+    [SerializeField]
+    public GameObject healthUI;
+    [SerializeField]
+    public GameObject choicesUI;
+    [SerializeField]
+    public GameObject popUpUI;
+    [SerializeField]
+    public GameObject extras;
+    [SerializeField]
+    public GameObject extrasButton;
     public void ResetCueBankUI()
     {
         cueBankContainer.gameObject.SetActive(false);
@@ -23,11 +39,19 @@ public class CueBankUI : MonoBehaviour
 
     public void ToggleCueBankUI()
     {
-        if (characterDialogueUI.currentSO_Dialogues.isEnabled)
+        if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
         {
             if (cueBankOpenable)
             {
                 cueBankContainer.SetActive(!cueBankContainer.activeSelf);
+                blackOverlay.SetActive(!cueBankContainer.activeSelf);
+
+                speakerDialogueUI.SetActive(!cueBankContainer.activeSelf);
+                healthUI.SetActive(!cueBankContainer.activeSelf);
+                choicesUI.SetActive(!cueBankContainer.activeSelf);
+                popUpUI.SetActive(!cueBankContainer.activeSelf);
+                extras.SetActive(!cueBankContainer.activeSelf);
+                extrasButton.SetActive(!cueBankContainer.activeSelf);
             }
 
         }
@@ -38,11 +62,11 @@ public class CueBankUI : MonoBehaviour
     {
 
         cueBankOpenable = true;
-        hapticText.text = p_characterDatas.hapticType.ToString();
-        vocalicText.text = p_characterDatas.vocalicType.ToString();
-        kinesicText.text = p_characterDatas.kinesicType.ToString();
-        oculesicText.text = p_characterDatas.oculesicType.ToString();
-        physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
+        hapticText.text = p_characterDatas.cueBankData.hapticType.ToString();
+        vocalicText.text = p_characterDatas.cueBankData.vocalicType.ToString();
+        kinesicText.text = p_characterDatas.cueBankData.kinesicType.ToString();
+        oculesicText.text = p_characterDatas.cueBankData.oculesicType.ToString();
+        physicalAppearanceText.text = p_characterDatas.cueBankData.physicalApperanceType.ToString();
 
 
     }

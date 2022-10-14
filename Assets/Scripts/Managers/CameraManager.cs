@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-public class CameraMovedEvent : UnityEvent<Vector2,Vector2> { }
+public class CameraMovedEvent : UnityEvent<Vector2> { }
 public class ShakeCameraEvent : UnityEvent { }
 public class CameraManager : MonoBehaviour
 {
@@ -22,11 +22,7 @@ public class CameraManager : MonoBehaviour
     }
     [SerializeField] public Camera worldCamera;
     [SerializeField] public Camera uiCamera;
-    [HideInInspector] public CameraMovement cameraMovement;
-    [SerializeField] private Transform panLimitUpperRightTransform;
 
-    [HideInInspector]
-    public Vector2 panLimit;
     public static CameraMovedEvent onCameraMovedEvent = new CameraMovedEvent();
     public static ShakeCameraEvent onShakeCameraEvent = new ShakeCameraEvent();
     [SerializeField] Room defaultRoom;
@@ -62,8 +58,7 @@ public class CameraManager : MonoBehaviour
         _instance = this;
         //If condition is true then do expression 1, else do expression 2
         worldCamera = worldCamera ? worldCamera : GameObject.Find("World Camera").GetComponent<Camera>();
-        worldCamera = worldCamera ? worldCamera : GameObject.Find("UI Camera").GetComponent<Camera>();
-        cameraMovement = worldCamera.GetComponent<CameraMovement>();
+        uiCamera = worldCamera ? worldCamera : GameObject.Find("UI Camera").GetComponent<Camera>();
         onShakeCameraEvent.AddListener(ShakeCamera);
     
     }
@@ -76,17 +71,9 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
-
-        panLimit = Vector2Abs(transform.position - panLimitUpperRightTransform.position);
-
         ResetCamera();
-        //StartCoroutine(Co_ZoomCamera());
     }
 
-    private void OnDisable()
-    {
-       
-    }
     Vector2 Vector2Abs(Vector2 p_vector2)
     {
         Vector2 answer = new Vector2(Mathf.Abs(p_vector2.x), Mathf.Abs(p_vector2.y));
@@ -97,7 +84,7 @@ public class CameraManager : MonoBehaviour
         if (!tutorialOn)
         {
             //Debug.Log("Invoked: " + defaultRoom.transform.position + ", " + panLimit);
-            onCameraMovedEvent.Invoke(defaultRoom.transform.position, panLimit);
+            onCameraMovedEvent.Invoke(defaultRoom.transform.position);
         }
 
     }

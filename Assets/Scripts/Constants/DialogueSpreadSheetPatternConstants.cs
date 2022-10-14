@@ -19,6 +19,8 @@ public class DialogueSpreadSheetPatternConstants
     public const int oculesicColumnPattern = 4;
     public const int physicalAppearanceColumnPattern = 5;
 
+    public const int isAutomaticHealthEvaluation = 6;
+
     [Header("Que Bank Row Patterns")]
     public const int cueBankRowPattern = 2;
 
@@ -48,6 +50,7 @@ public class DialogueSpreadSheetPatternConstants
 
     [Header("Choice Collumn Patterns")]
     public const int choiceNameColumnPattern = 0;
+  
     public const int nextDialogueSheetNameColumnPattern = 1;
     public const int healthModifierColumnPattern = 3;
     public const int healthCeilingConditionColumnPattern = 4;
@@ -59,6 +62,6 @@ public class DialogueSpreadSheetPatternConstants
 
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;
-    public const int popUpRowPattern = 2;
+    public const int popUpRowPattern = 4;
 
 }

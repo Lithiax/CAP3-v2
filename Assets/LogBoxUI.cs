@@ -8,22 +8,24 @@ public class LogBoxUI : MonoBehaviour
     [SerializeField]
     private GameObject logBox;
     [SerializeField] private Transform containerTransform;
-    [SerializeField]
-    private CharacterDialogueUI ui;
+    bool couldUpdate = false;
+
     private void Awake()
     {
         CharacterDialogueUI.onNewDialogueEvent.AddListener(UpdateDialogueLog);
     }
     public void ToggleLogBox()
     {
+        couldUpdate = !couldUpdate;
         if (logBox.activeSelf == false)
         {
+          
             //Create
-            if (StorylineManager.instance.temp.currentDialogueIndex > 0)
+            if (StorylineManager.currentDialogueIndex > 0)
             {
-                for (int i = 0; i <= StorylineManager.instance.temp.currentDialogueIndex - 1; i++)
+                for (int i = 0; i <= StorylineManager.currentDialogueIndex - 1; i++)
                 {
-                    UpdateDialogueLog(ui.currentSO_Dialogues.dialogues[i]);
+                    UpdateDialogueLog(StorylineManager.currentSO_Dialogues.dialogues[i]);
 
                 }
             }
@@ -43,17 +45,22 @@ public class LogBoxUI : MonoBehaviour
 
     public void UpdateDialogueLog(Dialogue p_dialogue)
     {
-        LogTextUI newPrefab = Instantiate(prefab, containerTransform);
-        //Find Speaker
-        string speakerFound = "";
-        for (int x = 0; x < p_dialogue.characterDatas.Count; x++)
+        if(couldUpdate)
         {
-            if (p_dialogue.characterDatas[x].isSpeaking)
+            LogTextUI newPrefab = Instantiate(prefab, containerTransform);
+            //Find Speaker
+            string speakerFound = "";
+            for (int x = 0; x < p_dialogue.characterDatas.Count; x++)
             {
-                speakerFound = p_dialogue.characterDatas[x].character.idName;
+                if (p_dialogue.characterDatas[x].isSpeaking)
+                {
+                    speakerFound = p_dialogue.characterDatas[x].character.stageName;
+                }
             }
+            string words = p_dialogue.words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
+            newPrefab.Initialize(speakerFound, words);
         }
-        newPrefab.Initialize(speakerFound, p_dialogue.words);
+      
     }
 
 }

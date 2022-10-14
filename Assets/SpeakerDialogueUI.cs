@@ -46,14 +46,17 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     public void ResetSpeakerDialogueUI()
     {
-        currentDialogueText.gameObject.SetActive(false);
-        currentSpeakerText.gameObject.SetActive(false);
+        currentDialogueBox.gameObject.SetActive(false);
+        currentSpeakerBox.gameObject.SetActive(false);
+        extraButtonsContainer.gameObject.SetActive(false);
     }
 
     public void ManualToggleSpeakerDialogueUI(bool p_desiredToggle)
     {
-        currentDialogueText.gameObject.SetActive(p_desiredToggle);
-        currentSpeakerText.gameObject.SetActive(p_desiredToggle);
+        currentDialogueBox.gameObject.SetActive(p_desiredToggle);
+        currentSpeakerBox.gameObject.SetActive(p_desiredToggle);
+        extraButtonsContainer.gameObject.SetActive(p_desiredToggle);
+        Debug.Log(p_desiredToggle);
     }
     public void ToggleExtras()
     {
@@ -70,11 +73,11 @@ public class SpeakerDialogueUI : MonoBehaviour
             currentSpeakerText = bigSpeakerText;
 
         }
-        if (characterDialogueUI.currentDialogueIndex >= characterDialogueUI.currentSO_Dialogues.dialogues.Count)
+        if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
-            characterDialogueUI.currentDialogueIndex = characterDialogueUI.currentSO_Dialogues.dialogues.Count - 1;
+            StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
         }
-        Dialogue currentDialogue = characterDialogueUI.currentSO_Dialogues.dialogues[characterDialogueUI.currentDialogueIndex];
+        Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
         smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
         smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
         bigSpeakerBox.SetActive(!bigSpeakerBox.activeSelf);
@@ -103,7 +106,7 @@ public class SpeakerDialogueUI : MonoBehaviour
                 if (p_characterDatas[i].isSpeaking)
                 {
                     currentSpeakerText.text = p_characterDatas[i].character.stageName;
-
+                    //Debug.Log("CURRENT SPEAKER NAME: " + p_characterDatas[i].character.stageName);
                 }
 
             }
@@ -125,6 +128,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     public void SetSpeech(string p_words)
     {
+        p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         if (characterDialogueUI.isSkipping)
         {
             //Debug.Log("stop writing");

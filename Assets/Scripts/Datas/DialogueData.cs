@@ -75,8 +75,13 @@ public enum PhysicalApperanceType
 
 public enum SpecificEventType
 {
-    transitionEffect,
+    fadeInNOutEffect,
+    fadeInEffect,
+    fadeOutEffect,
     soundEffect,
+    inputNameEvent,
+    phoneEvent,
+    shakeEffects,
     none,
 }
 

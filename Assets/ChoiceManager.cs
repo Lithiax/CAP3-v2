@@ -14,7 +14,7 @@ public class ChoiceManager : MonoBehaviour
     [SerializeField] private ChoiceUI choiceUIPrefab;
 
 
-    public static Action<List<ChoiceData>> OnChoosingChoiceEvent;
+    public static Action<HealthUI, List<ChoiceData>> OnChoosingChoiceEvent;
     
     private void Awake()
     {
@@ -25,17 +25,28 @@ public class ChoiceManager : MonoBehaviour
 
     }
 
-    void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
+    void CreateChoiceUIs(HealthUI healthUI, List<ChoiceData> p_choiceDatas)
     {
         choiceUIsContainer.SetActive(true);
         for (int i = 0; i < p_choiceDatas.Count; i++)
         {
             ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
-            newChoiceUI.InitializeValues(p_choiceDatas[i].words, "");
+            newChoiceUI.InitializeValues(p_choiceDatas[i].words);
             ChoiceData currentChoiceData = p_choiceDatas[i];
-
-            newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate {ChooseChoiceUI(currentChoiceData); });
-            LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+            //if (healthUI.currentHealth <= p_choiceDatas[i].healthCeilingCondition &&
+            //    healthUI.currentHealth > p_choiceDatas[i].healthFloorCondition)
+            //{
+                //Can be selected
+                newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+            //}
+            //else
+            //{
+            //    //Cant be selected
+            //    newChoiceUI.GetComponent<Button>().interactable = false;
+            //    newChoiceUI.GetComponent<Image>().color = new Color32(255,255,255,150);
+            //}
+       
         }
     }
 
@@ -62,13 +73,12 @@ public class ChoiceManager : MonoBehaviour
         {
             Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
             PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle,p_currentChoiceData.popUpContent);
-            CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogueName);
+            CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
 
         }
         else
         {
-            SpreadSheetReader.LoadLocalFile(p_currentChoiceData.branchDialogueName, FindObjectOfType<CharacterDialogueUI>().currentSO_Dialogues);
-    
+            StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
         }
 

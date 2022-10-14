@@ -9,6 +9,7 @@ public class VisualNovelDatas : MonoBehaviour
     {
         instance = this;
     }
+    public SO_Character mainCharacter;
     public List<SO_Character> characters = new List<SO_Character>();
     public List<Sprite> backgroundImages = new List<Sprite>();
     public static SO_Character FindCharacter(string p_name)
@@ -137,6 +138,7 @@ public class VisualNovelDatas : MonoBehaviour
 
     public static SpecificEventType FindEventType(string p_name)
     {
+        p_name = p_name.Replace(" ", string.Empty);
         for (int i = 0; i < SpecificEventType.GetValues(typeof(SpecificEventType)).Length; i++)
         {
             if (((SpecificEventType)i).ToString().ToLower() == p_name.ToLower())

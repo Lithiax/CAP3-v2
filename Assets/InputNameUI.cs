@@ -12,10 +12,21 @@ public class InputNameUI : MonoBehaviour
     public void ToggleUI()
     {
         frame.SetActive(!frame.activeSelf);
+        if (frame.activeSelf == true)
+        {
+            //CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
+        }
+        else if (frame.activeSelf == false)
+        {
+          
+        }
     }
     public void SubmitInputName()
     {
         so_Character.stageName = inputField.text;
+        StorylineManager.currentDialogueIndex++;
+        //CharacterDialogueUI.OnEndEvent.Invoke();
+        CharacterDialogueUI.OnContinueEvent.Invoke();
         ToggleUI();
     }
 }
