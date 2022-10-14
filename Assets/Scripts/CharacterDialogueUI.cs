@@ -188,18 +188,25 @@ public class CharacterDialogueUI : MonoBehaviour
     }
     public void SkipAll()
     {
-
-        while (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count-2)
+        if (StorylineManager.currentSO_Dialogues != null)
         {
-           // yield return new WaitForSeconds(0.5f);
-            OnNextButtonUIPressed();
+            if (StorylineManager.currentSO_Dialogues.dialogues.Count > 0)
+            {
+                while (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count - 2)
+                {
+                    // yield return new WaitForSeconds(0.5f);
+                    OnNextButtonUIPressed();
 
-            //Debug.Log(currentDialogueIndex + "/" + currentSO_Dialogues.dialogues.Count);
-            //currentDialogueIndex++;
+                    //Debug.Log(currentDialogueIndex + "/" + currentSO_Dialogues.dialogues.Count);
+                    //currentDialogueIndex++;
+                }
+
+                Debug.Log("Auto skipped " + StorylineManager.currentDialogueIndex);
+                //Debug.Log("Ended " + currentDialogueIndex);
+            }
         }
-    
-        Debug.Log("Auto skipped " + StorylineManager.currentDialogueIndex);
-        //Debug.Log("Ended " + currentDialogueIndex);
+   
+
 
     }
 
@@ -806,9 +813,14 @@ public class CharacterDialogueUI : MonoBehaviour
             return;
 
         }
+        if (StorylineManager.currentSO_Dialogues == null)
+        {
+            OnCloseCharacterDialogueUI();
+            return;
+        }
        
         //Debug.Log("22222222");
-        if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
+        if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count) // fix this for condition above
         {
             //Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
            //     + " iS: " + isSkipping
