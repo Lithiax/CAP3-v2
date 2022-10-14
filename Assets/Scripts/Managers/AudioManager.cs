@@ -92,8 +92,30 @@ public class AudioManager : MonoBehaviour
         }
 
     }
+    public void InstantPlayAudio(string p_oldAudioClip, string p_newAudioClip)
+    {
+        //foreach (SoundData currentSoundData in sounds)
+        //{
+        //    currentSoundData.source.Stop();
+        //}
+        //StartCoroutine(Co_AudioFade(p_oldAudioClip, p_newAudioClip));
+    }
 
-    public void TransitionAudio(string p_oldAudioClip, string p_newAudioClip)
+    public void ForceStopAudio(string p_newAudioClip)
+    {
+        SoundData sound;
+        sound = GetSoundByName(p_newAudioClip);
+        sound.source.Stop();
+
+    }
+    public void AdditivePlayAudio(string p_newAudioClip)
+    {
+        SoundData sound;
+        sound = GetSoundByName(p_newAudioClip);
+        sound.source.Play();
+  
+    }
+    public void SmoothPlayAudio(string p_oldAudioClip, string p_newAudioClip)
     {
         foreach (SoundData currentSoundData in sounds)
         {

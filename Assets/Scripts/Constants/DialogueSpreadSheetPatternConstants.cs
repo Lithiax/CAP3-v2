@@ -11,24 +11,26 @@ public class DialogueSpreadSheetPatternConstants
     public static string dialogueName = "[Dialogue]";
     public static string choiceName = "[Choice]";
 
-    [Header("Que Bank Collumn Patterns")]
-    public const int isEnabledCollumnPattern = 0;
-    public const int hapticTypeCollumnPattern = 1;
-    public const int vocalicTypeCollumnPattern = 2;
-    public const int kinesicCollumnPattern = 3;
-    public const int oculesicCollumnPattern = 4;
-    public const int physicalAppearanceCollumnPattern = 5;
+    [Header("Que Bank Column Patterns")]
+    public const int isEnabledColumnPattern = 0;
+    public const int hapticTypeColumnPattern = 1;
+    public const int vocalicTypeColumnPattern = 2;
+    public const int kinesicColumnPattern = 3;
+    public const int oculesicColumnPattern = 4;
+    public const int physicalAppearanceColumnPattern = 5;
+
+    public const int isAutomaticHealthEvaluation = 6;
 
     [Header("Que Bank Row Patterns")]
     public const int cueBankRowPattern = 2;
 
     [Header("Characters Collumn Patterns")]
-    public const int characterCollumnPattern = 0;
-    public const int faceEmotionCollumnPattern = 1;
-    public const int bodyEmotionCollumnPattern = 2;
-    public const int characterPositionCollumnPattern = 3;
-    public const int isFlippedCollumnPattern = 4;
-    public const int isSpeakingCollumnPattern = 5;
+    public const int characterColumnPattern = 0;
+    public const int faceEmotionColumnPattern = 1;
+    public const int bodyEmotionColumnPattern = 2;
+    public const int characterPositionColumnPattern = 3;
+    public const int isFlippedColumnPattern = 4;
+    public const int isSpeakingColumnPattern = 5;
 
     [Header("Characters Row Patterns")]
     public const int characterOneRowPattern = 2;
@@ -39,18 +41,27 @@ public class DialogueSpreadSheetPatternConstants
     public const int wordsRowPattern = 6;
 
     [Header("Misc Collumn Patterns")]
-    public const int backgroundCollumnPattern = 0;
+    public const int backgroundColumnPattern = 0;
+    public const int eventTypeColumnPattern = 1;
+    public const int eventParameterColumnPattern = 2;
 
     [Header("Misc Row Patterns")]
     public const int miscRowPattern = 8;
 
     [Header("Choice Collumn Patterns")]
-    public const int choiceNameCollumnPattern = 0;
-    public const int nextDialogueSheetNameCollumnPattern = 1;
-    public const int choiceDamagePattern = 3;
-    public const int eventID = 4;
+    public const int choiceNameColumnPattern = 0;
+  
+    public const int nextDialogueSheetNameColumnPattern = 1;
+    public const int healthModifierColumnPattern = 3;
+    public const int healthCeilingConditionColumnPattern = 4;
+    public const int healthFloorConditionColumnPattern = 5;
+    public const int effectIDColumnPattern = 6;
+
+    public const int popUpTitleColumnPattern = 0;
+    public const int popUpContentColumnPattern = 1;
 
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;
+    public const int popUpRowPattern = 4;
 
 }

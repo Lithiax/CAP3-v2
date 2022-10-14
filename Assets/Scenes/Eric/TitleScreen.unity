@@ -333,6 +333,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionUI: {fileID: 1310523988}
+  tester: {fileID: 0}
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!223 &346974498
 Canvas:
   m_ObjectHideFlags: 0

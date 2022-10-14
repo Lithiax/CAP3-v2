@@ -20,7 +20,8 @@ public class BodyEmotionData
 [CreateAssetMenu(fileName = "New Character Scriptable Object", menuName = "Scriptable Objects/Character")]
 public class SO_Character : ScriptableObject
 {
-    public new string name;
+    public string stageName;
+    public string idName;
     public Sprite avatar;
     public CharacterObject prefab;
     public List<FaceEmotionData> faceEmotionDatas;

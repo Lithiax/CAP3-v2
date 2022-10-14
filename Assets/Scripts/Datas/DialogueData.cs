@@ -73,6 +73,17 @@ public enum PhysicalApperanceType
     none
 }
 
+public enum SpecificEventType
+{
+    fadeInNOutEffect,
+    fadeInEffect,
+    fadeOutEffect,
+    soundEffect,
+    inputNameEvent,
+    phoneEvent,
+    shakeEffects,
+    none,
+}
 
 [System.Serializable]
 public class CharacterData
@@ -95,4 +106,8 @@ public class Dialogue
     public string words;
 
     public Sprite backgroundSprite;
+
+    public SpecificEventType specificEventType;
+    public string specificEventParameter;
+   // public string 
 }

@@ -19,7 +19,7 @@ public class MainMenuUI : MonoBehaviour
         float scaleheight = windowaspect / targetaspect;
 
         // obtain camera component so we can modify its viewport
-        Camera camera = GetComponent<Camera>();
+        Camera camera = Camera.main;//GetComponent<Camera>();
 
         // if scaled height is less than current height, add letterbox
         if (scaleheight < 1.0f)
@@ -50,6 +50,10 @@ public class MainMenuUI : MonoBehaviour
 
     public void NewGameButton()
     {
+        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        mainCharacter.stageName = "You";
+        StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
+
         SceneManager.LoadScene("VisualNovel");
     }
 

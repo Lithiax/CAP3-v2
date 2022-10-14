@@ -7,7 +7,9 @@ using TMPro;
 using System;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-public class CharacterSpokenToEvent : UnityEvent<string, SO_Dialogues> { }
+
+public class CharacterSpokenTo : UnityEvent<string> { }
+public class NewDialogueEvent : UnityEvent<Dialogue> { }
 public class FirstTimeFoodOnEndEvent : UnityEvent { }
 
 [System.Serializable]
@@ -20,79 +22,39 @@ public class CharacterPresetData
 
 public class CharacterDialogueUI : MonoBehaviour
 {
+
     [HeaderAttribute("REQUIRED COMPONENTS")]
     [SerializeField] private GameObject frame;
-    [SerializeField] private TMP_Text currentCharacterNameText;
-    [SerializeField] private TMP_Text currentDialogueText;
 
     [SerializeField] private Image backgroundImage;
 
     [SerializeField] public GameObject nextDialogueButton;
-    [SerializeField] private GameObject choiceUIsContainer;
-    private Transform choiceUIsContainerTransform;
-    private RectTransform choiceUIsContainerRectTransform;
+
 
     [SerializeField] private Transform characterUIContainerTransform;
     [SerializeField] private Transform characterObjectContainerTransform;
-    [SerializeField] private ChoiceUI choiceUIPrefab;
+
 
     [SerializeField]
     private List<Character> savedCharacters = new List<Character>();
     [SerializeField]
     private List<CharacterPresetData> characterPresetDatas = new List<CharacterPresetData>();
 
-    [SerializeField]
-    private GameObject cueBankContainer;
-    [SerializeField] private TMP_Text hapticText;
-    [SerializeField] private TMP_Text vocalicText;
-    [SerializeField] private TMP_Text kinesicText;
-    [SerializeField] private TMP_Text oculesicText;
-    [SerializeField] private TMP_Text physicalAppearanceText;
-
     [SerializeField] private CharacterUI staticCharacterPrefab;
 
     [HeaderAttribute("ADJUSTABLE VALUES")]
 
     [SerializeField] private Color32 nonSpeakerTintColor;
-    [SerializeField] private float typewriterSpeed = 0.1f;
+
 
     [SerializeField]
     private float avatarFadeTime;
     [SerializeField]
     private float avatarDelayTime;
 
-    private int currentDialogueIndex;
-
-    private int runningCoroutines = 0;
-    private bool isSkipping = false;
+    public int runningCoroutines = 0;
+    public bool isSkipping = false;
     private string id;
-
-
-    private bool isBig = false;
-
-
-    [SerializeField]
-    private GameObject extraButtonsContainer;
-
-    [SerializeField]
-    private TMP_Text smallDialogueText;
-    [SerializeField]
-    private TMP_Text bigDialogueText;
-
-    [SerializeField]
-    private GameObject smallSpeakerBox;
-    [SerializeField]
-    private GameObject bigSpeakerBox;
-
-    [SerializeField]
-    private GameObject smallDialogueBox;
-    [SerializeField]
-    private GameObject bigDialogueBox;
-
-    [SerializeField]
-    private TMP_Text smallSpeakerText;
-    [SerializeField]
-    private TMP_Text bigSpeakerText;
 
     bool isStartTransitionEnabled = true;
     bool isEndTransitionEnabled = true;
@@ -101,46 +63,100 @@ public class CharacterDialogueUI : MonoBehaviour
 
     bool isAlreadyEnded = false;
 
-    public static CharacterSpokenToEvent onCharacterSpokenToEvent = new CharacterSpokenToEvent();
+    public static NewDialogueEvent onNewDialogueEvent = new NewDialogueEvent();
 
-    //[HideInInspector]
-    public SO_Dialogues currentSO_Dialogues;
+    public static CharacterSpokenTo onCharacterSpokenTo = new CharacterSpokenTo();
+    public static System.Action OnStartChooseChoiceEvent;
+    public static System.Action OnEndChooseChoiceEvent;
 
-    [SerializeField]
-    private List<int> dialogueIndexInSheet = new List<int>();
-    [SerializeField]
-    private List<int> backgroundIndexInSheet = new List<int>();
-    [SerializeField]
-    private List<int> choiceIndexInSheet = new List<int>();
+
+    public static System.Action OnContinueEvent;
+    public static System.Action OnEndEvent;
+    public static System.Action<SO_Dialogues> OnPopUpEvent;
+
+    public static System.Action OnResettingVisualNovelUI;
 
     [SerializeField]
     private HealthUI healthUI;
+    [SerializeField]
+    private PopUpUI popUpUI;
+    [SerializeField]
+    private SpeakerDialogueUI speakerDialogueUI;
+    [SerializeField]
+    private CueBankUI cueBankUI;
+    [SerializeField]
+    private InputNameUI inputNameUI;
+    public bool rarara = false;
 
+    SO_Dialogues p_currentChoiceDataTest = null;
 
 
     private void Awake()
     {
-        onCharacterSpokenToEvent.AddListener(OnCharacterSpokenTo);
-        choiceUIsContainerTransform = choiceUIsContainer.transform;
-        choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
+        onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
+        //EVENTS
+        OnStartChooseChoiceEvent += DisableNextDialogueButton;
+        OnEndChooseChoiceEvent += ResetCharacterDialogueUI;
+        OnPopUpEvent += popuptest;
+        OnContinueEvent += ContinueEvent;
+        OnEndEvent += ToggleNextDialogueButton;
 
-        DialogueSpreadSheetPatternConstants.dialogueName = DialogueSpreadSheetPatternConstants.dialogueName.ToLower();
-        DialogueSpreadSheetPatternConstants.choiceName = DialogueSpreadSheetPatternConstants.choiceName.ToLower();
+
     }
-
-    public void OnEnable()
+    void ContinueEvent()
     {
-        SpreadSheetAPI.OnFinishedLoadingValues += TranslateIntoScriptableObject;
-
+        Debug.Log("CONTINUING");
+        speakerDialogueUI.ManualToggleSpeakerDialogueUI(true);
+        isSkipping = false;
+        runningCoroutines = 0;
+        nextDialogueButton.SetActive(true);
+        OnNextButtonUIPressed();
     }
-    public void OnCharacterSpokenTo(string p_id, SO_Dialogues p_SO_Dialogue)
+    private void OnEnable()
+    {
+        StartCoroutine(startload());
+    }
+
+    IEnumerator startload()
+    {
+        yield return new WaitForSeconds(1f);
+        if (StorylineManager.currentSO_Dialogues != null)
+        {
+            onCharacterSpokenTo.Invoke("");
+        }
+    }
+    void DisableNextDialogueButton()
+    {
+        nextDialogueButton.SetActive(false);
+    }
+    void ToggleNextDialogueButton()
+    {
+        nextDialogueButton.SetActive(true);
+    }
+    public void popuptest(SO_Dialogues p_currentChoiceData)
+    {
+        p_currentChoiceDataTest = p_currentChoiceData;
+    }
+
+
+    public void OnCharacterSpokenTo(string p_id)
     {
         id = p_id;
-        TranslateIntoScriptableObject(); // FIX
+        rarara = false;
+        p_currentChoiceDataTest = null;
+        if (runningCoroutines > 0)
+        {
+            isSkipping = false;
+            StopAllCoroutines();
+            speakerDialogueUI.StopCoroutine();
+            runningCoroutines = 0;
+            // Debug.Log("READYING");
 
+        }
         if (isStartTransitionEnabled)
         {
-            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, OnOpenCharacterDialogueUI);
+            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, OnOpenCharacterDialogueUI, tatata);
+            //Debug.Log("66666666666666666");
         }
         else
         {
@@ -148,131 +164,14 @@ public class CharacterDialogueUI : MonoBehaviour
         }
 
     }
-
-    public void TranslateIntoScriptableObject()
+    public void tatata()
     {
-        dialogueIndexInSheet.Clear();
-        choiceIndexInSheet.Clear();
-        backgroundIndexInSheet.Clear();
-        for (int i = 0; i < SpreadSheetAPI.instance.testerFormattedSheetRows.Length; i++)
-        {
-            if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains(DialogueSpreadSheetPatternConstants.dialogueName))
-            {
-                dialogueIndexInSheet.Add(i);
-            }
-            else if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains(DialogueSpreadSheetPatternConstants.choiceName))
-            {
-                choiceIndexInSheet.Add(i);
-            }
-            else if (SpreadSheetAPI.instance.testerFormattedSheetRows[i].ToLower().Contains("background sprite"))
-            {
-                backgroundIndexInSheet.Add(i);
-            }
-        }
-
-        //for (int i = 0; i < dialogueIndexInSheet.Count; i++)
-        //{
-        //    Debug.Log("dialogue indexes: " + dialogueIndexInSheet[i]);
-        //}
-        //for (int i = 0; i < choiceIndexInSheet.Count; i++)
-        //{
-        //    Debug.Log("choice indexes: " + choiceIndexInSheet[i]);
-        //}
-        //Reset
-        currentSO_Dialogues.dialogues.Clear();
-        currentSO_Dialogues.choiceDatas.Clear();
-
-
-        for (int i = 0; i < dialogueIndexInSheet.Count; i++)
-        {
-            int currentGeneratedDialogueIndex = dialogueIndexInSheet[i];
-  
-            Dialogue newDialogue = new Dialogue();
-            currentSO_Dialogues.dialogues.Add(newDialogue);
-            //Debug.Log(dialogueIndexInSheet[i]);
-            //Debug.Log(backgroundIndexInSheet[i]);
-            //Setting Character Data
-            string characterOne = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterOneRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
-            string characterTwo = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterTwoRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
-            string characterThree = SpreadSheetAPI.GetCellString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.characterThreeRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern).ToLower();
-
-            if (characterOne != "none")
-            {   
-                CharacterData newCharacterDataOne = new CharacterData();
-                TranslateToCharacterData(newCharacterDataOne, currentGeneratedDialogueIndex,DialogueSpreadSheetPatternConstants.characterOneRowPattern);
-                newDialogue.characterDatas.Add(newCharacterDataOne);
-            }
-            if (characterTwo != "none")
-            {
-                CharacterData newCharacterDataTwo = new CharacterData();
-                TranslateToCharacterData(newCharacterDataTwo, currentGeneratedDialogueIndex, DialogueSpreadSheetPatternConstants.characterTwoRowPattern);
-                newDialogue.characterDatas.Add(newCharacterDataTwo);
-            }
-            if (characterThree != "none")
-            {
-                CharacterData newCharacterDataThree = new CharacterData();
-                TranslateToCharacterData(newCharacterDataThree, currentGeneratedDialogueIndex, DialogueSpreadSheetPatternConstants.characterThreeRowPattern);
-                newDialogue.characterDatas.Add(newCharacterDataThree);
-            }
-
-            //Setting Que Bank
-            currentSO_Dialogues.isEnabled = VisualNovelDatas.TranslateIsSpeaking(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isEnabledCollumnPattern));
-            currentSO_Dialogues.hapticType = VisualNovelDatas.FindHapticType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.hapticTypeCollumnPattern));
-            currentSO_Dialogues.vocalicType = VisualNovelDatas.FindVocalicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.vocalicTypeCollumnPattern));
-            currentSO_Dialogues.kinesicType = VisualNovelDatas.FindKinesicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.kinesicCollumnPattern));
-            currentSO_Dialogues.oculesicType = VisualNovelDatas.FindOculesicType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.oculesicCollumnPattern));
-            currentSO_Dialogues.physicalApperanceType = VisualNovelDatas.FindPhysicalAppearanceType(SpreadSheetAPI.GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.physicalAppearanceCollumnPattern));
-
-            //Setting Words
- 
-            string[] retrievedWords = SpreadSheetAPI.GetCurrentSheetRow(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.wordsRowPattern);
-            string finalWords = "";
-            for (int x = 0; x < retrievedWords.Length; x++)
-            {
-                finalWords += retrievedWords[x];
-            }
-            newDialogue.words = finalWords;
-
-            //Setting Backgounrd
-            //Debug.LogError(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
-            newDialogue.backgroundSprite = VisualNovelDatas.FindBackgroundSprite(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
-
-         
-        }
-
-        //Setting Choice
-        for (int i = 0; i < choiceIndexInSheet.Count; i++)
-        {
-            int currentGeneratedChoiceIndex = 0;
-            currentGeneratedChoiceIndex = choiceIndexInSheet[i];
-
-            ChoiceData newChoiceData = null;
-            newChoiceData = new ChoiceData();
-            currentSO_Dialogues.choiceDatas.Add(newChoiceData);
-
-            //Setting Choice
-            newChoiceData.words = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceNameCollumnPattern);
-            newChoiceData.branchDialogueName = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameCollumnPattern);
-            int test = 0;
-            string testnum = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceDamagePattern);
-            if (testnum != "error")
-            {
-                int.TryParse(testnum, out test);
-            }
-            newChoiceData.damage = test;
-            newChoiceData.eventID = SpreadSheetAPI.GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.eventID);
-        }
-
+        rarara = true;
+        speakerDialogueUI.ManualToggleSpeakerDialogueUI(true);
+        //Debug.Log("11111111");
+        OnNextButtonUIPressed();
     }
-    public void TranslateToCharacterData(CharacterData p_characterData, int p_currentGeneratedDialogueIndex, int p_characterRowPattern)
-    {
-        p_characterData.character = VisualNovelDatas.FindCharacter(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.characterCollumnPattern));
-        p_characterData.faceEmotion = VisualNovelDatas.FindFaceEmotion(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.faceEmotionCollumnPattern));
-        p_characterData.bodyEmotion = VisualNovelDatas.FindFaceEmotion(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.bodyEmotionCollumnPattern));
-        p_characterData.characterPosition = VisualNovelDatas.FindBodyPosition(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.characterPositionCollumnPattern));
-        p_characterData.isFlipped = VisualNovelDatas.TranslateIsFlipped(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.isFlippedCollumnPattern));
-        p_characterData.isSpeaking = VisualNovelDatas.TranslateIsSpeaking(SpreadSheetAPI.GetCellString(p_currentGeneratedDialogueIndex + p_characterRowPattern, DialogueSpreadSheetPatternConstants.isSpeakingCollumnPattern));
-    }
+
     public void OnOpenCharacterDialogueUI()
     {
         frame.SetActive(true);
@@ -282,13 +181,14 @@ public class CharacterDialogueUI : MonoBehaviour
     public void OnCloseCharacterDialogueUI()
     {
         //Temporary
+
         SceneManager.LoadScene("FindR");
         frame.SetActive(false);
     }
     public void SkipAll()
     {
 
-        while (currentDialogueIndex < currentSO_Dialogues.dialogues.Count-2)
+        while (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count-2)
         {
            // yield return new WaitForSeconds(0.5f);
             OnNextButtonUIPressed();
@@ -297,54 +197,49 @@ public class CharacterDialogueUI : MonoBehaviour
             //currentDialogueIndex++;
         }
     
-        Debug.Log("Auto skipped " + currentDialogueIndex);
+        Debug.Log("Auto skipped " + StorylineManager.currentDialogueIndex);
         //Debug.Log("Ended " + currentDialogueIndex);
 
-    }
-  
-    public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
-    {
-        runningCoroutines++;
-        string p_currentText;
-        for (int i = 0; i <= p_fullText.Length; i++)
-        {
-            p_currentText = p_fullText.Substring(0, i);
-            p_textUI.text = p_currentText;
-            yield return new WaitForSeconds(typewriterSpeed);
-        }
-        runningCoroutines--;
-        CheckIfReady();
     }
 
     void ResetCharacterDialogueUI()
     {
-        currentDialogueIndex = 0;
+        StorylineManager.currentDialogueIndex = 0;
         isSkipping = false;
         runningCoroutines = 0;
         isAlreadyEnded = false;
         nextDialogueButton.SetActive(true);
-      
-        choiceUIsContainer.SetActive(false);
-        cueBankContainer.gameObject.SetActive(false);
-
+        cueBankUI.ResetCueBankUI();
+        popUpUI.CloseUI();
+        
         OnNextButtonUIPressed();
+        if (!rarara)
+        {
+            speakerDialogueUI.ResetSpeakerDialogueUI();
+            //Debug.Log("00000000");
+        }
+
     }
 
-    void NextDialogue()
+    void SetNextDialogue()
     {
-        Debug.Log(currentDialogueIndex + " NEXT DIALOGUE " + dialogueIndexInSheet[currentDialogueIndex]);
-        isSkipping = false;
-        
-        currentDialogueIndex++;
-        runningCoroutines = 0;
-     
-        if (currentDialogueIndex == currentSO_Dialogues.dialogues.Count)
+        if (rarara)
         {
-            if (isAdvancedonWorldEventEndedEvent)
+            Debug.Log(StorylineManager.currentDialogueIndex + " NEXT DIALOGUE " + StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex]);
+            isSkipping = false;
+
+            StorylineManager.currentDialogueIndex++;
+            runningCoroutines = 0;
+     
+            if (StorylineManager.currentDialogueIndex == StorylineManager.currentSO_Dialogues.dialogues.Count)
             {
-                isAlreadyEnded = true;
+                if (isAdvancedonWorldEventEndedEvent)
+                {
+                    isAlreadyEnded = true;
+                }
             }
         }
+     
     }
 
     IEnumerator AvatarFadeIn(Image p_avatarImage, Sprite p_sprite)
@@ -369,7 +264,11 @@ public class CharacterDialogueUI : MonoBehaviour
         yield return fadeOutSequence.WaitForCompletion();
         runningCoroutines--;
         savedCharacters.Remove(p_newCharacter);
-        Destroy(p_newCharacter.gameObject);
+        if (p_newCharacter.gameObject != null)
+        {
+            Destroy(p_newCharacter.gameObject);
+        }
+   
         CheckIfReady();
     }
 
@@ -393,93 +292,6 @@ public class CharacterDialogueUI : MonoBehaviour
         yield return fadeInSequence.WaitForCompletion();
         runningCoroutines--;
         CheckIfReady();
-    }
-    void CreateChoiceUIs()
-    {  
-        nextDialogueButton.SetActive(false);
-        choiceUIsContainer.SetActive(true);
-        for (int i =0; i <currentSO_Dialogues.choiceDatas.Count; i++)
-        {
-            ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
-            newChoiceUI.InitializeValues(currentSO_Dialogues.choiceDatas[i].words, "");
-            int index = i;
-            newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(index); });
-            LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
-        }
-    }
-    public void ToggleCueBankUI()
-    {
-        if (currentSO_Dialogues.isEnabled)
-        {
-            cueBankContainer.SetActive(!cueBankContainer.activeSelf);
-        }
-        
-    }
-    public void ToggleExtras()
-    {
-        if (!smallDialogueBox.activeSelf)
-        {
-            currentDialogueText = smallDialogueText;
-            smallSpeakerText.text = currentCharacterNameText.text;
-            currentCharacterNameText = smallSpeakerText;
-        }
-        else if (smallDialogueBox.activeSelf)
-        {
-            currentDialogueText = bigDialogueText;
-            bigSpeakerText.text = currentCharacterNameText.text;
-            currentCharacterNameText = bigSpeakerText;
-
-        }
-        if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
-        {
-            currentDialogueIndex = currentSO_Dialogues.dialogues.Count - 1;
-        }
-        Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
-        smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
-        smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
-        bigSpeakerBox.SetActive(!bigSpeakerBox.activeSelf);
-        bigDialogueBox.SetActive(!bigDialogueBox.activeSelf);
-        extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
-        if (runningCoroutines > 0 && !isSkipping)
-        {
-            isSkipping = true;
-            StopAllCoroutines();
-            runningCoroutines = 0;
-            // Debug.Log("READYING");
-
-        }
-
-        SetSpeech(currentDialogue.words);
- 
-        isBig = !isBig;
-    }
-
-    public void SetChoiceDamage(int p_modifier)
-    {
-        healthUI.ModifyHealthEvent.Invoke(p_modifier);
-    }
-    public void ChooseChoiceUI(int index)
-    {
-        nextDialogueButton.SetActive(true);
-        if (choiceUIsContainer.activeSelf)
-        {
-            for (int i = 0; i < choiceUIsContainerTransform.childCount; i++)
-            {
-                Destroy(choiceUIsContainerTransform.GetChild(i).gameObject);
-
-            }
-        }
-        choiceUIsContainer.SetActive(false);
-        SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[index].branchDialogueName);
-        SetChoiceDamage(currentSO_Dialogues.choiceDatas[index].damage);
-        DialogueSpreadSheetPatternConstants.effects.Add(currentSO_Dialogues.choiceDatas[index].eventID);
-        //TEMPORARY JUST TO SEE
-        //for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-        //{
-        //    Debug.Log("ALL THE LISTED EFFECTS: "+  DialogueSpreadSheetPatternConstants.effects[i]);
-        //}
-      
-        ResetCharacterDialogueUI();
     }
 
     void SetRectTransformToPreset(CharacterPositionType p_characterPositionType, SO_Character p_index)
@@ -573,15 +385,18 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             if (foundCharacter is CharacterObject)
             {
-                CharacterObject foundPreset = foundCharacter as CharacterObject;
-
-                for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; i++)
+                if (p_characterData.faceEmotion != CharacterEmotionType.none)
                 {
+                    CharacterObject foundPreset = foundCharacter as CharacterObject;
 
-                    if (foundPreset.so_Character.faceEmotionDatas[i].type == p_characterData.faceEmotion)
+                    for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; i++)
                     {
-                        foundPreset.expressionController.CurrentExpressionIndex = foundPreset.so_Character.faceEmotionDatas[i].index;
-                        break;
+
+                        if (foundPreset.so_Character.faceEmotionDatas[i].type == p_characterData.faceEmotion)
+                        {
+                            foundPreset.expressionController.CurrentExpressionIndex = foundPreset.so_Character.faceEmotionDatas[i].index;
+                            break;
+                        }
                     }
                 }
             }
@@ -609,7 +424,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         i++;
                         if (i >= foundPreset.charAnim.parameters.Length)
                         {
-                            Debug.Log(currentDialogueIndex + " Set Body Emotion is Not available");                        
+                            Debug.Log(StorylineManager.currentDialogueIndex + " Set Body Emotion is Not available");                        
                         }
                     }
                     
@@ -767,27 +582,7 @@ public class CharacterDialogueUI : MonoBehaviour
         
     }
 
-    void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
-    {
-        if (p_characterDatas.Count > 0)
-        {
-            for (int i = 0; i < p_characterDatas.Count; i++)
-            {
 
-                if (p_characterDatas[i].isSpeaking)
-                {
-                    currentCharacterNameText.text = p_characterDatas[i].character.name;
-
-                }
-
-            }
-        }
-        else
-        {
-            currentCharacterNameText.text = "NO CHARACTER ASSIGNED";
-        }
-      
-    }
     void IdentifyCharactersToAdd(List<SO_Character> newList, List<SO_Character> oldList,List<SO_Character> charactersToBeAdded)
     {
        
@@ -925,126 +720,200 @@ public class CharacterDialogueUI : MonoBehaviour
 
       
     }
-    void SetSpeech(string p_words)
-    {
-        if (isSkipping)
-        {
-            SetWords(p_words);
-        }
-        else
-        {
-            StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words));
-        }
-   
-    }
-    void SetWords(string p_words)
-    {
-        currentDialogueText.text = p_words;
-    }
-
-    void SetCueBank(SO_Dialogues p_characterDatas)
-    {
-        if (p_characterDatas.isEnabled)
-        {
-            cueBankContainer.gameObject.SetActive(false);
-        }
-        else
-        {
-            cueBankContainer.gameObject.SetActive(true);
-            hapticText.text = p_characterDatas.hapticType.ToString();
-            vocalicText.text = p_characterDatas.vocalicType.ToString();
-            kinesicText.text = p_characterDatas.kinesicType.ToString();
-            oculesicText.text = p_characterDatas.oculesicType.ToString();
-            physicalAppearanceText.text = p_characterDatas.physicalApperanceType.ToString();
-           
-        }
-    }
 
     public void CheckIfReady()
     {
-        if (runningCoroutines == 0)
+        if (runningCoroutines <= 0)
         {
-            //Debug.Log("READYING");
+            Debug.Log("READYING");
             isSkipping = true;
         }
     }
+    public void DoSpecificEvent(SpecificEventType p_specificEventType, string p_eventName)
+    {
+        if (p_specificEventType == SpecificEventType.soundEffect)
+        {
+            AudioManager.instance.AdditivePlayAudio(p_eventName);
+        }
+        else if (p_specificEventType == SpecificEventType.fadeInNOutEffect)
+        {
+            rarara = false;
+            if (p_eventName == "white")
+            {
+                TransitionUI.instance.color = Color.white;
 
+            }
+            else if (p_eventName == "black")
+            {
+                TransitionUI.instance.color = Color.black;
+              
+            }
+            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, p_postAction: tatata);
+        }
+        else if (p_specificEventType == SpecificEventType.fadeInEffect)
+        {
+            //rarara = false;
+            if (p_eventName == "white")
+            {
+                TransitionUI.instance.color = Color.white;
+          
+            }
+            else if (p_eventName == "black")
+            {
+                TransitionUI.instance.color = Color.black;
+           
+            }
+            TransitionUI.onFadeTransition.Invoke(1, false);
+        }
+        else if (p_specificEventType == SpecificEventType.fadeOutEffect)
+        {
+            //rarara = false;
+            if (p_eventName == "white")
+            {
+                TransitionUI.instance.color = Color.white;
+            }
+            else if (p_eventName == "black")
+            {
+                TransitionUI.instance.color = Color.black;
+            }
+            TransitionUI.onFadeTransition.Invoke(0, false);
+        }
+        else if (p_specificEventType == SpecificEventType.inputNameEvent)
+        {
+            inputNameUI.ToggleUI();
+            speakerDialogueUI.ResetSpeakerDialogueUI();
+            nextDialogueButton.SetActive(false);
+        }
+        else if (p_specificEventType == SpecificEventType.phoneEvent)
+        {
+           //phone
+        }
+        else if (p_specificEventType == SpecificEventType.shakeEffects)
+        {
+            CameraManager.instance.ShakeCamera();
+        }
+    }
 
     public void OnNextButtonUIPressed()
     {
-        
-        if (currentDialogueIndex < currentSO_Dialogues.dialogues.Count)
+        //Debug.Log("22222222");
+        if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
             //Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
            //     + " iS: " + isSkipping
             //    + " iR: ");
-            Dialogue currentDialogue = currentSO_Dialogues.dialogues[currentDialogueIndex];
+            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
+            if (currentDialogue.specificEventType != SpecificEventType.none)
+            {
+                DoSpecificEvent(currentDialogue.specificEventType, currentDialogue.specificEventParameter);
             
+            }
             if (runningCoroutines > 0 && !isSkipping)
             {
                 isSkipping = true;
                 StopAllCoroutines();
-                runningCoroutines=0;
+                speakerDialogueUI.StopCoroutine();
+                runningCoroutines =0;
                // Debug.Log("READYING");
             
             }
           
             else if (isSkipping)// && !isReady)
             {
-              //  Debug.Log("READIED");
+                //Debug.Log("READIED");
                 frame.SetActive(true);
-                NextDialogue();
+                onNewDialogueEvent.Invoke(currentDialogue);
+                SetNextDialogue();
                 OnNextButtonUIPressed();
                 return;
 
             }
-           
-            CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
-            for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
-            {
-                //Set Character UI Rect Transform
-                //Position
-                SetRectTransformToPreset(currentDialogue.characterDatas[i].characterPosition, currentDialogue.characterDatas[i].character);
-                SetAvatarFlipOrientation(currentDialogue.characterDatas[i]);
-                SetFacialEmotion(currentDialogue.characterDatas[i]);
-                SetBodyEmotion(currentDialogue.characterDatas[i]);
-                SetSpeakerTint(currentDialogue.characterDatas[i].isSpeaking, currentDialogue.characterDatas[i].character);
-            }
 
-            SetSpeakerName(currentDialogue.characterDatas);
+            if (rarara)
+            {
+                CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
+                for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
+                {
+                    //Set Character UI Rect Transform
+                    //Position
+                    SetRectTransformToPreset(currentDialogue.characterDatas[i].characterPosition, currentDialogue.characterDatas[i].character);
+                    SetAvatarFlipOrientation(currentDialogue.characterDatas[i]);
+                    SetFacialEmotion(currentDialogue.characterDatas[i]);
+                    SetBodyEmotion(currentDialogue.characterDatas[i]);
+                    SetSpeakerTint(currentDialogue.characterDatas[i].isSpeaking, currentDialogue.characterDatas[i].character);
+                }
+               
+                speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
+                cueBankUI.cueBankOpenable = false;
+                speakerDialogueUI.SetSpeech(currentDialogue.words);
+            }
+           
             SetBackground(currentDialogue.backgroundSprite);
-            SetSpeech(currentDialogue.words);
-          
+
         }
-        else if (currentDialogueIndex >= currentSO_Dialogues.dialogues.Count)
+        else if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
             if (!isAlreadyEnded)
             {
-                if (currentSO_Dialogues.choiceDatas.Count > 1)
+                if (p_currentChoiceDataTest == null)
                 {
-                    CreateChoiceUIs();
-                    SetCueBank(currentSO_Dialogues);
-                }
-                else if (currentSO_Dialogues.choiceDatas.Count == 1)
-                {
-                    Debug.Log(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
-                    SpreadSheetAPI.SetCurrentIndexToSheet(currentSO_Dialogues.choiceDatas[0].branchDialogueName);
-                    SetChoiceDamage(currentSO_Dialogues.choiceDatas[0].damage);
-                    ResetCharacterDialogueUI();
+                    if (StorylineManager.currentSO_Dialogues.choiceDatas.Count > 1)
+                    {
+                        if (StorylineManager.currentSO_Dialogues.isAutomaticHealthEvaluation)
+                        {
+                            //No choice, just evaluate
+                            for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
+                            {
+                                if (healthUI.currentHealth <= StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition &&
+                                    healthUI.currentHealth > StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition)
+                                {
+                                    StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
+                                    StorylineManager.currentDialogueIndex = 0;
+                                    break;
+                                }
+                              
+                            }
 
+                        }
+                        else
+                        {
+                            //Creating Choices
+                            Debug.Log("CREATING CHOIIIIIIIIICE");
+                            nextDialogueButton.SetActive(false);
+                            ChoiceManager.OnChoosingChoiceEvent(healthUI,StorylineManager.currentSO_Dialogues.choiceDatas);
+                            cueBankUI.SetCueBank(StorylineManager.currentSO_Dialogues);
+
+                        }
+
+
+                    }
+                    else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 1)
+                    {
+                        Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
+
+             
+                        //Set Choice Damage
+                        HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                        StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                        StorylineManager.currentDialogueIndex = 0;
+                    }
+                    else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
+                    {
+                        if (isEndTransitionEnabled)
+                        {
+                            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, p_postAction: OnCloseCharacterDialogueUI);
+                            Debug.Log("0000000000000000000000000000000000");
+                        }
+                        else
+                        {
+                            OnCloseCharacterDialogueUI();
+                        }
+                    }
                 }
-                else if (currentSO_Dialogues.choiceDatas.Count == 0)
+                else if (p_currentChoiceDataTest != null)
                 {
-                    if (isEndTransitionEnabled)
-                    {
-                        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, OnCloseCharacterDialogueUI);
-                    }
-                    else
-                    {
-                        OnCloseCharacterDialogueUI();
-                    }
+                    StorylineManager.currentSO_Dialogues = p_currentChoiceDataTest;
                 }
-                
             }
         }
     }

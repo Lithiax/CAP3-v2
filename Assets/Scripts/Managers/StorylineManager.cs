@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class StorylineManager : MonoBehaviour
 {
-    [NonReorderable][SerializeField] public SO_Dialogues startSO_Dialogues;
-    [NonReorderable][SerializeField] public List<SO_Dialogues> so_Dialogues;
-    [SerializeField] CharacterDialogueUI temp;
-    public void Start()
+    public static StorylineManager instance;
+    public SO_Character mainCharacter;
+    public static SO_Dialogues currentSO_Dialogues;
+    public static int currentDialogueIndex;
+    private void Awake()
     {
-        temp.OnCharacterSpokenTo("",startSO_Dialogues);
-        //CharacterDialogueUI.onCharacterSpokenToEvent.Invoke("None", startSO_Dialogues);
-        //AudioManager.instance.PlayOnRoomEnterString("QuestComplete");
+        instance = this;
     }
+
 
 }
