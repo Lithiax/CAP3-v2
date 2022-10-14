@@ -35,6 +35,7 @@ public class CueBankUI : MonoBehaviour
     public void ResetCueBankUI()
     {
         cueBankContainer.gameObject.SetActive(false);
+        blackOverlay.SetActive(false);
     }
 
     public void ToggleCueBankUI()
@@ -44,7 +45,7 @@ public class CueBankUI : MonoBehaviour
             if (cueBankOpenable)
             {
                 cueBankContainer.SetActive(!cueBankContainer.activeSelf);
-                blackOverlay.SetActive(!cueBankContainer.activeSelf);
+                blackOverlay.SetActive(cueBankContainer.activeSelf);
 
                 speakerDialogueUI.SetActive(!cueBankContainer.activeSelf);
                 healthUI.SetActive(!cueBankContainer.activeSelf);

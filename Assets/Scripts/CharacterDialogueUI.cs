@@ -136,6 +136,7 @@ public class CharacterDialogueUI : MonoBehaviour
     public void popuptest(SO_Dialogues p_currentChoiceData)
     {
         p_currentChoiceDataTest = p_currentChoiceData;
+        nextDialogueButton.SetActive(true);
     }
 
 
@@ -796,6 +797,16 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
+        if (p_currentChoiceDataTest != null)
+        {
+            StorylineManager.currentSO_Dialogues = p_currentChoiceDataTest;
+            p_currentChoiceDataTest = null;
+            CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+          
+            return;
+
+        }
+       
         //Debug.Log("22222222");
         if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
         {

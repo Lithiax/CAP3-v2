@@ -1681,8 +1681,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -62.737, y: -140.181}
-  m_SizeDelta: {x: 149.97, y: 102.149}
+  m_AnchoredPosition: {x: -78.790955, y: -140.181}
+  m_SizeDelta: {x: 117.862, y: 102.149}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &329625004
 MonoBehaviour:
@@ -2375,7 +2375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frame: {fileID: 472546876}
   cueBankContainer: {fileID: 1018639057}
-  blackOverlay: {fileID: 0}
+  blackOverlay: {fileID: 210907154}
   hapticText: {fileID: 2050818673}
   vocalicText: {fileID: 282255546}
   kinesicText: {fileID: 1078046795}
@@ -7933,8 +7933,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.861, y: -55.7}
-  m_SizeDelta: {x: 137.721, y: 80}
+  m_AnchoredPosition: {x: -74.42, y: -55.7}
+  m_SizeDelta: {x: 126.603, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298007396
 MonoBehaviour:
