@@ -10,5 +10,6 @@ public static class StaticUserData
     public static string b_month = "0";
     public static string b_year = "0";
 
+    //Adding to this will automatically set it up for the FindR Chat.
     public static List<ChatUserData> ChatUserData = new List<ChatUserData>();
 }

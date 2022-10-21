@@ -13,6 +13,7 @@ public class ChatManagerUI : MonoBehaviour
     [SerializeField] VerticalLayoutGroup chatParent;
     [SerializeField] RectTransform chatParentTransform;
     [SerializeField] GameObject chatPrefab;
+    [SerializeField] GameObject dividerPrefab;
     [HideInInspector] public List<ChatUser> chatUsers;
 
     [Header("Parent UI Transforms")]
@@ -81,6 +82,11 @@ public class ChatManagerUI : MonoBehaviour
         oldchatElementsTransform = chatElements.offsetMin;
     }
 
+    public void SpawnDivider()
+    {
+        GameObject.Instantiate(dividerPrefab, chatParentTransform);
+    }
+
     public void StartSpawningChat(ChatUser parent, DialogueGraphAPI Tree)
     {
         parent.currentChatComplete = false;
@@ -136,6 +142,7 @@ public class ChatManagerUI : MonoBehaviour
         ShowResponseBox();
     }
 
+    //NOTE: This is only used for NEW chats
     IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;

@@ -11,6 +11,14 @@ public class ChatUserData
     public List<GameObject> ChatObjects = new List<GameObject>();
     public string name;
     public DialogueContainer CurrentTree;
+    public ChatUserSO UserSO;
+
+    public ChatUserData(ChatUserSO userSO)
+    {
+        UserSO = userSO;
+        name = userSO.name;
+        CurrentTree = userSO.dialogueTree;
+    }
 }
 
 public class ChatUser : MonoBehaviour
@@ -19,7 +27,7 @@ public class ChatUser : MonoBehaviour
     public DialogueGraphAPI DialogueTree { get; private set; }
 
     //public ChatCollectionSO currentCollection;
-    List<GameObject> chatsObj = new List<GameObject>();
+    //List<GameObject> chatsObj = new List<GameObject>();
     [HideInInspector] public Toggle toggle;
     [SerializeField] Color toggleActivatedColor;
     [SerializeField] Color toggleUnactiveColor;
@@ -62,18 +70,15 @@ public class ChatUser : MonoBehaviour
         if (!StaticUserData.ChatUserData.Any(x => x.name == data.profileName))
         {
             //ADD SAVING CHAT OBJECTS INTO THE CHAT USER DATA
-            ChatData = new ChatUserData
-            {
-                name = data.profileName,
-                CurrentTree = data.dialogueTree
-            };
+            ChatData = new ChatUserData(data);
 
             if (data.initialPreviousChat)
             {
                 foreach (ChatBubble chat in data.initialPreviousChat.ChatData)
                 {
                     GameObject obj = chatManager.SpawnChatBubble(chat, this);
-                    chatsObj.Add(obj);
+                    //chatsObj.Add(obj);
+                    ChatData.ChatObjects.Add(obj);
                     PreviousChat = chat;
                 }
 
@@ -87,7 +92,7 @@ public class ChatUser : MonoBehaviour
         //If ChatUser is not new (FOR TESTING)
         else
         {
-            ChatData = StaticUserData.ChatUserData.First(x => x.name == name);
+            ChatData = StaticUserData.ChatUserData.First(x => x.UserSO == data);
 
             foreach (GameObject chat in ChatData.ChatObjects)
             {
@@ -118,6 +123,7 @@ public class ChatUser : MonoBehaviour
 
         profileName.text = data.profileName;
         profileImage.sprite = data.profileImage;
+        chatManager.SpawnDivider();
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
@@ -185,7 +191,8 @@ public class ChatUser : MonoBehaviour
 
     public void OnChatSpawned(ChatBubble chat, GameObject spawnedObj, string text)
     {
-        chatsObj.Add(spawnedObj);
+        //chatsObj.Add(spawnedObj);
+        ChatData.ChatObjects.Add(spawnedObj);
         PreviousChat = chat;
         lastMessageText.text = text;
     }
@@ -195,7 +202,8 @@ public class ChatUser : MonoBehaviour
         isToggled = tog;
 
         ResetNotif();
-        chatManager.ActivateChat(chatsObj, tog);
+        chatManager.ActivateChat(ChatData.ChatObjects, tog);
+
 
         toggle.image.color = tog ? toggleActivatedColor : toggleUnactiveColor;
 

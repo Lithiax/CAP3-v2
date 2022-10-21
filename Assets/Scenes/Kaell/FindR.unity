@@ -719,7 +719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.120000005, y: 0.81944263}
-  m_AnchoredPosition: {x: -0.48529053, y: 71.82661}
+  m_AnchoredPosition: {x: -0.48565674, y: 64.5}
   m_SizeDelta: {x: -0.9713, y: -143.0732}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &256922615
@@ -834,8 +834,9 @@ GameObject:
   m_Component:
   - component: {fileID: 307040549}
   - component: {fileID: 307040548}
+  - component: {fileID: 307040550}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: GameManagers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -868,6 +869,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &307040550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307040547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06f2c73fd2cff834cba37c4cb7679960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChatUserManager: {fileID: 101932264}
+  UserData:
+  - level: 0
+    ChatUsers: []
 --- !u!1 &307853789
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,6 +980,7 @@ MonoBehaviour:
   chatParent: {fileID: 1082451831}
   chatParentTransform: {fileID: 1082451829}
   chatPrefab: {fileID: 5333776925348523784, guid: 67bdc588dae9cc74f8081653d06ab065, type: 3}
+  dividerPrefab: {fileID: 5333776925348523784, guid: 86e82f3b9a6fee8409cc090cbdf49192, type: 3}
   chatUsers: []
   chatElements: {fileID: 1751302633}
   replyBoxTransform: {fileID: 800504509}
@@ -1523,7 +1541,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1527805614}
   m_HandleRect: {fileID: 1527805613}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2631,12 +2649,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 10
+    m_Right: 10
+    m_Top: 10
+    m_Bottom: 10
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -3367,7 +3385,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1326954866
 MonoBehaviour:
@@ -5015,7 +5033,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1676108961
 MonoBehaviour:
@@ -5400,7 +5418,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1874843103
 MonoBehaviour:
@@ -5974,7 +5992,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 277310268}
   m_HandleRect: {fileID: 277310267}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6056,7 +6074,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00024414062}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1931278371
