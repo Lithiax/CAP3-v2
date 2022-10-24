@@ -15,7 +15,7 @@ public class ChatUserManager : MonoBehaviour
     [SerializeField] FindREventsManager eventsManager;
 
     //To set a new user, just add it in the static script
-    List<ChatUser> SpawnedUsers = new List<ChatUser>();
+    [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
 
     private void Awake()
     {
