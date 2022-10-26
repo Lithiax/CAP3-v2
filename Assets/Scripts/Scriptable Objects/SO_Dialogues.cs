@@ -5,11 +5,11 @@ using UnityEngine;
 public class CueBankData
 {
     public bool isEnabled;
-    public HapticType hapticType;
-    public VocalicType vocalicType;
-    public KinesicType kinesicType;
-    public OculesicType oculesicType;
-    public PhysicalApperanceType physicalApperanceType;
+    public string hapticType;
+    public string vocalicType;
+    public string kinesicType;
+    public string oculesicType;
+    public string physicalApperanceType;
 }
 [System.Serializable]
 public class ChoiceData

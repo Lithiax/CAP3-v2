@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using DG.Tweening;
 public class SpeakerDialogueUI : MonoBehaviour
 {
     [SerializeField] private float typewriterSpeed = 0.1f;
@@ -12,7 +13,7 @@ public class SpeakerDialogueUI : MonoBehaviour
   
     [SerializeField]
     private GameObject currentDialogueBox;
-
+    private Image currentDialogueBoxImage;
     [SerializeField]
     private GameObject currentSpeakerBox;
 
@@ -33,8 +34,10 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     [SerializeField]
     private GameObject smallDialogueBox;
+    private Image smallDialogueBoxImage;
     [SerializeField]
     private GameObject bigDialogueBox;
+    private Image bigDialogueBoxImage;
 
     [SerializeField]
     private TMP_Text smallSpeakerText;
@@ -44,6 +47,32 @@ public class SpeakerDialogueUI : MonoBehaviour
     [SerializeField]
     private GameObject extraButtonsContainer;
 
+    [SerializeField]
+    float avatarFadeTime;
+    string currentWords;
+    bool canOpen = true;
+    private void Awake()
+    {
+        smallDialogueBoxImage = smallDialogueBox.GetComponent<Image>();
+        bigDialogueBoxImage = bigDialogueBox.GetComponent<Image>();
+        smallDialogueBoxImage.color = new Color32(255, 255, 255, 0);
+        bigDialogueBoxImage.color = new Color32(255, 255, 255, 0);
+        currentDialogueBoxImage = currentDialogueBox.GetComponent<Image>();
+        currentDialogueBoxImage.color = new Color32(255, 255, 255, 255);
+        CharacterDialogueUI.OnIsSkipping += Skip;
+        CharacterDialogueUI.OnInspectingEvent += open;
+        CharacterDialogueUI.OnDeinspectingEvent += close;
+    }
+    
+    void open()
+    {
+        frame.SetActive(false);
+    }
+
+    void close()
+    {
+        frame.SetActive(true);
+    }
     public void ResetSpeakerDialogueUI()
     {
         currentDialogueBox.gameObject.SetActive(false);
@@ -60,40 +89,52 @@ public class SpeakerDialogueUI : MonoBehaviour
     }
     public void ToggleExtras()
     {
-        if (!smallDialogueBox.activeSelf)
+        if (canOpen)
         {
-            currentDialogueText = smallDialogueText;
-            smallSpeakerText.text = currentSpeakerText.text;
-            currentSpeakerText = smallSpeakerText;
-        }
-        else if (smallDialogueBox.activeSelf)
-        {
-            currentDialogueText = bigDialogueText;
-            bigSpeakerText.text = currentSpeakerText.text;
-            currentSpeakerText = bigSpeakerText;
+            canOpen = false;
+            StartCoroutine(Out());
+            if (!smallDialogueBox.activeSelf)
+            {
+                currentDialogueBox = smallDialogueBox;
+                currentDialogueBoxImage = smallDialogueBoxImage;
+                currentDialogueText = smallDialogueText;
+                smallSpeakerText.text = currentSpeakerText.text;
+                currentSpeakerText = smallSpeakerText;
+            }
+            else if (smallDialogueBox.activeSelf)
+            {
+                currentDialogueBox = bigDialogueBox;
+                currentDialogueBoxImage = bigDialogueBoxImage;
+                currentDialogueText = bigDialogueText;
+                bigSpeakerText.text = currentSpeakerText.text;
+                currentSpeakerText = bigSpeakerText;
 
-        }
-        if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
-        {
-            StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
-        }
-        Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
-        smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
-        smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
-        bigSpeakerBox.SetActive(!bigSpeakerBox.activeSelf);
-        bigDialogueBox.SetActive(!bigDialogueBox.activeSelf);
-        extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
-        if (characterDialogueUI.runningCoroutines > 0 && !characterDialogueUI.isSkipping)
-        {
-            characterDialogueUI.isSkipping = true;
-            StopAllCoroutines();
-            characterDialogueUI.runningCoroutines = 0;
-            // Debug.Log("READYING");
+            }
 
+            if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
+            {
+                StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
+            }
+
+            //smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
+            //smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
+            //bigSpeakerBox.SetActive(!bigSpeakerBox.activeSelf);
+            //bigDialogueBox.SetActive(!bigDialogueBox.activeSelf);
+            extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
+            if (characterDialogueUI.runningCoroutines > 0 && !CharacterDialogueUI.isSkipping)
+            {
+                CharacterDialogueUI.isSkipping = true;
+                CharacterDialogueUI.OnIsSkipping.Invoke();
+                StopAllCoroutines();
+                characterDialogueUI.runningCoroutines = 0;
+                // Debug.Log("READYING");
+
+            }
+            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
+            SetSpeech(currentDialogue.words);
+            StartCoroutine(In());
         }
-
-        SetSpeech(currentDialogue.words);
-
+       
     }
 
     public void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
@@ -117,10 +158,14 @@ public class SpeakerDialogueUI : MonoBehaviour
         }
 
     }
-    public void StopCoroutine()
+
+    void Skip()
     {
+        AudioManager.instance.ForceStopAudio("typewriting");
         StopAllCoroutines();
+        SetWords(currentWords);
     }
+
     void SetWords(string p_words)
     {
         currentDialogueText.text = p_words;
@@ -129,23 +174,50 @@ public class SpeakerDialogueUI : MonoBehaviour
     public void SetSpeech(string p_words)
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
-        if (characterDialogueUI.isSkipping)
-        {
-            //Debug.Log("stop writing");
-            AudioManager.instance.ForceStopAudio("typewriting");
-            SetWords(p_words);
-        }
-        else
-        {
-            StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words));
-        }
+        p_words = p_words.Replace("<nl>", "<br>");
+        currentWords = p_words;
+       
+        StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words));
+        
 
     }
-
+    IEnumerator Out()
+    {
+        GameObject save = currentDialogueBox;
+        Image saveI = currentDialogueBoxImage;
+        TMP_Text saveT1 = currentSpeakerText;
+        TMP_Text saveT2 = currentDialogueText;
+        // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        var fadeOutSequence = DOTween.Sequence()
+        .Append(saveI.DOFade(0, avatarFadeTime));
+        fadeOutSequence.Join(saveT1.DOFade(0, avatarFadeTime));
+        fadeOutSequence.Join(saveT2.DOFade(0, avatarFadeTime));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+        save.SetActive(false);
+        //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+    }
+    IEnumerator In()
+    {
+        GameObject save = currentDialogueBox;
+        Image saveI = currentDialogueBoxImage;
+        TMP_Text saveT1 = currentSpeakerText;
+        TMP_Text saveT2 = currentDialogueText;
+        save.SetActive(true);
+        // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        var fadeOutSequence = DOTween.Sequence()
+        .Append(saveI.DOFade(1, avatarFadeTime));
+        fadeOutSequence.Join(saveT1.DOFade(1, avatarFadeTime));
+        fadeOutSequence.Join(saveT2.DOFade(1, avatarFadeTime));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+        canOpen = true;
+        //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+    }
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
     {
         //Debug.Log("ITS PLAYING");
-        characterDialogueUI.runningCoroutines++;
+        CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         string p_currentText;
         for (int i = 0; i <= p_fullText.Length; i++)
         {
@@ -154,8 +226,7 @@ public class SpeakerDialogueUI : MonoBehaviour
             AudioManager.instance.AdditivePlayAudio("typewriting");
             yield return new WaitForSeconds(typewriterSpeed);
         }
-        characterDialogueUI.runningCoroutines--;
 
-        characterDialogueUI.CheckIfReady();
+        CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
 }

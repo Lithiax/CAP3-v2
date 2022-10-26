@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEngine.UI;
 public class CameraMovedEvent : UnityEvent<Vector2> { }
 public class ShakeCameraEvent : UnityEvent { }
 public class CameraManager : MonoBehaviour
@@ -22,10 +23,10 @@ public class CameraManager : MonoBehaviour
     }
     [SerializeField] public Camera worldCamera;
     [SerializeField] public Camera uiCamera;
-
+    [SerializeField] public List<RectTransform> rectTransforms;
+    List<Vector2> savedPositions = new List<Vector2>();
     public static CameraMovedEvent onCameraMovedEvent = new CameraMovedEvent();
     public static ShakeCameraEvent onShakeCameraEvent = new ShakeCameraEvent();
-    [SerializeField] Room defaultRoom;
 
     [Header("Camera Shake Position Settings")]
     [SerializeField] float shakePositionDuration = 0.2f;
@@ -60,7 +61,10 @@ public class CameraManager : MonoBehaviour
         worldCamera = worldCamera ? worldCamera : GameObject.Find("World Camera").GetComponent<Camera>();
         uiCamera = worldCamera ? worldCamera : GameObject.Find("UI Camera").GetComponent<Camera>();
         onShakeCameraEvent.AddListener(ShakeCamera);
-    
+        for (int i =0; i < rectTransforms.Count; i++)
+        {
+            savedPositions.Add(rectTransforms[i].anchoredPosition);
+        }
     }
 
     private void OnDestroy()
@@ -84,22 +88,34 @@ public class CameraManager : MonoBehaviour
         if (!tutorialOn)
         {
             //Debug.Log("Invoked: " + defaultRoom.transform.position + ", " + panLimit);
-            onCameraMovedEvent.Invoke(defaultRoom.transform.position);
+            onCameraMovedEvent.Invoke(new Vector2(0,0));
         }
 
     }
 
     public void ShakeCamera()
     {
+        Debug.Log("RAA");
         StartCoroutine(Co_ShakeCamera());
     }
     public IEnumerator Co_ShakeCamera()
     {
+
+
         var sequence = DOTween.Sequence()
-        .Append(worldCamera.DOShakePosition(shakePositionDuration, shakePositionPower, shakePositionVibrato, shakePositionRandomRange, shakePositionCanFade));
-        sequence.Join(worldCamera.DOShakeRotation(shakeRotationDuration, shakeRotationPower, shakeRotationVibrato, shakeRotationRandomRange, shakeRotationCanFade));
+        .Append(rectTransforms[0].DOShakePosition(shakePositionDuration, shakePositionPower, shakePositionVibrato, shakePositionRandomRange, shakePositionCanFade));
+        for (int i= 1; i < rectTransforms.Count; i++)
+        {
+            sequence.Join(rectTransforms[i].DOShakePosition(shakeRotationDuration, shakeRotationPower, shakeRotationVibrato, shakeRotationRandomRange, shakeRotationCanFade));
+        }
+        //sequence.Join(worldCamera.DOShakeRotation(shakeRotationDuration, shakeRotationPower, shakeRotationVibrato, shakeRotationRandomRange, shakeRotationCanFade));
         sequence.Play();
         yield return sequence.WaitForCompletion();
+        for (int i = 0; i < rectTransforms.Count; i++)
+        {
+            rectTransforms[i].anchoredPosition = savedPositions[i];
+        }
+        Debug.Log("FINISHED");
     }
 
     public void ZoomCamera()

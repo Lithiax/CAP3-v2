@@ -44,7 +44,7 @@ public class DialogueSpreadSheetPatternConstants
     public const int backgroundColumnPattern = 0;
     public const int eventTypeColumnPattern = 1;
     public const int eventParameterColumnPattern = 2;
-
+    public const int backgroundMusicColumnPattern = 3;
     [Header("Misc Row Patterns")]
     public const int miscRowPattern = 8;
 

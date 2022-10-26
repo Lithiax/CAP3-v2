@@ -29,6 +29,7 @@ public class SpreadSheetAPI : MonoBehaviour
     private int currentSpreadSheetIndex;
     private int currentSheetIndex;
 
+    [SerializeField] public string[] debuggerSheetRows;
     [SerializeField] public static string[] currentSheetRows;
 
     private List<int> dialogueIndexInSheet = new List<int>();
@@ -39,8 +40,8 @@ public class SpreadSheetAPI : MonoBehaviour
     {
         DialogueSpreadSheetPatternConstants.dialogueName = DialogueSpreadSheetPatternConstants.dialogueName.ToLower();
         DialogueSpreadSheetPatternConstants.choiceName = DialogueSpreadSheetPatternConstants.choiceName.ToLower();
-        StartCoroutine(Co_LoadValues(so_SpreadSheets[0].name, so_SpreadSheets[0].spreadSheetID,so_SpreadSheets[0].sheetNames[0]));
-    
+        StartCoroutine(Co_LoadValues(so_SpreadSheets[0].name, so_SpreadSheets[0].spreadSheetID, so_SpreadSheets[0].sheetNames[0]));
+
     }
 
     public IEnumerator Co_LoadValues(string p_spreadSheetName, string p_spreadSheetID, string p_sheetName)
@@ -53,7 +54,7 @@ public class SpreadSheetAPI : MonoBehaviour
             www.result == UnityWebRequest.Result.ProtocolError ||
             www.timeout > 2)  //Computer has no internet access/cannot connect to website, opt to use json file saved
         {
-           
+
             Debug.Log(p_sheetName + " CURRENTLY OFFLINE DUE TO ERROR: " + www.error);
             Debug.Log("Spread Sheet Name: " + p_spreadSheetName + " Spread Sheet ID: " + p_spreadSheetID + " Sheet Name: " + p_sheetName);
         }
@@ -73,14 +74,25 @@ public class SpreadSheetAPI : MonoBehaviour
                 {
                     rawJson += cell + ",";
                 }
+                //rawJson.Replace("\r\n", "[stop]");
+                //rawJson.Replace("\n", " ");
+
                 rawJson += "\n";
 
             }
-          
+
         }
-      
-        string newStrings = p_sheetName.Replace(" ", string.Empty);
+
+        //string newStrings = p_sheetName.Replace(" ", string.Empty);
         currentSheetRows = rawJson.Split(new char[] { '\n' });
+        // currentSheetRows = rawJson.Split(new string[] { "[stop]" }, System.StringSplitOptions.None); 
+
+
+        if (p_sheetName == "Week1")
+        {
+            debuggerSheetRows = currentSheetRows;
+        }
+
         FindScriptableObject(p_spreadSheetName, p_sheetName);
     }
 
@@ -107,10 +119,10 @@ public class SpreadSheetAPI : MonoBehaviour
 
     void GenerateScriptableObject(string p_assetPath)
     {
-        
+
         //Create scriptable object if it doesnt exist
         SO_Dialogues example = ScriptableObject.CreateInstance<SO_Dialogues>();
-      
+
         UnityEditor.AssetDatabase.CreateAsset(example, p_assetPath);
         UnityEditor.AssetDatabase.SaveAssets();
         UnityEditor.AssetDatabase.Refresh();
@@ -194,109 +206,103 @@ public class SpreadSheetAPI : MonoBehaviour
 
             //Setting Que Bank
             p_soDialogue.cueBankData.isEnabled = VisualNovelDatas.TranslateIsSpeaking(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isEnabledColumnPattern));
-            p_soDialogue.cueBankData.hapticType = VisualNovelDatas.FindHapticType(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.hapticTypeColumnPattern));
-            p_soDialogue.cueBankData.vocalicType = VisualNovelDatas.FindVocalicType(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.vocalicTypeColumnPattern));
-            p_soDialogue.cueBankData.kinesicType = VisualNovelDatas.FindKinesicType(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.kinesicColumnPattern));
-            p_soDialogue.cueBankData.oculesicType = VisualNovelDatas.FindOculesicType(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.oculesicColumnPattern));
-            p_soDialogue.cueBankData.physicalApperanceType = VisualNovelDatas.FindPhysicalAppearanceType(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.physicalAppearanceColumnPattern));
+            p_soDialogue.cueBankData.hapticType = GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.hapticTypeColumnPattern);
+            p_soDialogue.cueBankData.vocalicType = GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.vocalicTypeColumnPattern);
+            p_soDialogue.cueBankData.kinesicType = GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.kinesicColumnPattern);
+            p_soDialogue.cueBankData.oculesicType = GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.oculesicColumnPattern);
+            p_soDialogue.cueBankData.physicalApperanceType = GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.physicalAppearanceColumnPattern);
 
             //Setting Words
+            string finalWords = OneString(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.wordsRowPattern);
 
-            string[] retrievedWords = GetCurrentSheetRow(currentGeneratedDialogueIndex + DialogueSpreadSheetPatternConstants.wordsRowPattern);
-            string finalWords = "";
-            for (int x = 0; x < retrievedWords.Length; x++)
-            {
-                finalWords += retrievedWords[x];
-            }
             newDialogue.words = finalWords;
- 
+
             //Setting Backgounrd
             //Debug.LogError(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
             newDialogue.backgroundSprite = VisualNovelDatas.FindBackgroundSprite(GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundColumnPattern));
             newDialogue.specificEventType = VisualNovelDatas.FindEventType(GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.eventTypeColumnPattern));
             newDialogue.specificEventParameter = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.eventParameterColumnPattern);
-
+            newDialogue.backgroundMusic = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundMusicColumnPattern);
         }
         p_soDialogue.isAutomaticHealthEvaluation = VisualNovelDatas.TranslateIsSpeaking(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticHealthEvaluation));
         //Setting Choice
         for (int i = 0; i < choiceIndexInSheet.Count; i++)
         {
-            int currentGeneratedChoiceIndex = 0;
-            currentGeneratedChoiceIndex = choiceIndexInSheet[i];
-
-            ChoiceData newChoiceData = null;
-            newChoiceData = new ChoiceData();
-            p_soDialogue.choiceDatas.Add(newChoiceData);
-
-            //Setting Choice
-            newChoiceData.words = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceNameColumnPattern);
-
-            string branchingDialogueName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameColumnPattern);
-            if (branchingDialogueName == "error")
+            int currentGeneratedChoiceIndex = choiceIndexInSheet[i];
+            string targetWord = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.choiceNameColumnPattern);
+            if (!string.IsNullOrEmpty(targetWord))
             {
-                branchingDialogueName = "";
-            }
-            newChoiceData.branchDialogueName = branchingDialogueName;
+                ChoiceData newChoiceData = null;
+                newChoiceData = new ChoiceData();
+                p_soDialogue.choiceDatas.Add(newChoiceData);
 
+                //Setting Choice
+                newChoiceData.words = targetWord;
 
-            int healthModifier = 0;
-            string healthModifierString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthModifierColumnPattern);
-            if (healthModifierString != "error")
-            {
-                int.TryParse(healthModifierString, out healthModifier);
-            }
-            newChoiceData.healthModifier = healthModifier;
-
-            int healthCeilingCondition = 0;
-            string healthCeilingConditionString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthCeilingConditionColumnPattern);
-            if (healthCeilingConditionString != "error")
-            {
-                int.TryParse(healthCeilingConditionString, out healthCeilingCondition);
-            }
-            newChoiceData.healthCeilingCondition = healthCeilingCondition;
-
-            int healthFloorCondition = 0;
-            string healthFloorConditionString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthFloorConditionColumnPattern);
-            if (healthFloorConditionString != "error")
-            {
-                int.TryParse(healthFloorConditionString, out healthFloorCondition);
-            }
-            newChoiceData.healthFloorCondition = healthFloorCondition;
-
-            newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
-
-            newChoiceData.popUpTitle = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.popUpRowPattern, DialogueSpreadSheetPatternConstants.popUpTitleColumnPattern);
-
-            string[] retrievedPopUpContentStrings = GetCurrentSheetRow(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.popUpRowPattern);
-            //for (int x = 0; x < retrievedPopUpContentStrings.Length; x++)
-            //{
-            //    Debug.Log("POP UP WHOLE: " + retrievedPopUpContentStrings[x]);
-            //}
-            if (DialogueSpreadSheetPatternConstants.popUpContentColumnPattern < retrievedPopUpContentStrings.Length)
-            {
-                //Debug.Log("POP UP START: " + retrievedPopUpContentStrings[DialogueSpreadSheetPatternConstants.popUpContentColumnPattern]);
-                string finalPopUpContentString = "";
-                for (int x = DialogueSpreadSheetPatternConstants.popUpContentColumnPattern; x < retrievedPopUpContentStrings.Length; x++)
+                string branchingDialogueName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.nextDialogueSheetNameColumnPattern);
+                if (branchingDialogueName == "error")
                 {
-                    finalPopUpContentString += retrievedPopUpContentStrings[x];
+                    branchingDialogueName = "";
                 }
-                newChoiceData.popUpContent = finalPopUpContentString;
+                newChoiceData.branchDialogueName = branchingDialogueName;
+
+
+                int healthModifier = 0;
+                string healthModifierString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthModifierColumnPattern);
+                if (healthModifierString != "error")
+                {
+                    int.TryParse(healthModifierString, out healthModifier);
+                }
+                newChoiceData.healthModifier = healthModifier;
+
+                int healthCeilingCondition = 0;
+                string healthCeilingConditionString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthCeilingConditionColumnPattern);
+                if (healthCeilingConditionString != "error")
+                {
+                    int.TryParse(healthCeilingConditionString, out healthCeilingCondition);
+                }
+                newChoiceData.healthCeilingCondition = healthCeilingCondition;
+
+                int healthFloorCondition = 0;
+                string healthFloorConditionString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.healthFloorConditionColumnPattern);
+                if (healthFloorConditionString != "error")
+                {
+                    int.TryParse(healthFloorConditionString, out healthFloorCondition);
+                }
+                newChoiceData.healthFloorCondition = healthFloorCondition;
+
+                newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
+
+                newChoiceData.popUpTitle = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.popUpRowPattern, DialogueSpreadSheetPatternConstants.popUpTitleColumnPattern);
+
+                string[] retrievedPopUpContentStrings = GetCurrentSheetRow(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.popUpRowPattern);
+                //for (int x = 0; x < retrievedPopUpContentStrings.Length; x++)
+                //{
+                //    Debug.Log("POP UP WHOLE: " + retrievedPopUpContentStrings[x]);
+                //}
+                if (DialogueSpreadSheetPatternConstants.popUpContentColumnPattern < retrievedPopUpContentStrings.Length)
+                {
+                    //Debug.Log("POP UP START: " + retrievedPopUpContentStrings[DialogueSpreadSheetPatternConstants.popUpContentColumnPattern]);
+                    string finalPopUpContentString = "";
+                    for (int x = DialogueSpreadSheetPatternConstants.popUpContentColumnPattern; x < retrievedPopUpContentStrings.Length; x++)
+                    {
+                        finalPopUpContentString += retrievedPopUpContentStrings[x];
+                    }
+                    newChoiceData.popUpContent = finalPopUpContentString;
+                }
             }
-            //else
-            //{
-            //    newChoiceData.popUpText = "error";
-            //}
+
 
 
         }
         SaveNextSheet();
-  
+
     }
 
     public void SaveNextSheet()
     {
         currentSheetIndex++;
-       
+
         if (currentSheetIndex < so_SpreadSheets[currentSpreadSheetIndex].sheetNames.Count) //Sheet is Within Range
         {
             StartCoroutine(Co_LoadValues(so_SpreadSheets[currentSpreadSheetIndex].name, so_SpreadSheets[currentSpreadSheetIndex].spreadSheetID, so_SpreadSheets[currentSpreadSheetIndex].sheetNames[currentSheetIndex]));
@@ -307,7 +313,7 @@ public class SpreadSheetAPI : MonoBehaviour
             currentSheetIndex = 0;
             if (currentSpreadSheetIndex < so_SpreadSheets.Count)
             {
-                
+
                 StartCoroutine(Co_LoadValues(so_SpreadSheets[currentSpreadSheetIndex].name, so_SpreadSheets[currentSpreadSheetIndex].spreadSheetID, so_SpreadSheets[currentSpreadSheetIndex].sheetNames[currentSheetIndex]));
             }
             else
@@ -331,7 +337,7 @@ public class SpreadSheetAPI : MonoBehaviour
                 for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                 {
                     Debug.Log(so_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
-                    currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name,currentSheetSODialogue.choiceDatas[i].branchDialogueName);
+                    currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
                     EditorUtility.SetDirty(currentSheetSODialogue);
                 }
             }
@@ -353,7 +359,7 @@ public class SpreadSheetAPI : MonoBehaviour
             return null;
         }
 
- 
+
     }
 
     void TranslateToCharacterData(CharacterData p_characterData, int p_currentGeneratedDialogueIndex, int p_characterRowPattern)
@@ -397,6 +403,17 @@ public class SpreadSheetAPI : MonoBehaviour
             }
         }
         return resultText;
+    }
+
+    public static string OneString(int p_desiredSheetRowCell)
+    {
+        string[] retrievedWords = GetCurrentSheetRow(p_desiredSheetRowCell);
+        string finalWords = "";
+        for (int x = 0; x < retrievedWords.Length; x++)
+        {
+            finalWords += retrievedWords[x];
+        }
+        return finalWords;
     }
 
 

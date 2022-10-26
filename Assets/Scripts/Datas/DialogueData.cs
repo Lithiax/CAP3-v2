@@ -81,7 +81,7 @@ public enum SpecificEventType
     soundEffect,
     inputNameEvent,
     phoneEvent,
-    shakeEffects,
+    shakeEffect,
     none,
 }
 
@@ -109,5 +109,6 @@ public class Dialogue
 
     public SpecificEventType specificEventType;
     public string specificEventParameter;
+    public string backgroundMusic;
    // public string 
 }
