@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class ChatUserManager : MonoBehaviour
+public class ChatUserManager : MonoBehaviour, IDataPersistence
 {
     //Keep UserData empty on runtime, only putshit for testing
+    [SerializeField] List<ChatUserSO> AllUsers;
+    Dictionary<int, ChatUserSO> UserDict = new Dictionary<int, ChatUserSO>();
+
     [SerializeField] List<ChatUserSO> UserDataTesting;
     [SerializeField] GameObject UserParent;
     [SerializeField] GameObject UserPrefab;
@@ -16,15 +19,19 @@ public class ChatUserManager : MonoBehaviour
 
     //To set a new user, just add it in the static script
     [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
+    List<int> IDs = new List<int>();
 
     private void Awake()
     {
+        Debug.Log("Awake");
+
         foreach (ChatUserData data in StaticUserData.ChatUserData)
         {
             if (UserDataTesting.Contains(data.UserSO)) continue;
 
             UserDataTesting.Add(data.UserSO);
         }
+
         foreach (ChatUserSO user in UserDataTesting)
         {
             GenerateUser(user);
@@ -45,7 +52,42 @@ public class ChatUserManager : MonoBehaviour
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
+        IDs.Add(data.ID);
 
         UserComp.Init(data, eventsManager, chatManager, toggleGroup);
+    }
+
+    public void LoadData(GameData data)
+    {
+        return;
+        Debug.Log("Load");
+
+        UserDataTesting.Clear();
+
+        if (data.ChatUserIDs.Length <= 0) return;
+
+        foreach (ChatUserSO user in AllUsers)
+        {
+            UserDict.Add(user.ID, user);
+        }
+
+        foreach (int id in data.ChatUserIDs)
+        {
+            UserDataTesting.Add(UserDict[id]);
+        }
+
+
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.CurrentSceneName = "FindR";
+        data.ChatUserIDs = IDs.ToArray();
+
+        foreach (int id in data.ChatUserIDs)
+        {
+            Debug.Log(id);
+
+        }
     }
 }

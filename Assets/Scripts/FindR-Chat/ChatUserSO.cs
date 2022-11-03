@@ -6,6 +6,7 @@ using UnityEngine;
 public class ChatUserSO : ScriptableObject
 {
     public Sprite profileImage;
+    public int ID;
     public string profileName;
     //public ChatCollectionSO initialChatCollection;
     public DialogueContainer dialogueTree;
