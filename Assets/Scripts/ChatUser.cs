@@ -253,6 +253,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        foreach (string effect in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log(effect);
+        }
+
         return;
 
         ChatUserData chatData = data.ChatUserData.First(x => x.UserSO == ChatUserSO);

@@ -6,6 +6,11 @@ using System.Linq;
 
 public class DataPersistenceManager : MonoBehaviour
 {
+    [Header("File Storage Config")]
+    [SerializeField] string fileName;
+
+    FileDataHandler dataHandler;
+
     GameData gameData;
     public static DataPersistenceManager instance { get; private set; }
     List<IDataPersistence> dataPersistenceObjets;
@@ -22,6 +27,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
+        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         dataPersistenceObjets = FindAllDataPersistenceObj();
         NewGame();
     }
@@ -33,11 +39,15 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
+        this.gameData = dataHandler.Load();
+
         if (this.gameData == null)
         {
             Debug.Log("No data found!");
             return;
         }
+
+        DialogueSpreadSheetPatternConstants.effects = gameData.GameEffects.ToList();
 
         if (gameData.CurrentSceneName != "")
         {
@@ -48,20 +58,18 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObject.LoadData(gameData);
         }
-
-        gameData.DebugLogData();
     }
 
     public void SaveGame()
     {
+        gameData.GameEffects = DialogueSpreadSheetPatternConstants.effects.ToArray();
+
         foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
         {
             dataPersistenceObject.SaveData(ref gameData);
         }
 
-        Debug.Log("Saved");
-
-        gameData.DebugLogData();
+        dataHandler.Save(gameData);
     }
 
     List<IDataPersistence> FindAllDataPersistenceObj()

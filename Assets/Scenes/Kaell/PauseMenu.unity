@@ -1539,6 +1539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604f9c7213d94be4fa7a239fb2dd9984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fileName: HOHSaveData.save
 --- !u!4 &1813069528
 Transform:
   m_ObjectHideFlags: 0

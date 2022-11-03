@@ -7,6 +7,7 @@ public class GameData
 {
     public string CurrentSceneName;
     public int[] ChatUserIDs;
+    public string[] GameEffects;
 
     public List<ChatUserData> ChatUserData;
 
@@ -14,6 +15,7 @@ public class GameData
     {
         CurrentSceneName = "";
         ChatUserIDs = new int[0];
+        GameEffects = new string[0];
     }
 
     public void DebugLogData()
