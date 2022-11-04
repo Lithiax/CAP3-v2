@@ -35,7 +35,7 @@ public class SpreadSheetAPI : MonoBehaviour
     private List<int> dialogueIndexInSheet = new List<int>();
     private List<int> backgroundIndexInSheet = new List<int>();
     private List<int> choiceIndexInSheet = new List<int>();
-
+    public static List<CodeReplacement> codeReplacements = new List<CodeReplacement>();
     public void Awake()
     {
         DialogueSpreadSheetPatternConstants.dialogueName = DialogueSpreadSheetPatternConstants.dialogueName.ToLower();
@@ -256,7 +256,10 @@ public class SpreadSheetAPI : MonoBehaviour
             newChoiceData.healthModifier = healthModifier;
             newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
             newChoiceData.effectReferenceName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectReferecedNameColumnPattern);
-
+            CodeReplacement newCodeReplacement = new CodeReplacement();
+            newCodeReplacement.code = newChoiceData.effectID;
+            newCodeReplacement.replacement = newChoiceData.effectReferenceName;
+            codeReplacements.Add(newCodeReplacement);
             newChoiceData.isHealthConditionInUseColumnPattern = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceConditionRowPattern, DialogueSpreadSheetPatternConstants.isHealthConditionInUseColumnPattern));
             int healthCeilingCondition = 0;
             string healthCeilingConditionString = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceConditionRowPattern, DialogueSpreadSheetPatternConstants.healthCeilingConditionColumnPattern);
@@ -299,6 +302,7 @@ public class SpreadSheetAPI : MonoBehaviour
 
 
         }
+        SaveNextSheet();
     }
     public void TranslateIntoScriptableObject(SO_Dialogues p_soDialogue)
     {
@@ -424,15 +428,38 @@ public class SpreadSheetAPI : MonoBehaviour
             else
             {
                 Debug.Log("ALL SHEETS LOADED");
-                Debug.Log("CONNECTING ALL SHEETS BRANCH DIALOGUE");
+       
+                TranslateCodeToReplacements();
                 ConnectAllSheetsBranchDialogue();
             }
         }
     }
 
+    void TranslateCodeToReplacements()
+    {
+        Debug.Log("TRANSLATING ALL SHEETS CODES TO REPLACEMENT");
+        for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < so_SpreadSheets.Count; localSpreadSheetIndex++)
+        {
+            for (int localSheetIndex = 0; localSheetIndex < so_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
+            {
+                string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + so_SpreadSheets[localSpreadSheetIndex].name + "/";
+                SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                for (int i = 0; i < currentSheetSODialogue.dialogues.Count; i++)
+                {
+                    for (int x = 0; x < codeReplacements.Count; x++)
+                    {
+                        currentSheetSODialogue.dialogues[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                    }
+
+                }
+            }
+        }
+        Debug.Log("FULLY TRANSLATED EVERYTHING");
+    }
+
     void ConnectAllSheetsBranchDialogue()
     {
-
+        Debug.Log("CONNECTING ALL SHEETS BRANCH DIALOGUE");
         for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < so_SpreadSheets.Count; localSpreadSheetIndex++)
         {
             for (int localSheetIndex = 0; localSheetIndex < so_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)

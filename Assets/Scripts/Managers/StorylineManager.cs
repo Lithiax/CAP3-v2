@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class CodeReplacement
+{
+    public string code;
+    public string replacement;
+}
+
 public class StorylineManager : MonoBehaviour
 {
     public static StorylineManager instance;
@@ -10,6 +16,7 @@ public class StorylineManager : MonoBehaviour
     public static SO_Dialogues currentSideDialogue;
     public static int currentDialogueIndex;
     public static List<Dialogue> loggedWords = new List<Dialogue>();
+
     public static string currentBackgroundMusic ="";
     private void Awake()
     {

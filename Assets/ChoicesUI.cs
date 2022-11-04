@@ -31,18 +31,38 @@ public class ChoicesUI : MonoBehaviour
             ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
             newChoiceUI.InitializeValues(p_choiceDatas[i].words);
             ChoiceData currentChoiceData = p_choiceDatas[i];
-            if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+            if (StorylineManager.currentSO_Dialogues.choiceDatas[i].isHealthConditionInUseColumnPattern)
             {
-                //Can be selected
-                newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
-                LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+                if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                {
+                    //Can be selected
+                    newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+                }
+                else
+                {
+                    //Cant be selected
+                    newChoiceUI.GetComponent<Button>().interactable = false;
+                    newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+                }
+
             }
-            else
+            else if(StorylineManager.currentSO_Dialogues.choiceDatas[i].isEffectIDConditionInUseColumnPattern)
             {
-                //Cant be selected
-                newChoiceUI.GetComponent<Button>().interactable = false;
-                newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+                if (DialogueSpreadSheetPatternConstants.effects.Contains(StorylineManager.currentSO_Dialogues.choiceDatas[i].effectIDCondition.ToLower()))
+                {
+                    //Can be selected
+                    newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+                }
+                else
+                {
+                    //Cant be selected
+                    newChoiceUI.GetComponent<Button>().interactable = false;
+                    newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+                }
             }
+           
 
         }
     }
@@ -62,7 +82,7 @@ public class ChoicesUI : MonoBehaviour
         HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
         if (p_currentChoiceData.effectID != "")
         {
-            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);
+            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
         }
         //Set Pop Up
         Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
