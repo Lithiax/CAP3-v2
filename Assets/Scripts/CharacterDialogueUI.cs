@@ -556,7 +556,7 @@ public class CharacterDialogueUI : MonoBehaviour
             {
                 if (StorylineManager.currentSO_Dialogues.choiceDatas.Count > 1)
                 {
-                    if (StorylineManager.currentSO_Dialogues.isAutomaticHealthEvaluation)
+                    if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isAutomaticEnabledColumnPattern)
                     {
                         //No choice, just evaluate
                         for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)

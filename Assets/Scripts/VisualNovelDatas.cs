@@ -55,11 +55,7 @@ public class VisualNovelDatas : MonoBehaviour
         return isFlipped;
     }
 
-    public static bool TranslateIsSpeaking(string p_name)
-    {
-        bool isFlipped = p_name.ToLower() == "true";
-        return isFlipped;
-    }
+  
 
     public static HapticType FindHapticType(string p_name)
     {
