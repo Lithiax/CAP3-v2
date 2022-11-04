@@ -9,15 +9,26 @@ public class FindREventsManager : MonoBehaviour
     [SerializeField] GameObject BeginDatePanel;
     [SerializeField] Button BeginDateYesButton;
 
+    List<ChatEvent> events = new List<ChatEvent>();
     [HideInInspector] public List<ChatUser> ChatUsers;
     public void RegisterEvent(ChatEvent chatEvents)
     {
         Debug.Log("Register");
         chatEvents.onEvent += HandleEvent;
+        events.Add(chatEvents);
+    }
+
+    private void OnDisable()
+    {
+        foreach(ChatEvent e in events)
+        {
+            e.onEvent -= HandleEvent;
+        }    
     }
 
     void HandleEvent(ChatUserSO userData, string data, ChatEventTypes eventType)
     {
+        Debug.Log("Call Event");
         ClearButtons();
         switch (eventType)
         {

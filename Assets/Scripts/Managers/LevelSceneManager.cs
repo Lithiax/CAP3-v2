@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelSceneManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Awake()
     {
         SceneManager.LoadSceneAsync("PauseMenu", LoadSceneMode.Additive);

@@ -83,5 +83,17 @@ public class DialogueGraphAPI : MonoBehaviour
         //Move Tree into Node Chosen
         CurrentNode = Nodes.First(x => x.BaseNodeData == node);
     }
+     
+    //Used For Loading Data ONLY
+    public void ForceJumpToNode(DialogueTreeNode node)
+    {
+        if (!Nodes.Any(x  => x == node))
+        {
+            Debug.LogError("Node to jump to does not exist!");
+            return;
+        }
+
+        CurrentNode = Nodes.First(x => x == node);      
+    }
 }
 

@@ -11,15 +11,23 @@ public class ChatUserData
     public List<GameObject> ChatObjects = new List<GameObject>();
     public string name;
     public DialogueContainer CurrentTree;
+    public ChatUserSO UserSO;
+    public DialogueTreeNode CurrentNode;
+    public ChatUserData(ChatUserSO userSO)
+    {
+        UserSO = userSO;
+        name = userSO.name;
+        CurrentTree = userSO.dialogueTree;
+    }
 }
 
-public class ChatUser : MonoBehaviour
+public class ChatUser : MonoBehaviour, IDataPersistence
 {
     //[SerializeField] ChatCollectionSO initialChatCollection;
     public DialogueGraphAPI DialogueTree { get; private set; }
 
     //public ChatCollectionSO currentCollection;
-    List<GameObject> chatsObj = new List<GameObject>();
+    //List<GameObject> chatsObj = new List<GameObject>();
     [HideInInspector] public Toggle toggle;
     [SerializeField] Color toggleActivatedColor;
     [SerializeField] Color toggleUnactiveColor;
@@ -62,18 +70,15 @@ public class ChatUser : MonoBehaviour
         if (!StaticUserData.ChatUserData.Any(x => x.name == data.profileName))
         {
             //ADD SAVING CHAT OBJECTS INTO THE CHAT USER DATA
-            ChatData = new ChatUserData
-            {
-                name = data.profileName,
-                CurrentTree = data.dialogueTree
-            };
+            ChatData = new ChatUserData(data);
 
             if (data.initialPreviousChat)
             {
                 foreach (ChatBubble chat in data.initialPreviousChat.ChatData)
                 {
                     GameObject obj = chatManager.SpawnChatBubble(chat, this);
-                    chatsObj.Add(obj);
+                    //chatsObj.Add(obj);
+                    ChatData.ChatObjects.Add(obj);
                     PreviousChat = chat;
                 }
 
@@ -87,29 +92,31 @@ public class ChatUser : MonoBehaviour
         //If ChatUser is not new (FOR TESTING)
         else
         {
-            ChatData = StaticUserData.ChatUserData.First(x => x.name == name);
+            ChatData = StaticUserData.ChatUserData.First(x => x.UserSO == data);
 
-            foreach (GameObject chat in ChatData.ChatObjects)
-            {
-                chatManager.SpawnChatObjects(chat, isToggled);
-            }
-            chatManager.RebuildAfterSpawning();
+            LoadChatData(ChatData);
 
-            //Get next container
-            DialogueContainer nextContainer = null;
-            foreach(string s in DialogueSpreadSheetPatternConstants.effects)
-            {
-                DialogueContainer d = data.dialogueBranches.GetBranch(s);
-                if (d)
-                {
-                    nextContainer = d;
-                    DialogueTree.SetDialogueTree(nextContainer);
-                    break;
-                }
-            }
+            //foreach (GameObject chat in ChatData.ChatObjects)
+            //{
+            //    chatManager.SpawnChatObjects(chat, isToggled);
+            //}
+            //chatManager.RebuildAfterSpawning();
 
-            if (nextContainer == null)
-                DialogueTree.SetDialogueTree(ChatData.CurrentTree);
+            ////Get appropriate dialogue tree
+            //DialogueContainer nextContainer = null;
+            //foreach(string s in DialogueSpreadSheetPatternConstants.effects)
+            //{
+            //    DialogueContainer d = data.dialogueBranches.GetBranch(s);
+            //    if (d)
+            //    {
+            //        nextContainer = d;
+            //        DialogueTree.SetDialogueTree(nextContainer);
+            //        break;
+            //    }
+            //}
+
+            //if (nextContainer == null)
+            //    DialogueTree.SetDialogueTree(ChatData.CurrentTree);
         }
 
 
@@ -118,7 +125,35 @@ public class ChatUser : MonoBehaviour
 
         profileName.text = data.profileName;
         profileImage.sprite = data.profileImage;
+        chatManager.SpawnDivider();
         chatManager.StartSpawningChat(this, DialogueTree);
+    }
+
+    void LoadChatData(ChatUserData data)
+    {
+        //Spawn in Previous Chat Objects
+        foreach (GameObject chat in data.ChatObjects)
+        {
+            chatManager.SpawnChatObjects(chat, isToggled);
+        }
+        chatManager.RebuildAfterSpawning();
+
+
+        //Get appropriate dialogue tree
+        DialogueContainer nextContainer = null;
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            DialogueContainer d = ChatUserSO.dialogueBranches.GetBranch(s);
+            if (d)
+            {
+                nextContainer = d;
+                DialogueTree.SetDialogueTree(nextContainer);
+                break;
+            }
+        }
+
+        if (nextContainer == null)
+            DialogueTree.SetDialogueTree(data.CurrentTree);
     }
 
     public void SetNextTree()
@@ -149,6 +184,10 @@ public class ChatUser : MonoBehaviour
     public void SetNewEventTree()
     {
         DialogueContainer nextContainer = null;
+
+        //DEBUG Purposes
+        DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
+
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
             DialogueContainer d = ChatUserSO.dialogueBranches.GetBranch(s);
@@ -169,6 +208,11 @@ public class ChatUser : MonoBehaviour
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
+    private void OnDisable()
+    {
+        chatManager.OnCurrentNodeEnded -= SetNextTree;
+    }
+
     public void SetNotif()
     {
         notifNum++;
@@ -185,7 +229,8 @@ public class ChatUser : MonoBehaviour
 
     public void OnChatSpawned(ChatBubble chat, GameObject spawnedObj, string text)
     {
-        chatsObj.Add(spawnedObj);
+        //chatsObj.Add(spawnedObj);
+        ChatData.ChatObjects.Add(spawnedObj);
         PreviousChat = chat;
         lastMessageText.text = text;
     }
@@ -195,7 +240,8 @@ public class ChatUser : MonoBehaviour
         isToggled = tog;
 
         ResetNotif();
-        chatManager.ActivateChat(chatsObj, tog);
+        chatManager.ActivateChat(ChatData.ChatObjects, tog);
+
 
         toggle.image.color = tog ? toggleActivatedColor : toggleUnactiveColor;
 
@@ -203,5 +249,53 @@ public class ChatUser : MonoBehaviour
         if (!tog) return;
         Debug.Log(profileName.text);
         chatManager.HandleResponse(this, DialogueTree);
+    }
+
+    public void LoadData(GameData data)
+    {
+        foreach (string effect in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log(effect);
+        }
+
+        return;
+
+        ChatUserData chatData = data.ChatUserData.First(x => x.UserSO == ChatUserSO);
+        //ChatData = data.ChatUserData.First(x => x.UserSO == ChatUserSO);
+
+        if (chatData == null)
+        {
+            Debug.LogError("ChatData Save File Not Found!");
+            return;
+        }    
+        
+        LoadChatData(chatData);
+
+        //DialogueTree.ForceJumpToNode(chatData.CurrentNode);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        return;
+
+        ChatData.CurrentNode = DialogueTree.CurrentNode;
+        //Note: Not sure if ChatData updating will automatically update this ?
+        //It does, make new object to save.
+        if (!data.ChatUserData.Any(x => x.UserSO == ChatUserSO))
+        {
+            ChatUserData newData = new ChatUserData(ChatUserSO);
+            data.ChatUserData.Add(newData);
+        }
+
+        else
+        {
+            ChatUserData d = data.ChatUserData.First(x => x.UserSO == ChatUserSO);
+
+            //I hope c#'s garbage collector collects this 
+            data.ChatUserData.Remove(d);
+            
+            ChatUserData newData = new ChatUserData(ChatUserSO);
+            data.ChatUserData.Add(newData);
+        }
     }
 }
