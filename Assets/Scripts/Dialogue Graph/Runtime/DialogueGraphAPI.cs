@@ -12,7 +12,7 @@ public class DialogueTreeNode
 
 public class DialogueGraphAPI : MonoBehaviour
 {
-    DialogueContainer DialogueTree;
+    public DialogueContainer DialogueTree { get; private set; }
     public DialogueTreeNode CurrentNode { get; private set; }
 
     List<DialogueTreeNode> Nodes = new List<DialogueTreeNode>();

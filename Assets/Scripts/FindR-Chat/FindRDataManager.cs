@@ -12,9 +12,17 @@ public class UserLevelData
 public class FindRDataManager : MonoBehaviour
 {
     public ChatUserManager ChatUserManager;
+    List<ChatUser> ChatUsers = new List<ChatUser>();
     public List<UserLevelData> UserData;
-    void Start()
+
+    private void OnDisable()
     {
-        
+        ChatUsers = ChatUserManager.SpawnedUsers;
+
+        StaticUserData.ChatUserData.Clear();
+        foreach (ChatUser user in ChatUsers)
+        {
+            StaticUserData.ChatUserData.Add(user.ChatData);
+        }
     }
 }

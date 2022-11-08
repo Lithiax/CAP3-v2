@@ -59,9 +59,6 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        return;
-        Debug.Log("Load");
-
         UserDataTesting.Clear();
 
         if (data.ChatUserIDs.Length <= 0) return;

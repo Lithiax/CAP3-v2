@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class FindREventsManager : MonoBehaviour
@@ -33,6 +34,7 @@ public class FindREventsManager : MonoBehaviour
         switch (eventType)
         {
             case ChatEventTypes.DateEvent:
+                Debug.Log("Date Event");
                 BeginDatePanel.SetActive(true);
                 BeginDateYesButton.onClick.AddListener(() => BeginDate(data));
                 break;
@@ -50,6 +52,7 @@ public class FindREventsManager : MonoBehaviour
     void BeginDate(string scene)
     {
         Debug.Log("Change Scene To " + scene);
+        SceneManager.LoadScene(scene);
     }
 
     public void ClearButtons()

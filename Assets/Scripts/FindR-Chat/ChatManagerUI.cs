@@ -81,9 +81,9 @@ public class ChatManagerUI : MonoBehaviour
         oldreplyBoxTransform = replyBoxTransform.offsetMax;
         oldchatElementsTransform = chatElements.offsetMin;
     }
-    public void SpawnDivider()
+    public GameObject SpawnDivider()
     {
-        GameObject.Instantiate(dividerPrefab, chatParentTransform);
+        return GameObject.Instantiate(dividerPrefab, chatParentTransform);
     }
 
     public void StartSpawningChat(ChatUser parent, DialogueGraphAPI Tree)
@@ -223,10 +223,12 @@ public class ChatManagerUI : MonoBehaviour
         return chatBubble;
     }
 
-    public void SpawnChatObjects(GameObject chat, bool toggle)
+    public GameObject SpawnChatObjects(GameObject chat, bool toggle)
     {
         GameObject chatBubble = GameObject.Instantiate(chat, chatParent.transform);
         chatBubble.SetActive(toggle);
+
+        return chatBubble;
     }
 
     IEnumerator ScrollDown()
