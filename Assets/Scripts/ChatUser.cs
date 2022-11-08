@@ -137,6 +137,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.RebuildAfterSpawning();
 
 
+        //TODO: Set dialogue containers based on LEVEL not just effects. :^) 
+
         //Get appropriate dialogue tree
         DialogueContainer nextContainer = null;
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)

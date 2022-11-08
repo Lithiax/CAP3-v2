@@ -32,6 +32,13 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
             UserDataTesting.Add(data.UserSO);
         }
 
+        foreach (ChatUserSO so in StaticUserData.UserSOs)
+        {
+            if (UserDataTesting.Contains(so)) continue;
+
+            UserDataTesting.Add(so);
+        }
+
         foreach (ChatUserSO user in UserDataTesting)
         {
             GenerateUser(user);

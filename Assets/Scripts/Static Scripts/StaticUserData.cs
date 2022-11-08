@@ -12,4 +12,6 @@ public static class StaticUserData
 
     //Adding to this will automatically set it up for the FindR Chat.
     public static List<ChatUserData> ChatUserData = new List<ChatUserData>();
+
+    public static List<ChatUserSO> UserSOs = new List<ChatUserSO>();
 }

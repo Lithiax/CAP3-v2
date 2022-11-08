@@ -263,7 +263,8 @@ public class ChatManagerUI : MonoBehaviour
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
         //If dialogue tree is over
-        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
+        //NOTE: There is a minor bug where it still shows up but it works rn so whatever pin it for next time.
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0 && !ChatCollection.isEvent())
         {
             HideResponse();
             OnCurrentNodeEnded?.Invoke();
