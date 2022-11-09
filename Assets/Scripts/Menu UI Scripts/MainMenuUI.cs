@@ -50,10 +50,11 @@ public class MainMenuUI : MonoBehaviour
 
     public void NewGameButton()
     {
-        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-        mainCharacter.stageName = "You";
-        StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
-
+        StorylineManager.LoadVisualNovel("Maeve1", "Week1");
+        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        //mainCharacter.stageName = "You";
+        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
+        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
         SceneManager.LoadScene("VisualNovel");
     }
 

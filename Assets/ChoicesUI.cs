@@ -20,7 +20,7 @@ public class ChoicesUI : MonoBehaviour
         choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
 
         OnChoosingChoiceEvent += Initialize;
-
+        StorylineManager.OnLoadedEvent += ResetChoiceManager;
     }
 
     void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)

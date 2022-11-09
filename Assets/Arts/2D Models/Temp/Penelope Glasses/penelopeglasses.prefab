@@ -6241,7 +6241,6 @@ GameObject:
   - component: {fileID: 1008881912546055009}
   - component: {fileID: 8908430218238388271}
   - component: {fileID: 2620558061948230813}
-  - component: {fileID: 4050730908520096885}
   m_Layer: 0
   m_Name: penelopeglasses
   m_TagString: Untagged
@@ -6258,8 +6257,8 @@ Transform:
   m_GameObject: {fileID: 6738823424097071495}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 184415497446459970}
   - {fileID: 1904856666593490210}
@@ -6343,7 +6342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967223d908bf07b4f90945995bdca68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maskTexture: {fileID: 0}
+  _maskTexture: {fileID: 11400000, guid: 16bf142754640ab4487bb625c30931fd, type: 2}
 --- !u!114 &5848564416352855670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6415,19 +6414,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4050730908520096885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6738823424097071495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd9e6647bfff7542acb0200ab74bdd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CubismFadeMotionList: {fileID: 0}
 --- !u!1 &6782215913860782284
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,12 +18,13 @@ public class DialogueSpreadSheetPatternConstants
     public static string proxemityName = "Proxemity";
 
     [Header("Que Bank Column Patterns")]
+
     public const int isEnabledColumnPattern = 0;
-    public const int hapticTypeColumnPattern = 1;
-    public const int vocalicTypeColumnPattern = 2;
-    public const int kinesicColumnPattern = 3;
-    public const int oculesicColumnPattern = 4;
-    public const int physicalAppearanceColumnPattern = 5;
+    public const int gestureTypeColumnPattern = 1;
+    public const int voiceTypeColumnPattern = 2;
+    public const int bodyPostureColumnPattern = 3;
+    public const int eyeContactColumnPattern = 4;
+    public const int proxemityColumnPattern = 5;
 
     public const int isAutomaticHealthEvaluation = 6;
 
@@ -58,9 +59,9 @@ public class DialogueSpreadSheetPatternConstants
     public const int choiceNameColumnPattern = 0;
   
     public const int nextDialogueSheetNameColumnPattern = 1;
-    public const int healthModifierColumnPattern = 2;
-    public const int effectIDColumnPattern = 3;
-    public const int effectReferecedNameColumnPattern = 4;
+    public const int healthModifierColumnPattern = 3;
+    public const int effectIDColumnPattern = 4;
+    public const int effectReferecedNameColumnPattern = 5;
 
     public const int isAutomaticEnabledColumnPattern = 0;
 

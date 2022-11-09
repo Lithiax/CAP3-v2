@@ -11,9 +11,11 @@ public class SODialogueLoader : MonoBehaviour
 
     public void LoadSODialogueButtonUI()
     {
-        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-        mainCharacter.stageName = "You";
-        StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField.text + "/" + sheetField.text);
+        StorylineManager.LoadVisualNovel(folderField.text, sheetField.text);
+        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        //mainCharacter.stageName = "You";
+        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField.text + "/" + sheetField.text);
+        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField.text + "/" + "Interactible Choices");
         if (StorylineManager.currentSO_Dialogues != null)
         {
             Debug.Log("DIALOGUE LOADED");

@@ -13,36 +13,49 @@ public class LogBoxUI : MonoBehaviour
     private void Awake()
     {
         CharacterDialogueUI.onNewDialogueEvent.AddListener(UpdateDialogueLog);
+        StorylineManager.OnLoadedEvent += OnLoaded;
+    }
+
+    private void OnLoaded()
+    {
+        Destroy();
+        Create();
     }
     public void ToggleLogBox()
     {
         couldUpdate = !couldUpdate;
         if (logBox.activeSelf == false)
         {
-          
-            //Create
-            if (StorylineManager.currentDialogueIndex > 0)
-            {
-                for (int i = 0; i <= StorylineManager.loggedWords.Count; i++)
-                {
-                    UpdateDialogueLog(StorylineManager.loggedWords[i]);
-
-                }
-            }
-           
+            Create();
         }
         else
         {
-            //Destroy
-            for (int i = 0; i < containerTransform.childCount; i++)
-            {
-                Destroy(containerTransform.GetChild(i).gameObject);
-            }
+            Destroy();
         }
         logBox.SetActive(!logBox.activeSelf);
 
     }
 
+    void Create()
+    {
+        //Create
+        if (StorylineManager.currentDialogueIndex > 0)
+        {
+            for (int i = 0; i < StorylineManager.loggedWords.Count; i++)
+            {
+                UpdateDialogueLog(StorylineManager.loggedWords[i]);
+
+            }
+        }
+    }
+    private void Destroy()
+    {
+        //Destroy
+        for (int i = 0; i < containerTransform.childCount; i++)
+        {
+            Destroy(containerTransform.GetChild(i).gameObject);
+        }
+    }
     public void UpdateDialogueLog(Dialogue p_dialogue)
     {
         if(couldUpdate)

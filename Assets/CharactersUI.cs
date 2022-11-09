@@ -13,6 +13,7 @@ public class CharactersUI : MonoBehaviour
     public static Action<List<SO_Character>> onRemoveCharactersEvent;// = new onLoadAvatarsEvent
     public static Action<List<CharacterData>> onUpdateCharacterDatasEvent;// = new onLoadAvatarsEvent
     [SerializeField] private Transform characterUIContainerTransform;
+    [SerializeField] private Transform live2DCollisionUIContainerTransform;
     [SerializeField] private Transform characterObjectContainerTransform;
 
 
@@ -330,6 +331,19 @@ public class CharactersUI : MonoBehaviour
 
                     CharacterObject foundPreset = foundCharacter as CharacterObject;
                     CharacterDialogueUI.savedCharacters.Remove(foundPreset);
+                    //LIVE 2D
+                    //Check if its the character thats talking
+                    if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                    {
+                        if (p_charactersToBeRemoved[i] == StorylineManager.cueCharacter)
+                        {
+                            for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
+                            {
+                                Debug.Log("DELETING RAD");
+                                Destroy(live2DCollisionUIContainerTransform.GetChild(i).gameObject);
+                            }
+                        }
+                    }
                     Destroy(foundPreset.gameObject);
                 }
 
@@ -362,36 +376,52 @@ public class CharactersUI : MonoBehaviour
         //}
         //else
         //{
-            for (int i = 0; i < p_charactersToBeAdded.Count; i++)
+        for (int i = 0; i < p_charactersToBeAdded.Count; i++)
+        {
+            Character newCharacter = null;
+            // Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
+
+            if (p_charactersToBeAdded[i].prefab != null) //Live 2D
             {
-                Character newCharacter = null;
-                // Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
 
-                if (p_charactersToBeAdded[i].prefab != null) //Live 2D
+                newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
+                //Check if its the character thats talking
+                if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                 {
-
-                    newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
-
-                }
-                else //UI
-                {
-                    if (p_charactersToBeAdded[i].avatar != null)
+                    if (p_charactersToBeAdded[i] == StorylineManager.cueCharacter)
                     {
-                        newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform);
-                        CharacterUI newCharacterUI = newCharacter as CharacterUI;
-                        newCharacter.so_Character = p_charactersToBeAdded[i];
-
-                        StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                        if (StorylineManager.cueCharacter.collisionPrefab != null)
+                        {
+                            GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
+                        }
                     }
-
-
                 }
-                if (newCharacter != null)
-                {
-                    CharacterDialogueUI.savedCharacters.Add(newCharacter);
-                }
+                    
+                           
+
+               
+
 
             }
+            else //UI
+            {
+                if (p_charactersToBeAdded[i].avatar != null)
+                {
+                    newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform);
+                    CharacterUI newCharacterUI = newCharacter as CharacterUI;
+                    newCharacter.so_Character = p_charactersToBeAdded[i];
+
+                    StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                }
+
+
+            }
+            if (newCharacter != null)
+            {
+                CharacterDialogueUI.savedCharacters.Add(newCharacter);
+            }
+
+        }
         //}
     }
 

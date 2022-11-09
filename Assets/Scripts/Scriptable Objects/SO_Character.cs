@@ -24,6 +24,7 @@ public class SO_Character : ScriptableObject
     public string idName;
     public Sprite avatar;
     public CharacterObject prefab;
+    public GameObject collisionPrefab;
     public List<FaceEmotionData> faceEmotionDatas;
     public List<BodyEmotionData> bodyEmotionDatas;
 }

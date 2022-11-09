@@ -16,14 +16,18 @@ public class BackgroundUI : MonoBehaviour
     }
     void SetBackground(Sprite p_backgroundSprite)
     {
-        if (p_backgroundSprite != null)
+        if (!StorylineManager.sideDialogue)
         {
-            backgroundImage.sprite = p_backgroundSprite;
-            backgroundImage.color = new Color32(255, 255, 255, 255);
+            if (p_backgroundSprite != null)
+            {
+                backgroundImage.sprite = p_backgroundSprite;
+                backgroundImage.color = new Color32(255, 255, 255, 255);
+            }
+            else if (p_backgroundSprite == null)
+            {
+                backgroundImage.color = new Color32(0, 0, 0, 0);
+            }
         }
-        else if (p_backgroundSprite == null)
-        {
-            backgroundImage.color = new Color32(0, 0, 0, 0);
-        }
+     
     }
 }

@@ -5,11 +5,39 @@ using UnityEngine;
 public class CueBankData
 {
     public bool isEnabled;
-    public string hapticType;
-    public string vocalicType;
-    public string kinesicType;
-    public string oculesicType;
-    public string physicalApperanceType;
+
+    public string gestureType;
+    public string voiceType;
+    public string bodyPostureType;
+    public string eyeContactType;
+    public string proxemityType;
+
+
+    public string GetCueValue(CueType cueType)
+    {
+        if (cueType == CueType.Voice)
+        {
+            return voiceType;
+
+        }
+        else if (cueType == CueType.Body_Posture)
+        {
+            return bodyPostureType;
+        }
+        else if (cueType == CueType.Proxemic)
+        {
+            return proxemityType;
+        }
+        else if (cueType == CueType.Eye_Contact)
+        {
+            return eyeContactType;
+        }
+        else if (cueType == CueType.Gesture)
+        {
+            return gestureType;
+        }
+        return "ERROR";
+    }
 }
 [System.Serializable]
 public class ChoiceData
