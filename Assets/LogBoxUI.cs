@@ -23,9 +23,9 @@ public class LogBoxUI : MonoBehaviour
             //Create
             if (StorylineManager.currentDialogueIndex > 0)
             {
-                for (int i = 0; i <= StorylineManager.currentDialogueIndex - 1; i++)
+                for (int i = 0; i <= StorylineManager.loggedWords.Count; i++)
                 {
-                    UpdateDialogueLog(StorylineManager.currentSO_Dialogues.dialogues[i]);
+                    UpdateDialogueLog(StorylineManager.loggedWords[i]);
 
                 }
             }

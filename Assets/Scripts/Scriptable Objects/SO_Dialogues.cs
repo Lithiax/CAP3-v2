@@ -5,11 +5,11 @@ using UnityEngine;
 public class CueBankData
 {
     public bool isEnabled;
-    public HapticType hapticType;
-    public VocalicType vocalicType;
-    public KinesicType kinesicType;
-    public OculesicType oculesicType;
-    public PhysicalApperanceType physicalApperanceType;
+    public string hapticType;
+    public string vocalicType;
+    public string kinesicType;
+    public string oculesicType;
+    public string physicalApperanceType;
 }
 [System.Serializable]
 public class ChoiceData
@@ -18,10 +18,17 @@ public class ChoiceData
     public SO_Dialogues branchDialogue;
     public string branchDialogueName;
     public int healthModifier;
+    public string effectID;
+    public string effectReferenceName;
+
+    public bool isAutomaticEnabledColumnPattern;
+
+    public bool isHealthConditionInUseColumnPattern;
     public int healthCeilingCondition;
     public int healthFloorCondition;
 
-    public string effectID;
+    public bool isEffectIDConditionInUseColumnPattern;
+    public string effectIDCondition;
 
     public string popUpTitle;
     public string popUpContent;
@@ -31,7 +38,6 @@ public class ChoiceData
 public class SO_Dialogues : ScriptableObject
 {
     public List<Dialogue> dialogues = new List<Dialogue>();
-    public bool isAutomaticHealthEvaluation;
     public List<ChoiceData> choiceDatas = new List<ChoiceData>();
     public CueBankData cueBankData;
 }

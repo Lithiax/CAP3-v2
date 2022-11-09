@@ -11,75 +11,70 @@ using System.Threading.Tasks;
 
 public class TransitionUI : MonoBehaviour
 {
-    //public delegate Task FadeTransition(float p_opacity, 
-    //                                    bool p_isActiveOnEnd = true);
+
     public delegate void FadeTransition(float p_opacity,
+                                        bool aboveLayer = false,
                                         bool p_isActiveOnEnd = true);
     public delegate void FadeInAndOutTransition(float p_preOpacity,
                                             float p_preTransitionTime,
                                             float p_delayTime,
                                             float p_postOpacity,
                                             float p_postTransitionTime,
+                                            bool aboveLayer = false,
                                             Action p_preAction = null,
                                             Action p_postAction = null);
     public static TransitionUI instance;
     public static FadeInAndOutTransition onFadeInAndOutTransition;
     [SerializeField] public Image transitionUI;
+    private Canvas transitionUICanvas;
+    [SerializeField] private int defaultLayer;
+    [SerializeField] private int targetLayer;
     public IEnumerator runningCoroutine;
     public static FadeTransition onFadeTransition;
     public TMP_Text tester;
     public Color color;
-    //public static FadeInAndOutTransition onFadeInAndOutTransition = new FadeInAndOutTransition();
+
     private void Awake()
     {
         instance = this;
-        onFadeTransition=TransitionFade;
+        transitionUICanvas = GetComponent<Canvas>();
+        onFadeTransition =TransitionFade;
         onFadeInAndOutTransition=TransitionPreFadeAndPostFade;
     }
-    //public async Task TransitionFade(float p_opacity, bool p_isActiveOnEnd = true)
-    //{
-    //    //if (runningCoroutine != null)
-    //    //{
-    //    //    StopCoroutine(runningCoroutine);
-    //    //    runningCoroutine = null;
-    //    //}
-    //    //await Task.Yield();
-    //    transitionUI.raycastTarget = (true);
 
-    //    Sequence fadeSequence = DOTween.Sequence();
-    //    fadeSequence.Join(transitionUI.DOFade(p_opacity, 0.5f));
-    //    fadeSequence.Play();
-    //    await fadeSequence.AsyncWaitForCompletion();
-    //    //yield return fadeSequence.WaitForCompletion();
-    //    transitionUI.raycastTarget = (p_isActiveOnEnd);
-   
-    //    //runningCoroutine = Co_TransitionFade(p_opacity, p_isActiveOnEnd);
-    //    //StartCoroutine(runningCoroutine);
-    //}
 
-    public void TransitionFade(float p_opacity, bool p_isActiveOnEnd = true)
+    public void TransitionFade(float p_opacity, bool aboveLayer = true, bool p_isActiveOnEnd = true)
     {
         if (runningCoroutine != null)
         {
             StopCoroutine(runningCoroutine);
             runningCoroutine = null;
         }
-        
+        Debug.Log("STARTED");
+        if (aboveLayer)
+        {
+            transitionUICanvas.sortingOrder = defaultLayer;
+        }
+        else
+        {
+            transitionUICanvas.sortingOrder = targetLayer;
 
+        }
         runningCoroutine = Co_TransitionFade(p_opacity, p_isActiveOnEnd);
         StartCoroutine(runningCoroutine);
     }
     public IEnumerator Co_TransitionFade(float p_opacity, bool p_isActiveOnEnd = true)
 
     {
-        //await Task.Yield();
+     
         transitionUI.raycastTarget = (true);
 
         Sequence fadeSequence = DOTween.Sequence();
         fadeSequence.Join(transitionUI.DOFade(p_opacity, 0.5f));
         fadeSequence.Play();
-        //await fadeSequence.AsyncWaitForCompletion();
+
         yield return fadeSequence.WaitForCompletion();
+        Debug.Log("ENDED");
         transitionUI.raycastTarget = (p_isActiveOnEnd);
     }
     public void TransitionPreFadeAndPostFade(float p_preOpacity,
@@ -87,9 +82,19 @@ public class TransitionUI : MonoBehaviour
                                             float p_delayTime,
                                             float p_postOpacity,
                                             float p_postTransitionTime,
+                                            bool aboveLayer = true,
                                             Action p_preAction = null,
                                             Action p_postAction = null)
     {
+        if (aboveLayer)
+        {
+            transitionUICanvas.sortingOrder = defaultLayer;
+        }
+        else
+        {
+            transitionUICanvas.sortingOrder = targetLayer;
+
+        }
         transitionUI.color = color;
         if (runningCoroutine != null)
         {
@@ -117,7 +122,7 @@ public class TransitionUI : MonoBehaviour
     {
         transitionUI.color = color;
         Sequence preSequence = DOTween.Sequence();
-        //transitionUI.gameObject.SetActive(true);
+
         preSequence.Join(transitionUI.DOFade(p_preOpacity, p_preTransitionTime));
 
         yield return preSequence.WaitForCompletion();
@@ -127,9 +132,6 @@ public class TransitionUI : MonoBehaviour
         Sequence postSequence = DOTween.Sequence();
         postSequence.Join(transitionUI.DOFade(p_postOpacity, p_postTransitionTime));
         yield return postSequence.WaitForCompletion();
-
-        //transitionUI.gameObject.SetActive(false);
-
         p_postAction?.Invoke();
     }
 }

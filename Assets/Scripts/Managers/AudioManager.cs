@@ -21,7 +21,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    [NonReorderable] public SoundData[] sounds;
+    [NonReorderable] public SoundData[] soundEffects;
+    [NonReorderable] public SoundData[] backgroundMusics;
     public AudioMixer mixer;
     string currentSongPlaying = "";
     string previousSongPlaying = "";
@@ -30,7 +31,17 @@ public class AudioManager : MonoBehaviour
     {
         _instance = this;
       
-        foreach (SoundData currentSoundData in sounds)
+        foreach (SoundData currentSoundData in soundEffects)
+        {
+            currentSoundData.source = gameObject.AddComponent<AudioSource>();
+            currentSoundData.source.outputAudioMixerGroup = currentSoundData.output;
+            currentSoundData.source.clip = currentSoundData.clip;
+            currentSoundData.source.volume = currentSoundData.volume;
+            currentSoundData.source.pitch = currentSoundData.pitch;
+            currentSoundData.source.loop = currentSoundData.loop;
+        }
+
+        foreach (SoundData currentSoundData in backgroundMusics)
         {
             currentSoundData.source = gameObject.AddComponent<AudioSource>();
             currentSoundData.source.outputAudioMixerGroup = currentSoundData.output;
@@ -59,40 +70,49 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public SoundData GetSoundByName(string p_name)
+    public SoundData GetSoundByName(string p_name, bool p_isSoundEffect)
     {
-        SoundData sound = Array.Find(sounds, sound => sound.name == p_name);
+        SoundData[] currentSoundEffects;
+        if (p_isSoundEffect)
+        {
+            currentSoundEffects = soundEffects;
+        }
+        else
+        {
+            currentSoundEffects = backgroundMusics;
+        }
+        SoundData sound = Array.Find(currentSoundEffects, sound => sound.name == p_name);
         return sound;
     }
 
-    IEnumerator Co_AudioFade()
-    {
-        SoundData sound;
-        string soundName = previousSongPlaying;
-        sound = GetSoundByName(soundName);
+    //IEnumerator Co_AudioFade(bool p_isSoundEffect = true)
+    //{
+    //    SoundData sound;
+    //    string soundName = previousSongPlaying;
+    //    sound = GetSoundByName(soundName, p_isSoundEffect);
     
-        if (soundName != "")
-        {
-            Sequence fadeOutSequence = DOTween.Sequence();
-            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
-            fadeOutSequence.Play();
-            yield return fadeOutSequence.WaitForCompletion();
-        }
+    //    if (soundName != "")
+    //    {
+    //        Sequence fadeOutSequence = DOTween.Sequence();
+    //        fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+    //        fadeOutSequence.Play();
+    //        yield return fadeOutSequence.WaitForCompletion();
+    //    }
 
-        SoundData currentSound;
-        string currentSoundName = currentSongPlaying;
-        currentSound = GetSoundByName(currentSoundName);
-        currentSound.source.Play();
-        if (currentSoundName != "")
-        {
-            Sequence fadeInSequence = DOTween.Sequence();
-            fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
-            fadeInSequence.Play();
-            Debug.Log("NEW");
-        }
+    //    SoundData currentSound;
+    //    string currentSoundName = currentSongPlaying;
+    //    currentSound = GetSoundByName(currentSoundName, p_isSoundEffect);
+    //    currentSound.source.Play();
+    //    if (currentSoundName != "")
+    //    {
+    //        Sequence fadeInSequence = DOTween.Sequence();
+    //        fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
+    //        fadeInSequence.Play();
+    //        Debug.Log("NEW");
+    //    }
 
-    }
-    public void InstantPlayAudio(string p_oldAudioClip, string p_newAudioClip)
+    //}
+    public void InstantPlayAudio(string p_oldAudioClip, string p_newAudioClip, bool p_isSoundEffect = true)
     {
         //foreach (SoundData currentSoundData in sounds)
         //{
@@ -101,45 +121,63 @@ public class AudioManager : MonoBehaviour
         //StartCoroutine(Co_AudioFade(p_oldAudioClip, p_newAudioClip));
     }
 
-    public void ForceStopAudio(string p_newAudioClip)
+    public void ForceStopAudio(string p_newAudioClip, bool p_isSoundEffect = true)
     {
         SoundData sound;
-        sound = GetSoundByName(p_newAudioClip);
+        sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
         sound.source.Stop();
 
     }
-    public void AdditivePlayAudio(string p_newAudioClip)
+
+    public void SmoothStopAudio(string p_newAudioClip, bool p_isSoundEffect = true)
     {
         SoundData sound;
-        sound = GetSoundByName(p_newAudioClip);
+        sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
+        StartCoroutine(Co_AudioFade(p_newAudioClip, p_isSoundEffect));
+
+    }
+    public void AdditivePlayAudio(string p_newAudioClip, bool p_isSoundEffect = true)
+    {
+        SoundData sound;
+        sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
         sound.source.Play();
   
     }
-    public void SmoothPlayAudio(string p_oldAudioClip, string p_newAudioClip)
+    public void SmoothPlayAudio(string p_oldAudioClip, string p_newAudioClip, bool p_isSoundEffect = true)
     {
-        foreach (SoundData currentSoundData in sounds)
+        SoundData[] currentSoundEffects;
+        if (p_isSoundEffect)
         {
-            currentSoundData.source.Stop();
+            currentSoundEffects = soundEffects;
         }
-        StartCoroutine(Co_AudioFade(p_oldAudioClip, p_newAudioClip));
+        else
+        {
+            currentSoundEffects = backgroundMusics;
+        }
+        //foreach (SoundData currentSoundData in currentSoundEffects)
+        //{
+        //    currentSoundData.source.Stop();
+        //}
+        StartCoroutine(Co_AudioFade(p_oldAudioClip, p_newAudioClip, p_isSoundEffect));
     }
 
-    public IEnumerator Co_AudioFade(string p_oldAudioClip, string p_newAudioClip)
+    public IEnumerator Co_AudioFade(string p_oldAudioClip, string p_newAudioClip, bool p_isSoundEffect = true)
     {
         SoundData sound;
         string soundName = p_oldAudioClip;
-        sound = GetSoundByName(soundName);
+        sound = GetSoundByName(soundName, p_isSoundEffect);
         if (soundName != "")
         {
             Sequence fadeOutSequence = DOTween.Sequence();
             fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
             fadeOutSequence.Play();
             yield return fadeOutSequence.WaitForCompletion();
+            sound.source.Stop();
         }
-
+       
         SoundData currentSound;
         string currentSoundName = p_newAudioClip;
-        currentSound = GetSoundByName(currentSoundName);
+        currentSound = GetSoundByName(currentSoundName, p_isSoundEffect);
         currentSound.source.Play();
         if (currentSoundName != "")
         {
@@ -147,5 +185,20 @@ public class AudioManager : MonoBehaviour
             fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
             fadeInSequence.Play();
         }
+    }
+    public IEnumerator Co_AudioFade(string p_oldAudioClip, bool p_isSoundEffect = true)
+    {
+        SoundData sound;
+        string soundName = p_oldAudioClip;
+        sound = GetSoundByName(soundName, p_isSoundEffect);
+        if (soundName != "")
+        {
+            Sequence fadeOutSequence = DOTween.Sequence();
+            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+            fadeOutSequence.Play();
+            yield return fadeOutSequence.WaitForCompletion();
+            sound.source.Stop();
+        }
+     
     }
 }

@@ -11,6 +11,12 @@ public class DialogueSpreadSheetPatternConstants
     public static string dialogueName = "[Dialogue]";
     public static string choiceName = "[Choice]";
 
+    public static string gestureName = "Gesture";
+    public static string voiceName = "Voice";
+    public static string bodyPostureName = "Body Posture";
+    public static string eyeContactName = "Eye Contact";
+    public static string proxemityName = "Proxemity";
+
     [Header("Que Bank Column Patterns")]
     public const int isEnabledColumnPattern = 0;
     public const int hapticTypeColumnPattern = 1;
@@ -44,7 +50,7 @@ public class DialogueSpreadSheetPatternConstants
     public const int backgroundColumnPattern = 0;
     public const int eventTypeColumnPattern = 1;
     public const int eventParameterColumnPattern = 2;
-
+    public const int backgroundMusicColumnPattern = 3;
     [Header("Misc Row Patterns")]
     public const int miscRowPattern = 8;
 
@@ -52,10 +58,18 @@ public class DialogueSpreadSheetPatternConstants
     public const int choiceNameColumnPattern = 0;
   
     public const int nextDialogueSheetNameColumnPattern = 1;
-    public const int healthModifierColumnPattern = 3;
-    public const int healthCeilingConditionColumnPattern = 4;
-    public const int healthFloorConditionColumnPattern = 5;
-    public const int effectIDColumnPattern = 6;
+    public const int healthModifierColumnPattern = 2;
+    public const int effectIDColumnPattern = 3;
+    public const int effectReferecedNameColumnPattern = 4;
+
+    public const int isAutomaticEnabledColumnPattern = 0;
+
+    public const int isHealthConditionInUseColumnPattern = 1;
+    public const int healthCeilingConditionColumnPattern = 2;
+    public const int healthFloorConditionColumnPattern = 3;
+
+    public const int isEffectIDConditionInUseColumnPattern = 4;
+    public const int effectIDConditionColumnPattern = 5;
 
     public const int popUpTitleColumnPattern = 0;
     public const int popUpContentColumnPattern = 1;
@@ -63,5 +77,6 @@ public class DialogueSpreadSheetPatternConstants
     [Header("Choice Row Patterns")]
     public const int choiceRowPattern = 2;
     public const int popUpRowPattern = 4;
+    public const int choiceConditionRowPattern = 6;
 
 }
