@@ -2617,7 +2617,6 @@ GameObject:
   - component: {fileID: 9020935245454550510}
   - component: {fileID: 3069205760262060845}
   - component: {fileID: 5777357694657016328}
-  - component: {fileID: 4649735882888199368}
   - component: {fileID: 1081217778349021570}
   m_Layer: 0
   m_Name: brad
@@ -2792,19 +2791,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4649735882888199368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3531821659204230720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd9e6647bfff7542acb0200ab74bdd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CubismFadeMotionList: {fileID: 0}
 --- !u!114 &1081217778349021570
 MonoBehaviour:
   m_ObjectHideFlags: 0

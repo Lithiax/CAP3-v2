@@ -69,14 +69,14 @@ public class CharacterDialogueUI : MonoBehaviour
     public static System.Action OnDeinspectingEvent;
     [SerializeField]
     private SpeakerDialogueUI speakerDialogueUI;
-    [SerializeField]
-    private CueBankUI cueBankUI;
+
     [SerializeField]
     private InputNameUI inputNameUI;
     public bool rarara = false;
 
     SO_Dialogues p_currentChoiceDataTest = null;
 
+    bool popUp = false; 
 
     private void Awake()
     {
@@ -139,6 +139,7 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         p_currentChoiceDataTest = p_currentChoiceData;
         nextDialogueButton.SetActive(true);
+        popUp = true;
     }
 
 
@@ -214,13 +215,13 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void ResetCharacterDialogueUI()
     {
-        StorylineManager.currentDialogueIndex = 0;
+        //StorylineManager.currentDialogueIndex = 0;
         isSkipping = false;
         runningCoroutines = 0;
         isAlreadyEnded = false;
         nextDialogueButton.SetActive(true);
-        cueBankUI.ResetCueBankUI();
-        
+
+        popUp = false;
         OnNextButtonUIPressed();
         if (!rarara)
         {
@@ -447,12 +448,22 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
+        if (popUp)
+        {
+            Debug.Log("IT SHUD BE CLOSING");
+            OnResettingCharacterUIEvent.Invoke();
+            popUp = false;
+        }
+        else
+        {
+
+        }
         if (p_currentChoiceDataTest != null)
         {
             StorylineManager.currentSO_Dialogues = p_currentChoiceDataTest;
             p_currentChoiceDataTest = null;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
-          
+            
             return;
 
         }
@@ -468,7 +479,8 @@ public class CharacterDialogueUI : MonoBehaviour
             //Debug.Log("BUTTON PRESSED " + currentDialogueIndex + " RC: "+ runningCoroutines 
             //     + " iS: " + isSkipping
             //    + " iR: ");
-            Debug.Log(StorylineManager.currentBackgroundMusic);
+            //Debug.Log(StorylineManager.currentBackgroundMusic);
+            
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
             if (!string.IsNullOrEmpty(currentDialogue.backgroundMusic))
             {
@@ -535,7 +547,7 @@ public class CharacterDialogueUI : MonoBehaviour
               
                
                 speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
-                cueBankUI.cueBankOpenable = false;
+
                 speakerDialogueUI.SetSpeech(currentDialogue.words);
             }
             BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
@@ -554,58 +566,70 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             if (p_currentChoiceDataTest == null)
             {
-                if (StorylineManager.currentSO_Dialogues.choiceDatas.Count > 1)
+                if (StorylineManager.sideDialogue)
                 {
-                    if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isAutomaticEnabledColumnPattern)
+                    Debug.Log("IT ENDED SIDE DIALOGUE");
+                    StorylineManager.sideDialogue = false;
+                    StorylineManager.currentSO_Dialogues = StorylineManager.savedSO_Dialogues;
+                    StorylineManager.currentDialogueIndex = StorylineManager.savedDialogueIndex;
+
+                }
+                else
+                {
+                    if (StorylineManager.currentSO_Dialogues.choiceDatas.Count > 1)
                     {
-                        //No choice, just evaluate
-                        for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
+                        if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isAutomaticEnabledColumnPattern)
                         {
-                           
-                            if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                            //No choice, just evaluate
+                            for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
                             {
-                                StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
-                                StorylineManager.currentDialogueIndex = 0;
-                                break;
+
+                                if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                                {
+                                    StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
+                                    StorylineManager.currentDialogueIndex = 0;
+                                    break;
+                                }
+
                             }
 
                         }
+                        else
+                        {
+                            //Creating Choices
+                            Debug.Log("CREATING CHOIIIIIIIIICE");
+                            nextDialogueButton.SetActive(false);
+                            ChoicesUI.OnChoosingChoiceEvent(StorylineManager.currentSO_Dialogues.choiceDatas);
+ 
+
+                        }
+
 
                     }
-                    else
+                    else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 1)
                     {
-                        //Creating Choices
-                        Debug.Log("CREATING CHOIIIIIIIIICE");
-                        nextDialogueButton.SetActive(false);
-                        ChoicesUI.OnChoosingChoiceEvent(StorylineManager.currentSO_Dialogues.choiceDatas);
-                        cueBankUI.SetCueBank(StorylineManager.currentSO_Dialogues);
+                        Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
 
+
+                        //Set Choice Damage
+                        HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                        StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                        StorylineManager.currentDialogueIndex = 0;
                     }
-
-
-                }
-                else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 1)
-                {
-                    Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
-
-
-                    //Set Choice Damage
-                    HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-                    StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
-                    StorylineManager.currentDialogueIndex = 0;
-                }
-                else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
-                {
-                    if (isEndTransitionEnabled)
+                    else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
                     {
-                        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
-                        Debug.Log("0000000000000000000000000000000000");
-                    }
-                    else
-                    {
-                        OnCloseCharacterDialogueUI();
+                        if (isEndTransitionEnabled)
+                        {
+                            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
+                            Debug.Log("0000000000000000000000000000000000");
+                        }
+                        else
+                        {
+                            OnCloseCharacterDialogueUI();
+                        }
                     }
                 }
+               
             }
             else if (p_currentChoiceDataTest != null)
             {

@@ -63,11 +63,11 @@ public class CueBankUI : MonoBehaviour
     {
 
         cueBankOpenable = true;
-        hapticText.text = p_characterDatas.cueBankData.hapticType.ToString();
-        vocalicText.text = p_characterDatas.cueBankData.vocalicType.ToString();
-        kinesicText.text = p_characterDatas.cueBankData.kinesicType.ToString();
-        oculesicText.text = p_characterDatas.cueBankData.oculesicType.ToString();
-        physicalAppearanceText.text = p_characterDatas.cueBankData.physicalApperanceType.ToString();
+        hapticText.text = p_characterDatas.cueBankData.gestureType.ToString();
+        vocalicText.text = p_characterDatas.cueBankData.voiceType.ToString();
+        kinesicText.text = p_characterDatas.cueBankData.bodyPostureType.ToString();
+        oculesicText.text = p_characterDatas.cueBankData.eyeContactType.ToString();
+        physicalAppearanceText.text = p_characterDatas.cueBankData.proxemityType.ToString();
 
 
     }

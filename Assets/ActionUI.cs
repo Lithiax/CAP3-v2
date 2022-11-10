@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 [System.Serializable]
 public enum CueType
 {
@@ -17,24 +18,20 @@ public class ActionUI : MonoBehaviour
 {
     [SerializeField]
     public CueType cueType;
-    [SerializeField]
-    public string cueValue;
-    [SerializeField] List<SO_Choice> choice;
 
 
-    void Awake()
+    public void EnterFunction()
     {
-
+        ActionUIs.onEnterEvent.Invoke(this);
     }
 
-    public void Selected()
+    public void ExitFunction()
     {
-        
+        ActionUIs.onExitEvent.Invoke();
     }
 
-    public void Close()
+    public void PointClickFunction()
     {
-      
+        ActionUIs.onPointClickEvent.Invoke(this);
     }
-
 }
