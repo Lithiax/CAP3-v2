@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 using System.Linq;
 
 public class FindREventsManager : MonoBehaviour
 {
+    [SerializeField] Image FadeImage;
     [SerializeField] GameObject BeginDatePanel;
     [SerializeField] Button BeginDateYesButton;
 
@@ -36,12 +38,16 @@ public class FindREventsManager : MonoBehaviour
             case ChatEventTypes.DateEvent:
                 Debug.Log("Date Event");
                 BeginDatePanel.SetActive(true);
-                BeginDateYesButton.onClick.AddListener(() => BeginDate(data));
+                BeginDateYesButton.onClick.AddListener(() => LoadScene(data));
                 break;
             case ChatEventTypes.BranchEvent:
                 Debug.Log("Branch Event");
                 ChatUser user = ChatUsers.First(x => x.ChatUserSO == userData);
                 user.SetNewEventTree();
+                break;
+            case ChatEventTypes.InstantDateEvent:
+                Debug.Log("Instant Date Event");
+                LoadScene(data);
                 break;
             default:
                 Debug.LogError("Invalid Event");
@@ -49,10 +55,22 @@ public class FindREventsManager : MonoBehaviour
         }
     }
 
-    void BeginDate(string scene)
+    void LoadScene(string scene)
     {
+        string[] subs = scene.Split(',');
+
+        if (subs.Length > 2)
+        {
+            Debug.LogError("Visual Novel Parameters: '" + scene + "' is in an invalid format. Split with ,");
+            return;
+        }
+
         Debug.Log("Change Scene To " + scene);
-        SceneManager.LoadScene(scene);
+        FadeImage.DOFade(1, 1).OnComplete(() => 
+        {
+            StorylineManager.LoadVisualNovel(subs[0], subs[1]);
+            SceneManager.LoadScene("VisualNovel"); 
+        });
     }
 
     public void ClearButtons()

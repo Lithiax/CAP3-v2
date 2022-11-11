@@ -187,7 +187,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         DialogueContainer nextContainer = null;
 
         //DEBUG Purposes
-        DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
+        //DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
 
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {

@@ -194,7 +194,7 @@ public class ChatManagerUI : MonoBehaviour
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
             EventManager.RegisterEvent(ev);
-            if (ev.EventType == ChatEventTypes.BranchEvent)
+            if (ev.EventType != ChatEventTypes.DateEvent)
             {
                 ev.RaiseEvent();
             }
