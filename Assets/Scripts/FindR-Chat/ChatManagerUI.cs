@@ -201,7 +201,9 @@ public class ChatManagerUI : MonoBehaviour
         }
 
         if (parent.isToggled)
+        {
             HandleResponse(parent, Tree);
+        }
     }   
 
     public void RebuildAfterSpawning()
@@ -250,17 +252,21 @@ public class ChatManagerUI : MonoBehaviour
     {
         if (parent.SingleResponseChat != null)
         {
+            Debug.Log("Single Response");
             OneResponseButton(parent.SingleResponseChat, parent);
             ShowResponseBox();
             return;
         }
         if (!parent.currentChatComplete)
         {
+            Debug.Log("Chat Not Complete");
             HideResponse();
             return;
         }
 
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
+
+
 
         //If dialogue tree is over
         //NOTE: There is a minor bug where it still shows up but it works rn so whatever pin it for next time.
@@ -272,8 +278,20 @@ public class ChatManagerUI : MonoBehaviour
             return;
         }
 
+        if( Tree.CurrentNode.ConnectedNodesData.Count == 1)
+        {
+            ChatCollectionSO coll = Tree.CurrentNode.ConnectedNodesData[0].chatCollection as ChatCollectionSO;
+            if (String.IsNullOrEmpty(coll.PromptText))
+            {
+                Debug.Log("Skip");
+                ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
+                return;
+            }
+        }
+
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
+
             if (ChatCollection.isEvent())
             {
                 if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
@@ -282,7 +300,6 @@ public class ChatManagerUI : MonoBehaviour
                     return;
                 }
             }
-
             //Clear button on click events
             foreach (ReplyButton bData in replyButtonData)
             {

@@ -7,7 +7,8 @@ public enum ChatEventTypes
 {
     DateEvent,
     BranchEvent,
-    InstantDateEvent
+    InstantDateEvent,
+    RGaugeEvent
 };
 
 [System.Serializable]

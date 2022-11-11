@@ -54,7 +54,7 @@ public class GraphSaveUtility
             });
         }
 
-        AssetDatabase.CreateAsset(dialogueContainer, $"Assets/Scriptable Objects/Resources/{fileName}.asset");
+        AssetDatabase.CreateAsset(dialogueContainer, $"Assets/Resources/Scriptable Objects/Resources/{fileName}.asset");
         AssetDatabase.SaveAssets();
     }
 

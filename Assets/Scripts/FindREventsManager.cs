@@ -49,10 +49,19 @@ public class FindREventsManager : MonoBehaviour
                 Debug.Log("Instant Date Event");
                 LoadScene(data);
                 break;
+            case ChatEventTypes.RGaugeEvent:
+                Debug.Log("RGaugeEvent");
+                break;
             default:
                 Debug.LogError("Invalid Event");
                 break;
         }
+    }
+
+    void GaugeEvent(string num)
+    {
+        int n = int.Parse(num);
+        Debug.Log("Date Gauge: " + num);
     }
 
     void LoadScene(string scene)
