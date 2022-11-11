@@ -19,8 +19,10 @@ public class DialogueGraphAPI : MonoBehaviour
 
     public void SetDialogueTree(DialogueContainer tree)
     {
+        if (tree == null) return;
         if (Nodes.Count > 0)
             Nodes.Clear();
+
 
         DialogueTree = tree;
         //Create Nodes

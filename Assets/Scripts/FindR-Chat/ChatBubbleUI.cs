@@ -20,6 +20,12 @@ public class ChatBubbleUI : MonoBehaviour
     [SerializeField] Image ProfileImage;
     [SerializeField] GameObject ProfileNameObj;
     [SerializeField] TextMeshProUGUI ProfileName;
+
+    Vector2 OriginalImageSize;
+    private void Awake()
+    {
+        OriginalImageSize = ProfileImage.rectTransform.sizeDelta;
+    }
     public void SetUpChat(ChatUser parent, ChatBubble data)
     {
         chatText.text = data.chatText;
@@ -40,9 +46,12 @@ public class ChatBubbleUI : MonoBehaviour
         }
 
         if (parent.PreviousChat == null) return;
-        if (!parent.PreviousChat.isUser)
+
+        if (!parent.PreviousChat.isUser && parent.PreviousChat.chatText != "")
         {
             ProfileImage.sprite = null;
+            //Actual width/height = 68.028
+            ProfileImage.rectTransform.sizeDelta = new Vector2(OriginalImageSize.x, 5);
             ProfileNameObj.SetActive(false);
         }
     }

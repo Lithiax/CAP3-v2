@@ -85,14 +85,14 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 {
                     GameObject obj = chatManager.SpawnChatBubble(chat, this);
                     chatsObj.Add(obj);
-
+                    chatManager.RebuildAfterSpawning();
                     ChatData.ChatBubbles.Add(chat);
                     PreviousChat = chat;
                 }
 
                 chatManager.RebuildAfterSpawning();
             }
-
+               
             DialogueTree.SetDialogueTree(data.dialogueTree);
 
             StaticUserData.ChatUserData.Add(ChatData);

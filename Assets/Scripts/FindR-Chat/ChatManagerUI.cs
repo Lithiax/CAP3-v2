@@ -47,6 +47,8 @@ public class ChatManagerUI : MonoBehaviour
 
     private void Awake()
     {
+        InitializeTransforms();
+
         EventManager = GameObject.FindObjectOfType<FindREventsManager>();
         replyButtonObjs.Add(ReplyButton1);
         replyButtonObjs.Add(ReplyButton2);
@@ -71,16 +73,17 @@ public class ChatManagerUI : MonoBehaviour
         //replyButton2Comp = ReplyButton2.GetComponent<Button>();
     }
 
+    public void InitializeTransforms()
+    {
+        oldreplyBoxTransform = replyBoxTransform.offsetMax;
+        oldchatElementsTransform = chatElements.offsetMin;
+    }
+
     public void ReplyClicked(int num)
     {
         HideResponse();
     }
 
-    private void Start()
-    {
-        oldreplyBoxTransform = replyBoxTransform.offsetMax;
-        oldchatElementsTransform = chatElements.offsetMin;
-    }
     public GameObject SpawnDivider()
     {
         return GameObject.Instantiate(dividerPrefab, chatParentTransform);
@@ -208,6 +211,7 @@ public class ChatManagerUI : MonoBehaviour
 
     public void RebuildAfterSpawning()
     {
+        return;
         StartCoroutine(RebuildUI());
 
         StartCoroutine(ScrollDown());
@@ -236,7 +240,12 @@ public class ChatManagerUI : MonoBehaviour
     IEnumerator ScrollDown()
     {
         yield return new WaitForSeconds(0.1f);
-        scrollBar.value = 0;
+        //scrollBar.value = 0;
+
+        DOVirtual.Float(scrollBar.value, 0, 0.1f, x =>
+        {
+            scrollBar.value = x;
+        });
     }
 
     IEnumerator RebuildUI()
@@ -371,7 +380,7 @@ public class ChatManagerUI : MonoBehaviour
         //-0.1619987
         //chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, 96.326f);
 
-        DOVirtual.Float(oldchatElementsTransform.y, 106.326f, 0.1f, x =>
+        DOVirtual.Float(oldchatElementsTransform.y, 138.357f, 0.1f, x =>
         {
             chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, x);
         })
@@ -401,7 +410,7 @@ public class ChatManagerUI : MonoBehaviour
 
         if (chatElements.offsetMin != oldchatElementsTransform)
         {
-            DOVirtual.Float(96.326f, oldchatElementsTransform.y, 0.1f, x =>
+            DOVirtual.Float(138.357f, oldchatElementsTransform.y, 0.1f, x =>
             {
                 chatElements.offsetMin = new Vector2(oldchatElementsTransform.x, x);
             })

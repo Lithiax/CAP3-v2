@@ -24,6 +24,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     private void Awake()
     {
         Debug.Log("Awake");
+        chatManager.InitializeTransforms();
 
         foreach (ChatUserData data in StaticUserData.ChatUserData)
         {
