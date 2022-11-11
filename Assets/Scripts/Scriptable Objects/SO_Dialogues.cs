@@ -49,6 +49,8 @@ public class ChoiceData
     public string effectID;
     public string effectReferenceName;
 
+    public bool isIsImmediateGoPhone;
+
     public bool isAutomaticEnabledColumnPattern;
 
     public bool isHealthConditionInUseColumnPattern;

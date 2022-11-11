@@ -32,8 +32,8 @@ public class SpreadSheetAPI : MonoBehaviour
     [SerializeField] public string[] debuggerSheetRows;
     [SerializeField] public static string[] currentSheetRows;
 
-    private List<int> dialogueIndexInSheet = new List<int>();
-    private List<int> backgroundIndexInSheet = new List<int>();
+    [SerializeField] private List<int> dialogueIndexInSheet = new List<int>();
+    [SerializeField] private List<int> backgroundIndexInSheet = new List<int>();
     private List<int> choiceIndexInSheet = new List<int>();
     public  List<CodeReplacement> codeReplacements = new List<CodeReplacement>();
     public void Awake()
@@ -61,7 +61,8 @@ public class SpreadSheetAPI : MonoBehaviour
         else//Computer has internet access/can connect to website, opt to update the previous json file saved with new values from web
         {
             string rawSheet = www.downloadHandler.text;
-
+            
+            Debug.Log(p_spreadSheetName + " - SHEET LOADING -  " + p_sheetName);
 
             foreach (var rawSheetRowsValuesObject in JSON.Parse(rawSheet)["values"]) //Only get values in sheet
             {
@@ -88,10 +89,10 @@ public class SpreadSheetAPI : MonoBehaviour
         // currentSheetRows = rawJson.Split(new string[] { "[stop]" }, System.StringSplitOptions.None); 
 
 
-        if (p_sheetName == "Interactible Choices") //Week1 orig
-        {
+        //if (p_sheetName == "Interactible Choices") //Week1 orig
+        //{
             debuggerSheetRows = currentSheetRows;
-        }
+        //}
 
         FindScriptableObject(p_spreadSheetName, p_sheetName);
     }
@@ -265,6 +266,8 @@ public class SpreadSheetAPI : MonoBehaviour
             newChoiceData.healthModifier = healthModifier;
             newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
             newChoiceData.effectReferenceName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectReferecedNameColumnPattern);
+            newChoiceData.isIsImmediateGoPhone = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.isImmediateGoPhoneColumnPattern));
+            newChoiceData.isAutomaticEnabledColumnPattern = TranslateToBool(GetCellString(currentGeneratedChoiceIndex +DialogueSpreadSheetPatternConstants.choiceConditionRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticEnabledColumnPattern));
             Debug.Log(newChoiceData.effectID + " " + newChoiceData.effectReferenceName);
             if (!string.IsNullOrEmpty(newChoiceData.effectID))
             {

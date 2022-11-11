@@ -14,6 +14,7 @@ public class LogBoxUI : MonoBehaviour
     {
         CharacterDialogueUI.onNewDialogueEvent.AddListener(UpdateDialogueLog);
         StorylineManager.OnLoadedEvent += OnLoaded;
+
     }
 
     private void OnLoaded()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 public class ChoicesUI : MonoBehaviour
 {
     [SerializeField] private GameObject choiceUIsContainer;
@@ -62,6 +63,13 @@ public class ChoicesUI : MonoBehaviour
                     newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
                 }
             }
+            else if (!StorylineManager.currentSO_Dialogues.choiceDatas[i].isHealthConditionInUseColumnPattern && 
+                !StorylineManager.currentSO_Dialogues.choiceDatas[i].isEffectIDConditionInUseColumnPattern)
+            {
+                //Can be selected
+                newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+            }
            
 
         }
@@ -69,35 +77,57 @@ public class ChoicesUI : MonoBehaviour
 
     public void ChooseChoiceUI(ChoiceData p_currentChoiceData)
     {
-
-        CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
-        //Reset Choice Manager
-        ResetChoiceManager();
-
-        //Set Choice Damage
-        //if (p_currentChoiceData.damage)
-        //{
-
-        //}
-        HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
         if (p_currentChoiceData.effectID != "")
         {
             DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
         }
-        //Set Pop Up
-        Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
-        if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
+        Debug.Log("Choosing Choice");
+        if (p_currentChoiceData.branchDialogue == null)
         {
-            Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
-            PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
-            CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
+            Debug.Log("PHONE");
+            if (p_currentChoiceData.isIsImmediateGoPhone)
+            {
+                Debug.Log("HELLO");
+                if (!string.IsNullOrEmpty(p_currentChoiceData.effectID))
+                {
+                    Debug.Log("PHONE IS WORKING");
+                    StorylineManager.LoadAsyncFindr();
+                }
+            }
 
         }
         else
         {
-            StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
-            CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+            Debug.Log("NOT PHONE");
+            CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
+            //Reset Choice Manager
+            ResetChoiceManager();
+
+            //Set Choice Damage
+            //if (p_currentChoiceData.damage)
+            //{
+
+            //}
+            HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+
+            //Set Pop Up
+            Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
+            if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
+            {
+                Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
+                PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
+                CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
+
+            }
+            else
+            {
+                StorylineManager.currentDialogueIndex = 0;
+                StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
+                CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+            }
+
         }
+      
 
     }
 

@@ -880,9 +880,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_SpreadSheets:
-  - {fileID: 11400000, guid: 99489bb64cc059d49b3559efe7f8dab2, type: 2}
+  - {fileID: 11400000, guid: 3838cbccf619d0c499f798ea06c08623, type: 2}
+  - {fileID: 11400000, guid: 691912f7a82d24d4796f1da766bb34bd, type: 2}
+  - {fileID: 11400000, guid: f553be5e67a758a4e89932593cdce043, type: 2}
+  - {fileID: 11400000, guid: 47b977f2408026e49ac657d7d93cdcf4, type: 2}
+  - {fileID: 11400000, guid: f94e11002716c1e4a864da773672d2ad, type: 2}
   apiKey: AIzaSyC8PPNhhTSLFqpcEUZZrGwTyl1m4e9xU-Q
   debuggerSheetRows: []
+  dialogueIndexInSheet: 
+  backgroundIndexInSheet: 
   codeReplacements: []
 --- !u!1 &1433164237
 GameObject:

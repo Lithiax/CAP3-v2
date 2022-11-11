@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 [System.Serializable]
 public class CodeReplacement
 {
@@ -25,8 +27,11 @@ public class CueChoice
 public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static Action OnLoadedEvent;
+    [SerializeField] Button saveButtonUI;
+    [SerializeField] Button loadButtonUI;
     public static void LoadVisualNovel(string folderField, string sheetField)
     {
+        isPaused = false;
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         mainCharacter.stageName = "You";
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
@@ -100,9 +105,23 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         return null;
 
     }
+
+    public static void LoadAsyncFindr()
+    {
+        Debug.Log("LOADING");
+        isPaused = true;
+        SceneManager.LoadSceneAsync("FindR", LoadSceneMode.Additive);
+    }
+
+    public static void UnloadAsyncFindr()
+    {
+        isPaused = false;
+        SceneManager.UnloadSceneAsync("FindR", UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+    }
     public static StorylineManager instance;
     public SO_Character mainCharacter;
 
+    public static bool isPaused;
     public static SO_Dialogues currentSO_Dialogues;
     public static int currentDialogueIndex;
     public static List<Dialogue> loggedWords = new List<Dialogue>();
@@ -116,9 +135,31 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static List<CueChoice> cuesChoices = new List<CueChoice>();
 
     public static string currentBackgroundMusic ="";
+    public IEnumerator AsyncLoadScene(string name, Action onCallBack = null)
+    {
+        AsyncOperation asyncLoadScene = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+
+        while (!asyncLoadScene.isDone)
+        {
+            // loading bar =  asyncLoadScene.progress
+
+            yield return null;
+        }
+        yield return new WaitForSeconds(3f);
+        if (onCallBack != null)
+            onCallBack?.Invoke();
+    }
+
+    void ConnectEvent()
+    {
+        saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
+        loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
+    }
     private void Awake()
     {
         instance = this;
+    
+        StartCoroutine(AsyncLoadScene("PauseMenu", ConnectEvent));
     }
 
     public void LoadData(GameData data)
