@@ -62,6 +62,13 @@ public class ChoicesUI : MonoBehaviour
                     newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
                 }
             }
+            else if (!StorylineManager.currentSO_Dialogues.choiceDatas[i].isHealthConditionInUseColumnPattern &&
+                !StorylineManager.currentSO_Dialogues.choiceDatas[i].isEffectIDConditionInUseColumnPattern)
+            {
+                //Can be selected
+                newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+            }
            
 
         }
@@ -69,7 +76,19 @@ public class ChoicesUI : MonoBehaviour
 
     public void ChooseChoiceUI(ChoiceData p_currentChoiceData)
     {
+        StorylineManager.currentDialogueIndex = 0;
+        if (p_currentChoiceData.effectID != "")
+        {
+            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
+        }
 
+        if (p_currentChoiceData.isImmediateGoPhone)
+        {
+            if (!string.IsNullOrEmpty(p_currentChoiceData.effectID))
+            {
+                StorylineManager.LoadPhone();
+            }
+        }
         CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
         //Reset Choice Manager
         ResetChoiceManager();
@@ -80,10 +99,7 @@ public class ChoicesUI : MonoBehaviour
 
         //}
         HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
-        if (p_currentChoiceData.effectID != "")
-        {
-            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
-        }
+      
         //Set Pop Up
         Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
