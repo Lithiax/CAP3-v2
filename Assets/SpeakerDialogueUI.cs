@@ -63,7 +63,14 @@ public class SpeakerDialogueUI : MonoBehaviour
         CharacterDialogueUI.OnInspectingEvent += open;
         CharacterDialogueUI.OnDeinspectingEvent += close;
     }
-    
+
+    private void OnDestroy()
+    {
+        CharacterDialogueUI.OnIsSkipping -= Skip;
+        CharacterDialogueUI.OnInspectingEvent -= open;
+        CharacterDialogueUI.OnDeinspectingEvent -= close;
+    }
+
     void open()
     {
         frame.SetActive(false);

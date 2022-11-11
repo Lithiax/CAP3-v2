@@ -23,6 +23,11 @@ public class ChoicesUI : MonoBehaviour
         StorylineManager.OnLoadedEvent += ResetChoiceManager;
     }
 
+    private void OnDestroy()
+    {
+        OnChoosingChoiceEvent -= Initialize;
+        StorylineManager.OnLoadedEvent -= ResetChoiceManager;
+    }
     void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
     {
         choiceUIsContainer.SetActive(true);

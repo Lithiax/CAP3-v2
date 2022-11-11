@@ -147,6 +147,13 @@ public class HealthUI : MonoBehaviour
         InstantUpdateBar(currentHealth, maxHealth, maxHealth);
     }
 
+    private void OnDestroy()
+    {
+        ModifyHealthEvent -= ModifyHealth;
+        myDelegate -= IsWithinHealthCondition;
+        CharacterDialogueUI.OnInspectingEvent -= open;
+        CharacterDialogueUI.OnDeinspectingEvent -= close;
+    }
     void open()
     {
         frame.SetActive(false);

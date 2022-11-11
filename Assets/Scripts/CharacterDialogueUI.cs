@@ -95,6 +95,19 @@ public class CharacterDialogueUI : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        //EVENTS
+        OnStartChooseChoiceEvent -= DisableNextDialogueButton;
+        OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;
+        OnPopUpEvent -= popuptest;
+        OnContinueEvent -= ContinueEvent;
+        OnEndEvent -= ToggleNextDialogueButton;
+
+        OnAddNewTransitionEvent -= AddNewTransitionEvent;
+        OnFinishTransitionEvent -= FinishTransitionEvent;
+        OnCheckIfSkippableEvent -= CheckIfReady;
+    }
     void AddNewTransitionEvent()
     {
         runningCoroutines++;
