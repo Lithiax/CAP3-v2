@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 [System.Serializable]
 public class CodeReplacement
 {
@@ -39,7 +41,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         savedSO_Dialogues = null;
 
         currentBackgroundMusic = "";
-
+        paused = false;
         for (int i = 0; i< so_InteractibleChoices.choiceDatas.Count;i++)
         {
             CueChoice newCueChoice = new CueChoice();
@@ -116,9 +118,16 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static List<CueChoice> cuesChoices = new List<CueChoice>();
 
     public static string currentBackgroundMusic ="";
+
+    [SerializeField] private Button saveButtonUI;
+    [SerializeField] private Button loadButtonUI;
+
+    public static bool paused = false;
+
     private void Awake()
     {
         instance = this;
+        StartCoroutine(AsyncLoadScene("PauseMenu", Finished));
     }
 
     public void LoadData(GameData data)
@@ -158,5 +167,37 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.currentBackgroundMusic = currentBackgroundMusic;
 
 
+    }
+    public static void LoadPhone()
+    {
+        paused = true;
+        Debug.Log("LOADING");
+        SceneManager.LoadSceneAsync("FindR", LoadSceneMode.Additive);
+    }
+
+    public static void UnloadPhone()
+    {
+        paused = false;
+        SceneManager.UnloadSceneAsync("FindR");
+    }
+
+    public IEnumerator AsyncLoadScene(string name, Action onCallBack = null)
+    {
+        AsyncOperation asyncLoadScene = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+
+        while (!asyncLoadScene.isDone)
+        {
+            // loading bar =  asyncLoadScene.progress
+
+            yield return null;
+        }
+        if (onCallBack != null)
+            onCallBack?.Invoke();
+    }
+
+    void Finished()
+    {
+        saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
+        loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
     }
 }

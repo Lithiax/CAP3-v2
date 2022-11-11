@@ -186,6 +186,7 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         //Temporary
         StorylineManager.loggedWords.Clear();
+        Debug.Log("ENDED FUCK");
         SceneManager.LoadScene("FindR");
         frame.SetActive(false);
     }
@@ -467,9 +468,13 @@ public class CharacterDialogueUI : MonoBehaviour
             return;
 
         }
-        if (StorylineManager.currentSO_Dialogues == null)
+        if (StorylineManager.currentSO_Dialogues == null && !StorylineManager.paused)
         {
             OnCloseCharacterDialogueUI();
+            return;
+        }
+        else if (StorylineManager.currentSO_Dialogues == null)
+        {
             return;
         }
        
@@ -608,13 +613,21 @@ public class CharacterDialogueUI : MonoBehaviour
                     }
                     else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 1)
                     {
-                        Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
-
-
-                        //Set Choice Damage
-                        HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-                        StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
-                        StorylineManager.currentDialogueIndex = 0;
+                        if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isImmediateGoPhone)
+                        {
+                            if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
+                            {
+                                StorylineManager.LoadPhone();
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
+                            //Set Choice Damage
+                            HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                            StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                            StorylineManager.currentDialogueIndex = 0;
+                        }
                     }
                     else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
                     {

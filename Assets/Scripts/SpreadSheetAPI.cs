@@ -265,6 +265,13 @@ public class SpreadSheetAPI : MonoBehaviour
             newChoiceData.healthModifier = healthModifier;
             newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
             newChoiceData.effectReferenceName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectReferecedNameColumnPattern);
+            newChoiceData.isImmediateGoPhone = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.isImmediateGoPhoneColumnPattern));
+            if (newChoiceData.words == "Uh")
+            {
+                Debug.Log("BOOL newChoiceData.isImmediateGoPhone: " + newChoiceData.isImmediateGoPhone);
+            }
+          
+            newChoiceData.isAutomaticEnabledColumnPattern = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceConditionRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticEnabledColumnPattern));
             Debug.Log(newChoiceData.effectID + " " + newChoiceData.effectReferenceName);
             if (!string.IsNullOrEmpty(newChoiceData.effectID))
             {
