@@ -7465,7 +7465,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7081561208829843220}
   - {fileID: 4664165387898248213}
@@ -7523,7 +7523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Opacity: 1
-  _lastOpacity: 0
+  _lastOpacity: 1
   _isOverwrittenModelMultiplyColors: 0
   _isOverwrittenModelScreenColors: 0
   _modelMultiplyColor: {r: 0, g: 0, b: 0, a: 0}
@@ -7634,8 +7634,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_Character: {fileID: 11400000, guid: 44f703acc99aeb54886085a120e09ee1, type: 2}
-  charAnim: {fileID: 0}
-  expressionController: {fileID: 0}
+  charAnim: {fileID: 4711534965756630297}
+  expressionController: {fileID: 7891161009984419943}
 --- !u!1 &8797517729268931710
 GameObject:
   m_ObjectHideFlags: 0

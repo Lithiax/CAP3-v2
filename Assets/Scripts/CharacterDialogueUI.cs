@@ -469,7 +469,6 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         if (StorylineManager.currentSO_Dialogues == null)
         {
-            
             OnCloseCharacterDialogueUI();
             return;
         }
@@ -614,23 +613,8 @@ public class CharacterDialogueUI : MonoBehaviour
 
                         //Set Choice Damage
                         HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-                        if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue != null)
-                        {
-                            StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
-                            StorylineManager.currentDialogueIndex = 0;
-                        }
-                        else
-                        {
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isIsImmediateGoPhone)
-                            {
-                                if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != null)
-                                {
-                                    StorylineManager.LoadAsyncFindr();
-                                }
-                            }
-                                
-                        }
-                  
+                        StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                        StorylineManager.currentDialogueIndex = 0;
                     }
                     else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
                     {

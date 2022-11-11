@@ -393,7 +393,6 @@ public class CharactersUI : MonoBehaviour
                         if (StorylineManager.cueCharacter.collisionPrefab != null)
                         {
                             GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
-                            Debug.Log("COLLISION SHUD BE LOADING");
                         }
                     }
                 }

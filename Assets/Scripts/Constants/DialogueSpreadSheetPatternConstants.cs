@@ -62,7 +62,6 @@ public class DialogueSpreadSheetPatternConstants
     public const int healthModifierColumnPattern = 3;
     public const int effectIDColumnPattern = 4;
     public const int effectReferecedNameColumnPattern = 5;
-    public const int isImmediateGoPhoneColumnPattern = 6;
 
     public const int isAutomaticEnabledColumnPattern = 0;
 
