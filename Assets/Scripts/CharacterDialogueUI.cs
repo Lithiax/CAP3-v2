@@ -468,13 +468,14 @@ public class CharacterDialogueUI : MonoBehaviour
             return;
 
         }
-        if (StorylineManager.currentSO_Dialogues == null && !StorylineManager.paused)
+        if (StorylineManager.currentSO_Dialogues == null && StorylineManager.paused)
         {
-            OnCloseCharacterDialogueUI();
+ 
             return;
         }
-        else if (StorylineManager.currentSO_Dialogues == null)
+        else if (StorylineManager.currentSO_Dialogues == null && !StorylineManager.paused)
         {
+            OnCloseCharacterDialogueUI();
             return;
         }
        
