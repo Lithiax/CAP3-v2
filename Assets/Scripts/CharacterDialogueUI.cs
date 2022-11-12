@@ -78,6 +78,13 @@ public class CharacterDialogueUI : MonoBehaviour
 
     bool popUp = false; 
 
+    IEnumerator Cd()
+    {
+        yield return new WaitForSeconds(5f);
+        Debug.Log("CD ENDED");
+        nextDialogueButton.SetActive(true);
+        popUp = true;
+    }
     private void Awake()
     {
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
@@ -151,8 +158,8 @@ public class CharacterDialogueUI : MonoBehaviour
     public void popuptest(SO_Dialogues p_currentChoiceData)
     {
         p_currentChoiceDataTest = p_currentChoiceData;
-        nextDialogueButton.SetActive(true);
-        popUp = true;
+
+        StartCoroutine(Cd());
     }
 
 
