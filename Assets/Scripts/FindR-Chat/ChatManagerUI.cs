@@ -149,6 +149,14 @@ public class ChatManagerUI : MonoBehaviour
         ShowResponseBox();
     }
 
+    float SetWaitTime(float length)
+    {
+        int rand = UnityEngine.Random.Range(-30, 30);
+        float CPM = 650 + rand;
+
+        return ((length / CPM) * 60);
+    }
+
     //NOTE: This is only used for NEW chats
     IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
@@ -168,27 +176,44 @@ public class ChatManagerUI : MonoBehaviour
                 parent.SingleResponseChat = null;
             }
 
-            float waitTime = UnityEngine.Random.Range(0.5f, 2f);
-
-            GameObject chatObj = SpawnChatBubble(chat, parent);
-
-            parent.OnChatSpawned(chat, chatObj, chat.chatText);
-
-
-            chatObj.SetActive(parent.isToggled);
+            float waitTime = SetWaitTime(chat.chatText.Length);
             
+            GameObject chatObj = SpawnChatBubble(chat, parent, !chat.isUser);
+            chatObj.SetActive(parent.isToggled);
+            parent.OnChatSpawned(chat, chatObj);
+
             if (parent.isToggled)
             {
                 parent.ResetNotif();
-                ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
+                StartCoroutine(RebuildUI());
+
+                StartCoroutine(ScrollDown());
+            }
+
+
+            if (chat.isUser)
+            {
+                waitTime = 1f;
+                yield return new WaitForSeconds(waitTime);
+                continue;
+            }
+            Debug.Log(waitTime);
+            yield return new WaitForSeconds(waitTime);
+
+            parent.SetLastMessageText(chat.chatText);
+
+            if (parent.isToggled)
+            {
+                parent.ResetNotif();
                 StartCoroutine(RebuildUI());
 
                 StartCoroutine(ScrollDown());
             }
             else if (!chat.isUser)
                 parent.SetNotif();
-        
-            yield return new WaitForSeconds(1f);
+
+            ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
+            chatText.ShowText();
         }
 
         parent.currentChatComplete = true;
@@ -211,20 +236,19 @@ public class ChatManagerUI : MonoBehaviour
 
     public void RebuildAfterSpawning()
     {
-        return;
         StartCoroutine(RebuildUI());
 
         StartCoroutine(ScrollDown());
     }
 
-    public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent)
+    public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent, bool isNew = false)
     {
         GameObject chatBubble = GameObject.Instantiate(chatPrefab, chatParent.transform);
         chatBubble.SetActive(false);
         ChatBubbleUI chatText = chatBubble.GetComponent<ChatBubbleUI>();
         allChatBubbles.Add(chatText);
 
-        chatText.SetUpChat(parent, data);
+        chatText.SetUpChat(parent, data, isNew);
 
         return chatBubble;
     }

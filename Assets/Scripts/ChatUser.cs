@@ -228,12 +228,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         notifNum = 0;
     }
 
-    public void OnChatSpawned(ChatBubble chat, GameObject spawnedObj, string text)
+    public void OnChatSpawned(ChatBubble chat, GameObject spawnedObj)
     {
         //chatsObj.Add(spawnedObj);
         chatsObj.Add(spawnedObj);
         ChatData.ChatBubbles.Add(chat);
         PreviousChat = chat;
+    }
+
+    public void SetLastMessageText(string text)
+    {
         lastMessageText.text = text;
     }
 

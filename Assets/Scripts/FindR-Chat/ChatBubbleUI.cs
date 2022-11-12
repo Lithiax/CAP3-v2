@@ -8,6 +8,8 @@ public class ChatBubbleUI : MonoBehaviour
 {
     [HideInInspector] public ChatUser ChatUserParent;
     [SerializeField] TextMeshProUGUI chatText;
+    [SerializeField] GameObject chatTextObj;
+    [SerializeField] GameObject waitChatObj;
     [SerializeField] HorizontalLayoutGroup chatLayoutGroup;
     [SerializeField] VerticalLayoutGroup anchorLayoutGroup;
     public ContentSizeFitter andchorFitter;
@@ -21,15 +23,54 @@ public class ChatBubbleUI : MonoBehaviour
     [SerializeField] GameObject ProfileNameObj;
     [SerializeField] TextMeshProUGUI ProfileName;
 
+
+    float waitTime = 0.5f;
     Vector2 OriginalImageSize;
     private void Awake()
     {
         OriginalImageSize = ProfileImage.rectTransform.sizeDelta;
     }
-    public void SetUpChat(ChatUser parent, ChatBubble data)
+    public void SetUpChat(ChatUser parent, ChatBubble data, bool isNew)
     {
-        chatText.text = data.chatText;
+        SetUI(parent, data);
 
+        if (isNew)
+        {
+            chatTextObj.SetActive(false);
+            waitChatObj.SetActive(true);
+        }
+
+        chatText.text = data.chatText;
+    }
+
+    public void ShowText()
+    {
+        chatTextObj.SetActive(true);
+        waitChatObj.SetActive(false);
+    }
+
+    void SetTyping()
+    {
+        StartCoroutine(IsTypingWait());
+    }
+    IEnumerator IsTypingWait()
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        chatTextObj.SetActive(true);
+        waitChatObj.SetActive(false);
+    }
+
+    void SetWaitTime(int length)
+    {
+        int rand = Random.Range(-30, 30);
+        int CPM = 350 + rand;
+
+        waitTime = (length / CPM) * 60;
+    }
+
+    void SetUI(ChatUser parent, ChatBubble data)
+    {
         if (!data.isUser)
         {
             ProfileImage.sprite = parent.ChatUserSO.profileImage;
