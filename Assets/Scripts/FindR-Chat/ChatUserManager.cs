@@ -56,7 +56,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     {
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
-            Debug.Log(s);
+            Debug.Log("Active Effects: " + s);
         }
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();

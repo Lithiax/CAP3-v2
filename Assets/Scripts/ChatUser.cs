@@ -177,6 +177,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
                 DialogueTree.SetDialogueTree(nextContainer);
                 //TEMP TEMP CHANGE IF NECESSARY
+
+                Debug.Log("Removing Effect: " + s);
                 DialogueSpreadSheetPatternConstants.effects.Remove(s);
                 break;
             }
