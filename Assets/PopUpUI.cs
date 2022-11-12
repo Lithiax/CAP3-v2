@@ -80,7 +80,7 @@ public class PopUpUI : MonoBehaviour
         //Expand
         var fadeInSequence = DOTween.Sequence()
         .Append(detailedFrameRectTransform.DOSizeDelta(targetSize, avatarSizeTime));
-        fadeInSequence.Join(detailedContentText.DOFade(1, avatarFadeTime));
+        fadeInSequence.Join(detailedContentText.DOFade(1, 1.5f));
         fadeInSequence.Play();
         //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }

@@ -30022,7 +30022,7 @@ MonoBehaviour:
   avatarFadeTime: 1
   avatarDelayTime: 1
   wordDelayTime: 0.2
-  wordFadeTime: 3
+  wordFadeTime: 0.8
   avatarSizeTime: 1
 --- !u!223 &1088246313
 Canvas:
