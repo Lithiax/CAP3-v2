@@ -53,6 +53,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     public ChatUserData ChatData { get; private set; }
     GameObject Divider;
+    GameObject newMatchPanel;
     RectTransform panelRectTransform;
     public bool isToggled { get; private set; }
 
@@ -125,6 +126,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         {
             onlineIndicator.color = offlineColor;
             chatManager.ReplyClicked(0);
+
+            if (chatsObj.Count <= 0)
+            {
+                newMatchPanel = chatManager.SpawnNewMatchPanel(data);
+            }
+
             return;
         }
 
@@ -261,12 +268,13 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.ActivateChat(chatsObj, tog);
 
         Divider?.SetActive(tog);
+        newMatchPanel?.SetActive(tog);
 
         toggle.image.color = tog ? toggleActivatedColor : toggleUnactiveColor;
 
 
         if (!tog) return;
-        if (DialogueTree.DialogueTree == null) return;
+
         chatManager.HandleResponse(this, DialogueTree);
     }
 

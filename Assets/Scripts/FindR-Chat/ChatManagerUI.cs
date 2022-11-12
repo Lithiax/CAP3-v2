@@ -14,6 +14,7 @@ public class ChatManagerUI : MonoBehaviour
     [SerializeField] RectTransform chatParentTransform;
     [SerializeField] GameObject chatPrefab;
     [SerializeField] GameObject dividerPrefab;
+    [SerializeField] GameObject newMatchPanelPrefab;
     [HideInInspector] public List<ChatUser> chatUsers;
 
     [Header("Parent UI Transforms")]
@@ -84,6 +85,13 @@ public class ChatManagerUI : MonoBehaviour
         HideResponse();
     }
 
+    public GameObject SpawnNewMatchPanel(ChatUserSO userData)
+    {
+        GameObject g =  GameObject.Instantiate(newMatchPanelPrefab.gameObject, chatParentTransform);
+        g.GetComponent<NewMatchPanelUI>().SetUp(userData);
+        return g;
+    }
+
     public GameObject SpawnDivider()
     {
         return GameObject.Instantiate(dividerPrefab, chatParentTransform);
@@ -119,6 +127,7 @@ public class ChatManagerUI : MonoBehaviour
             chat.SetActive(con);
         }
 
+
         ChatBubbleUI chatText = chats[chats.Count - 1].GetComponent<ChatBubbleUI>();
         StartCoroutine(RebuildUI());
 
@@ -152,7 +161,7 @@ public class ChatManagerUI : MonoBehaviour
     float SetWaitTime(float length)
     {
         int rand = UnityEngine.Random.Range(-30, 30);
-        float CPM = 650 + rand;
+        float CPM = 1050f + rand;
 
         return ((length / CPM) * 60);
     }
@@ -238,7 +247,7 @@ public class ChatManagerUI : MonoBehaviour
     {
         StartCoroutine(RebuildUI());
 
-        StartCoroutine(ScrollDown());
+        StartCoroutine(ScrollDown(true));
     }
 
     public GameObject SpawnChatBubble(ChatBubble data, ChatUser parent, bool isNew = false)
@@ -264,7 +273,9 @@ public class ChatManagerUI : MonoBehaviour
     IEnumerator ScrollDown(bool instant = false)
     {
         yield return new WaitForSeconds(0.1f);
-        
+
+        Debug.Log("Scroll Instant: " + instant);
+
         if (instant)
         {
             scrollBar.value = 0;
@@ -283,11 +294,15 @@ public class ChatManagerUI : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(chatParentTransform);
         //scrollAreaSizeFitter.enabled = true;
         //chatText.andchorFitter.enabled = false;
-        StartCoroutine(ScrollDown());
     }
 
     public void HandleResponse(ChatUser parent, DialogueGraphAPI Tree)
     {
+        if (Tree.DialogueTree == null)
+        {
+            HideResponse(true);
+            return;
+        }
         if (parent.SingleResponseChat != null)
         {
             Debug.Log("Single Response");
@@ -423,7 +438,7 @@ public class ChatManagerUI : MonoBehaviour
         //replyButtonsParent.SetActive(true);
     }
 
-    void HideResponse()
+    void HideResponse(bool instant = false)
     {
         replyButtonsParent.SetActive(false);
 
@@ -445,7 +460,7 @@ public class ChatManagerUI : MonoBehaviour
             })
                 .OnComplete(() =>
             {
-                StartCoroutine(ScrollDown());
+                //StartCoroutine(ScrollDown());
                 ReplyText.SetActive(true);
             });
             return;
@@ -453,6 +468,6 @@ public class ChatManagerUI : MonoBehaviour
         else
             chatElements.offsetMin = oldchatElementsTransform;
 
-        StartCoroutine(ScrollDown());
+        StartCoroutine(ScrollDown(true));
     }
 }

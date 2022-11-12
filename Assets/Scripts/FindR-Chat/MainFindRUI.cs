@@ -10,6 +10,7 @@ public class MainFindRUI : MonoBehaviour
     [SerializeField] List<Button> Buttons;
     [SerializeField] Color buttonActivatedColor;
     [SerializeField] Color oldButtonColor;
+    [SerializeField] Scrollbar matchesScroll;
 
     public void SwitchPanels(GameObject selectedPanel)
     {
@@ -19,6 +20,14 @@ public class MainFindRUI : MonoBehaviour
                 panel.SetActive(true);
             else
                 panel.SetActive(false);
+        }
+    }
+
+    public void ActivateChat()
+    {
+        foreach (GameObject panel in Panels)
+        {
+            panel.SetActive(false);
         }
     }
 
@@ -44,5 +53,10 @@ public class MainFindRUI : MonoBehaviour
             b.image.color = oldButtonColor;
             //b.GetComponentInChildren<TextMeshProUGUI>().color = oldButtonColor;
         }
+    }
+
+    public void ResetScroll()
+    {
+        matchesScroll.value = 1;
     }
 }
