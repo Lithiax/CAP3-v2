@@ -45,9 +45,15 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
 
+    [Header("Online Indicator")]
+    [SerializeField] Image onlineIndicator;
+    [SerializeField] Color offlineColor;
+    [SerializeField] Color onlineColor;
+
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     public ChatUserData ChatData { get; private set; }
     GameObject Divider;
+    RectTransform panelRectTransform;
     public bool isToggled { get; private set; }
 
     int notifNum = 0;
@@ -55,6 +61,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     {
         toggle = GetComponent<Toggle>();
         DialogueTree = GetComponent<DialogueGraphAPI>();
+        panelRectTransform = GetComponent<RectTransform>();
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -116,10 +123,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         if (DialogueTree.DialogueTree == null)
         {
+            onlineIndicator.color = offlineColor;
             chatManager.ReplyClicked(0);
             return;
         }
 
+        onlineIndicator.color = onlineColor;
         Divider = chatManager.SpawnDivider();
         chatManager.StartSpawningChat(this, DialogueTree);
     }
@@ -239,6 +248,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public void SetLastMessageText(string text)
     {
         lastMessageText.text = text;
+        panelRectTransform.SetAsFirstSibling();
     }
 
     public void SwitchChat(bool tog)

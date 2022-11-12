@@ -19,6 +19,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     //To set a new user, just add it in the static script
     [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
+    List<GameObject> SpawnedUserObjects = new List<GameObject>();
     List<int> IDs = new List<int>();
 
     private void Awake()

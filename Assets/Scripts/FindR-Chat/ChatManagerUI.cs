@@ -122,7 +122,7 @@ public class ChatManagerUI : MonoBehaviour
         ChatBubbleUI chatText = chats[chats.Count - 1].GetComponent<ChatBubbleUI>();
         StartCoroutine(RebuildUI());
 
-        StartCoroutine(ScrollDown());
+        StartCoroutine(ScrollDown(true));
     }
 
     //Dont use for now
@@ -261,10 +261,15 @@ public class ChatManagerUI : MonoBehaviour
         return chatBubble;
     }
 
-    IEnumerator ScrollDown()
+    IEnumerator ScrollDown(bool instant = false)
     {
         yield return new WaitForSeconds(0.1f);
-        //scrollBar.value = 0;
+        
+        if (instant)
+        {
+            scrollBar.value = 0;
+            yield break;
+        }
 
         DOVirtual.Float(scrollBar.value, 0, 0.1f, x =>
         {
