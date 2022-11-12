@@ -84,6 +84,11 @@ public class ChoicesUI : MonoBehaviour
         StorylineManager.currentDialogueIndex = 0;
         if (p_currentChoiceData.effectID != "")
         {
+            Debug.Log(p_currentChoiceData.effectID);
+            for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+            {
+                Debug.Log(DialogueSpreadSheetPatternConstants.effects[i]);
+            }
             DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
         }
 
