@@ -459,6 +459,10 @@ public class SpreadSheetAPI : MonoBehaviour
     void TranslateCodeToReplacements()
     {
         Debug.Log("TRANSLATING ALL SHEETS CODES TO REPLACEMENT");
+        CodeReplacement comma = new CodeReplacement();
+        comma.code = "<comma>";
+        comma.replacement = ",";
+        codeReplacements.Add(comma);
         for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < so_SpreadSheets.Count; localSpreadSheetIndex++)
         {
             for (int localSheetIndex = 0; localSheetIndex < so_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
@@ -472,7 +476,22 @@ public class SpreadSheetAPI : MonoBehaviour
                     {
                         for (int x = 0; x < codeReplacements.Count; x++)
                         {
-                            currentSheetSODialogue.dialogues[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                            currentSheetSODialogue.dialogues[i].words = currentSheetSODialogue.dialogues[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                            EditorUtility.SetDirty(currentSheetSODialogue);
+                        }
+
+                    }
+                    for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
+                    {
+                        for (int x = 0; x < codeReplacements.Count; x++)
+                        {
+                            if (codeReplacements[x].code == "<comma>")
+                            {
+                                Debug.Log("COMMA " + codeReplacements[x].replacement);
+                            
+                            }
+                            Debug.Log("COMMA " + currentSheetSODialogue.choiceDatas[i].words);
+                            currentSheetSODialogue.choiceDatas[i].words = currentSheetSODialogue.choiceDatas[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
                             EditorUtility.SetDirty(currentSheetSODialogue);
                         }
 

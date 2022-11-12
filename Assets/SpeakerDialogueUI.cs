@@ -123,10 +123,6 @@ public class SpeakerDialogueUI : MonoBehaviour
                 StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
             }
 
-            //smallSpeakerBox.SetActive(!smallSpeakerBox.activeSelf);
-            //smallDialogueBox.SetActive(!smallDialogueBox.activeSelf);
-            //bigSpeakerBox.SetActive(!bigSpeakerBox.activeSelf);
-            //bigDialogueBox.SetActive(!bigDialogueBox.activeSelf);
             extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
             if (characterDialogueUI.runningCoroutines > 0 && !CharacterDialogueUI.isSkipping)
             {
