@@ -40,34 +40,12 @@ public class CharactersUI : MonoBehaviour
         onUpdateCharacterDatasEvent += UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping += Skip;
     }
-    //    CharacterDialogueUI.OnInspectingEvent += Toggle;
-    //    CharacterDialogueUI.OnDeinspectingEvent += Toggle;
-    //}
-    //void Toggle()
-    //{
-    //    frame.SetActive(!frame.activeSelf);
-    //}
+  
     void Skip()
     {
         for (int i = 0; i < characterDatas.Count; i++)
         {
-            ////Remove
-            //CharacterDialogueUI.savedCharacters.Remove(foundPreset);
-            //Destroy(foundPreset.gameObject);
-
-            ////add avatar
-            //for (int x = 0; x < CharacterDialogueUI.savedCharacters.Count; x++)
-            //{
-            //    if (CharacterDialogueUI.savedCharacters[x] is CharacterUI)
-            //    {
-            //        if (CharacterDialogueUI.savedCharacters[x].so_Character.avatar != null)
-            //        {
-            //            CharacterUI currentCharacterUI = CharacterDialogueUI.savedCharacters[x] as CharacterUI;
-            //            currentCharacterUI.avatarImage.color = new Color(1, 1, 1, 1);
-            //        }
-            //    }
-
-            //}
+    
             Character foundCharacter = FindPreset(characterDatas[i].character);
 
             //Tint
@@ -195,6 +173,21 @@ public class CharactersUI : MonoBehaviour
                     {
                         CharacterObject foundPreset = foundCharacter as CharacterObject;
                         foundPreset.transform.position = characterPresetDatas[i].avatarTransform.position;
+                        if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                        {
+                            if (foundPreset.so_Character == StorylineManager.cueCharacter)
+                            {
+                                if (StorylineManager.cueCharacter.collisionPrefab != null)
+                                {
+                                    if (live2DCollisionUIContainerTransform.childCount == 1)
+                                    {
+                                        live2DCollisionUIContainerTransform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = characterPresetDatas[i].avatarRectTransform.anchoredPosition;
+                                    
+                                    }
+
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -333,17 +326,16 @@ public class CharactersUI : MonoBehaviour
                     CharacterDialogueUI.savedCharacters.Remove(foundPreset);
                     //LIVE 2D
                     //Check if its the character thats talking
-                    if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                    
+                    if (p_charactersToBeRemoved[i] == StorylineManager.cueCharacter)
                     {
-                        if (p_charactersToBeRemoved[i] == StorylineManager.cueCharacter)
+                        for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
                         {
-                            for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
-                            {
-                                Debug.Log("DELETING RAD");
-                                Destroy(live2DCollisionUIContainerTransform.GetChild(i).gameObject);
-                            }
+                            Debug.Log("DELETING RAD");
+                            Destroy(live2DCollisionUIContainerTransform.GetChild(i).gameObject);
                         }
                     }
+                    
                     Destroy(foundPreset.gameObject);
                 }
 
@@ -356,26 +348,7 @@ public class CharactersUI : MonoBehaviour
 
     void AddAvatar(List<SO_Character> p_charactersToBeAdded)
     {
-        //Do functions to characters to be Added
-        //Debug.Log("-----ADDING " + isSkipping);
-        //if (CharacterDialogueUI.isSkipping)
-        //{
-        //    for (int i = 0; i < CharacterDialogueUI.savedCharacters.Count; i++)
-        //    {
-        //        if (CharacterDialogueUI.savedCharacters[i] is CharacterUI)
-        //        {
-        //            if (CharacterDialogueUI.savedCharacters[i].so_Character.avatar != null)
-        //            {
-        //                CharacterUI currentCharacterUI = CharacterDialogueUI.savedCharacters[i] as CharacterUI;
-        //                currentCharacterUI.avatarImage.color = new Color(1, 1, 1, 1);
-        //            }
-        //        }
-
-        //    }
-
-        //}
-        //else
-        //{
+    
         for (int i = 0; i < p_charactersToBeAdded.Count; i++)
         {
             Character newCharacter = null;
@@ -392,7 +365,11 @@ public class CharactersUI : MonoBehaviour
                     {
                         if (StorylineManager.cueCharacter.collisionPrefab != null)
                         {
-                            GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
+                            if (live2DCollisionUIContainerTransform.childCount == 0)
+                            {
+                                GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
+                            }
+                        
                         }
                     }
                 }

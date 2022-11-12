@@ -80,7 +80,7 @@ public class PopUpUI : MonoBehaviour
         //Expand
         var fadeInSequence = DOTween.Sequence()
         .Append(detailedFrameRectTransform.DOSizeDelta(targetSize, avatarSizeTime));
-        fadeInSequence.Join(detailedContentText.DOFade(1, avatarFadeTime));
+        fadeInSequence.Join(detailedContentText.DOFade(1, 1.5f));
         fadeInSequence.Play();
         //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
@@ -95,6 +95,8 @@ public class PopUpUI : MonoBehaviour
         fadeOutSequence.Join(detailedFrameRectTransform.DOSizeDelta(new Vector2(0,0), avatarSizeTime));
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
+        detailedTitleText.text = "";
+        detailedContentText.text = "";
         detailedFrameRectTransform.sizeDelta = defaultSize;
         detailedFrameRectTransform.anchoredPosition = defaultPosition;
         //var fadeeeSequence = DOTween.Sequence()

@@ -80,7 +80,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     IEnumerator Cd()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         Debug.Log("CD ENDED");
         nextDialogueButton.SetActive(true);
         popUp = true;
@@ -566,8 +566,10 @@ public class CharacterDialogueUI : MonoBehaviour
 
             }
 
+            Debug.Log("RARARA NO ");
             if (rarara)
             {
+                Debug.Log("RARARA");
                 CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
                 CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
               
