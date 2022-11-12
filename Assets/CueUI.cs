@@ -47,7 +47,7 @@ public class CueUI : MonoBehaviour
                 ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerRectTransform);
                 newChoiceUI.InitializeValues(p_choiceDatas[i].choiceData.words);
                 ChoiceData currentChoiceData = p_choiceDatas[i].choiceData;
-                if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                if (HealthUI.myDelegate.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
                 {
                     //Can be selected
                     newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
@@ -64,29 +64,7 @@ public class CueUI : MonoBehaviour
 
         }
     }
-    void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
-    {
-        choiceUIsContainer.SetActive(true);
-        for (int i = 0; i < p_choiceDatas.Count; i++)
-        {
-            ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerRectTransform);
-            newChoiceUI.InitializeValues(p_choiceDatas[i].words);
-            ChoiceData currentChoiceData = p_choiceDatas[i];
-            if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
-            {
-                //Can be selected
-                newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
-                LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
-            }
-            else
-            {
-                //Cant be selected
-                newChoiceUI.GetComponent<Button>().interactable = false;
-                newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
-            }
 
-        }
-    }
     public void ResetChoiceManager()
     {
         if (choiceUIsContainer.activeSelf)
