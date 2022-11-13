@@ -647,7 +647,11 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>")
                             {
-                                DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
+                                if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
+                                {
+                                    DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
+                                }
+                            
                             }
                             for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
                             {
