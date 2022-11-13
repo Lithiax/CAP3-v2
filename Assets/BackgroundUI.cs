@@ -14,6 +14,11 @@ public class BackgroundUI : MonoBehaviour
     {
         onSetBackgroundEvent += SetBackground;
     }
+
+    private void OnDestroy()
+    {
+        onSetBackgroundEvent -= SetBackground;
+    }
     void SetBackground(Sprite p_backgroundSprite)
     {
         if (!StorylineManager.sideDialogue)
