@@ -15,7 +15,12 @@ public class DialogueGraphAPI : MonoBehaviour
     public DialogueContainer DialogueTree { get; private set; }
     public DialogueTreeNode CurrentNode { get; private set; }
 
+
     List<DialogueTreeNode> Nodes = new List<DialogueTreeNode>();
+    public bool IsFirstNode(DialogueTreeNode node) 
+    { 
+        return node.BaseNodeData.NodeGUID == DialogueTree.NodeLinks.First(x => x.PortName == "Next").TargetNodeGuid; 
+    }
 
     public void SetDialogueTree(DialogueContainer tree)
     {

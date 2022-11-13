@@ -166,6 +166,15 @@ public class ChatManagerUI : MonoBehaviour
         return ((length / CPM) * 60);
     }
 
+    //SO BAD BUT ITS 5AM IDK
+    bool CheckIsUser(bool isFirstChat, bool isFirstNode)
+    {
+        if (isFirstNode && isFirstChat) return true;
+        if (!isFirstChat) return true;
+
+        return false;
+    }
+
     //NOTE: This is only used for NEW chats
     IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
@@ -173,7 +182,14 @@ public class ChatManagerUI : MonoBehaviour
 
         foreach (ChatBubble chat in ChatCollection.ChatData)
         {
-            if (chat.isUser && chat != ChatCollection.ChatData[0])
+            //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
+            //Check if tree is not the first node
+
+            Debug.Log("Check User: " + CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)));
+            Debug.Log("Is First Node: " + Tree.IsFirstNode(Tree.CurrentNode));
+
+            if (chat.isUser &&
+                CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)))
             {
                 parent.SingleResponseChat = chat;
                 OneResponseButton(chat, parent);

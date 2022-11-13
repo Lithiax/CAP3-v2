@@ -21,10 +21,13 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
     List<GameObject> SpawnedUserObjects = new List<GameObject>();
     List<int> IDs = new List<int>();
+    List<string> effectsToRemove = new List<string>();
 
     private void Awake()
     {
         Debug.Log("Awake");
+        //DEBUG Purposes
+        //DialogueSpreadSheetPatternConstants.effects.Add("<m1w4>");
         chatManager.InitializeTransforms();
 
         foreach (ChatUserData data in StaticUserData.ChatUserData)
@@ -50,6 +53,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             SpawnedUsers[0].toggle.Select();
         }
+
     }
 
     void GenerateUser(ChatUserSO data)
@@ -61,9 +65,26 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
+        UserComp.OnRemoveEffect += AddToEffectsRemoveLog;
+
         IDs.Add(data.ID);
 
         UserComp.Init(data, eventsManager, chatManager, toggleGroup);
+    }
+
+    public void AddToEffectsRemoveLog(string s)
+    {
+        effectsToRemove.Add(s);
+    }
+
+    private void OnDisable()
+    {
+        foreach(ChatUser user in SpawnedUsers)
+        {
+            user.OnRemoveEffect -= AddToEffectsRemoveLog;
+        }
+
+        DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
     }
 
     public void LoadData(GameData data)

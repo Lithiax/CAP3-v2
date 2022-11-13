@@ -58,6 +58,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public bool isToggled { get; private set; }
 
     int notifNum = 0;
+
+    public Action<string> OnRemoveEffect;
+
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
@@ -118,7 +121,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             LoadChatData(ChatData);
         }
 
-
         //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
         //currentCollection = initialChatCollection;
 
@@ -129,6 +131,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (DialogueTree.DialogueTree == null)
         {
             onlineIndicator.color = offlineColor;
+            panelRectTransform.SetAsLastSibling();
             chatManager.ReplyClicked(0);
 
             if (chatsObj.Count <= 0)
@@ -140,6 +143,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
 
         onlineIndicator.color = onlineColor;
+        panelRectTransform.SetAsFirstSibling();
         Divider = chatManager.SpawnDivider();
         chatManager.StartSpawningChat(this, DialogueTree);
     }
@@ -173,7 +177,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 DialogueTree.SetDialogueTree(nextContainer);
 
                 Debug.Log("Removing Effect: " + s);
-                DialogueSpreadSheetPatternConstants.effects.Remove(s);
+                OnRemoveEffect?.Invoke(s);
+
                 break;
             }
         }
@@ -193,10 +198,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 nextContainer = d;
 
                 DialogueTree.SetDialogueTree(nextContainer);
-                //TEMP TEMP CHANGE IF NECESSARY
 
                 Debug.Log("Removing Effect: " + s);
-                DialogueSpreadSheetPatternConstants.effects.Remove(s);
+                OnRemoveEffect?.Invoke(s);
+
                 break;
             }
         }
@@ -213,9 +218,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public void SetNewEventTree()
     {
         DialogueContainer nextContainer = null;
-
-        //DEBUG Purposes
-        //DialogueSpreadSheetPatternConstants.effects.Add("Drunk");
 
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
