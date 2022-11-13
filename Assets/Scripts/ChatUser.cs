@@ -223,7 +223,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         if (nextContainer == null)
         {
-            Debug.LogError("NO EVENT FOUND!");
+            Debug.Log("NO EVENT FOUND!");
             return;
         }
         chatManager.OnCurrentNodeEnded += SetNextTree;
