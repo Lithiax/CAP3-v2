@@ -259,7 +259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &315292311
 RectTransform:
   m_ObjectHideFlags: 0
@@ -655,9 +655,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Tester, Assembly-CSharp
-        m_MethodName: ChangeScene
+      - m_Target: {fileID: 1354017432}
+        m_TargetAssemblyTypeName: SpreadSheetAPI, Assembly-CSharp
+        m_MethodName: ConnectAll
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -880,16 +880,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_SpreadSheets:
+  - {fileID: 11400000, guid: 6dec438529659874889530c44f20c4fc, type: 2}
+  allso_SpreadSheets:
   - {fileID: 11400000, guid: 99489bb64cc059d49b3559efe7f8dab2, type: 2}
   - {fileID: 11400000, guid: 0f0038c0b16b35f4483b82bab1a9ab0d, type: 2}
   - {fileID: 11400000, guid: d29ad49be1efee54ba5580f42ce14de7, type: 2}
   - {fileID: 11400000, guid: 9d65d668cba871049bf71889db20e6ab, type: 2}
   - {fileID: 11400000, guid: 6cf9906c8044df440b96659f91ab2506, type: 2}
-  - {fileID: 11400000, guid: ad9af4b4f41110441820350b9e12b0e0, type: 2}
   - {fileID: 11400000, guid: 76dc009b7b285b64ab64ecc9e430dcfb, type: 2}
+  - {fileID: 11400000, guid: ad9af4b4f41110441820350b9e12b0e0, type: 2}
+  - {fileID: 11400000, guid: 2eb9a3b988cade94491002160f0358f0, type: 2}
+  - {fileID: 11400000, guid: 721cdf91d85949148b717156fc2220d7, type: 2}
+  - {fileID: 11400000, guid: 1cbd89cb1eb6da84ca8623140c862344, type: 2}
+  - {fileID: 11400000, guid: 6dec438529659874889530c44f20c4fc, type: 2}
   apiKey: AIzaSyC8PPNhhTSLFqpcEUZZrGwTyl1m4e9xU-Q
   debuggerSheetRows: []
   codeReplacements: []
+  counter: 0
 --- !u!1 &1433164237
 GameObject:
   m_ObjectHideFlags: 0

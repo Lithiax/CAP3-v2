@@ -23,7 +23,7 @@ public class SpreadSheetAPI : MonoBehaviour
     //"https://sheets.googleapis.com/v4/spreadsheets/" + spreadSheetID + "/values/" + p_sheetName + "?key=" + apiKey);
 
     [SerializeField] List<SO_SpreadSheet> so_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
-
+    [SerializeField] List<SO_SpreadSheet> allso_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] string apiKey = "AIzaSyC8PPNhhTSLFqpcEUZZrGwTyl1m4e9xU-Q";
 
     private int currentSpreadSheetIndex;
@@ -36,6 +36,8 @@ public class SpreadSheetAPI : MonoBehaviour
     private List<int> backgroundIndexInSheet = new List<int>();
     private List<int> choiceIndexInSheet = new List<int>();
     public  List<CodeReplacement> codeReplacements = new List<CodeReplacement>();
+
+    public int counter = 0;
     public void Awake()
     {
         DialogueSpreadSheetPatternConstants.dialogueName = DialogueSpreadSheetPatternConstants.dialogueName.ToLower();
@@ -46,6 +48,17 @@ public class SpreadSheetAPI : MonoBehaviour
 
     public IEnumerator Co_LoadValues(string p_spreadSheetName, string p_spreadSheetID, string p_sheetName)
     {
+        //if (counter < 10)
+        //{
+        //    counter++;
+        //}
+        //else
+        //{
+        
+        //    yield return new WaitForSeconds(8f);
+        //    counter = 0;
+        //}
+ 
         string rawJson = "";
 
         UnityWebRequest www = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/" + p_spreadSheetID + "/values/" + p_sheetName + "?key=" + apiKey);
@@ -429,6 +442,13 @@ public class SpreadSheetAPI : MonoBehaviour
         return isFlipped;
     }
 
+    public void ConnectAll()
+    {
+
+        TranslateCodeToReplacements();
+        ConnectAllSheetsBranchDialogue();
+    }
+
     public void SaveNextSheet()
     {
         currentSheetIndex++;
@@ -450,8 +470,8 @@ public class SpreadSheetAPI : MonoBehaviour
             {
                 Debug.Log("ALL SHEETS LOADED");
        
-                TranslateCodeToReplacements();
-                ConnectAllSheetsBranchDialogue();
+                //TranslateCodeToReplacements();
+                //ConnectAllSheetsBranchDialogue();
             }
         }
     }
@@ -463,15 +483,15 @@ public class SpreadSheetAPI : MonoBehaviour
         comma.code = "<comma>";
         comma.replacement = ",";
         codeReplacements.Add(comma);
-        for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < so_SpreadSheets.Count; localSpreadSheetIndex++)
+        for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < allso_SpreadSheets.Count; localSpreadSheetIndex++)
         {
-            for (int localSheetIndex = 0; localSheetIndex < so_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
+            for (int localSheetIndex = 0; localSheetIndex < allso_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
             {
-                string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + so_SpreadSheets[localSpreadSheetIndex].name + "/";
-                if (so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex] != "Interactible Choices")
+                string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + allso_SpreadSheets[localSpreadSheetIndex].name + "/";
+                if (allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex] != "Interactible Choices")
                 {
-                    Debug.Log(so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
-                    SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     for (int i = 0; i < currentSheetSODialogue.dialogues.Count; i++)
                     {
                         for (int x = 0; x < codeReplacements.Count; x++)
@@ -506,18 +526,18 @@ public class SpreadSheetAPI : MonoBehaviour
     void ConnectAllSheetsBranchDialogue()
     {
         Debug.Log("CONNECTING ALL SHEETS BRANCH DIALOGUE");
-        for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < so_SpreadSheets.Count; localSpreadSheetIndex++)
+        for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < allso_SpreadSheets.Count; localSpreadSheetIndex++)
         {
-            for (int localSheetIndex = 0; localSheetIndex < so_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
+            for (int localSheetIndex = 0; localSheetIndex < allso_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
             {
-                string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + so_SpreadSheets[localSpreadSheetIndex].name + "/";
-                if (so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex] != "Interactible Choices")
+                string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + allso_SpreadSheets[localSpreadSheetIndex].name + "/";
+                if (allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex] != "Interactible Choices")
                 {
-                    Debug.Log(so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
-                    SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     {
-                        Debug.Log(so_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
+                        Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
                         if (currentSheetSODialogue.choiceDatas[i].effectID == "<VN>")
                         {
                             string[] sheetDivided = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
@@ -528,7 +548,7 @@ public class SpreadSheetAPI : MonoBehaviour
                         {
                             if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].branchDialogueName))
                             {
-                                currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
+                                currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
                             }
                                 
                         }
@@ -538,11 +558,11 @@ public class SpreadSheetAPI : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
-                    SO_InteractibleChoices currentSheetSODialogue = Resources.Load<SO_InteractibleChoices>(spreadSheetFileLocation + so_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    SO_InteractibleChoices currentSheetSODialogue = Resources.Load<SO_InteractibleChoices>(spreadSheetFileLocation + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     //for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     //{
-                        Debug.Log(so_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
+                        Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
                         //GO BACK
                         for (int x = 0; x < CueType.GetValues(typeof(CueType)).Length - 1; x++)
                         {
@@ -551,7 +571,7 @@ public class SpreadSheetAPI : MonoBehaviour
                             Debug.Log("ddd" + target + " - "+ selectedChoiceDatas.Count);
                             for (int w =0; w < selectedChoiceDatas.Count;w++)
                             {
-                                selectedChoiceDatas[w].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name, selectedChoiceDatas[w].branchDialogueName);
+                                selectedChoiceDatas[w].branchDialogue = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, selectedChoiceDatas[w].branchDialogueName);
                             }
                      
                         }

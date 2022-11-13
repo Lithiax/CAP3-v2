@@ -34,6 +34,14 @@ public class ActionUIs : MonoBehaviour
         onExitEvent += ClosedUI;
         onPointClickEvent += PointClick;
     }
+
+    private void OnDestroy()
+    {
+        CueUI.onChoiceChosenEvent -= ClosedUIButton;
+        onEnterEvent -= Entered;
+        onExitEvent -= ClosedUI;
+        onPointClickEvent -= PointClick;
+    }
     CueUIPresetData GetCueUIPresetData(CueType p_cueType)
     {
 
