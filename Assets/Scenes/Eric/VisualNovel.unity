@@ -29958,7 +29958,7 @@ MonoBehaviour:
   defaultPosition: {x: 460, y: 0}
   targetPosition: {x: 0, y: -300}
   defaultSize: {x: 460, y: 95}
-  targetSize: {x: 580, y: 170}
+  targetSize: {x: 580, y: 200}
   avatarMoveTime: 1
   avatarFadeTime: 1
   avatarDelayTime: 1
@@ -55872,7 +55872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2116774069
 RectTransform:
   m_ObjectHideFlags: 0

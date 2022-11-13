@@ -238,7 +238,7 @@ public class SpreadSheetAPI : MonoBehaviour
             
             }
          
-            SetChoice(p_soDialogue.GetChoiceData(target), choiceIndexInSheet);
+            SetChoice(p_soDialogue,p_soDialogue.GetChoiceData(target), choiceIndexInSheet);
             choiceIndexInSheet.Clear();
   
         }
@@ -246,7 +246,7 @@ public class SpreadSheetAPI : MonoBehaviour
         SaveNextSheet();
 
     }
-    void SetChoice(List<ChoiceData> p_choiceDatas, List<int> choiceIndexInSheet)
+    void SetChoice(ScriptableObject p_soDialogue,List<ChoiceData> p_choiceDatas, List<int> choiceIndexInSheet)
     {
         //Setting Choice
         for (int i = 0; i < choiceIndexInSheet.Count; i++)
@@ -280,10 +280,6 @@ public class SpreadSheetAPI : MonoBehaviour
             newChoiceData.effectID = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectIDColumnPattern);
             newChoiceData.effectReferenceName = GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.effectReferecedNameColumnPattern);
             newChoiceData.isImmediateGoPhone = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceRowPattern, DialogueSpreadSheetPatternConstants.isImmediateGoPhoneColumnPattern));
-            if (newChoiceData.words == "Uh")
-            {
-                Debug.Log("BOOL newChoiceData.isImmediateGoPhone: " + newChoiceData.isImmediateGoPhone);
-            }
           
             newChoiceData.isAutomaticEnabledColumnPattern = TranslateToBool(GetCellString(currentGeneratedChoiceIndex + DialogueSpreadSheetPatternConstants.choiceConditionRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticEnabledColumnPattern));
             Debug.Log(newChoiceData.effectID + " " + newChoiceData.effectReferenceName);
@@ -334,7 +330,7 @@ public class SpreadSheetAPI : MonoBehaviour
             }
             //}
 
-
+            EditorUtility.SetDirty(p_soDialogue);
 
         }
     }
@@ -433,7 +429,7 @@ public class SpreadSheetAPI : MonoBehaviour
         }
   
         //p_soDialogue.isAutomaticHealthEvaluation = TranslateToBool(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticHealthEvaluation));
-        SetChoice(p_soDialogue.choiceDatas, choiceIndexInSheet);
+        SetChoice(p_soDialogue,p_soDialogue.choiceDatas, choiceIndexInSheet);
         EditorUtility.SetDirty(p_soDialogue);
         SaveNextSheet();
   
@@ -513,7 +509,21 @@ public class SpreadSheetAPI : MonoBehaviour
                             
                             }
                             Debug.Log("COMMA " + currentSheetSODialogue.choiceDatas[i].words);
-                            currentSheetSODialogue.choiceDatas[i].words = currentSheetSODialogue.choiceDatas[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                            
+                            if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].words))
+                            {
+                                currentSheetSODialogue.choiceDatas[i].words = currentSheetSODialogue.choiceDatas[i].words.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                            }
+                            if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].popUpTitle))
+                            {
+                                currentSheetSODialogue.choiceDatas[i].popUpTitle = currentSheetSODialogue.choiceDatas[i].popUpTitle.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+
+                            }
+                            if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].popUpContent))
+                            {
+                                currentSheetSODialogue.choiceDatas[i].popUpContent = currentSheetSODialogue.choiceDatas[i].popUpContent.Replace(codeReplacements[x].code, codeReplacements[x].replacement);
+                            }
+                           
                             EditorUtility.SetDirty(currentSheetSODialogue);
                         }
 

@@ -223,6 +223,7 @@ public class CharacterDialogueUI : MonoBehaviour
         //Temporary
         if (visualnovel)
         {
+            Debug.Log("PLEASE FOR MY SAKE IT WORKED");
             visualnovel = false;
             OnOpenCharacterDialogueUI();
         }
@@ -493,6 +494,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
+   
         if (popUp)
         {
             Debug.Log("IT SHUD BE CLOSING");
@@ -685,21 +687,27 @@ public class CharacterDialogueUI : MonoBehaviour
                             Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
                             //Set Choice Damage
                             HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                         
+                
+                        
+                            StorylineManager.currentDialogueIndex = 0;
+                            Debug.Log("PLEASE : " + StorylineManager.currentSO_Dialogues.name + " - " + StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID);
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>")
+                            {
+                                Debug.Log("PLEASE FOR GOD SAKE WORK");
+                                visualnovel = true;
+                            }
+                            ChoiceData ch = StorylineManager.currentSO_Dialogues.choiceDatas[0];
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
                             {
                                 StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
                             }
-                
-                        
-                            StorylineManager.currentDialogueIndex = 0;
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>")
+
+                            if (ch.effectID == "<VN>" ||
+                                ch.effectID != "<VN>" &&
+                                ch.branchDialogueName == "<Phone>")
                             {
-                                visualnovel = true;
-                            }
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>" || 
-                                StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>" &&
-                                StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogueName == "<Phone>")
-                            {
+                                
                                 if (isEndTransitionEnabled)
                                 {
                                     TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);

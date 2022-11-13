@@ -30,6 +30,14 @@ public class ChoicesUI : MonoBehaviour
     }
     void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
     {
+        if (choiceUIsContainer.activeSelf)
+        {
+            for (int i = 0; i < choiceUIsContainerTransform.childCount; i++)
+            {
+                Destroy(choiceUIsContainerTransform.GetChild(i).gameObject);
+
+            }
+        }
         choiceUIsContainer.SetActive(true);
         for (int i = 0; i < p_choiceDatas.Count; i++)
         {
