@@ -90,7 +90,8 @@ public class CharacterDialogueUI : MonoBehaviour
 
     private void Awake()
     {
-        ActionUIs.onPointClickEvent += open;
+        ActionUIs.onEnterEvent += open;
+        //ActionUIs.onPointClickEvent += open;
         OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
         //EVENTS
@@ -103,35 +104,15 @@ public class CharacterDialogueUI : MonoBehaviour
         OnAddNewTransitionEvent += AddNewTransitionEvent;
         OnFinishTransitionEvent += FinishTransitionEvent;
         OnCheckIfSkippableEvent += CheckIfReady;
-        ChoicesUI.OnChoicesCreatedEvent += choicesCreated;
 
 
-    }
 
-    void choicesCreated()
-    {
-        Debug.Log("RRRRRRRRR  CLOSE");
-        if (cueBank)
-        {
-            Debug.Log("RRRRRRRRR       CLOSEEE");
-            ChoicesUI.OnChoicesForceCloseEvent.Invoke();
-        }
-    }
-    void open(ActionUI test)
-    {
-        cueBank = true;
-        nextDialogueButton.SetActive(false);
-    }
-
-    void close()
-    {
-        cueBank = false;
-        nextDialogueButton.SetActive(true);
     }
     private void OnDestroy()
     {
         //EVENTS
-        ActionUIs.onPointClickEvent -= open;
+        ActionUIs.onEnterEvent -= open;
+        //  ActionUIs.onPointClickEvent -= open;
         OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
         OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;
@@ -142,8 +123,30 @@ public class CharacterDialogueUI : MonoBehaviour
         OnAddNewTransitionEvent -= AddNewTransitionEvent;
         OnFinishTransitionEvent -= FinishTransitionEvent;
         OnCheckIfSkippableEvent -= CheckIfReady;
-        ChoicesUI.OnChoicesCreatedEvent -= choicesCreated;
+
     }
+
+
+    void open(ActionUI tes)
+    {
+      
+        nextDialogueButton.SetActive(false);
+        cueBank = true;
+    }
+
+    void close()
+    {
+        cueBank = false;
+        nextDialogueButton.SetActive(true);
+        //StartCoroutine(del());
+    }
+
+    IEnumerator del()
+    {
+        yield return new WaitForSeconds(1f);
+        nextDialogueButton.SetActive(true);
+    }
+  
     void AddNewTransitionEvent()
     {
         runningCoroutines++;
@@ -512,10 +515,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
-        if (cueBank)
-        {
-            return;
-        }
+        
         if (popUp)
         {
             Debug.Log("IT SHUD BE CLOSING");

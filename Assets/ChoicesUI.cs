@@ -13,39 +13,53 @@ public class ChoicesUI : MonoBehaviour
 
 
     public static Action<List<ChoiceData>> OnChoosingChoiceEvent;
-    public static Action OnChoicesCreatedEvent;
-         public static Action OnChoicesForceCloseEvent;
+    public GameObject cue;
 
+    List<ChoiceData> savedchoiceDatas = new List<ChoiceData> ();
+   
     private void Awake()
     {
+        //ActionUIs.onEnterEvent += ves;
         CharacterDialogueUI.OnInspectingEvent += open;
         CharacterDialogueUI.OnDeinspectingEvent += close;
-        OnChoicesForceCloseEvent += open;
+    
         choiceUIsContainerTransform = choiceUIsContainer.transform;
         choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
 
         OnChoosingChoiceEvent += Initialize;
         StorylineManager.OnLoadedEvent += ResetChoiceManager;
+
     }
+     
     void open()
     {
-        Debug.Log("RRRRRRRRRCLOSE");
+        Des();
         choiceUIsContainer.SetActive(false);
     }
 
     void close()
     {
-        choiceUIsContainer.SetActive(true);
+        for (int i = 0; i < savedchoiceDatas.Count; i++)
+        {
+            Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: " + savedchoiceDatas[i].words);
+        }
+        if (savedchoiceDatas.Count > 0)
+        {
+            CreateChoiceUIs(savedchoiceDatas);
+        }
+
+        //choiceUIsContainer.SetActive(true);
     }
     private void OnDestroy()
     {
-        OnChoicesForceCloseEvent -= open;
+     
         CharacterDialogueUI.OnInspectingEvent -= open;
         CharacterDialogueUI.OnDeinspectingEvent -= close;
         OnChoosingChoiceEvent -= Initialize;
         StorylineManager.OnLoadedEvent -= ResetChoiceManager;
     }
-    void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
+  
+    void Des()
     {
         if (choiceUIsContainer.activeSelf)
         {
@@ -55,7 +69,17 @@ public class ChoicesUI : MonoBehaviour
 
             }
         }
+    }
+
+    //void CreateChoiceUIsss(List<ChoiceData> p_choiceDatas)
+    //{
+
+    //}
+    void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
+    {
+        Des();
         choiceUIsContainer.SetActive(true);
+        Debug.Log("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
         for (int i = 0; i < p_choiceDatas.Count; i++)
         {
             ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
@@ -102,11 +126,12 @@ public class ChoicesUI : MonoBehaviour
            
 
         }
-        OnChoicesCreatedEvent.Invoke();
+    
     }
 
     public void ChooseChoiceUI(ChoiceData p_currentChoiceData)
     {
+        savedchoiceDatas.Clear();
         StorylineManager.currentDialogueIndex = 0;
         if (p_currentChoiceData.effectID != "")
         {
@@ -162,12 +187,27 @@ public class ChoicesUI : MonoBehaviour
 
     public void Initialize(List<ChoiceData> p_choiceDatas)
     {
-        StartCoroutine(Delay( p_choiceDatas));
+        savedchoiceDatas.Clear();
+        for (int i = 0; i < p_choiceDatas.Count; i++)
+        {
+            savedchoiceDatas.Add(p_choiceDatas[i]);
+        }
+        Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+        
+            StartCoroutine(Delay(savedchoiceDatas));
+      
+
     }
     IEnumerator Delay(List<ChoiceData> p_choiceDatas)
     {
         yield return new WaitForSeconds(2f);
-        CreateChoiceUIs(p_choiceDatas);
+        if (!cue.activeSelf)
+        {
+            CreateChoiceUIs(p_choiceDatas);
+        }
+       
+    
     }
     void ResetChoiceManager()
     {

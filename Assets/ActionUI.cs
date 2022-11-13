@@ -18,7 +18,7 @@ public class ActionUI : MonoBehaviour
 {
     [SerializeField]
     public CueType cueType;
-
+    bool can = true;
 
     public void EnterFunction()
     {
@@ -32,6 +32,19 @@ public class ActionUI : MonoBehaviour
 
     public void PointClickFunction()
     {
-        ActionUIs.onPointClickEvent.Invoke(this);
+        if (can)
+        {
+            can = false;
+            StartCoroutine(cd());
+            ActionUIs.onPointClickEvent.Invoke(this);
+        }
+     
+    }
+
+    IEnumerator cd()
+    {
+    
+        yield return new WaitForSeconds(1f);
+        can = true;
     }
 }
