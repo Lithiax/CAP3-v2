@@ -90,7 +90,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     private void Awake()
     {
-        OnInspectingEvent += open;
+        ActionUIs.onPointClickEvent += open;
         OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
         //EVENTS
@@ -106,19 +106,19 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
     }
-    void open()
+    void open(ActionUI test)
     {
         nextDialogueButton.SetActive(false);
     }
 
     void close()
     {
-        nextDialogueButton.SetActive(false);
+        nextDialogueButton.SetActive(true);
     }
     private void OnDestroy()
     {
         //EVENTS
-        OnInspectingEvent -= open;
+        ActionUIs.onPointClickEvent -= open;
         OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
         OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;

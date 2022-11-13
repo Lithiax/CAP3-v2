@@ -8280,8 +8280,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 23.096619, y: 59.08217}
-  m_SizeDelta: {x: -67.61331, y: 63.311996}
+  m_AnchoredPosition: {x: 23.096619, y: 77.115}
+  m_SizeDelta: {x: -67.6133, y: 99.377}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &329625004
 MonoBehaviour:
@@ -8303,10 +8303,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Evaluation
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
-  m_sharedMaterial: {fileID: -6198209883204185716, guid: 81d4c9e845caa644ebd33be34dfc4896, type: 2}
+  m_sharedMaterial: {fileID: 7560753635513707573, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8369,7 +8369,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &329625005
@@ -34951,7 +34951,7 @@ MonoBehaviour:
   m_text: INFORMATION
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
-  m_sharedMaterial: {fileID: -671523319085604478, guid: 78be24c5e0eb82d449caeaf6acc5332b, type: 2}
+  m_sharedMaterial: {fileID: -6382025516150767968, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -55872,7 +55872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2116774069
 RectTransform:
   m_ObjectHideFlags: 0
@@ -55894,7 +55894,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 460, y: -300}
-  m_SizeDelta: {x: 460, y: 95}
+  m_SizeDelta: {x: 580, y: 200}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &2116774071
 CanvasRenderer:
