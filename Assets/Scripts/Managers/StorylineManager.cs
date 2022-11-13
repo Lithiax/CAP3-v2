@@ -119,15 +119,14 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     public static string currentBackgroundMusic ="";
 
-    [SerializeField] private Button saveButtonUI;
-    [SerializeField] private Button loadButtonUI;
+
 
     public static bool paused = false;
 
     private void Awake()
     {
         instance = this;
-        StartCoroutine(AsyncLoadScene("PauseMenu", Finished));
+        //StartCoroutine(AsyncLoadScene("PauseMenu", Finished));
     }
 
     public void LoadData(GameData data)
@@ -191,13 +190,11 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
             yield return null;
         }
+
+
         if (onCallBack != null)
             onCallBack?.Invoke();
     }
 
-    void Finished()
-    {
-        saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
-        loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
-    }
+   
 }
