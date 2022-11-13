@@ -156,6 +156,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //TODO: Set dialogue containers based on LEVEL not just effects. :^) 
 
         //Get appropriate dialogue tree
+
+        if (ChatUserSO.dialogueBranches == null) return;
+
         DialogueContainer nextContainer = null;
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
