@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 public class LevelSceneManager : MonoBehaviour
 {
     List<string> activeSceneNames = new List<string>();
+
+    [SerializeField] private Button saveButtonUI;
+    [SerializeField] private Button loadButtonUI;
     void Awake()
     {
         //Ensure theres only one pause menu
@@ -30,6 +33,19 @@ public class LevelSceneManager : MonoBehaviour
                 Destroy(es[i].gameObject);
             }
         }
-    }
 
+        Finished();
+    }
+    void Finished()
+    {
+        if (saveButtonUI != null)
+        {
+            saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
+        }
+        if (loadButtonUI != null)
+        {
+            loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
+        }
+ 
+    }
 }
