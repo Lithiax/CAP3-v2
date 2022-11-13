@@ -10,7 +10,7 @@ public class LevelSceneManager : MonoBehaviour
     void Awake()
     {
         //Ensure theres only one pause menu
-        for (int i = 0; i > SceneManager.sceneCount; i++)
+        for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             activeSceneNames.Add(SceneManager.GetSceneAt(i).name);
         }
