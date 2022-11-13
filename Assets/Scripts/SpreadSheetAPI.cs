@@ -129,6 +129,7 @@ public class SpreadSheetAPI : MonoBehaviour
             {
                 SO_InteractibleChoices example = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + p_spreadSheetName + "/" + p_sheetName);
                 TranslateIntoInteractibleChoicesScriptableObject(example);
+
             }
             else
             {
@@ -336,7 +337,6 @@ public class SpreadSheetAPI : MonoBehaviour
 
 
         }
-
     }
     public void TranslateIntoScriptableObject(SO_Dialogues p_soDialogue)
     {
@@ -431,10 +431,12 @@ public class SpreadSheetAPI : MonoBehaviour
             newDialogue.specificEventParameter = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.eventParameterColumnPattern);
             newDialogue.backgroundMusic = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundMusicColumnPattern);
         }
+  
         //p_soDialogue.isAutomaticHealthEvaluation = TranslateToBool(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticHealthEvaluation));
         SetChoice(p_soDialogue.choiceDatas, choiceIndexInSheet);
+        EditorUtility.SetDirty(p_soDialogue);
         SaveNextSheet();
-
+  
     }
     public bool TranslateToBool(string p_name)
     {
