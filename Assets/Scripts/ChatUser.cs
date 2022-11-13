@@ -102,6 +102,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             }
                
             DialogueTree.SetDialogueTree(data.dialogueTree);
+            
+            if (DialogueTree.DialogueTree == null)
+                LoadChatData(ChatData);
+
 
             StaticUserData.ChatUserData.Add(ChatData);
         }
