@@ -46,6 +46,12 @@ public class PopUpUI : MonoBehaviour
         OnPopUpEvent += Initialize;
         CharacterDialogueUI.OnResettingCharacterUIEvent += CloseUI;
     }
+
+    private void OnDestroy()
+    {
+        OnPopUpEvent -= Initialize;
+        CharacterDialogueUI.OnResettingCharacterUIEvent -= CloseUI;
+    }
     public void Initialize(string p_title,string p_content)
     {
         Debug.Log("POPPING UP " + p_content);
