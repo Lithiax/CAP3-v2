@@ -47,7 +47,7 @@ public class FindREventsManager : MonoBehaviour
                 break;
             case ChatEventTypes.InstantDateEvent:
                 Debug.Log("Instant Date Event");
-                LoadScene(data);
+                StartCoroutine(InstantDateEvent(data));
                 break;
             case ChatEventTypes.RGaugeEvent:
                 Debug.Log("RGaugeEvent");
@@ -56,6 +56,12 @@ public class FindREventsManager : MonoBehaviour
                 Debug.LogError("Invalid Event");
                 break;
         }
+    }
+
+    IEnumerator InstantDateEvent(string data)
+    {
+        yield return new WaitForSeconds(5f);
+        LoadScene(data);
     }
 
     void GaugeEvent(string num)
