@@ -13,18 +13,35 @@ public class ChoicesUI : MonoBehaviour
 
 
     public static Action<List<ChoiceData>> OnChoosingChoiceEvent;
+    public static Action OnChoicesCreatedEvent;
+         public static Action OnChoicesForceCloseEvent;
 
     private void Awake()
     {
+        CharacterDialogueUI.OnInspectingEvent += open;
+        CharacterDialogueUI.OnDeinspectingEvent += close;
+        OnChoicesForceCloseEvent += open;
         choiceUIsContainerTransform = choiceUIsContainer.transform;
         choiceUIsContainerRectTransform = choiceUIsContainer.GetComponent<RectTransform>();
 
         OnChoosingChoiceEvent += Initialize;
         StorylineManager.OnLoadedEvent += ResetChoiceManager;
     }
+    void open()
+    {
+        Debug.Log("RRRRRRRRRCLOSE");
+        choiceUIsContainer.SetActive(false);
+    }
 
+    void close()
+    {
+        choiceUIsContainer.SetActive(true);
+    }
     private void OnDestroy()
     {
+        OnChoicesForceCloseEvent -= open;
+        CharacterDialogueUI.OnInspectingEvent -= open;
+        CharacterDialogueUI.OnDeinspectingEvent -= close;
         OnChoosingChoiceEvent -= Initialize;
         StorylineManager.OnLoadedEvent -= ResetChoiceManager;
     }
@@ -85,6 +102,7 @@ public class ChoicesUI : MonoBehaviour
            
 
         }
+        OnChoicesCreatedEvent.Invoke();
     }
 
     public void ChooseChoiceUI(ChoiceData p_currentChoiceData)
