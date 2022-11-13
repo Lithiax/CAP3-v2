@@ -40,7 +40,14 @@ public class CharactersUI : MonoBehaviour
         onUpdateCharacterDatasEvent += UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping += Skip;
     }
-  
+
+    private void OnDestroy()
+    {
+        onRemoveCharactersEvent -= RemoveAvatar;
+        onAddCharactersEvent -= AddAvatar;
+        onUpdateCharacterDatasEvent -= UpdateCharacterDatas;
+        CharacterDialogueUI.OnIsSkipping -= Skip;
+    }
     void Skip()
     {
         for (int i = 0; i < characterDatas.Count; i++)
@@ -332,7 +339,7 @@ public class CharactersUI : MonoBehaviour
                         for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
                         {
                             Debug.Log("DELETING RAD");
-                            Destroy(live2DCollisionUIContainerTransform.GetChild(i).gameObject);
+                            Destroy(live2DCollisionUIContainerTransform.GetChild(x).gameObject);
                         }
                     }
                     
