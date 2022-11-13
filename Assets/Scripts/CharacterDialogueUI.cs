@@ -647,6 +647,14 @@ public class CharacterDialogueUI : MonoBehaviour
                     }
                     else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 1)
                     {
+                        if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>")
+                        {
+                            if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
+                            {
+                                DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
+                            }
+
+                        }
                         if (StorylineManager.currentSO_Dialogues.choiceDatas[0].isImmediateGoPhone)
                         {
                             if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
@@ -656,14 +664,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         }
                         else
                         {
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>")
-                            {
-                                if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
-                                {
-                                    DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
-                                }
-                            
-                            }
+                          
                             for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
                             {
                                 Debug.Log("EFFECTS: " + DialogueSpreadSheetPatternConstants.effects[i]);

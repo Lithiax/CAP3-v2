@@ -96,6 +96,13 @@ public class ChoicesUI : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(p_currentChoiceData.effectID))
             {
+                if (p_currentChoiceData.effectID != "<VN>")
+                {
+                    Debug.Log("EFFECT ADDED ");
+                    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
+                    
+
+                }
                 StorylineManager.LoadPhone();
             }
         }
