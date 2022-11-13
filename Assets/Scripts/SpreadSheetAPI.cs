@@ -518,7 +518,21 @@ public class SpreadSheetAPI : MonoBehaviour
                     for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     {
                         Debug.Log(so_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
-                        currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
+                        if (currentSheetSODialogue.choiceDatas[i].effectID == "<VN>")
+                        {
+                            string[] sheetDivided = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
+
+                            currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(sheetDivided[0], sheetDivided[1]);
+                        }
+                        else if (currentSheetSODialogue.choiceDatas[i].branchDialogueName != "<Phone>")
+                        {
+                            if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].branchDialogueName))
+                            {
+                                currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(so_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
+                            }
+                                
+                        }
+                      
                         EditorUtility.SetDirty(currentSheetSODialogue);
                     }
                 }

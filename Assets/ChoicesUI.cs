@@ -89,7 +89,7 @@ public class ChoicesUI : MonoBehaviour
             {
                 Debug.Log(DialogueSpreadSheetPatternConstants.effects[i]);
             }
-            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
+           // DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
         }
 
         if (p_currentChoiceData.isImmediateGoPhone)
