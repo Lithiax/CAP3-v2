@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: MAEVE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 81d4c9e845caa644ebd33be34dfc4896, type: 2}
-  m_sharedMaterial: {fileID: -6198209883204185716, guid: 81d4c9e845caa644ebd33be34dfc4896, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
+  m_sharedMaterial: {fileID: -6382025516150767968, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -203,8 +203,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hey! Sorry I just came from a  school event
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 81d4c9e845caa644ebd33be34dfc4896, type: 2}
-  m_sharedMaterial: {fileID: -6198209883204185716, guid: 81d4c9e845caa644ebd33be34dfc4896, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
+  m_sharedMaterial: {fileID: 7560753635513707573, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

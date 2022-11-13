@@ -94,10 +94,15 @@ public class PopUpUI : MonoBehaviour
     IEnumerator Out()
     {
         // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        var fadeOutSequencete = DOTween.Sequence()
+             .Append(detailedTitleText.DOFade(0, 0.2f));
+
+        fadeOutSequencete.Join(detailedContentText.DOFade(0, 0.2f));
+        yield return fadeOutSequencete.WaitForCompletion();
         var fadeOutSequence = DOTween.Sequence()
         .Append(detailedFrameImage.DOFade(0, avatarFadeTime));
-        fadeOutSequence.Join(detailedTitleText.DOFade(0, 0.2f));
-        fadeOutSequence.Join(detailedContentText.DOFade(0, 0.2f));
+        //fadeOutSequence.Join(detailedTitleText.DOFade(0, 0.2f));
+        //fadeOutSequence.Join(detailedContentText.DOFade(0, 0.2f));
         fadeOutSequence.Join(detailedFrameRectTransform.DOSizeDelta(new Vector2(0,0), avatarSizeTime));
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
