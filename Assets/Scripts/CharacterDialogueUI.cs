@@ -74,6 +74,8 @@ public class CharacterDialogueUI : MonoBehaviour
     private InputNameUI inputNameUI;
     public bool rarara = false;
 
+    bool visualnovel = false;
+
     SO_Dialogues p_currentChoiceDataTest = null;
 
     bool popUp = false; 
@@ -204,11 +206,20 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnCloseCharacterDialogueUI()
     {
-        //Temporary
         StorylineManager.loggedWords.Clear();
-        Debug.Log("ENDED FUCK");
-        SceneManager.LoadScene("FindR");
-        frame.SetActive(false);
+        //Temporary
+        if (visualnovel)
+        {
+            visualnovel = false;
+            OnOpenCharacterDialogueUI();
+        }
+        else
+        {
+        
+            Debug.Log("ENDED FUCK");
+            SceneManager.LoadScene("FindR");
+            frame.SetActive(false);
+        }
     }
     public void SkipAll()
     {
@@ -667,6 +678,10 @@ public class CharacterDialogueUI : MonoBehaviour
                 
                         
                             StorylineManager.currentDialogueIndex = 0;
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>")
+                            {
+                                visualnovel = true;
+                            }
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>" || 
                                 StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>" &&
                                 StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogueName == "<Phone>")
