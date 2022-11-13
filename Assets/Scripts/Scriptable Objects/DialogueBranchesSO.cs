@@ -18,7 +18,7 @@ public class DialogueBranchesSO : ScriptableObject
 
     public DialogueContainer GetBranch(string prompt)
     {
-        Debug.Log(prompt);
+        Debug.Log("Get Branch: " + prompt);
         if (!DialogueBranches.Any(x => x.prompt == prompt))
             return null;
 
@@ -32,6 +32,8 @@ public class DialogueBranchesSO : ScriptableObject
 
     public DialogueContainer GetPostBranch(string prompt)
     {
+        if (DialogueBranches.Count <= 0) return null;
+
         if (!DialogueBranches.Any(x => x.prompt == prompt))
             return null;
 

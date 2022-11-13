@@ -15,7 +15,7 @@ public class LevelSceneManager : MonoBehaviour
             activeSceneNames.Add(SceneManager.GetSceneAt(i).name);
         }
 
-        if (activeSceneNames.Contains("PauseMenu"))
+        if (!activeSceneNames.Contains("PauseMenu"))
         {
             SceneManager.LoadSceneAsync("PauseMenu", LoadSceneMode.Additive);
         }
