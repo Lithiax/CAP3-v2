@@ -75,7 +75,7 @@ public class CharacterDialogueUI : MonoBehaviour
     public bool rarara = false;
 
     bool visualnovel = false;
-
+    bool cueBank = false;
     SO_Dialogues p_currentChoiceDataTest = null;
 
     bool popUp = false; 
@@ -87,8 +87,11 @@ public class CharacterDialogueUI : MonoBehaviour
         nextDialogueButton.SetActive(true);
         popUp = true;
     }
+
     private void Awake()
     {
+        ActionUIs.onPointClickEvent += open;
+        OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
         //EVENTS
         OnStartChooseChoiceEvent += DisableNextDialogueButton;
@@ -103,10 +106,20 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
     }
+    void open(ActionUI test)
+    {
+        nextDialogueButton.SetActive(false);
+    }
 
+    void close()
+    {
+        nextDialogueButton.SetActive(true);
+    }
     private void OnDestroy()
     {
         //EVENTS
+        ActionUIs.onPointClickEvent -= open;
+        OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
         OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;
         OnPopUpEvent -= popuptest;
