@@ -96,10 +96,10 @@ public class CueUI : MonoBehaviour
 
         //}
         HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
-        if (p_currentChoiceData.effectID != "")
-        {
-            DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);
-        }
+        //if (p_currentChoiceData.effectID != "")
+        //{
+        //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);
+        //}
         //Set Pop Up
         Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))

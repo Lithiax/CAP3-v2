@@ -645,25 +645,59 @@ public class CharacterDialogueUI : MonoBehaviour
                         }
                         else
                         {
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>")
+                            {
+                                DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
+                            }
+                            for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+                            {
+                                Debug.Log("EFFECTS: " + DialogueSpreadSheetPatternConstants.effects[i]);
+                            }
                             Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
                             //Set Choice Damage
                             HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-                            StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
+                            {
+                                StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                            }
+                
+                        
                             StorylineManager.currentDialogueIndex = 0;
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>" || 
+                                StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>" &&
+                                StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogueName == "<Phone>")
+                            {
+                                if (isEndTransitionEnabled)
+                                {
+                                    TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
+                                    Debug.Log("0000000000000000000000000000000000");
+                                }
+                                else
+                                {
+                                    OnCloseCharacterDialogueUI();
+                                }
+                            }
+                            //if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "VN")
+                            //{
+
+                            //    TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
+                            //}
+
+
                         }
                     }
-                    else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
-                    {
-                        if (isEndTransitionEnabled)
-                        {
-                            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
-                            Debug.Log("0000000000000000000000000000000000");
-                        }
-                        else
-                        {
-                            OnCloseCharacterDialogueUI();
-                        }
-                    }
+                    //else if (StorylineManager.currentSO_Dialogues.choiceDatas.Count == 0)
+                    //{
+                    //    if (isEndTransitionEnabled)
+                    //    {
+                    //        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
+                    //        Debug.Log("0000000000000000000000000000000000");
+                    //    }
+                    //    else
+                    //    {
+                    //        OnCloseCharacterDialogueUI();
+                    //    }
+                    //}
                 }
                
             }
