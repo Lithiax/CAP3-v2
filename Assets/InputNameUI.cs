@@ -8,7 +8,24 @@ public class InputNameUI : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
     [SerializeField]
     private SO_Character so_Character;
-
+    bool canSubmit = false;
+    private void Awake()
+    {
+        inputField.onValueChanged.AddListener((str) =>
+        {
+            if (inputField.text.Length > 3 && inputField.text.Length < 9)
+            {
+                // Do something 
+                canSubmit = true;
+            }
+            else
+            {
+                //Not okay
+                canSubmit = false;
+                inputField.text = "";
+            }    
+        });
+    }
     public void ToggleUI()
     {
         frame.SetActive(!frame.activeSelf);
@@ -23,10 +40,14 @@ public class InputNameUI : MonoBehaviour
     }
     public void SubmitInputName()
     {
-        so_Character.stageName = inputField.text;
-        StorylineManager.currentDialogueIndex++;
-        //CharacterDialogueUI.OnEndEvent.Invoke();
-        CharacterDialogueUI.OnContinueEvent.Invoke();
-        ToggleUI();
+        if (canSubmit)
+        {
+            so_Character.stageName = inputField.text;
+            StorylineManager.currentDialogueIndex++;
+            //CharacterDialogueUI.OnEndEvent.Invoke();
+            CharacterDialogueUI.OnContinueEvent.Invoke();
+            ToggleUI();
+        }
+   
     }
 }

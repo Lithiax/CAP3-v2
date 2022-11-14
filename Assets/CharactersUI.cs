@@ -361,49 +361,53 @@ public class CharactersUI : MonoBehaviour
             Character newCharacter = null;
             // Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
 
-            if (p_charactersToBeAdded[i].prefab != null) //Live 2D
+            if (p_charactersToBeAdded[i] != null)
             {
-
-                newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
-                //Check if its the character thats talking
-                if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                if (p_charactersToBeAdded[i].prefab != null) //Live 2D
                 {
-                    if (p_charactersToBeAdded[i] == StorylineManager.cueCharacter)
+
+                    newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
+                    //Check if its the character thats talking
+                    if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                     {
-                        if (StorylineManager.cueCharacter.collisionPrefab != null)
+                        if (p_charactersToBeAdded[i] == StorylineManager.cueCharacter)
                         {
-                            if (live2DCollisionUIContainerTransform.childCount == 0)
+                            if (StorylineManager.cueCharacter.collisionPrefab != null)
                             {
-                                GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
+                                if (live2DCollisionUIContainerTransform.childCount == 0)
+                                {
+                                    GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);
+                                }
+
                             }
-                        
                         }
                     }
+
+
+
+
+
+
                 }
-                    
-                           
-
-               
-
-
-            }
-            else //UI
-            {
-                if (p_charactersToBeAdded[i].avatar != null)
+                else //UI
                 {
-                    newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform);
-                    CharacterUI newCharacterUI = newCharacter as CharacterUI;
-                    newCharacter.so_Character = p_charactersToBeAdded[i];
+                    if (p_charactersToBeAdded[i].avatar != null)
+                    {
+                        newCharacter = Instantiate(staticCharacterPrefab, characterUIContainerTransform);
+                        CharacterUI newCharacterUI = newCharacter as CharacterUI;
+                        newCharacter.so_Character = p_charactersToBeAdded[i];
 
-                    StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                        StartCoroutine(AvatarFadeIn(newCharacterUI.avatarImage, p_charactersToBeAdded[i].avatar));
+                    }
+
+
                 }
-
-
+                if (newCharacter != null)
+                {
+                    CharacterDialogueUI.savedCharacters.Add(newCharacter);
+                }
             }
-            if (newCharacter != null)
-            {
-                CharacterDialogueUI.savedCharacters.Add(newCharacter);
-            }
+           
 
         }
         //}
