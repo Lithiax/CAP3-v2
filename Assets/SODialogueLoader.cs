@@ -9,6 +9,14 @@ public class SODialogueLoader : MonoBehaviour
     [SerializeField] private TMP_InputField folderField;
     [SerializeField] private TMP_InputField sheetField;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            Debug.Log("CHEAT PRESSED");
+            frame.SetActive(!frame.activeSelf);
+        }
+    }
     public void LoadSODialogueButtonUI()
     {
         StorylineManager.LoadVisualNovel(folderField.text, sheetField.text);

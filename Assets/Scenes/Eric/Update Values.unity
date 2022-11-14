@@ -830,6 +830,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 465707d20090a31479f64e8750809c4c, type: 2}
   - {fileID: 11400000, guid: ce65232b59c8b144faed5d840171145b, type: 2}
   - {fileID: 11400000, guid: 8048bf61efa7a724d8248d115bd11cb7, type: 2}
+  - {fileID: 11400000, guid: 1451c7592bcb03b489e5190dbdb84a23, type: 2}
   backgroundImages:
   - {fileID: 21300000, guid: c700d9f195b78d7479668c5650df97b8, type: 3}
   - {fileID: 21300000, guid: 29f151777fc7a7c4885c99c8b035a7f3, type: 3}
@@ -880,7 +881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_SpreadSheets:
-  - {fileID: 11400000, guid: 9d65d668cba871049bf71889db20e6ab, type: 2}
+  - {fileID: 11400000, guid: 0f0038c0b16b35f4483b82bab1a9ab0d, type: 2}
   allso_SpreadSheets:
   - {fileID: 11400000, guid: 99489bb64cc059d49b3559efe7f8dab2, type: 2}
   - {fileID: 11400000, guid: 0f0038c0b16b35f4483b82bab1a9ab0d, type: 2}
