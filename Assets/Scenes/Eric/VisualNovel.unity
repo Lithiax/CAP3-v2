@@ -194,6 +194,7 @@ MonoBehaviour:
   - cueType: 4
     cueIcon: {fileID: 21300000, guid: d4720882002fe1e4cb8d6684f4fc5ddc, type: 3}
     position: {x: -550, y: 120}
+  canDoWork: 1
 --- !u!114 &8433957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16600,6 +16601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   choiceUIsContainer: {fileID: 1976719753562116365}
   choiceUIPrefab: {fileID: 2716355077835613698, guid: c553da7dc9264a545a6d9fb0ecc0e534, type: 3}
+  cue: {fileID: 1316389235}
 --- !u!223 &631839315
 Canvas:
   m_ObjectHideFlags: 0
@@ -29958,12 +29960,12 @@ MonoBehaviour:
   defaultPosition: {x: 460, y: 0}
   targetPosition: {x: 0, y: -300}
   defaultSize: {x: 460, y: 95}
-  targetSize: {x: 580, y: 170}
+  targetSize: {x: 580, y: 200}
   avatarMoveTime: 1
   avatarFadeTime: 1
   avatarDelayTime: 1
   wordDelayTime: 0.2
-  wordFadeTime: 0.8
+  wordFadeTime: 0.6
   avatarSizeTime: 1
 --- !u!223 &1088246313
 Canvas:
@@ -55872,7 +55874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2116774069
 RectTransform:
   m_ObjectHideFlags: 0

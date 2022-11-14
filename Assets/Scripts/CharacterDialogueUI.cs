@@ -90,7 +90,8 @@ public class CharacterDialogueUI : MonoBehaviour
 
     private void Awake()
     {
-        ActionUIs.onPointClickEvent += open;
+        ActionUIs.onEnterEvent += open;
+        //ActionUIs.onPointClickEvent += open;
         OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
         //EVENTS
@@ -105,20 +106,13 @@ public class CharacterDialogueUI : MonoBehaviour
         OnCheckIfSkippableEvent += CheckIfReady;
 
 
-    }
-    void open(ActionUI test)
-    {
-        nextDialogueButton.SetActive(false);
-    }
 
-    void close()
-    {
-        nextDialogueButton.SetActive(true);
     }
     private void OnDestroy()
     {
         //EVENTS
-        ActionUIs.onPointClickEvent -= open;
+        ActionUIs.onEnterEvent -= open;
+        //  ActionUIs.onPointClickEvent -= open;
         OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
         OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;
@@ -129,7 +123,30 @@ public class CharacterDialogueUI : MonoBehaviour
         OnAddNewTransitionEvent -= AddNewTransitionEvent;
         OnFinishTransitionEvent -= FinishTransitionEvent;
         OnCheckIfSkippableEvent -= CheckIfReady;
+
     }
+
+
+    void open(ActionUI tes)
+    {
+      
+        nextDialogueButton.SetActive(false);
+        cueBank = true;
+    }
+
+    void close()
+    {
+        cueBank = false;
+        nextDialogueButton.SetActive(true);
+        //StartCoroutine(del());
+    }
+
+    IEnumerator del()
+    {
+        yield return new WaitForSeconds(1f);
+        nextDialogueButton.SetActive(true);
+    }
+  
     void AddNewTransitionEvent()
     {
         runningCoroutines++;
@@ -223,6 +240,11 @@ public class CharacterDialogueUI : MonoBehaviour
         //Temporary
         if (visualnovel)
         {
+            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
+            {
+                StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+            }
+            Debug.Log("PLEASE FOR MY SAKE IT WORKED");
             visualnovel = false;
             OnOpenCharacterDialogueUI();
         }
@@ -493,6 +515,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
+        
         if (popUp)
         {
             Debug.Log("IT SHUD BE CLOSING");
@@ -685,21 +708,24 @@ public class CharacterDialogueUI : MonoBehaviour
                             Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
                             //Set Choice Damage
                             HealthUI.ModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
-                            {
-                                StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
-                            }
+                         
                 
                         
                             StorylineManager.currentDialogueIndex = 0;
+                            Debug.Log("PLEASE : " + StorylineManager.currentSO_Dialogues.name + " - " + StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID);
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>")
                             {
+                                Debug.Log("PLEASE FOR GOD SAKE WORK");
                                 visualnovel = true;
                             }
-                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "<VN>" || 
-                                StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID != "<VN>" &&
-                                StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogueName == "<Phone>")
+                            ChoiceData ch = StorylineManager.currentSO_Dialogues.choiceDatas[0];
+                         
+
+                            if (ch.effectID == "<VN>" ||
+                                ch.effectID != "<VN>" &&
+                                ch.branchDialogueName == "<Phone>")
                             {
+                                
                                 if (isEndTransitionEnabled)
                                 {
                                     TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
@@ -708,6 +734,13 @@ public class CharacterDialogueUI : MonoBehaviour
                                 else
                                 {
                                     OnCloseCharacterDialogueUI();
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(ch.branchDialogueName))
+                            {
+                                if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
+                                {
+                                    StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
                                 }
                             }
                             //if (StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID == "VN")

@@ -70,8 +70,9 @@ public class PopUpUI : MonoBehaviour
 
     IEnumerator In()
     {
-       // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
-        var fadeOutSequence = DOTween.Sequence()
+        // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        detailedContentText.color = new Color(1,1,1,0);
+         var fadeOutSequence = DOTween.Sequence()
         .Append(detailedFrameRectTransform.DOAnchorPos(targetPosition, avatarMoveTime));
         fadeOutSequence.Join(detailedFrameImage.DOFade(1, avatarFadeTime));
         fadeOutSequence.Play();
@@ -99,6 +100,8 @@ public class PopUpUI : MonoBehaviour
 
         fadeOutSequencete.Join(detailedContentText.DOFade(0, 0.2f));
         yield return fadeOutSequencete.WaitForCompletion();
+        detailedTitleText.text = "";
+        detailedContentText.text = "";
         var fadeOutSequence = DOTween.Sequence()
         .Append(detailedFrameImage.DOFade(0, avatarFadeTime));
         //fadeOutSequence.Join(detailedTitleText.DOFade(0, 0.2f));
@@ -106,8 +109,7 @@ public class PopUpUI : MonoBehaviour
         fadeOutSequence.Join(detailedFrameRectTransform.DOSizeDelta(new Vector2(0,0), avatarSizeTime));
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
-        detailedTitleText.text = "";
-        detailedContentText.text = "";
+       
         detailedFrameRectTransform.sizeDelta = defaultSize;
         detailedFrameRectTransform.anchoredPosition = defaultPosition;
         //var fadeeeSequence = DOTween.Sequence()

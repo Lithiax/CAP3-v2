@@ -27,20 +27,37 @@ public class ActionUIs : MonoBehaviour
     public static Action<ActionUI> onEnterEvent;
     public static Action onExitEvent;
     public static Action<ActionUI> onPointClickEvent;
+
+    public bool canDoWork = true;
+
     private void Awake()
     {
         CueUI.onChoiceChosenEvent += ClosedUIButton;
         onEnterEvent += Entered;
         onExitEvent += ClosedUI;
         onPointClickEvent += PointClick;
+        CharacterDialogueUI.OnStartChooseChoiceEvent += startchoose;
+        CharacterDialogueUI.OnEndChooseChoiceEvent += canDoReset;
     }
 
+    void canDoReset()
+    {
+        canDoWork = true;
+    }
     private void OnDestroy()
     {
         CueUI.onChoiceChosenEvent -= ClosedUIButton;
         onEnterEvent -= Entered;
         onExitEvent -= ClosedUI;
         onPointClickEvent -= PointClick;
+        CharacterDialogueUI.OnStartChooseChoiceEvent -= startchoose;
+        CharacterDialogueUI.OnEndChooseChoiceEvent -= canDoReset;
+    }
+
+    void startchoose()
+    {
+        canDoWork = false;
+        ClosedUIButton();
     }
     CueUIPresetData GetCueUIPresetData(CueType p_cueType)
     {
@@ -58,21 +75,25 @@ public class ActionUIs : MonoBehaviour
     public void Entered(ActionUI test)
     {
         //ToggleContainer();
-        if (canExit)
+        if (canDoWork)
         {
-            
-
-            CueUIPresetData chosenCueUIPresetData = GetCueUIPresetData(test.cueType);
-            if (StorylineManager.currentSO_Dialogues != null)
+            if (canExit)
             {
-                if (!StorylineManager.sideDialogue)
+
+
+                CueUIPresetData chosenCueUIPresetData = GetCueUIPresetData(test.cueType);
+                if (StorylineManager.currentSO_Dialogues != null)
                 {
-                    currentCueUI.Initialize(test.cueType.ToString(), chosenCueUIPresetData.cueIcon, StorylineManager.currentSO_Dialogues.cueBankData.GetCueValue(test.cueType), chosenCueUIPresetData.position);
-                    StartCoroutine(Ent());
+                    if (!StorylineManager.sideDialogue)
+                    {
+                        currentCueUI.Initialize(test.cueType.ToString(), chosenCueUIPresetData.cueIcon, StorylineManager.currentSO_Dialogues.cueBankData.GetCueValue(test.cueType), chosenCueUIPresetData.position);
+                        StartCoroutine(Ent());
+                    }
+
                 }
-                 
             }
         }
+      
        
 
        
@@ -98,10 +119,11 @@ public class ActionUIs : MonoBehaviour
 
     public void ClosedUI()
     {
+        StopAllCoroutines();
         if (canExit)
         {
             isShowing = false;
-            StopAllCoroutines();
+           
             CharacterDialogueUI.OnDeinspectingEvent.Invoke();
             currentCueUI.gameObject.SetActive(false);
             currentCueUI.ResetChoiceManager();
