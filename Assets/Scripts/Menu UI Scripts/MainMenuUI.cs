@@ -7,6 +7,11 @@ public class MainMenuUI : MonoBehaviour
 {
     void Start()
     {
+        SetAspect();
+    }
+
+    void SetAspect()
+    {
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
         // variables instead so you can set them at design time)
@@ -14,6 +19,7 @@ public class MainMenuUI : MonoBehaviour
 
         // determine the game window's current aspect ratio
         float windowaspect = (float)Screen.width / (float)Screen.height;
+        windowaspect = 1600 / 900;
 
         // current viewport height should be scaled by this amount
         float scaleheight = windowaspect / targetaspect;
