@@ -13,4 +13,6 @@ public class ChatUserSO : ScriptableObject
 
     public DialogueBranchesSO dialogueBranches;
     public ChatCollectionSO initialPreviousChat;
+
+    public Sprite profileMatchImage;
 }

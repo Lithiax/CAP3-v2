@@ -13,5 +13,7 @@ public class FindRMatchProfileUI : MonoBehaviour
     {
         profileName.text = user.ChatUserSO.profileName;
         profileImage.sprite = user.ChatUserSO.profileImage;
+
+        GetComponent<Image>().sprite = user.ChatUserSO.profileMatchImage;
     }
 }
