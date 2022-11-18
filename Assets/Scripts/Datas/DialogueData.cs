@@ -9,24 +9,13 @@ public enum SpeechTransitionType
 
 public enum CharacterEmotionType
 {
-    happy,
-    thinking,
-    yawn,
-    exclamation,
-    lightbulb,
-    question,
-    heart,
-    sad,
-    angry,
-    misc,
     none,
-    laugh,
-    smile,
+    angry,
     blush,
-    disgust,
     cry,
-    idle,
-    anxious,
+    disgust,
+    laughing,
+    idle
 }
 
 public enum CharacterPositionType
@@ -37,41 +26,6 @@ public enum CharacterPositionType
     none
 }
 
-public enum HapticType
-{
-    soft,
-    hard,
-    none
-}
-
-public enum VocalicType
-{
-    soft,
-    hard,
-    none
-}
-
-public enum KinesicType
-{
-    soft,
-    hard,
-    none
-}
-
-public enum OculesicType
-{
-    soft,
-    hard,
-    none
-}
-
-
-public enum PhysicalApperanceType
-{
-    soft,
-    hard,
-    none
-}
 
 public enum SpecificEventType
 {

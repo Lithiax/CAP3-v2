@@ -55,66 +55,6 @@ public class VisualNovelDatas : MonoBehaviour
         return isFlipped;
     }
 
-  
-
-    public static HapticType FindHapticType(string p_name)
-    {
-        for (int i = 0; i < HapticType.GetValues(typeof(HapticType)).Length; i++)
-        {
-            if (((HapticType)i).ToString().ToLower() == p_name.ToLower())
-            {
-                return (HapticType)i;
-            }
-        }
-        return HapticType.none;
-    }
-
-    public static VocalicType FindVocalicType(string p_name)
-    {
-        for (int i = 0; i < VocalicType.GetValues(typeof(VocalicType)).Length; i++)
-        {
-            if (((VocalicType)i).ToString().ToLower() == p_name.ToLower())
-            {
-                return (VocalicType)i;
-            }
-        }
-        return VocalicType.none;
-    }
-
-    public static KinesicType FindKinesicType(string p_name)
-    {
-        for (int i = 0; i < KinesicType.GetValues(typeof(KinesicType)).Length; i++)
-        {
-            if (((KinesicType)i).ToString().ToLower() == p_name.ToLower())
-            {
-                return (KinesicType)i;
-            }
-        }
-        return KinesicType.none;
-    }
-    public static OculesicType FindOculesicType(string p_name)
-    {
-        for (int i = 0; i < OculesicType.GetValues(typeof(OculesicType)).Length; i++)
-        {
-            if (((OculesicType)i).ToString().ToLower() == p_name.ToLower())
-            {
-                return (OculesicType)i;
-            }
-        }
-        return OculesicType.none;
-    }
-
-    public static PhysicalApperanceType FindPhysicalAppearanceType(string p_name)
-    {
-        for (int i = 0; i < PhysicalApperanceType.GetValues(typeof(PhysicalApperanceType)).Length; i++)
-        {
-            if (((PhysicalApperanceType)i).ToString().ToLower() == p_name.ToLower())
-            {
-                return (PhysicalApperanceType)i;
-            }
-        }
-        return PhysicalApperanceType.none;
-    }
 
     public static Sprite FindBackgroundSprite(string p_name)
     {
