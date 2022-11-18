@@ -81,6 +81,7 @@ public class ChatManagerUI : MonoBehaviour
         oldchatElementsTransform = chatElements.offsetMin;
     }
 
+    //Glorified Hide Respnose getter so bad 
     public void ReplyClicked(int num)
     {
         HideResponse();
@@ -111,6 +112,8 @@ public class ChatManagerUI : MonoBehaviour
         parent.DialogueTree.MoveToNode(nodeData.chatCollection);
 
         Debug.Log("Clicked" + this);
+
+        parent.ChatData.CurrentDialogueComplete = false;
 
         StartSpawningChat(parent, Tree);
         HideResponse();
@@ -183,71 +186,70 @@ public class ChatManagerUI : MonoBehaviour
 
         if (!parent.ChatData.CurrentDialogueComplete)
         {
-        for (int i = Tree.CurrentNode.CurrentIndex; i < ChatCollection.ChatData.Count; i++)
-        {
-            Tree.CurrentNode.CurrentIndex = i;
-            ChatBubble chat = ChatCollection.ChatData[i];
-            //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
-            //Check if tree is not the first node
-
-            Debug.Log("Check User: " + CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)));
-            Debug.Log("Is First Node: " + Tree.IsFirstNode(Tree.CurrentNode));
-
-            if (chat.isUser &&
-                CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)))
+            for (int i = Tree.CurrentNode.CurrentIndex; i < ChatCollection.ChatData.Count; i++)
             {
-                parent.SingleResponseChat = chat;
-                OneResponseButton(chat, parent);
-                while (parent.SingleResponseChat != null)
-                    yield return null;
-            }
-            else
-            {
-                parent.SingleResponseChat = null;
-            }
+                Tree.CurrentNode.CurrentIndex = i;
+                ChatBubble chat = ChatCollection.ChatData[i];
+                //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
+                //Check if tree is not the first node
 
-            float waitTime = SetWaitTime(chat.chatText.Length);
-            
-            GameObject chatObj = SpawnChatBubble(chat, parent, !chat.isUser);
-            chatObj.SetActive(parent.isToggled);
-            parent.OnChatSpawned(chat, chatObj);
+                Debug.Log("Check User: " + CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)));
+                Debug.Log("Is First Node: " + Tree.IsFirstNode(Tree.CurrentNode));
 
-            if (parent.isToggled)
-            {
-                parent.ResetNotif();
-                StartCoroutine(RebuildUI());
+                if (chat.isUser &&
+                    CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)))
+                {
+                    parent.SingleResponseChat = chat;
+                    OneResponseButton(chat, parent);
+                    while (parent.SingleResponseChat != null)
+                        yield return null;
+                }
+                else
+                {
+                    parent.SingleResponseChat = null;
+                }
 
-                StartCoroutine(ScrollDown());
-            }
+                float waitTime = SetWaitTime(chat.chatText.Length);
+
+                GameObject chatObj = SpawnChatBubble(chat, parent, !chat.isUser);
+                chatObj.SetActive(parent.isToggled);
+                parent.OnChatSpawned(chat, chatObj);
+
+                if (parent.isToggled)
+                {
+                    parent.ResetNotif();
+                    StartCoroutine(RebuildUI());
+
+                    StartCoroutine(ScrollDown());
+                }
 
 
-            if (chat.isUser)
-            {
-                waitTime = 1f;
+                if (chat.isUser)
+                {
+                    waitTime = 1f;
+                    yield return new WaitForSeconds(waitTime);
+                    parent.ChatData.ChatBubbles.Add(chat);
+                    continue;
+                }
+                Debug.Log(waitTime);
                 yield return new WaitForSeconds(waitTime);
+
+                parent.SetLastMessageText(chat.chatText);
                 parent.ChatData.ChatBubbles.Add(chat);
-                continue;
+
+                if (parent.isToggled)
+                {
+                    parent.ResetNotif();
+                    StartCoroutine(RebuildUI());
+
+                    StartCoroutine(ScrollDown());
+                }
+                else if (!chat.isUser)
+                    parent.SetNotif();
+
+                ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
+                chatText.ShowText();
             }
-            Debug.Log(waitTime);
-            yield return new WaitForSeconds(waitTime);
-
-            parent.SetLastMessageText(chat.chatText);
-            parent.ChatData.ChatBubbles.Add(chat);
-
-            if (parent.isToggled)
-            {
-                parent.ResetNotif();
-                StartCoroutine(RebuildUI());
-
-                StartCoroutine(ScrollDown());
-            }
-            else if (!chat.isUser)
-                parent.SetNotif();
-
-            ChatBubbleUI chatText = chatObj.GetComponent<ChatBubbleUI>();
-            chatText.ShowText();
-        }
-
         }
 
         parent.currentChatComplete = true;
@@ -300,8 +302,6 @@ public class ChatManagerUI : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        Debug.Log("Scroll Instant: " + instant);
-
         if (instant)
         {
             scrollBar.value = 0;
@@ -326,6 +326,7 @@ public class ChatManagerUI : MonoBehaviour
     {
         if (Tree.DialogueTree == null)
         {
+            Debug.Log("Tree Is Null");
             HideResponse(true);
             return;
         }
@@ -349,7 +350,7 @@ public class ChatManagerUI : MonoBehaviour
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
         //If dialogue tree is over
-        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0 && ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
         {
             if (!ChatCollection.isEvent())
             {
@@ -382,6 +383,7 @@ public class ChatManagerUI : MonoBehaviour
             {
                 if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
                 {
+                    Debug.Log("Not Date Event");
                     HideResponse();
                     return;
                 }

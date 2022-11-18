@@ -137,6 +137,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             Debug.Log("Load Chat Data: " + ChatData.name);
 
             LoadChatData(ChatData);
+            if (ChatData.CurrentDialogueIndex != 0)
+            {
+                DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
+            }
             Divider = chatManager.SpawnDivider();
         }
 
@@ -227,6 +231,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
+        ChatData.CurrentDialogueComplete = false;
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
@@ -238,6 +243,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
         chatManager.OnSetNextTree += SetNextTree;
+
+        ChatData.CurrentDialogueComplete = false;
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
