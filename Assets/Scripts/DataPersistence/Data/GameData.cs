@@ -47,6 +47,7 @@ public class GameData
         savedSO_Dialogues = null;
 
         currentBackgroundMusic = "";
+        ChatUserData = new List<ChatUserData>();
     }
 
     public void DebugLogData()

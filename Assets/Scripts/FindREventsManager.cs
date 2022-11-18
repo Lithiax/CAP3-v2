@@ -50,7 +50,7 @@ public class FindREventsManager : MonoBehaviour
                 StartCoroutine(InstantDateEvent(data));
                 break;
             case ChatEventTypes.RGaugeEvent:
-                Debug.Log("RGaugeEvent");
+                GaugeEvent(data);
                 break;
             default:
                 Debug.LogError("Invalid Event");
@@ -67,7 +67,7 @@ public class FindREventsManager : MonoBehaviour
     void GaugeEvent(string num)
     {
         int n = int.Parse(num);
-        Debug.Log("Date Gauge: " + num);
+        Debug.Log("Date Gauge: " + n);
     }
 
     void LoadScene(string scene)

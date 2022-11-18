@@ -31,6 +31,12 @@ public class DataPersistenceManager : MonoBehaviour
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         dataPersistenceObjets = FindAllDataPersistenceObj();
         NewGame();
+        SceneManager.sceneLoaded += GetAndLoadData;
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        
     }
 
     public void NewGame()
@@ -52,8 +58,19 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (gameData.CurrentSceneName != "")
         {
-            SceneManager.LoadScene(gameData.CurrentSceneName);
+            SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
         }
+
+        //Commented because it doesnt load data in the loaded scene lol
+        //foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
+        //{
+        //    dataPersistenceObject.LoadData(gameData);
+        //}
+    }
+
+    void GetAndLoadData(Scene scene, LoadSceneMode mode)
+    {
+        dataPersistenceObjets = FindAllDataPersistenceObj();
 
         foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
         {

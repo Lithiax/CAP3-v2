@@ -22,14 +22,15 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     List<GameObject> SpawnedUserObjects = new List<GameObject>();
     List<int> IDs = new List<int>();
     List<string> effectsToRemove = new List<string>();
+    public bool DataLoaded = false;
 
+    GameData gameData = null;
     private void Awake()
     {
-        Debug.Log("Awake");
-        //DEBUG Purposes
-        //DialogueSpreadSheetPatternConstants.effects.Add("<m1w4>");
         chatManager.InitializeTransforms();
-
+    }
+    private void Start()
+    {
         foreach (ChatUserData data in StaticUserData.ChatUserData)
         {
             if (UserDataTesting.Contains(data.UserSO)) continue;
@@ -53,7 +54,6 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             SpawnedUsers[0].toggle.Select();
         }
-
     }
 
     void GenerateUser(ChatUserSO data)
@@ -66,6 +66,8 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
         UserComp.OnRemoveEffect += AddToEffectsRemoveLog;
+        UserComp.AllowLoadingData(gameData);
+
 
         IDs.Add(data.ID);
 
@@ -89,8 +91,11 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        this.gameData = data;
         UserDataTesting.Clear();
+        UserDict.Clear();
 
+        DataLoaded = true;
         if (data.ChatUserIDs.Length <= 0) return;
 
         foreach (ChatUserSO user in AllUsers)
@@ -102,8 +107,6 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             UserDataTesting.Add(UserDict[id]);
         }
-
-
     }
 
     public void SaveData(ref GameData data)

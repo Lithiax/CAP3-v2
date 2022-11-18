@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class DialogueTreeNode
 {
     public DialogueNodeData BaseNodeData;
     public List<DialogueNodeData> ConnectedNodesData;
+    public int CurrentIndex = 0;
 }
 
 public class DialogueGraphAPI : MonoBehaviour
@@ -15,10 +17,12 @@ public class DialogueGraphAPI : MonoBehaviour
     public DialogueContainer DialogueTree { get; private set; }
     public DialogueTreeNode CurrentNode { get; private set; }
 
-
     List<DialogueTreeNode> Nodes = new List<DialogueTreeNode>();
+    bool jumped = false;
+    public Action OnNodeChanged;
     public bool IsFirstNode(DialogueTreeNode node) 
-    { 
+    {
+        if (jumped) return true;
         return node.BaseNodeData.NodeGUID == DialogueTree.NodeLinks.First(x => x.PortName == "Next").TargetNodeGuid; 
     }
 
@@ -85,22 +89,28 @@ public class DialogueGraphAPI : MonoBehaviour
     {
         if (CurrentNode.ConnectedNodesData.Count <= 0) return;
 
+        OnNodeChanged?.Invoke();
+
         //Get node chosen
         DialogueNodeData node = CurrentNode.ConnectedNodesData.First(x => x.chatCollection == chatCollection);
         //Move Tree into Node Chosen
         CurrentNode = Nodes.First(x => x.BaseNodeData == node);
+        jumped = false;
     }
      
     //Used For Loading Data ONLY
-    public void ForceJumpToNode(DialogueTreeNode node)
+    public void ForceJumpToNode(string GUID, int index)
     {
-        if (!Nodes.Any(x  => x == node))
+        if (!Nodes.Any(x  => x.BaseNodeData.NodeGUID == GUID))
         {
             Debug.LogError("Node to jump to does not exist!");
             return;
         }
 
-        CurrentNode = Nodes.First(x => x == node);      
+        CurrentNode = Nodes.First(x => x.BaseNodeData.NodeGUID == GUID);
+        CurrentNode.CurrentIndex = index;
+        Debug.Log("JUMP TO NODE");
+        jumped = true;
     }
 }
 

@@ -44,7 +44,8 @@ public class ChatManagerUI : MonoBehaviour
     Vector2 oldreplyBoxTransform;
     Vector2 oldchatElementsTransform;
 
-    public Action OnCurrentNodeEnded;
+    public Action OnSetNextTree;
+    public Action OnTreeEnded;
 
     private void Awake()
     {
@@ -180,8 +181,12 @@ public class ChatManagerUI : MonoBehaviour
     {
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
-        foreach (ChatBubble chat in ChatCollection.ChatData)
+        if (!parent.ChatData.CurrentDialogueComplete)
         {
+        for (int i = Tree.CurrentNode.CurrentIndex; i < ChatCollection.ChatData.Count; i++)
+        {
+            Tree.CurrentNode.CurrentIndex = i;
+            ChatBubble chat = ChatCollection.ChatData[i];
             //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
             //Check if tree is not the first node
 
@@ -220,12 +225,14 @@ public class ChatManagerUI : MonoBehaviour
             {
                 waitTime = 1f;
                 yield return new WaitForSeconds(waitTime);
+                parent.ChatData.ChatBubbles.Add(chat);
                 continue;
             }
             Debug.Log(waitTime);
             yield return new WaitForSeconds(waitTime);
 
             parent.SetLastMessageText(chat.chatText);
+            parent.ChatData.ChatBubbles.Add(chat);
 
             if (parent.isToggled)
             {
@@ -241,7 +248,10 @@ public class ChatManagerUI : MonoBehaviour
             chatText.ShowText();
         }
 
+        }
+
         parent.currentChatComplete = true;
+        parent.ChatData.CurrentDialogueComplete = true;
 
         //if event, register
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
@@ -321,10 +331,13 @@ public class ChatManagerUI : MonoBehaviour
         }
         if (parent.SingleResponseChat != null)
         {
-            Debug.Log("Single Response");
-            OneResponseButton(parent.SingleResponseChat, parent);
-            ShowResponseBox();
-            return;
+            if (parent.SingleResponseChat.chatText != "")
+            {
+                Debug.Log("Single Response");
+                OneResponseButton(parent.SingleResponseChat, parent);
+                ShowResponseBox();
+                return;
+            }   
         }
         if (!parent.currentChatComplete)
         {
@@ -335,15 +348,19 @@ public class ChatManagerUI : MonoBehaviour
 
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
-
-
         //If dialogue tree is over
-        //NOTE: There is a minor bug where it still shows up but it works rn so whatever pin it for next time.
-        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0 && !ChatCollection.isEvent())
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
         {
-            HideResponse();
-            OnCurrentNodeEnded?.Invoke();
-            Debug.Log("Choice END");
+            if (!ChatCollection.isEvent())
+            {
+                HideResponse();
+                OnSetNextTree?.Invoke();
+                Debug.Log("Choice END");
+            }
+            else
+            {
+                OnTreeEnded?.Invoke();
+            }
             return;
         }
 
