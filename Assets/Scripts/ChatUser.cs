@@ -16,6 +16,7 @@ public class ChatUserData
     public string CurrentNodeGUID;
     public int CurrentDialogueIndex;
     public bool CurrentDialogueComplete;
+    public float RGMeter;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -54,6 +55,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [SerializeField] Image onlineIndicator;
     [SerializeField] Color offlineColor;
     [SerializeField] Color onlineColor;
+
+    [Header("RG Bar")]
+    [SerializeField] Image Bar;
 
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     public ChatUserData ChatData { get; private set; }
@@ -126,9 +130,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             if (DialogueTree.DialogueTree == null)
                 LoadChatData(ChatData);
 
+            LoadRGDataFromStatic(ChatData);
 
             StaticUserData.ChatUserData.Add(ChatData);
-            Divider = chatManager.SpawnDivider();
         }
         //If ChatUser is not new (FOR TESTING)
         else
@@ -137,10 +141,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             Debug.Log("Load Chat Data: " + ChatData.name);
 
             LoadChatData(ChatData);
+            LoadRGDataFromStatic(ChatData);
+
             if (ChatData.CurrentDialogueIndex != 0)
             {
                 DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
             }
+        }
+
+        if (DialogueTree.DialogueTree != null)
+        {
             Divider = chatManager.SpawnDivider();
         }
 
@@ -168,6 +178,33 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         onlineIndicator.color = onlineColor;
         panelRectTransform.SetAsFirstSibling();
         chatManager.StartSpawningChat(this, DialogueTree);
+    }
+
+    void LoadRGDataFromStatic(ChatUserData data)
+    {
+        switch (data.UserSO.profileName)
+        {
+            case "Maeve":
+                data.RGMeter = DialogueSpreadSheetPatternConstants.maeveHealth;
+                break;
+
+            case "Liam":
+                data.RGMeter = DialogueSpreadSheetPatternConstants.liamHealth;
+                break;
+
+            case "Brad":
+                data.RGMeter = DialogueSpreadSheetPatternConstants.bradHealth;
+                break;
+
+            case "Penelope":
+                data.RGMeter = DialogueSpreadSheetPatternConstants.penelopeHealth;
+                break;
+
+            default:
+                Debug.Log("User does not have a health bar");
+                break;
+        }
+
     }
 
     void LoadChatData(ChatUserData data)
