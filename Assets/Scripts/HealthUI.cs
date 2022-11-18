@@ -105,7 +105,7 @@ public class HealthUI : MonoBehaviour
     public float currentHealth = 100f;
     public float maxHealth = 100f;
     public static Action<int> ModifyHealthEvent;
-
+    public static Action saveHealth;
     public static IsWithinHealthCondition myDelegate;
 
     [SerializeField] private GameObject frame;
@@ -137,22 +137,66 @@ public class HealthUI : MonoBehaviour
     private void Awake()
     {
         ModifyHealthEvent += ModifyHealth;
-        myDelegate += IsWithinHealthCondition; 
+        myDelegate += IsWithinHealthCondition;
+        saveHealth += saveHealthFun;
         CharacterDialogueUI.OnInspectingEvent += open;
         CharacterDialogueUI.OnDeinspectingEvent += close;
         realBarUI.fillAmount = 0f;
         ghostBarUI.fillAmount = 0f;
-     //   realBarTransform = realBarUI.GetComponent<Canvas>();
-      //  ghostBarTransform = ghostBarUI.GetComponent<Canvas>();
+        //   realBarTransform = realBarUI.GetComponent<Canvas>();
+        //  ghostBarTransform = ghostBarUI.GetComponent<Canvas>();
+        if (StorylineManager.cueCharacter != null)
+        {
+            if (StorylineManager.cueCharacter.idName == "Maeve")
+            {
+                currentHealth = DialogueSpreadSheetPatternConstants.maeveHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Penelope")
+            {
+                currentHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Brad")
+            {
+                currentHealth = DialogueSpreadSheetPatternConstants.bradHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Liam")
+            {
+                currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
+            }
+        }
         InstantUpdateBar(currentHealth, maxHealth, maxHealth);
     }
 
     private void OnDestroy()
     {
+        saveHealth -= saveHealthFun;
         ModifyHealthEvent -= ModifyHealth;
         myDelegate -= IsWithinHealthCondition;
         CharacterDialogueUI.OnInspectingEvent -= open;
         CharacterDialogueUI.OnDeinspectingEvent -= close;
+    }
+
+    void saveHealthFun()
+    {
+        if (StorylineManager.cueCharacter != null)
+        {
+            if (StorylineManager.cueCharacter.idName == "Maeve")
+            {
+                DialogueSpreadSheetPatternConstants.maeveHealth = currentHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Penelope")
+            {
+                DialogueSpreadSheetPatternConstants.penelopeHealth = currentHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Brad")
+            {
+                DialogueSpreadSheetPatternConstants.bradHealth = currentHealth;
+            }
+            else if (StorylineManager.cueCharacter.idName == "Liam")
+            {
+                DialogueSpreadSheetPatternConstants.liamHealth = currentHealth;
+            }
+        }
     }
     void open()
     {

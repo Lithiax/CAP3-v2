@@ -8,6 +8,13 @@ using SimpleJSON;
 #if UNITY_EDITOR
 using UnityEditor;
 
+[System.Serializable]
+public class ReloadSheet
+{
+    public string spreadSheetName;
+    public string spreadSheetID;
+    public string sheetName;
+}
 
 public class SpreadSheetAPI : MonoBehaviour
 {
@@ -24,6 +31,7 @@ public class SpreadSheetAPI : MonoBehaviour
 
     [SerializeField] List<SO_SpreadSheet> so_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] List<SO_SpreadSheet> allso_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
+    [SerializeField] List<ReloadSheet> redoSpreadSheets = new List<ReloadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] string apiKey = "AIzaSyC8PPNhhTSLFqpcEUZZrGwTyl1m4e9xU-Q";
 
     private int currentSpreadSheetIndex;
@@ -36,28 +44,29 @@ public class SpreadSheetAPI : MonoBehaviour
     private List<int> backgroundIndexInSheet = new List<int>();
     private List<int> choiceIndexInSheet = new List<int>();
     public  List<CodeReplacement> codeReplacements = new List<CodeReplacement>();
-
-    public int counter = 0;
+    public bool reloadSheet = false;
     public void Awake()
     {
         DialogueSpreadSheetPatternConstants.dialogueName = DialogueSpreadSheetPatternConstants.dialogueName.ToLower();
         DialogueSpreadSheetPatternConstants.choiceName = DialogueSpreadSheetPatternConstants.choiceName.ToLower();
-        StartCoroutine(Co_LoadValues(so_SpreadSheets[0].name, so_SpreadSheets[0].spreadSheetID, so_SpreadSheets[0].sheetNames[0]));
 
+        if (reloadSheet)
+        {
+            if (redoSpreadSheets.Count > 0)
+            {
+                StartCoroutine(Co_LoadValues(redoSpreadSheets[0].spreadSheetName, redoSpreadSheets[0].spreadSheetID, redoSpreadSheets[0].sheetName));
+            }
+        }
+        else
+        {
+            StartCoroutine(Co_LoadValues(so_SpreadSheets[0].name, so_SpreadSheets[0].spreadSheetID, so_SpreadSheets[0].sheetNames[0]));
+        }
     }
 
     public IEnumerator Co_LoadValues(string p_spreadSheetName, string p_spreadSheetID, string p_sheetName)
     {
-        //if (counter < 10)
-        //{
-        //    counter++;
-        //}
-        //else
-        //{
         
-        //    yield return new WaitForSeconds(8f);
-        //    counter = 0;
-        //}
+      
  
         string rawJson = "";
 
@@ -67,7 +76,11 @@ public class SpreadSheetAPI : MonoBehaviour
             www.result == UnityWebRequest.Result.ProtocolError ||
             www.timeout > 2)  //Computer has no internet access/cannot connect to website, opt to use json file saved
         {
-
+            ReloadSheet r = new ReloadSheet();
+            r.spreadSheetName = p_spreadSheetName;
+            r.spreadSheetID = p_spreadSheetID;
+            r.sheetName = p_sheetName;
+            redoSpreadSheets.Add(r);
             Debug.Log(p_sheetName + " CURRENTLY OFFLINE DUE TO ERROR: " + www.error);
             Debug.Log("Spread Sheet Name: " + p_spreadSheetName + " Spread Sheet ID: " + p_spreadSheetID + " Sheet Name: " + p_sheetName);
         }
@@ -105,7 +118,7 @@ public class SpreadSheetAPI : MonoBehaviour
         {
             debuggerSheetRows = currentSheetRows;
         }
-
+ 
         FindScriptableObject(p_spreadSheetName, p_sheetName);
     }
 
@@ -140,6 +153,8 @@ public class SpreadSheetAPI : MonoBehaviour
         }
 
     }
+
+
 
     void GenerateScriptableObject(string p_assetPath, string p_sheetName)
     {
@@ -449,31 +464,59 @@ public class SpreadSheetAPI : MonoBehaviour
 
     public void SaveNextSheet()
     {
-        currentSheetIndex++;
+        if (!reloadSheet)
+        {
+            
+            currentSheetIndex++;
 
-        if (currentSheetIndex < so_SpreadSheets[currentSpreadSheetIndex].sheetNames.Count) //Sheet is Within Range
-        {
-            StartCoroutine(Co_LoadValues(so_SpreadSheets[currentSpreadSheetIndex].name, so_SpreadSheets[currentSpreadSheetIndex].spreadSheetID, so_SpreadSheets[currentSpreadSheetIndex].sheetNames[currentSheetIndex]));
-        }
-        else //Sheet is exceeding Range
-        {
-            currentSpreadSheetIndex++;
-            currentSheetIndex = 0;
-            if (currentSpreadSheetIndex < so_SpreadSheets.Count)
+            if (currentSheetIndex < so_SpreadSheets[currentSpreadSheetIndex].sheetNames.Count) //Sheet is Within Range
             {
-
                 StartCoroutine(Co_LoadValues(so_SpreadSheets[currentSpreadSheetIndex].name, so_SpreadSheets[currentSpreadSheetIndex].spreadSheetID, so_SpreadSheets[currentSpreadSheetIndex].sheetNames[currentSheetIndex]));
             }
-            else
+            else //Sheet is exceeding Range
             {
-                Debug.Log("ALL SHEETS LOADED");
-       
-                //TranslateCodeToReplacements();
-                //ConnectAllSheetsBranchDialogue();
+                currentSpreadSheetIndex++;
+                currentSheetIndex = 0;
+                if (currentSpreadSheetIndex < so_SpreadSheets.Count)
+                {
+
+                    StartCoroutine(Co_LoadValues(so_SpreadSheets[currentSpreadSheetIndex].name, so_SpreadSheets[currentSpreadSheetIndex].spreadSheetID, so_SpreadSheets[currentSpreadSheetIndex].sheetNames[currentSheetIndex]));
+                }
+                else
+                {
+                    Debug.Log("ALL SHEETS LOADED");
+
+                    currentSpreadSheetIndex = 0;
+                    currentSheetIndex = 0;
+
+
+                    //TranslateCodeToReplacements();
+                    //ConnectAllSheetsBranchDialogue();
+                }
+            }
+            
+        }
+           
+        else
+        {
+            currentSheetIndex++;
+
+            if (currentSheetIndex < redoSpreadSheets.Count) //Sheet is Within Range
+            {
+                StartCoroutine(Co_LoadValues(redoSpreadSheets[currentSheetIndex].spreadSheetName, redoSpreadSheets[currentSheetIndex].spreadSheetID, redoSpreadSheets[currentSheetIndex].sheetName));
+               
+            }
+            else //Sheet is exceeding Range
+            {
+                
+                Debug.Log("ALL SHEETS RELOADED");
+                
+
             }
         }
+       
     }
-
+  
     void TranslateCodeToReplacements()
     {
         Debug.Log("TRANSLATING ALL SHEETS CODES TO REPLACEMENT");

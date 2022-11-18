@@ -78,8 +78,9 @@ public class CharacterDialogueUI : MonoBehaviour
     bool cueBank = false;
     SO_Dialogues p_currentChoiceDataTest = null;
 
-    bool popUp = false; 
+    bool popUp = false;
 
+  
     IEnumerator Cd()
     {
         yield return new WaitForSeconds(3f);
@@ -236,6 +237,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnCloseCharacterDialogueUI()
     {
+        HealthUI.saveHealth.Invoke();
         StorylineManager.loggedWords.Clear();
         //Temporary
         if (visualnovel)
@@ -555,34 +557,38 @@ public class CharacterDialogueUI : MonoBehaviour
             //Debug.Log(StorylineManager.currentBackgroundMusic);
             
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
-            if (!string.IsNullOrEmpty(currentDialogue.backgroundMusic))
+            if (!StorylineManager.sideDialogue)
             {
-                if (currentDialogue.backgroundMusic.ToLower() != "error")
+                if (!string.IsNullOrEmpty(currentDialogue.backgroundMusic))
                 {
-                    if (StorylineManager.currentBackgroundMusic.ToLower() != currentDialogue.backgroundMusic.ToLower())
+                    if (currentDialogue.backgroundMusic.ToLower() != "error")
                     {
-                        if (currentDialogue.backgroundMusic.ToLower() != "stop")
+                        if (StorylineManager.currentBackgroundMusic.ToLower() != currentDialogue.backgroundMusic.ToLower())
                         {
-                            if (StorylineManager.currentBackgroundMusic != "")
+                            if (currentDialogue.backgroundMusic.ToLower() != "stop")
                             {
-                                AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
+                                if (StorylineManager.currentBackgroundMusic != "")
+                                {
+                                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
+                                }
+                                else
+                                {
+                                    AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
+                                }
+
+                                StorylineManager.currentBackgroundMusic = currentDialogue.backgroundMusic;
                             }
                             else
                             {
-                                AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
+                                AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+                                StorylineManager.currentBackgroundMusic = "";
                             }
+                        }
 
-                            StorylineManager.currentBackgroundMusic = currentDialogue.backgroundMusic;
-                        }
-                        else
-                        {
-                            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-                            StorylineManager.currentBackgroundMusic = "";
-                        }
                     }
-                   
                 }
-            } 
+            }
+                
            
             if (currentDialogue.specificEventType != SpecificEventType.none)
             {
@@ -687,7 +693,12 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID))
                             {
-                                DialogueSpreadSheetPatternConstants.effects.Add(StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.ToLower());
+                                string[] sheetDivided = StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.Split('&');
+                                for (int i = 0; i < sheetDivided.Length; i++)
+                                {
+                                    DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
+                                }
+                          
                             }
 
                         }
@@ -733,6 +744,7 @@ public class CharacterDialogueUI : MonoBehaviour
                                 }
                                 else
                                 {
+                                    
                                     OnCloseCharacterDialogueUI();
                                 }
                             }
