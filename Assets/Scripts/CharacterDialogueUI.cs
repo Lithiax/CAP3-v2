@@ -451,7 +451,16 @@ public class CharacterDialogueUI : MonoBehaviour
         List<SO_Character> oldCharacters = new List<SO_Character>();
         List<SO_Character> charactersToBeRemoved = new List<SO_Character>();
         List<SO_Character> charactersToBeAdded = new List<SO_Character>();
-
+        for (int i = 0; i < p_characterDatas.Count; i++)
+        {
+            newCharacters.Add(p_characterDatas[i].character);
+            //Debug.Log("CURRENT: " + newCharacters[i].name);
+        }
+        for (int i = 0; i < savedCharacters.Count; i++)
+        {
+            oldCharacters.Add(savedCharacters[i].so_Character);
+            //Debug.Log("saved: " + characterPresetDatas[i].name);
+        }
         //Mark the Characters to Add and Characters that Exists
         IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
         //Mark the Characters to Remove
