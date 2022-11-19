@@ -17,6 +17,7 @@ public class ChatUserData
     public int CurrentDialogueIndex;
     public bool CurrentDialogueComplete;
     public float RGMeter;
+    public bool WasBranchEffect;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -289,6 +290,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
         chatManager.OnSetNextTree += SetNextTree;
+        ChatData.WasBranchEffect = true;
 
         ChatData.CurrentDialogueComplete = false;
         chatManager.StartSpawningChat(this, DialogueTree);
@@ -302,6 +304,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     private void OnDisable()
     {
         chatManager.OnSetNextTree -= SetNextTree;
+        ChatData.WasBranchEffect = false;
         DialogueTree.OnNodeChanged -= OnNodeChange;
     }
 
@@ -368,8 +371,13 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             healthUI.currentHealth = ChatData.RGMeter;
             if (userData.dialogueTree != null)
             {
+                if (ChatData.WasBranchEffect == true)
+                {
+                    chatManager.OnSetNextTree += SetNextTree;
+                }
                 Divider = chatManager.SpawnDivider();
             }
+           
             LoadChatData(ChatData);
             DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
         }

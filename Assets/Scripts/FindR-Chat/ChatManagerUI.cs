@@ -263,7 +263,7 @@ public class ChatManagerUI : MonoBehaviour
 
         parent.currentChatComplete = true;
         parent.ChatData.CurrentDialogueComplete = true;
-        Debug.Log("CURRRENT CHAT COMPLETE");
+        Debug.Log("CURRENT CHAT COMPLETE current events: " + ChatCollection.ChatEvents.Count);
         //if event, register
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
