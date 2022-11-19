@@ -239,7 +239,11 @@ public class CharacterDialogueUI : MonoBehaviour
         id = p_id;
         rarara = false;
         p_currentChoiceDataTest = null;
-        healthUI.OnInitializeEvent.Invoke(StorylineManager.cueCharacter.idName);
+        if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
+        {
+            healthUI.OnInitializeEvent.Invoke(DialogueSpreadSheetPatternConstants.cueCharacter.idName);
+        }
+   
         //if (runningCoroutines > 0)
         //{
         //    isSkipping = false;
