@@ -344,7 +344,7 @@ public class CharactersUI : MonoBehaviour
 
     void AddAvatar(List<SO_Character> p_charactersToBeAdded)
     {
-    
+        Debug.Log(" COUNTER " + p_charactersToBeAdded.Count);
         for (int i = 0; i < p_charactersToBeAdded.Count; i++)
         {
             Character newCharacter = null;
@@ -450,90 +450,4 @@ public class CharactersUI : MonoBehaviour
 
     }
 
-
-    void IdentifyCharactersToAdd(List<SO_Character> newList, List<SO_Character> oldList, List<SO_Character> charactersToBeAdded)
-    {
-
-        //Mark the Characters to Add and Characters that Exists
-        for (int i = 0; i < newList.Count; i++)
-        {
-            if (oldList.Count > 0)
-            {
-                for (int x = 0; x < oldList.Count;)
-                {
-                    if (newList[i] == oldList[x])//matching
-                    {
-                        break;
-                    }
-                    x++;
-                    if (x >= oldList.Count)//new
-                    {
-                        charactersToBeAdded.Add(newList[i]);
-                    }
-                }
-            }
-            else
-            {
-                charactersToBeAdded.Add(newList[i]);
-            }
-
-        }
-
-    }
-    void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> newList, List<SO_Character> charactersToBeRemoved)
-    {
-        //Mark the Characters to Remove
-        for (int oldIndex = 0; oldIndex < oldList.Count; oldIndex++)
-        {
-            if (newList.Count > 0)
-            {
-                for (int currentIndex = 0; currentIndex < newList.Count;)
-                {
-                    if (oldList[oldIndex] == newList[currentIndex]) //If Old Element in Old List Matches New Element in New List, it means it stays
-                    {
-                        break;
-                    }
-
-                    currentIndex++;
-                    if (currentIndex >= newList.Count)
-                    {
-                        if (charactersToBeRemoved.Count > 0)
-                        {
-                            for (int removedIndex = 0; removedIndex < charactersToBeRemoved.Count;)
-                            {
-                                if (charactersToBeRemoved[removedIndex] == oldList[oldIndex])
-                                {
-                                    //It already is marked to be removed
-                                    break;
-                                }
-                                removedIndex++;
-                                if (currentIndex >= charactersToBeRemoved.Count)
-                                {
-                                    //It has not been already marked to be removed
-                                    charactersToBeRemoved.Add(oldList[oldIndex]);
-                                }
-
-
-                            }
-                        }
-                        else
-                        {
-                            charactersToBeRemoved.Add(oldList[oldIndex]);
-                        }
-
-
-
-                    }
-                }
-
-            }
-            else
-            {
-                charactersToBeRemoved.Add(oldList[oldIndex]);
-            }
-
-
-        }
-
-    }
 }

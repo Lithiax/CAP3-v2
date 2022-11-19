@@ -386,7 +386,7 @@ public class CharacterDialogueUI : MonoBehaviour
             }
 
         }
-
+        Debug.Log("LOCAL COUNT: " + charactersToBeAdded.Count);
     }
     void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> newList, List<SO_Character> charactersToBeRemoved)
     {
@@ -451,11 +451,22 @@ public class CharacterDialogueUI : MonoBehaviour
         List<SO_Character> oldCharacters = new List<SO_Character>();
         List<SO_Character> charactersToBeRemoved = new List<SO_Character>();
         List<SO_Character> charactersToBeAdded = new List<SO_Character>();
-
+        for (int i = 0; i < p_characterDatas.Count; i++)
+        {
+            newCharacters.Add(p_characterDatas[i].character);
+            //Debug.Log("CURRENT: " + newCharacters[i].name);
+        }
+        for (int i = 0; i < savedCharacters.Count; i++)
+        {
+            oldCharacters.Add(savedCharacters[i].so_Character);
+            //Debug.Log("saved: " + characterPresetDatas[i].name);
+        }
         //Mark the Characters to Add and Characters that Exists
         IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
         //Mark the Characters to Remove
         IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
+
+        Debug.Log(" COUNTER DD " + charactersToBeAdded.Count);
 
         CharactersUI.onRemoveCharactersEvent.Invoke(charactersToBeRemoved);
         CharactersUI.onAddCharactersEvent.Invoke(charactersToBeAdded);
@@ -642,6 +653,7 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
+            nextDialogueButton.SetActive(false);
             EndOfDialogue();
         }
     }
@@ -683,7 +695,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         else
                         {
                             //Creating Choices
-                            nextDialogueButton.SetActive(false);
+                            //nextDialogueButton.SetActive(false);
                             ChoicesUI.OnChoosingChoiceEvent(StorylineManager.currentSO_Dialogues.choiceDatas);
  
 
@@ -753,7 +765,9 @@ public class CharacterDialogueUI : MonoBehaviour
                                 if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
                                 {
                                     Debug.Log("Going Next dialogue");
+                           
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                                    nextDialogueButton.SetActive(true);
                                 }
                             }
 
