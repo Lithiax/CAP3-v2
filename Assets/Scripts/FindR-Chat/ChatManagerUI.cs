@@ -362,7 +362,7 @@ public class ChatManagerUI : MonoBehaviour
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
         //If dialogue tree is over
-        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0 && ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
         {
             if (!ChatCollection.isEvent())
             {
@@ -370,7 +370,7 @@ public class ChatManagerUI : MonoBehaviour
                 OnSetNextTree?.Invoke();
                 Debug.Log("Choice END");
             }
-            else
+            else if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
             {
                 OnTreeEnded?.Invoke();
             }
