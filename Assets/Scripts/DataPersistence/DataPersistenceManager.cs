@@ -31,7 +31,6 @@ public class DataPersistenceManager : MonoBehaviour
         dataHandler = new FileDataHandler(Application.persistentDataPath);
         dataPersistenceObjets = FindAllDataPersistenceObj();
         NewGame();
-        SceneManager.sceneLoaded += GetAndLoadData;
     }
 
     public void NewGame()
@@ -56,6 +55,8 @@ public class DataPersistenceManager : MonoBehaviour
             SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
         }
 
+        SceneManager.sceneLoaded += GetAndLoadData;
+
         //Commented because it doesnt load data in the loaded scene lol
         //foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
         //{
@@ -71,6 +72,8 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObject.LoadData(gameData);
         }
+
+        SceneManager.sceneLoaded -= GetAndLoadData;
     }
 
     public void SaveGame(string pfileName)
