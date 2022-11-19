@@ -246,6 +246,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             {
                 nextContainer = d;
                 DialogueTree.SetDialogueTree(nextContainer);
+                ChatData.CurrentTree = DialogueTree.DialogueTree;
 
                 break;
             }
@@ -264,6 +265,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 nextContainer = d;
 
                 DialogueTree.SetDialogueTree(nextContainer);
+                ChatData.CurrentTree = DialogueTree.DialogueTree;
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
@@ -371,6 +373,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             healthUI.currentHealth = ChatData.RGMeter;
             if (userData.dialogueTree != null)
             {
+                DialogueTree.SetDialogueTree(ChatData.CurrentTree);
                 if (ChatData.WasBranchEffect == true)
                 {
                     chatManager.OnSetNextTree += SetNextTree;
