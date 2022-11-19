@@ -19,9 +19,9 @@ public class ChatEvent
     public ChatEventTypes EventType;
     public ChatUserSO userOwner;
 
-    public void RaiseEvent()
+    public void RaiseEvent(ChatUserSO owner)
     {
-        onEvent?.Invoke(userOwner, EventData, EventType);
+        onEvent?.Invoke(owner, EventData, EventType);
     }
 
     public string GetResponse()

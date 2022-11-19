@@ -13,7 +13,7 @@ public class FindREventsManager : MonoBehaviour
     [SerializeField] Button BeginDateYesButton;
 
     List<ChatEvent> events = new List<ChatEvent>();
-    [HideInInspector] public List<ChatUser> ChatUsers;
+    public List<ChatUser> ChatUsers;
     public void RegisterEvent(ChatEvent chatEvents)
     {
         Debug.Log("Register");

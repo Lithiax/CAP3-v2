@@ -57,6 +57,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [SerializeField] Color onlineColor;
 
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
+    [SerializeField] HealthUI healthUI;
     public ChatUserData ChatData { get; private set; }
     GameObject Divider;
     GameObject newMatchPanel;
@@ -80,7 +81,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public void ModifyHealth(int health)
     {
- 
+        healthUI.OnModifyHealthEvent?.Invoke(health);
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -212,6 +213,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 break;
         }
 
+        healthUI.currentHealth = data.RGMeter;
     }
 
     void LoadChatData(ChatUserData data)
@@ -363,7 +365,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
         {
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
-
+            healthUI.currentHealth = ChatData.RGMeter;
             if (userData.dialogueTree != null)
             {
                 Divider = chatManager.SpawnDivider();

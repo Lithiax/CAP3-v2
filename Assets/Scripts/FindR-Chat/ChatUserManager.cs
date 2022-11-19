@@ -22,7 +22,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     List<GameObject> SpawnedUserObjects = new List<GameObject>();
     List<int> IDs = new List<int>();
     List<string> effectsToRemove = new List<string>();
-    public bool DataLoaded = false;
+    [HideInInspector] public bool DataLoaded = false;
 
     GameData gameData = null;
     private void Awake()

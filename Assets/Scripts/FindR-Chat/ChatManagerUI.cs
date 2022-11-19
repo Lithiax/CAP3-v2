@@ -120,7 +120,7 @@ public class ChatManagerUI : MonoBehaviour
     }
     void EventClicked(ChatUser parent, ChatEvent chatCollection)
     {
-        chatCollection.RaiseEvent();
+        chatCollection.RaiseEvent(parent.ChatUserSO);
     }
 
     public void ActivateChat(List<GameObject> chats, bool con)
@@ -183,6 +183,15 @@ public class ChatManagerUI : MonoBehaviour
     IEnumerator SpawnChats(ChatUser parent, DialogueGraphAPI Tree)
     {
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
+
+        foreach (ChatEvent ev in ChatCollection.ChatEvents)
+        {
+            if (ev.EventType == ChatEventTypes.RGaugeEvent)
+            {
+                EventManager.RegisterEvent(ev);
+                ev.RaiseEvent(parent.ChatUserSO);
+            }
+        }
 
         if (!parent.ChatData.CurrentDialogueComplete)
         {
@@ -254,14 +263,17 @@ public class ChatManagerUI : MonoBehaviour
 
         parent.currentChatComplete = true;
         parent.ChatData.CurrentDialogueComplete = true;
-
+        Debug.Log("CURRRENT CHAT COMPLETE");
         //if event, register
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
-            EventManager.RegisterEvent(ev);
-            if (ev.EventType != ChatEventTypes.DateEvent)
+            if (ev.EventType != ChatEventTypes.RGaugeEvent)
             {
-                ev.RaiseEvent();
+                EventManager.RegisterEvent(ev);
+                if (ev.EventType != ChatEventTypes.DateEvent)
+                {
+                    ev.RaiseEvent(parent.ChatUserSO);
+                }
             }
         }
 
