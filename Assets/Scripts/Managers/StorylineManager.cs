@@ -26,7 +26,7 @@ public class CueChoice
 }
 public class StorylineManager : MonoBehaviour, IDataPersistence
 {
-    public static bool firstTime;
+    public static bool firstTime = false;
     public static Action OnLoadedEvent;
     public static void LoadVisualNovel(string folderField, string sheetField)
     {
