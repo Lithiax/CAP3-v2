@@ -193,12 +193,17 @@ public class ChatManagerUI : MonoBehaviour
             }
         }
 
+        Debug.Log("Dialogue Complete: " + parent.ChatData.CurrentDialogueComplete);
+        Debug.Log("Current Index: " + Tree.CurrentNode.CurrentIndex);
+
         if (!parent.ChatData.CurrentDialogueComplete)
         {
             for (int i = Tree.CurrentNode.CurrentIndex; i < ChatCollection.ChatData.Count; i++)
             {
-                Tree.CurrentNode.CurrentIndex = i;
-                ChatBubble chat = ChatCollection.ChatData[i];
+                int index = i;
+                Tree.CurrentNode.CurrentIndex = index;
+                Debug.Log("Current Index: " + Tree.CurrentNode.CurrentIndex);
+                ChatBubble chat = ChatCollection.ChatData[index];
                 //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
                 //Check if tree is not the first node
 

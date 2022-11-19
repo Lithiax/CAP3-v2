@@ -434,4 +434,5 @@ public class ChatUser : MonoBehaviour, IDataPersistence
  * 3. Load Proper Dialogue Tree - Done
  * 4. Jump to previous Node - Done
  * 5. Fix Weird bug where UI is not loaded for the first chat - Not Done
+ * 6. Fix bug where if you save while chat is loading on the last element. it resets it due to index going back to 0.
 */
