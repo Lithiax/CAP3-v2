@@ -56,9 +56,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [SerializeField] Color offlineColor;
     [SerializeField] Color onlineColor;
 
-    [Header("RG Bar")]
-    [SerializeField] Image Bar;
-
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     public ChatUserData ChatData { get; private set; }
     GameObject Divider;
@@ -79,6 +76,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         panelRectTransform = GetComponent<RectTransform>();
 
         DialogueTree.OnNodeChanged += OnNodeChange;
+    }
+
+    public void ModifyHealth(int health)
+    {
+        HealthUI.OnModifyHealthEvent?.Invoke(health);
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
