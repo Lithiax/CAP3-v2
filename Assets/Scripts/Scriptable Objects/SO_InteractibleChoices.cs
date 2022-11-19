@@ -15,6 +15,7 @@ public class CueChoiceData
 public class SO_InteractibleChoices : ScriptableObject
 {
     public CharacterData characterData;
+    public SO_Dialogues deathSheet;
     public List<CueChoiceData> choiceDatas = new List<CueChoiceData>();
 
     public List<ChoiceData> GetChoiceData(string p_cueTypeValue)

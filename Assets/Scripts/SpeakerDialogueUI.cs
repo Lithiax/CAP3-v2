@@ -97,7 +97,6 @@ public class SpeakerDialogueUI : MonoBehaviour
         currentDialogueBox.gameObject.SetActive(p_desiredToggle);
         currentSpeakerBox.gameObject.SetActive(p_desiredToggle);
         extraButtonsContainer.gameObject.SetActive(p_desiredToggle);
-        Debug.Log(p_desiredToggle);
     }
     public void ToggleExtras()
     {
@@ -135,7 +134,6 @@ public class SpeakerDialogueUI : MonoBehaviour
                 CharacterDialogueUI.OnIsSkipping.Invoke();
                 StopAllCoroutines();
                 characterDialogueUI.runningCoroutines = 0;
-                // Debug.Log("READYING");
 
             }
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
@@ -154,8 +152,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
                 if (p_characterDatas[i].isSpeaking)
                 {
-                    currentSpeakerText.text = p_characterDatas[i].character.stageName;
-                    //Debug.Log("CURRENT SPEAKER NAME: " + p_characterDatas[i].character.stageName);
+                    currentSpeakerText.text = p_characterDatas[i].character.stageName; 
                 }
 
             }
@@ -220,11 +217,9 @@ public class SpeakerDialogueUI : MonoBehaviour
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
         canOpen = true;
-        //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
     {
-        //Debug.Log("ITS PLAYING");
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         string p_currentText;
         for (int i = 0; i <= p_fullText.Length; i++)

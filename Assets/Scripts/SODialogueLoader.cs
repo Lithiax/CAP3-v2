@@ -24,6 +24,7 @@ public class SODialogueLoader : MonoBehaviour
     }
     public void LoadSODialogueButtonUI()
     {
+        StorylineManager.firstTime = true;
         StorylineManager.LoadVisualNovel(folderField.text, sheetField.text);
         //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         //mainCharacter.stageName = "You";
@@ -32,8 +33,8 @@ public class SODialogueLoader : MonoBehaviour
         if (StorylineManager.currentSO_Dialogues != null)
         {
             Debug.Log("DIALOGUE LOADED");
-            CharacterDialogueUI.onCharacterSpokenTo.Invoke("");
-        
+            //CharacterDialogueUI.onCharacterSpokenTo.Invoke("");
+
             frame.SetActive(false);
         }
         else

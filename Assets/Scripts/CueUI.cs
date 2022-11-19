@@ -47,7 +47,7 @@ public class CueUI : MonoBehaviour
                 ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerRectTransform);
                 newChoiceUI.InitializeValues(p_choiceDatas[i].choiceData.words);
                 ChoiceData currentChoiceData = p_choiceDatas[i].choiceData;
-                if (HealthUI.myDelegate.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
+                if (HealthUI.OnIsWithinHealthConditionEvent.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
                 {
                     //Can be selected
                     newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
@@ -95,7 +95,7 @@ public class CueUI : MonoBehaviour
         //{
 
         //}
-        HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+        HealthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
         //if (p_currentChoiceData.effectID != "")
         //{
         //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);

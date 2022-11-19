@@ -31,6 +31,7 @@ public class SpreadSheetAPI : MonoBehaviour
 
     [SerializeField] List<SO_SpreadSheet> so_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] List<SO_SpreadSheet> allso_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
+    [SerializeField] List<SO_SpreadSheet> alltempso_SpreadSheets = new List<SO_SpreadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] List<ReloadSheet> redoSpreadSheets = new List<ReloadSheet>();//"1sXdUXWGEicqD-EotO6DOppzJYMrR_rNhWJszIvgSiC4";
     [SerializeField] string apiKey = "AIzaSyC8PPNhhTSLFqpcEUZZrGwTyl1m4e9xU-Q";
 
@@ -531,7 +532,7 @@ public class SpreadSheetAPI : MonoBehaviour
                 string spreadSheetFileLocation = "Scriptable Objects/Dialogues/Visual Novel/" + allso_SpreadSheets[localSpreadSheetIndex].name + "/";
                 if (allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex] != "Interactible Choices")
                 {
-                    Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
+                    Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " : " + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     for (int i = 0; i < currentSheetSODialogue.dialogues.Count; i++)
                     {
@@ -618,8 +619,12 @@ public class SpreadSheetAPI : MonoBehaviour
                     //for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     //{
                         Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
-                        //GO BACK
-                        for (int x = 0; x < CueType.GetValues(typeof(CueType)).Length - 1; x++)
+                    if(allso_SpreadSheets[localSpreadSheetIndex].canAbruptEnd)
+                    {
+                        currentSheetSODialogue.deathSheet = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, allso_SpreadSheets[localSpreadSheetIndex].sheetNames[allso_SpreadSheets[localSpreadSheetIndex].sheetNames.Count - 1]);
+                    }
+
+                    for (int x = 0; x < CueType.GetValues(typeof(CueType)).Length - 1; x++)
                         {
                             string target = ((CueType)x).ToString().ToLower();
                             List<ChoiceData> selectedChoiceDatas = currentSheetSODialogue.GetChoiceData(target);

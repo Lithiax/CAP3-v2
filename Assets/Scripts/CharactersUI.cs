@@ -48,6 +48,7 @@ public class CharactersUI : MonoBehaviour
         onUpdateCharacterDatasEvent -= UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping -= Skip;
     }
+
     void Skip()
     {
         for (int i = 0; i < characterDatas.Count; i++)
@@ -300,8 +301,7 @@ public class CharactersUI : MonoBehaviour
 
     void RemoveAvatar(List<SO_Character> p_charactersToBeRemoved)
     {
-        //Debug.Log("-----REMOVING " + isSkipping);
-        //Do functions to characters to be Added
+        //Do functions to characters to be Removed
         for (int i = 0; i < p_charactersToBeRemoved.Count; i++)
         {
             Character foundCharacter = FindPreset(p_charactersToBeRemoved[i]);
@@ -312,17 +312,7 @@ public class CharactersUI : MonoBehaviour
                     CharacterUI foundPreset = foundCharacter as CharacterUI;
                     if (p_charactersToBeRemoved[i].avatar != null)
                     {
-                        //if (CharacterDialogueUI.isSkipping)
-                        //{
-
-                        //    // Debug.Log("REMOVINGRR " + foundPreset);
-                        //    CharacterDialogueUI.savedCharacters.Remove(foundPreset);
-                        //    Destroy(foundPreset.gameObject);
-                        //}
-                        //else
-                        //{
-                            StartCoroutine(AvatarFadeOut(foundPreset.avatarImage, foundPreset));
-                        //}
+                        StartCoroutine(AvatarFadeOut(foundPreset.avatarImage, foundPreset));
                     }
 
                 }
@@ -338,7 +328,6 @@ public class CharactersUI : MonoBehaviour
                     {
                         for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
                         {
-                            Debug.Log("DELETING RAD");
                             Destroy(live2DCollisionUIContainerTransform.GetChild(x).gameObject);
                         }
                     }
@@ -359,7 +348,6 @@ public class CharactersUI : MonoBehaviour
         for (int i = 0; i < p_charactersToBeAdded.Count; i++)
         {
             Character newCharacter = null;
-            // Debug.Log("PRINT NAME: " + p_charactersToBeAdded[i].name);
 
             if (p_charactersToBeAdded[i] != null)
             {

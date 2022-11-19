@@ -87,7 +87,7 @@ public class ChoicesUI : MonoBehaviour
             ChoiceData currentChoiceData = p_choiceDatas[i];
             if (StorylineManager.currentSO_Dialogues.choiceDatas[i].isHealthConditionInUseColumnPattern)
             {
-                if (HealthUI.myDelegate.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                if (HealthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
                 {
                     //Can be selected
                     newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
@@ -171,7 +171,7 @@ public class ChoicesUI : MonoBehaviour
         //{
 
         //}
-        HealthUI.ModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+        HealthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
       
         //Set Pop Up
         Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);

@@ -55,6 +55,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void NewGameButton()
     {
+        StorylineManager.firstTime = true;
         StorylineManager.LoadVisualNovel("Maeve1", "Week1");
         //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         //mainCharacter.stageName = "You";
