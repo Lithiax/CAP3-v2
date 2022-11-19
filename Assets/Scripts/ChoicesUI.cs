@@ -5,9 +5,12 @@ using UnityEngine.UI;
 using System;
 public class ChoicesUI : MonoBehaviour
 {
+
     [SerializeField] private GameObject choiceUIsContainer;
     private Transform choiceUIsContainerTransform;
     private RectTransform choiceUIsContainerRectTransform;
+
+    [SerializeField] private HealthUI healthUI;
 
     [SerializeField] private ChoiceUI choiceUIPrefab;
 
@@ -33,7 +36,7 @@ public class ChoicesUI : MonoBehaviour
      
     void open()
     {
-        Des();
+        Destroy();
         choiceUIsContainer.SetActive(false);
     }
 
@@ -59,7 +62,7 @@ public class ChoicesUI : MonoBehaviour
         StorylineManager.OnLoadedEvent -= ResetChoiceManager;
     }
   
-    void Des()
+    void Destroy()
     {
         if (choiceUIsContainer.activeSelf)
         {
@@ -71,15 +74,10 @@ public class ChoicesUI : MonoBehaviour
         }
     }
 
-    //void CreateChoiceUIsss(List<ChoiceData> p_choiceDatas)
-    //{
-
-    //}
     void CreateChoiceUIs(List<ChoiceData> p_choiceDatas)
     {
-        Des();
+        Destroy();
         choiceUIsContainer.SetActive(true);
-        Debug.Log("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
         for (int i = 0; i < p_choiceDatas.Count; i++)
         {
             ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerTransform);
@@ -87,7 +85,7 @@ public class ChoicesUI : MonoBehaviour
             ChoiceData currentChoiceData = p_choiceDatas[i];
             if (StorylineManager.currentSO_Dialogues.choiceDatas[i].isHealthConditionInUseColumnPattern)
             {
-                if (HealthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                if (healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
                 {
                     //Can be selected
                     newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
@@ -167,11 +165,7 @@ public class ChoicesUI : MonoBehaviour
         ResetChoiceManager();
 
         //Set Choice Damage
-        //if (p_currentChoiceData.damage)
-        //{
-
-        //}
-        HealthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+        healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
       
         //Set Pop Up
         Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
@@ -197,12 +191,9 @@ public class ChoicesUI : MonoBehaviour
         {
             savedchoiceDatas.Add(p_choiceDatas[i]);
         }
-        Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
-        
-            StartCoroutine(Delay(savedchoiceDatas));
+        StartCoroutine(Delay(savedchoiceDatas));
       
-
     }
     IEnumerator Delay(List<ChoiceData> p_choiceDatas)
     {

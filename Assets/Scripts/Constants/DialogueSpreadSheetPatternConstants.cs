@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class DialogueSpreadSheetPatternConstants 
 {
-    public static float penelopeHealth;
-    public static float bradHealth;
-    public static float liamHealth;
-    public static float maeveHealth;
+    public static float penelopeHealth = 100;
+    public static float bradHealth = 100;
+    public static float liamHealth = 100;
+    public static float maeveHealth = 100;
 
     public static List<string> effects = new List<string>();
     [Header("Google Sheet")]
