@@ -32,8 +32,8 @@ public class SaveFileUI : MonoBehaviour
                 byte[] bytes = File.ReadAllBytes(fullPath);
                 Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);
                 texture.LoadImage(bytes);
-
                 SetUpImage(texture);
+
                 FileText.text = "File " + ID.ToString();
             }
             catch (Exception e)
