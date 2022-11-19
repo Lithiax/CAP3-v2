@@ -386,7 +386,7 @@ public class CharacterDialogueUI : MonoBehaviour
             }
 
         }
-
+        Debug.Log("LOCAL COUNT: " + charactersToBeAdded.Count);
     }
     void IdentifyCharactersToRemove(List<SO_Character> oldList, List<SO_Character> newList, List<SO_Character> charactersToBeRemoved)
     {
@@ -456,6 +456,8 @@ public class CharacterDialogueUI : MonoBehaviour
         IdentifyCharactersToAdd(newCharacters, oldCharacters, charactersToBeAdded);
         //Mark the Characters to Remove
         IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
+
+        Debug.Log(" COUNTER DD " + charactersToBeAdded.Count);
 
         CharactersUI.onRemoveCharactersEvent.Invoke(charactersToBeRemoved);
         CharactersUI.onAddCharactersEvent.Invoke(charactersToBeAdded);
@@ -642,6 +644,7 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
+            nextDialogueButton.SetActive(false);
             EndOfDialogue();
         }
     }
@@ -683,7 +686,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         else
                         {
                             //Creating Choices
-                            nextDialogueButton.SetActive(false);
+                            //nextDialogueButton.SetActive(false);
                             ChoicesUI.OnChoosingChoiceEvent(StorylineManager.currentSO_Dialogues.choiceDatas);
  
 
@@ -753,7 +756,9 @@ public class CharacterDialogueUI : MonoBehaviour
                                 if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
                                 {
                                     Debug.Log("Going Next dialogue");
+                           
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
+                                    nextDialogueButton.SetActive(true);
                                 }
                             }
 

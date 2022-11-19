@@ -344,7 +344,7 @@ public class CharactersUI : MonoBehaviour
 
     void AddAvatar(List<SO_Character> p_charactersToBeAdded)
     {
-    
+        Debug.Log(" COUNTER " + p_charactersToBeAdded.Count);
         for (int i = 0; i < p_charactersToBeAdded.Count; i++)
         {
             Character newCharacter = null;
