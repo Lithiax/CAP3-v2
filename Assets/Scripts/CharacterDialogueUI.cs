@@ -80,6 +80,8 @@ public class CharacterDialogueUI : MonoBehaviour
 
     bool popUp = false;
 
+    [SerializeField] private HealthUI healthUI;
+
     public GameObject tutorial;
     public Image tutorialImage;
     public List<Sprite> tutorialImages = new List<Sprite>();
@@ -126,7 +128,7 @@ public class CharacterDialogueUI : MonoBehaviour
         OnAddNewTransitionEvent += AddNewTransitionEvent;
         OnFinishTransitionEvent += FinishTransitionEvent;
         OnCheckIfSkippableEvent += CheckIfReady;
-        HealthUI.OnHealthDeathEvent += HealthDeath;
+        healthUI.OnHealthDeathEvent += HealthDeath;
 
 
     }
@@ -134,7 +136,6 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         //EVENTS
         ActionUIs.onEnterEvent -= open;
-        //  ActionUIs.onPointClickEvent -= open;
         OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
         OnEndChooseChoiceEvent -= ResetCharacterDialogueUI;
@@ -145,7 +146,7 @@ public class CharacterDialogueUI : MonoBehaviour
         OnAddNewTransitionEvent -= AddNewTransitionEvent;
         OnFinishTransitionEvent -= FinishTransitionEvent;
         OnCheckIfSkippableEvent -= CheckIfReady;
-        HealthUI.OnHealthDeathEvent -= HealthDeath;
+        healthUI.OnHealthDeathEvent -= HealthDeath;
 
     }
 
@@ -170,7 +171,6 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         cueBank = false;
         nextDialogueButton.SetActive(true);
-        //StartCoroutine(del());
     }
 
     IEnumerator del()
@@ -239,6 +239,7 @@ public class CharacterDialogueUI : MonoBehaviour
         id = p_id;
         rarara = false;
         p_currentChoiceDataTest = null;
+        healthUI.OnInitializeEvent.Invoke(StorylineManager.cueCharacter.idName);
         //if (runningCoroutines > 0)
         //{
         //    isSkipping = false;
@@ -281,7 +282,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnCloseCharacterDialogueUI()
     {
-        HealthUI.OnSaveHealthEvent.Invoke();
+        healthUI.OnSaveHealthEvent.Invoke();
         StorylineManager.loggedWords.Clear();
         //Temporary
         if (visualnovel)
@@ -325,7 +326,6 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void ResetCharacterDialogueUI()
     {
-        //StorylineManager.currentDialogueIndex = 0;
         isSkipping = false;
         runningCoroutines = 0;
         isAlreadyEnded = false;
@@ -670,7 +670,7 @@ public class CharacterDialogueUI : MonoBehaviour
                             for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
                             {
 
-                                if (HealthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
+                                if (healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
                                 {
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
                                     StorylineManager.currentDialogueIndex = 0;
@@ -722,7 +722,7 @@ public class CharacterDialogueUI : MonoBehaviour
                             //}
                             Debug.Log(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue);
                             //Set Choice Damage
-                            HealthUI.OnModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                            healthUI.OnModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
 
                             StorylineManager.currentDialogueIndex = 0;
                             

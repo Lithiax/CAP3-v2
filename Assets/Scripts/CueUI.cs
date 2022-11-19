@@ -15,7 +15,7 @@ public class CueUI : MonoBehaviour
     [SerializeField] private GameObject choiceUIsContainer;
     [SerializeField] private RectTransform choiceUIsContainerRectTransform;
     [SerializeField] private ChoiceUI choiceUIPrefab;
-
+    [SerializeField] private HealthUI healthUI;
     public static Action onChoiceChosenEvent;
     private void Awake()
     {
@@ -47,7 +47,7 @@ public class CueUI : MonoBehaviour
                 ChoiceUI newChoiceUI = Instantiate(choiceUIPrefab, choiceUIsContainerRectTransform);
                 newChoiceUI.InitializeValues(p_choiceDatas[i].choiceData.words);
                 ChoiceData currentChoiceData = p_choiceDatas[i].choiceData;
-                if (HealthUI.OnIsWithinHealthConditionEvent.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
+                if (healthUI.OnIsWithinHealthConditionEvent.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
                 {
                     //Can be selected
                     newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
@@ -91,11 +91,7 @@ public class CueUI : MonoBehaviour
         ResetChoiceManager();
 
         //Set Choice Damage
-        //if (p_currentChoiceData.damage)
-        //{
-
-        //}
-        HealthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+        healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
         //if (p_currentChoiceData.effectID != "")
         //{
         //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);

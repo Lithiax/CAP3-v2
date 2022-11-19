@@ -80,7 +80,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public void ModifyHealth(int health)
     {
-        HealthUI.OnModifyHealthEvent?.Invoke(health);
+ 
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)

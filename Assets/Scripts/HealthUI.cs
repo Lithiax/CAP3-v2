@@ -102,12 +102,14 @@ public class TransitionData
 
 public class HealthUI : MonoBehaviour
 {
+    public string characterOwnerName = "";
     public float currentHealth = 100f;
     public float maxHealth = 100f;
-    public static Action<int> OnModifyHealthEvent;
-    public static Action OnHealthDeathEvent;
-    public static Action OnSaveHealthEvent;
-    public static IsWithinHealthCondition OnIsWithinHealthConditionEvent;
+    public Action<string> OnInitializeEvent;
+    public Action<int> OnModifyHealthEvent;
+    public Action OnHealthDeathEvent;
+    public Action OnSaveHealthEvent;
+    public IsWithinHealthCondition OnIsWithinHealthConditionEvent;
 
     [SerializeField] private GameObject frame;
     [SerializeField] private Image realBarUI; //colored
@@ -133,6 +135,7 @@ public class HealthUI : MonoBehaviour
     IEnumerator runningCoroutine;
     private void Awake()
     {
+        OnInitializeEvent += OnInitialize;
         OnModifyHealthEvent += ModifyHealth;
         OnIsWithinHealthConditionEvent += IsWithinHealthCondition;
         OnSaveHealthEvent += SaveHealth;
@@ -141,7 +144,23 @@ public class HealthUI : MonoBehaviour
         realBarUI.fillAmount = 0f;
         ghostBarUI.fillAmount = 0f;
 
-        if (StorylineManager.cueCharacter != null)
+        
+        InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+    }
+
+    private void OnDestroy()
+    {
+        OnInitializeEvent -= OnInitialize;
+        OnSaveHealthEvent -= SaveHealth;
+        OnModifyHealthEvent -= ModifyHealth;
+        OnIsWithinHealthConditionEvent -= IsWithinHealthCondition;
+        CharacterDialogueUI.OnInspectingEvent -= Open;
+        CharacterDialogueUI.OnDeinspectingEvent -= Close;
+    }
+    void OnInitialize(string p_ownerName)
+    {
+        characterOwnerName = p_ownerName;
+        if (!string.IsNullOrEmpty(characterOwnerName))
         {
             if (StorylineManager.cueCharacter.idName == "Maeve")
             {
@@ -160,18 +179,7 @@ public class HealthUI : MonoBehaviour
                 currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
             }
         }
-        InstantUpdateBar(currentHealth, maxHealth, maxHealth);
     }
-
-    private void OnDestroy()
-    {
-        OnSaveHealthEvent -= SaveHealth;
-        OnModifyHealthEvent -= ModifyHealth;
-        OnIsWithinHealthConditionEvent -= IsWithinHealthCondition;
-        CharacterDialogueUI.OnInspectingEvent -= Open;
-        CharacterDialogueUI.OnDeinspectingEvent -= Close;
-    }
-
     void SaveHealth()
     {
         if (StorylineManager.cueCharacter != null)
