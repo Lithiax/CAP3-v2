@@ -162,19 +162,19 @@ public class HealthUI : MonoBehaviour
         characterOwnerName = p_ownerName;
         if (!string.IsNullOrEmpty(characterOwnerName))
         {
-            if (StorylineManager.cueCharacter.idName == "Maeve")
+            if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Maeve")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.maeveHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Penelope")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Penelope")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Brad")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Brad")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.bradHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Liam")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Liam")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
             }
@@ -182,21 +182,21 @@ public class HealthUI : MonoBehaviour
     }
     void SaveHealth()
     {
-        if (StorylineManager.cueCharacter != null)
+        if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
         {
-            if (StorylineManager.cueCharacter.idName == "Maeve")
+            if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Maeve")
             {
                 DialogueSpreadSheetPatternConstants.maeveHealth = currentHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Penelope")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Penelope")
             {
                 DialogueSpreadSheetPatternConstants.penelopeHealth = currentHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Brad")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Brad")
             {
                 DialogueSpreadSheetPatternConstants.bradHealth = currentHealth;
             }
-            else if (StorylineManager.cueCharacter.idName == "Liam")
+            else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Liam")
             {
                 DialogueSpreadSheetPatternConstants.liamHealth = currentHealth;
             }

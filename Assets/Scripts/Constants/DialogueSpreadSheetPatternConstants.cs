@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DialogueSpreadSheetPatternConstants 
 {
+    public static SO_Character cueCharacter;
     public static float penelopeHealth = 100;
     public static float bradHealth = 100;
     public static float liamHealth = 100;

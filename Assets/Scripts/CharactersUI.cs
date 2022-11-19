@@ -183,9 +183,9 @@ public class CharactersUI : MonoBehaviour
                         foundPreset.transform.position = characterPresetDatas[i].avatarTransform.position;
                         if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                         {
-                            if (foundPreset.so_Character == StorylineManager.cueCharacter)
+                            if (foundPreset.so_Character == DialogueSpreadSheetPatternConstants.cueCharacter)
                             {
-                                if (StorylineManager.cueCharacter.collisionPrefab != null)
+                                if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
                                 {
                                     if (live2DCollisionUIContainerTransform.childCount == 1)
                                     {
@@ -324,7 +324,7 @@ public class CharactersUI : MonoBehaviour
                     //LIVE 2D
                     //Check if its the character thats talking
                     
-                    if (p_charactersToBeRemoved[i] == StorylineManager.cueCharacter)
+                    if (p_charactersToBeRemoved[i] == DialogueSpreadSheetPatternConstants.cueCharacter)
                     {
                         for (int x = 0; x < live2DCollisionUIContainerTransform.childCount; x++)
                         {
@@ -358,9 +358,9 @@ public class CharactersUI : MonoBehaviour
                     //Check if its the character thats talking
                     if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                     {
-                        if (p_charactersToBeAdded[i] == StorylineManager.cueCharacter)
+                        if (p_charactersToBeAdded[i] == DialogueSpreadSheetPatternConstants.cueCharacter)
                         {
-                            if (StorylineManager.cueCharacter.collisionPrefab != null)
+                            if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
                             {
                                 if (live2DCollisionUIContainerTransform.childCount == 0)
                                 {

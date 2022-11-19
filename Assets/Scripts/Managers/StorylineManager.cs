@@ -44,7 +44,15 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             StorylineManager.currentZeroSO_Dialogues = null;
         }
 
-        StorylineManager.cueCharacter= so_InteractibleChoices.characterData.character;
+        if (so_InteractibleChoices.characterData != null)
+        {
+            DialogueSpreadSheetPatternConstants.cueCharacter = so_InteractibleChoices.characterData.character;
+        }
+        else
+        {
+            DialogueSpreadSheetPatternConstants.cueCharacter = null;
+        }
+   
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = 0;
         sideDialogue = false;
@@ -120,8 +128,6 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static SO_Dialogues currentSO_Dialogues;
     public static int currentDialogueIndex;
     public static List<Dialogue> loggedWords = new List<Dialogue>();
-
-    public static SO_Character cueCharacter;
 
     public static bool sideDialogue = false;
     public static int savedDialogueIndex;

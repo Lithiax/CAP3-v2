@@ -96,7 +96,7 @@ public class ActionUIs : MonoBehaviour
                     {
                         //Find Speaker
                         CharacterData speaker = null;
-                        if (StorylineManager.cueCharacter != null)
+                        if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
                         {
                             if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
                             {
@@ -107,7 +107,7 @@ public class ActionUIs : MonoBehaviour
                                         if (StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas[i].isSpeaking)
                                         {
                                             speaker = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas[i];
-                                            if (speaker.character != StorylineManager.cueCharacter)
+                                            if (speaker.character != DialogueSpreadSheetPatternConstants.cueCharacter)
                                             {
                                                 speaker = null;
                                             }
