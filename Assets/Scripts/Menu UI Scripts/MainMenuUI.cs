@@ -67,5 +67,10 @@ public class MainMenuUI : MonoBehaviour
     public void ExitButton()
     {
         Application.Quit();
-    }    
+    }
+
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

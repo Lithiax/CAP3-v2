@@ -38,7 +38,7 @@ public class FindREventsManager : MonoBehaviour
             case ChatEventTypes.DateEvent:
                 Debug.Log("Date Event");
                 BeginDatePanel.SetActive(true);
-                BeginDateYesButton.onClick.AddListener(() => LoadScene(data));
+                BeginDateYesButton.onClick.AddListener(() => LoadVisualNovel(data));
                 break;
             case ChatEventTypes.BranchEvent:
                 Debug.Log("Branch Event");
@@ -52,6 +52,9 @@ public class FindREventsManager : MonoBehaviour
             case ChatEventTypes.RGaugeEvent:
                 GaugeEvent(userData, data);
                 break;
+            case ChatEventTypes.ChangeSceneEvent:
+                StartCoroutine(ChangeSceneEvent(data));
+                break;
             default:
                 Debug.LogError("Invalid Event");
                 break;
@@ -61,7 +64,7 @@ public class FindREventsManager : MonoBehaviour
     IEnumerator InstantDateEvent(string data)
     {
         yield return new WaitForSeconds(5f);
-        LoadScene(data);
+        LoadVisualNovel(data);
     }
 
     void GaugeEvent(ChatUserSO userData, string num)
@@ -74,7 +77,7 @@ public class FindREventsManager : MonoBehaviour
         Debug.Log("Date Gauge: " + n);
     }
 
-    void LoadScene(string scene)
+    void LoadVisualNovel(string scene)
     {
         string[] subs = scene.Split(',');
 
@@ -89,6 +92,21 @@ public class FindREventsManager : MonoBehaviour
         {
             StorylineManager.LoadVisualNovel(subs[0], subs[1]);
             SceneManager.LoadScene("VisualNovel"); 
+        });
+    }
+
+    IEnumerator ChangeSceneEvent(string data)
+    {
+        yield return new WaitForSeconds(5f);
+        LoadScene(data);
+    }
+
+    void LoadScene(string scene)
+    {
+        Debug.Log("Change Scene To " + scene);
+        FadeImage.DOFade(1, 1).OnComplete(() =>
+        {
+            SceneManager.LoadScene(scene);
         });
     }
 
