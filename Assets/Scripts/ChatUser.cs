@@ -214,7 +214,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 break;
         }
 
+        Debug.Log("Load RGMeter: " + data.RGMeter);
         healthUI.currentHealth = data.RGMeter;
+        UpdateHealthBar(data.RGMeter);
+
+    }
+
+    void UpdateHealthBar(float meter)
+    {
+        float fill = meter / 100f;
+        healthUI.InstantUpdateBar(fill);
     }
 
     void LoadChatData(ChatUserData data)
@@ -371,6 +380,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         {
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
             healthUI.currentHealth = ChatData.RGMeter;
+            UpdateHealthBar(ChatData.RGMeter);
+
             if (userData.dialogueTree != null)
             {
                 DialogueTree.SetDialogueTree(ChatData.CurrentTree);
