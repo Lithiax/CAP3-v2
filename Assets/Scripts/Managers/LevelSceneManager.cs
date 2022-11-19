@@ -34,17 +34,18 @@ public class LevelSceneManager : MonoBehaviour
             }
         }
 
-        Finished();
+        //Save button has a different funciton now. Commenting for now. -Kaell
+        //Finished();
     }
     void Finished()
     {
         if (saveButtonUI != null)
         {
-            saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
+            //saveButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.SaveGame(); });
         }
         if (loadButtonUI != null)
         {
-            loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
+            //loadButtonUI.onClick.AddListener(delegate { DataPersistenceManager.instance.LoadGame(); });
         }
  
     }

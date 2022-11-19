@@ -6,7 +6,8 @@ using System;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject PausePanel;
-    [SerializeField] GameObject settingsPanel;
+
+    [SerializeField] List<GameObject> panels;
     public static Action isPausingEvent;
     bool paused = false;
 
@@ -47,15 +48,17 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void SettingsButton()
+    public void ActivatePanel(GameObject panel)
     {
-        settingsPanel.SetActive(true);
+        foreach (GameObject p in panels)
+        {
+            p.SetActive(false);
+
+            if (p == panel)
+                p.SetActive(true);
+        }
     }
 
-    public void BackToMenu()
-    {
-        settingsPanel.SetActive(false);
-    }
     public void ResumeButton()
     {
         paused = false;

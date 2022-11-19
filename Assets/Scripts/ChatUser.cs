@@ -133,6 +133,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             LoadRGDataFromStatic(ChatData);
 
             StaticUserData.ChatUserData.Add(ChatData);
+
+            if (DialogueTree.DialogueTree != null)
+            {
+                Divider = chatManager.SpawnDivider();
+            }
         }
         //If ChatUser is not new (FOR TESTING)
         else
@@ -147,11 +152,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             {
                 DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
             }
-        }
 
-        if (DialogueTree.DialogueTree != null)
-        {
-            Divider = chatManager.SpawnDivider();
+            if (DialogueTree.DialogueTree != null)
+            {
+                Divider = chatManager.SpawnDivider();
+            }
         }
 
         //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
@@ -356,7 +361,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
         {
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
-            Divider = chatManager.SpawnDivider();
+
+            if (userData.dialogueTree != null)
+            {
+                Divider = chatManager.SpawnDivider();
+            }
             LoadChatData(ChatData);
             DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
         }

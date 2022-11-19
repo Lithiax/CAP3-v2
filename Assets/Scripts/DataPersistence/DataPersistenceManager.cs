@@ -28,15 +28,10 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        dataHandler = new FileDataHandler(Application.persistentDataPath);
         dataPersistenceObjets = FindAllDataPersistenceObj();
         NewGame();
         SceneManager.sceneLoaded += GetAndLoadData;
-    }
-
-    private void OnAnimatorIK(int layerIndex)
-    {
-        
     }
 
     public void NewGame()
@@ -44,9 +39,9 @@ public class DataPersistenceManager : MonoBehaviour
         gameData = new GameData();
     }
 
-    public void LoadGame()
+    public void LoadGame(string pfileName)
     {
-        this.gameData = dataHandler.Load();
+        this.gameData = dataHandler.Load(pfileName);
 
         if (this.gameData == null)
         {
@@ -78,7 +73,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
-    public void SaveGame()
+    public void SaveGame(string pfileName)
     {
         gameData.GameEffects = DialogueSpreadSheetPatternConstants.effects.ToArray();
 
@@ -87,7 +82,7 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObject.SaveData(ref gameData);
         }
 
-        dataHandler.Save(gameData);
+        dataHandler.Save(gameData, pfileName);
     }
 
     List<IDataPersistence> FindAllDataPersistenceObj()

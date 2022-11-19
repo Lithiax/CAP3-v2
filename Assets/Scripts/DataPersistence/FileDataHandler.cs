@@ -6,17 +6,15 @@ using System.IO;
 public class FileDataHandler
 {
     string dataDirPath = "";
-    string dataFileName = "";
 
-    public FileDataHandler(string dataDirPath, string dataFileName)
+    public FileDataHandler(string dataDirPath)
     {
         this.dataDirPath = dataDirPath;
-        this.dataFileName = dataFileName;
     }
 
-    public GameData Load()
+    public GameData Load(string fileName)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, fileName);
         GameData loadedData = null;
 
         if (File.Exists(fullPath))
@@ -45,9 +43,9 @@ public class FileDataHandler
         return loadedData;
     }
 
-    public void Save(GameData data)
+    public void Save(GameData data, string fileName)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, fileName);
         try
         {
             //create directory if does not exist
