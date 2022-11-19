@@ -50,7 +50,6 @@ public class TransitionUI : MonoBehaviour
             StopCoroutine(runningCoroutine);
             runningCoroutine = null;
         }
-        Debug.Log("STARTED");
         if (aboveLayer)
         {
             transitionUICanvas.sortingOrder = defaultLayer;
@@ -74,7 +73,6 @@ public class TransitionUI : MonoBehaviour
         fadeSequence.Play();
 
         yield return fadeSequence.WaitForCompletion();
-        Debug.Log("ENDED");
         transitionUI.raycastTarget = (p_isActiveOnEnd);
     }
     public void TransitionPreFadeAndPostFade(float p_preOpacity,

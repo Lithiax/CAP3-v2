@@ -104,20 +104,17 @@ public class HealthUI : MonoBehaviour
 {
     public float currentHealth = 100f;
     public float maxHealth = 100f;
-    public static Action<int> ModifyHealthEvent;
-    public static Action saveHealth;
-    public static IsWithinHealthCondition myDelegate;
+    public static Action<int> OnModifyHealthEvent;
+    public static Action OnHealthDeathEvent;
+    public static Action OnSaveHealthEvent;
+    public static IsWithinHealthCondition OnIsWithinHealthConditionEvent;
 
     [SerializeField] private GameObject frame;
-    // [SerializeField] private Transform containerTransform; //colored
     [SerializeField] private Image realBarUI; //colored
-   // [SerializeField] private Canvas realBarTransform; //colored
     [SerializeField] private Image ghostBarUI; //white
-   // [SerializeField] private Canvas ghostBarTransform; //white
 
     private bool isResetting = false;
     private bool isCurrentlyResettingCoroutine = false;
-   // private bool isUpdateNext = false;
     [SerializeField] private float resetTransitionTime;
 
     [SerializeField] private Color32 defaultRealBarColor;
@@ -136,15 +133,14 @@ public class HealthUI : MonoBehaviour
     IEnumerator runningCoroutine;
     private void Awake()
     {
-        ModifyHealthEvent += ModifyHealth;
-        myDelegate += IsWithinHealthCondition;
-        saveHealth += saveHealthFun;
-        CharacterDialogueUI.OnInspectingEvent += open;
-        CharacterDialogueUI.OnDeinspectingEvent += close;
+        OnModifyHealthEvent += ModifyHealth;
+        OnIsWithinHealthConditionEvent += IsWithinHealthCondition;
+        OnSaveHealthEvent += SaveHealth;
+        CharacterDialogueUI.OnInspectingEvent += Open;
+        CharacterDialogueUI.OnDeinspectingEvent += Close;
         realBarUI.fillAmount = 0f;
         ghostBarUI.fillAmount = 0f;
-        //   realBarTransform = realBarUI.GetComponent<Canvas>();
-        //  ghostBarTransform = ghostBarUI.GetComponent<Canvas>();
+
         if (StorylineManager.cueCharacter != null)
         {
             if (StorylineManager.cueCharacter.idName == "Maeve")
@@ -169,14 +165,14 @@ public class HealthUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        saveHealth -= saveHealthFun;
-        ModifyHealthEvent -= ModifyHealth;
-        myDelegate -= IsWithinHealthCondition;
-        CharacterDialogueUI.OnInspectingEvent -= open;
-        CharacterDialogueUI.OnDeinspectingEvent -= close;
+        OnSaveHealthEvent -= SaveHealth;
+        OnModifyHealthEvent -= ModifyHealth;
+        OnIsWithinHealthConditionEvent -= IsWithinHealthCondition;
+        CharacterDialogueUI.OnInspectingEvent -= Open;
+        CharacterDialogueUI.OnDeinspectingEvent -= Close;
     }
 
-    void saveHealthFun()
+    void SaveHealth()
     {
         if (StorylineManager.cueCharacter != null)
         {
@@ -198,12 +194,12 @@ public class HealthUI : MonoBehaviour
             }
         }
     }
-    void open()
+    void Open()
     {
         frame.SetActive(false);
     }
 
-    void close()
+    void Close()
     {
         frame.SetActive(true);
     }
@@ -214,9 +210,11 @@ public class HealthUI : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
-        else if (currentHealth < 0)
+        else if (currentHealth <= 0)
         {
             currentHealth = 0;
+            OnHealthDeathEvent.Invoke();
+
         }
        
         UpdateBar(currentHealth, maxHealth);

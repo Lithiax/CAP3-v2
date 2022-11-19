@@ -7,17 +7,31 @@ using DG.Tweening;
 using System;
 public class BackgroundUI : MonoBehaviour
 {
+    [SerializeField] private Image currentBackgroundImage;
     [SerializeField] private Image backgroundImage;
+    [SerializeField]
+    private Canvas backgroundCanvas;
+
+ [SerializeField] private Image secondaryBackgroundImage;
+    [SerializeField]
+    private Canvas secondaryBackgroundCanvas;
     public static Action<Sprite> onSetBackgroundEvent;// = new onLoadAvatarsEvent
 
     private void Awake()
     {
         onSetBackgroundEvent += SetBackground;
+        CharacterDialogueUI.OnIsSkipping += Skip;
     }
 
     private void OnDestroy()
     {
         onSetBackgroundEvent -= SetBackground;
+        CharacterDialogueUI.OnIsSkipping -= Skip;
+    }
+    void Skip()
+    {
+        StopAllCoroutines();
+        currentBackgroundImage.color = new Color32(255, 255, 255, 255);
     }
     void SetBackground(Sprite p_backgroundSprite)
     {
@@ -25,14 +39,40 @@ public class BackgroundUI : MonoBehaviour
         {
             if (p_backgroundSprite != null)
             {
-                backgroundImage.sprite = p_backgroundSprite;
-                backgroundImage.color = new Color32(255, 255, 255, 255);
+                if (p_backgroundSprite != currentBackgroundImage.sprite)
+                {
+                    if (currentBackgroundImage == backgroundImage)
+                    {
+                        currentBackgroundImage = secondaryBackgroundImage;
+                        secondaryBackgroundCanvas.sortingOrder = 0;
+                        backgroundCanvas.sortingOrder = -1;
+                    }
+                    else
+                    {
+                        currentBackgroundImage = backgroundImage;
+                        secondaryBackgroundCanvas.sortingOrder = -1;
+                        backgroundCanvas.sortingOrder = 0;
+                    }
+                    StartCoroutine(TransitionIm(p_backgroundSprite));
+                    //currentBackgroundImage.color = new Color32(255, 255, 255, 255);
+                }
+             
             }
             else if (p_backgroundSprite == null)
             {
-                backgroundImage.color = new Color32(0, 0, 0, 0);
+                currentBackgroundImage.color = new Color32(0, 0, 0, 0);
             }
         }
      
     }
+
+    IEnumerator TransitionIm(Sprite p_backgroundSprite)
+    {
+        currentBackgroundImage.sprite = p_backgroundSprite;
+        var fadeInSequence = DOTween.Sequence()
+            .Append(currentBackgroundImage.DOFade(1f, 0.25f));
+        fadeInSequence.Play();
+        yield return fadeInSequence.WaitForCompletion();
+    }
+
 }

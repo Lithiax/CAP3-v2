@@ -26,13 +26,24 @@ public class CueChoice
 }
 public class StorylineManager : MonoBehaviour, IDataPersistence
 {
+    public static bool firstTime = true;
     public static Action OnLoadedEvent;
     public static void LoadVisualNovel(string folderField, string sheetField)
     {
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         mainCharacter.stageName = "You";
+        
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
         SO_InteractibleChoices so_InteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + "Interactible Choices");
+        if (so_InteractibleChoices.deathSheet != null)
+        {
+            StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
+        }
+        else
+        {
+            StorylineManager.currentZeroSO_Dialogues = null;
+        }
+
         StorylineManager.cueCharacter= so_InteractibleChoices.characterData.character;
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = 0;
@@ -105,6 +116,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static StorylineManager instance;
     public SO_Character mainCharacter;
 
+    public static SO_Dialogues currentZeroSO_Dialogues;
     public static SO_Dialogues currentSO_Dialogues;
     public static int currentDialogueIndex;
     public static List<Dialogue> loggedWords = new List<Dialogue>();
