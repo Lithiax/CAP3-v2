@@ -700,7 +700,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             //Creating Choices
                             //nextDialogueButton.SetActive(false);
-                            ChoicesUI.OnChoosingChoiceEvent(StorylineManager.currentSO_Dialogues.choiceDatas);
+                            ChoicesUI.OnChoosingChoiceEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas);
  
 
                         }

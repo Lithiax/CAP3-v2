@@ -83,6 +83,7 @@ public class ActionUIs : MonoBehaviour
     public void Entered(ActionUI test)
     {
         //ToggleContainer();
+        Debug.Log(canDoWork + " - " + canExit);
         if (canDoWork)
         {
             if (canExit)
@@ -92,37 +93,49 @@ public class ActionUIs : MonoBehaviour
                 CueUIPresetData chosenCueUIPresetData = GetCueUIPresetData(test.cueType);
                 if (StorylineManager.currentSO_Dialogues != null)
                 {
+                    Debug.Log("INSIDE 1");
                     if (!StorylineManager.sideDialogue)
                     {
+                        Debug.Log("INSIDE 2");
                         //Find Speaker
                         CharacterData speaker = null;
                         if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
                         {
+                            Debug.Log("INSIDE 2a");
                             if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
                             {
+                                Debug.Log("INSIDE 2b");
                                 if (StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas != null)
                                 {
+                                    Debug.Log("INSIDE 2c");
                                     for (int i = 0; i < StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas.Count; i++)
                                     {
-                                        if (StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas[i].isSpeaking)
-                                        {
+                                        //if (StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas[i].isSpeaking)
+                                        //{
+                                          
                                             speaker = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].characterDatas[i];
+                                            Debug.Log("INSIDE 2d " + speaker);
                                             if (speaker.character != DialogueSpreadSheetPatternConstants.cueCharacter)
                                             {
+                                                Debug.Log("INSIDE 2g");
                                                 speaker = null;
+                                            }
+                                            else
+                                            {
+                                                break;
                                             }
 
 
-                                            break;
-                                        }
+                                          
+                                        //}
                                     }
                                 }
 
                             }
                         }
-                            
-                  
 
+
+                        Debug.Log("INSIDE 3 " + speaker);
                         if (speaker != null)
                         {
                             CuePresetPositionData cuePresetPositionData = null;
@@ -152,6 +165,7 @@ public class ActionUIs : MonoBehaviour
 
     public void PointClick(ActionUI test)
     {
+        Debug.Log("POINT CLICK " + canExit + " - " + ActionUIs.isShowing);
         if (ActionUIs.isShowing)
         {
             //ToggleContainer();
@@ -161,6 +175,7 @@ public class ActionUIs : MonoBehaviour
 
     IEnumerator Ent()
     {
+        Debug.Log("START");
         yield return new WaitForSeconds(1f);
         ActionUIs.isShowing = true;
         currentCueUI.gameObject.SetActive(true);
