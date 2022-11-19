@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
+    [SerializeField] List<GameObject> panels;
     void Start()
     {
      //   SetAspect();
@@ -53,6 +54,16 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            foreach (GameObject p in panels)
+            {
+                p.SetActive(false);
+            }
+        }
+    }
     public void NewGameButton()
     {
         StorylineManager.firstTime = true;
@@ -67,6 +78,17 @@ public class MainMenuUI : MonoBehaviour
     public void ExitButton()
     {
         Application.Quit();
+    }
+
+    public void ActivatePanel(GameObject panel)
+    {
+        foreach (GameObject p in panels)
+        {
+            p.SetActive(false);
+
+            if (p == panel)
+                p.SetActive(true);
+        }
     }
 
     public void MainMenuButton()
