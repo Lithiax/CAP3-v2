@@ -351,7 +351,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Cant Auto skipped, already at last 2 dialogues" + StorylineManager.currentDialogueIndex);
+                    Debug.Log("Cant Auto skipped, already at last 2 dialogues " + StorylineManager.currentDialogueIndex + " of " + StorylineManager.currentSO_Dialogues.name);
                 }
             }
         }
@@ -626,7 +626,7 @@ public class CharacterDialogueUI : MonoBehaviour
             OnCloseCharacterDialogueUI();
             return;
         }
-        Debug.Log("=3");
+        Debug.Log("=3 " + StorylineManager.currentDialogueIndex + "/"+ StorylineManager.currentSO_Dialogues.dialogues.Count);
         if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count) // fix this for condition above
         {
             
