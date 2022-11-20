@@ -6,16 +6,17 @@ public class DialogueSpreadSheetPatternConstants
 {
     public static void AddEffect(string p_effect)
     {
-   
+        DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
         if (p_effect == "<progress>")
         {
+
             StaticUserData.ProgressionData.ProgressDate();
         }
-        else
-        {
+        //else
+        //{
 
-            DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
-        }
+        //    DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
+        //}
     }
     public static SO_Character cueCharacter;
     public static float penelopeHealth = 100;
