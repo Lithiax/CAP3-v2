@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_SpreadSheets:
-  - {fileID: 11400000, guid: d29ad49be1efee54ba5580f42ce14de7, type: 2}
+  - {fileID: 11400000, guid: 99489bb64cc059d49b3559efe7f8dab2, type: 2}
   allso_SpreadSheets:
   - {fileID: 11400000, guid: 99489bb64cc059d49b3559efe7f8dab2, type: 2}
   - {fileID: 11400000, guid: 9d65d668cba871049bf71889db20e6ab, type: 2}
