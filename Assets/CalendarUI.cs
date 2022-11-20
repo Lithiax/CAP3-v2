@@ -65,6 +65,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         xMarksParentOldLocalPos = xMarkParent.transform.localPosition;
     }
 
+    private void Start()
+    {
+        Init();
+        StartCoroutine(Debugger());
+    }
+
     public void Init()
     {
         Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);

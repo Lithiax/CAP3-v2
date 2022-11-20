@@ -50,6 +50,11 @@ public class DataPersistenceManager : MonoBehaviour
 
         DialogueSpreadSheetPatternConstants.effects = gameData.GameEffects.ToList();
 
+        if (gameData.ProgressionData != null)
+        {
+            StaticUserData.ProgressionData = gameData.ProgressionData; 
+        }
+
         if (gameData.CurrentSceneName != "")
         {
             SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
@@ -79,6 +84,7 @@ public class DataPersistenceManager : MonoBehaviour
     public void SaveGame(string pfileName)
     {
         gameData.GameEffects = DialogueSpreadSheetPatternConstants.effects.ToArray();
+        gameData.ProgressionData = StaticUserData.ProgressionData;
 
         foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
         {
