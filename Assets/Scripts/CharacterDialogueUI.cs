@@ -674,6 +674,7 @@ public class CharacterDialogueUI : MonoBehaviour
                     StorylineManager.sideDialogue = false;
                     StorylineManager.currentSO_Dialogues = StorylineManager.savedSO_Dialogues;
                     StorylineManager.currentDialogueIndex = StorylineManager.savedDialogueIndex;
+                    nextDialogueButton.SetActive(true);
 
                 }
                 else
@@ -690,6 +691,7 @@ public class CharacterDialogueUI : MonoBehaviour
                                 {
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
                                     StorylineManager.currentDialogueIndex = 0;
+                                    nextDialogueButton.SetActive(true);
                                     break;
                                 }
 
