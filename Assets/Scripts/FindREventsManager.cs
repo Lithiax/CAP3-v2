@@ -91,7 +91,8 @@ public class FindREventsManager : MonoBehaviour
         FadeImage.DOFade(1, 1).OnComplete(() => 
         {
             StorylineManager.LoadVisualNovel(subs[0], subs[1]);
-            SceneManager.LoadScene("VisualNovel"); 
+
+            LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
         });
     }
 
@@ -106,7 +107,7 @@ public class FindREventsManager : MonoBehaviour
         Debug.Log("Change Scene To " + scene);
         FadeImage.DOFade(1, 1).OnComplete(() =>
         {
-            SceneManager.LoadScene(scene);
+            LoadingUI.instance.InitializeLoadingScreen(scene);
         });
     }
 

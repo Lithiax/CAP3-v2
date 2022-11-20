@@ -27,7 +27,7 @@ public class GameData
     public string currentBackgroundMusic;
 
     public List<ChatUserData> ChatUserData;
-
+    public ProgressionData ProgressionData;
     public GameData()
     {
         CurrentSceneName = "";
