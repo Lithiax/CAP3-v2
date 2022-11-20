@@ -56,7 +56,7 @@ public class TransitionUI : MonoBehaviour
         }
         else
         {
-            transitionUICanvas.sortingOrder = targetLayer;
+            //transitionUICanvas.sortingOrder = targetLayer;
 
         }
         runningCoroutine = Co_TransitionFade(p_opacity, p_isActiveOnEnd);
@@ -65,11 +65,11 @@ public class TransitionUI : MonoBehaviour
     public IEnumerator Co_TransitionFade(float p_opacity, bool p_isActiveOnEnd = true)
 
     {
-     
+        Debug.Log("transition fade");
         transitionUI.raycastTarget = (true);
 
-        Sequence fadeSequence = DOTween.Sequence();
-        fadeSequence.Join(transitionUI.DOFade(p_opacity, 0.5f));
+        Sequence fadeSequence = DOTween.Sequence()
+        .Append(transitionUI.DOFade(p_opacity, 0.5f));
         fadeSequence.Play();
 
         yield return fadeSequence.WaitForCompletion();
@@ -90,10 +90,10 @@ public class TransitionUI : MonoBehaviour
         }
         else
         {
-            transitionUICanvas.sortingOrder = targetLayer;
+            //transitionUICanvas.sortingOrder = targetLayer;
 
         }
-        transitionUI.color = color;
+        transitionUI.color = new Color(color.r, color.g, color.b, transitionUI.color.a);
         if (runningCoroutine != null)
         {
             StopCoroutine(runningCoroutine);
@@ -118,17 +118,17 @@ public class TransitionUI : MonoBehaviour
                             Action p_preAction = null,
                             Action p_postAction = null)
     {
-        transitionUI.color = color;
-        Sequence preSequence = DOTween.Sequence();
+        Debug.Log("transition done");
+        Sequence preSequence = DOTween.Sequence()
 
-        preSequence.Join(transitionUI.DOFade(p_preOpacity, p_preTransitionTime));
+        .Append(transitionUI.DOFade(p_preOpacity, p_preTransitionTime));
 
         yield return preSequence.WaitForCompletion();
-
+        Debug.Log("FADINGl: " + p_preOpacity);
         p_preAction?.Invoke();
         yield return new WaitForSeconds(p_delayTime);
-        Sequence postSequence = DOTween.Sequence();
-        postSequence.Join(transitionUI.DOFade(p_postOpacity, p_postTransitionTime));
+        Sequence postSequence = DOTween.Sequence()
+        .Append(transitionUI.DOFade(p_postOpacity, p_postTransitionTime));
         yield return postSequence.WaitForCompletion();
         p_postAction?.Invoke();
     }

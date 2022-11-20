@@ -80,7 +80,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         if (StorylineManager.currentSO_Dialogues != null)
         {
             Debug.Log("DIALOGUE LOADED");
-            CharacterDialogueUI.onCharacterSpokenTo.Invoke("");
+            CharacterDialogueUI.onCharacterSpokenTo.Invoke();
 
         }
         else
@@ -163,7 +163,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         currentBackgroundMusic = data.currentBackgroundMusic;
 
-        CharacterDialogueUI.onCharacterSpokenTo.Invoke("");
+        CharacterDialogueUI.onCharacterSpokenTo.Invoke();
         OnLoadedEvent.Invoke();
     }
 

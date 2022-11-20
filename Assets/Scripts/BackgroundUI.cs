@@ -35,10 +35,13 @@ public class BackgroundUI : MonoBehaviour
     }
     void SetBackground(Sprite p_backgroundSprite)
     {
+        Debug.Log("HAHA");
         if (!StorylineManager.sideDialogue)
         {
+            Debug.Log("DADA");
             if (p_backgroundSprite != null)
             {
+                Debug.Log("INAHA");
                 if (p_backgroundSprite != currentBackgroundImage.sprite)
                 {
                     if (currentBackgroundImage == backgroundImage)
@@ -53,6 +56,7 @@ public class BackgroundUI : MonoBehaviour
                         secondaryBackgroundCanvas.sortingOrder = -1;
                         backgroundCanvas.sortingOrder = 0;
                     }
+                    currentBackgroundImage.color = new Color32(255, 255, 255, 0);
                     StartCoroutine(TransitionIm(p_backgroundSprite));
                     //currentBackgroundImage.color = new Color32(255, 255, 255, 255);
                 }
@@ -60,7 +64,10 @@ public class BackgroundUI : MonoBehaviour
             }
             else if (p_backgroundSprite == null)
             {
-                currentBackgroundImage.color = new Color32(0, 0, 0, 0);
+                Debug.Log("RAHA");
+                //StartCoroutine(TransitionIm(p_backgroundSprite));
+                currentBackgroundImage.sprite = p_backgroundSprite;
+                currentBackgroundImage.color = new Color32(255, 255, 255, 255);
             }
         }
      

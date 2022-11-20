@@ -29,6 +29,7 @@ public class ActionUI : MonoBehaviour
     IEnumerator runningCDCoroutine;
     Sequence fadeInSeq;
     public bool canDoWork = true;
+
     private void Awake()
     {
         image = GetComponent<Image>();

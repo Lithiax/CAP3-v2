@@ -371,11 +371,6 @@ public class CharactersUI : MonoBehaviour
                         }
                     }
 
-
-
-
-
-
                 }
                 else //UI
                 {
