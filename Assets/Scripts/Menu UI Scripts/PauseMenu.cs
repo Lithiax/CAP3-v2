@@ -6,6 +6,7 @@ using System;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject PausePanel;
+    [SerializeField] GameObject logSheet;
 
     [SerializeField] List<GameObject> panels;
     public static Action isPausingEvent;
@@ -20,6 +21,15 @@ public class PauseMenu : MonoBehaviour
     {
         isPausingEvent -= IsPausing;
     }
+    private void OnEnable()
+    {
+        foreach (GameObject p in panels)
+        {
+            p.SetActive(false);
+        }
+
+        logSheet.SetActive(true);
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -29,11 +39,6 @@ public class PauseMenu : MonoBehaviour
             //paused = !paused;
             //PausePanel.SetActive(paused);
         }
-    }
-
-    public void Pause()
-    {
-
     }
 
     void IsPausing()
@@ -50,6 +55,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ActivatePanel(GameObject panel)
     {
+        logSheet.SetActive(false);
         foreach (GameObject p in panels)
         {
             p.SetActive(false);
