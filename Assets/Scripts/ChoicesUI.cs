@@ -151,7 +151,8 @@ public class ChoicesUI : MonoBehaviour
                     string[] sheetDivided = p_currentChoiceData.effectID.Split('&');
                     for (int i=0; i< sheetDivided.Length; i++)
                     {
-                        DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
+                        DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
+                        //DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
                     }
                     
                     

@@ -84,6 +84,7 @@ public class CueUI : MonoBehaviour
         t.wasChosen = true;
         StorylineManager.savedDialogueIndex = StorylineManager.currentDialogueIndex;
         StorylineManager.savedSO_Dialogues = StorylineManager.currentSO_Dialogues;
+        StorylineManager.currentDialogueIndex = 0;
         StorylineManager.sideDialogue = true;
         CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
         onChoiceChosenEvent.Invoke();
@@ -110,6 +111,7 @@ public class CueUI : MonoBehaviour
         }
         else
         {
+            Debug.Log("CHOSEN");
             StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
         

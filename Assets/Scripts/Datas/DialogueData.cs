@@ -36,6 +36,7 @@ public enum SpecificEventType
     inputNameEvent,
     phoneEvent,
     shakeEffect,
+    stayBlack,
     none,
 }
 
