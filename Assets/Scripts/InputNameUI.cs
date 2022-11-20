@@ -13,7 +13,7 @@ public class InputNameUI : MonoBehaviour
     {
         inputField.onValueChanged.AddListener((str) =>
         {
-            if (inputField.text.Length > 3 && inputField.text.Length < 9)
+            if (inputField.text.Length > 0 && inputField.text.Length < 9)
             {
                 // Do something 
                 canSubmit = true;
