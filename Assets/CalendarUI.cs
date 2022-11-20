@@ -64,6 +64,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         if (StaticUserData.ProgressionData == null)
         {
             progressionData = new ProgressionData(1, 1);
+            StaticUserData.ProgressionData = progressionData;
         }
         else
         {
