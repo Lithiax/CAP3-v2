@@ -166,6 +166,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     void Skip()
     {
+        
         AudioManager.instance.ForceStopAudio("typewriting");
         StopAllCoroutines();
         SetWords(currentWords);
@@ -220,6 +221,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     }
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
     {
+        Debug.Log("TYPE WRITING");
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         string p_currentText;
         for (int i = 0; i <= p_fullText.Length; i++)
@@ -229,7 +231,7 @@ public class SpeakerDialogueUI : MonoBehaviour
             AudioManager.instance.AdditivePlayAudio("typewriting");
             yield return new WaitForSeconds(typewriterSpeed);
         }
-
+        Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
 }

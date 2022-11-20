@@ -121,6 +121,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("IS IT TUTORIAL: " + StorylineManager.firstTime);
         ActionUIs.onEnterEvent += open;
         OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
@@ -329,8 +330,7 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else
         {
-  
-            SceneManager.LoadScene("FindR");
+            LoadingUI.instance.InitializeLoadingScreen("FindR");
             frame.SetActive(false);
         }
     }

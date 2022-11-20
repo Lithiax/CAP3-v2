@@ -55,6 +55,8 @@ public class DataPersistenceManager : MonoBehaviour
             StaticUserData.ProgressionData = gameData.ProgressionData; 
         }
 
+        StorylineManager.LoadVisualNovel(gameData.currentSO_Dialogues,gameData.so_InteractibleChoices);
+
         if (gameData.CurrentSceneName != "")
         {
             SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
