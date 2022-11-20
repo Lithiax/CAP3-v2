@@ -552,7 +552,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 TransitionUI.instance.color = Color.black;
            
             }
-            nextDialogueButton.SetActive(false);
+            //nextDialogueButton.SetActive(false);
             TransitionUI.onFadeTransition.Invoke(1, false, false);
         }
         else if (p_specificEventType == SpecificEventType.fadeOutEffect)
@@ -776,6 +776,7 @@ public class CharacterDialogueUI : MonoBehaviour
                                 string[] sheetDivided = StorylineManager.currentSO_Dialogues.choiceDatas[0].effectID.Split('&');
                                 for (int i = 0; i < sheetDivided.Length; i++)
                                 {
+                                    Debug.Log("ADDING THE EFFECT: " + sheetDivided[i].ToLower());
                                     DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
                                 }
                           
