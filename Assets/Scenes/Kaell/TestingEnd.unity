@@ -1655,6 +1655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 709d9a38f3919a2409aaa065fea2c59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panels: []
 --- !u!4 &1543958359
 Transform:
   m_ObjectHideFlags: 0
@@ -1851,6 +1852,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1599970066}
   m_CullTransparentMesh: 1
+--- !u!1001 &1675810110
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 339.7987
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 136.38107
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.9143946
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742147139394282047, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
+      propertyPath: m_Name
+      value: LoadingController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
 --- !u!1 &1804256470
 GameObject:
   m_ObjectHideFlags: 0
