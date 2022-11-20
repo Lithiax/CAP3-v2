@@ -18,6 +18,8 @@ public class LoadingUI : MonoBehaviour
     bool calendarDone = false;
     bool loadingDone = false;
 
+    string sceneToLoad;
+
     private void Awake()
     {
         instance = this;
@@ -47,13 +49,14 @@ public class LoadingUI : MonoBehaviour
         loadingScreen.SetActive(true);
         calendar.Init();
 
-        calendar.StartAnimation(sceneName);
+        sceneToLoad = sceneName;
+        calendar.StartAnimation();
 
         //asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
     }
 
-    void StartLoading(string sceneToLoad)
+    void StartLoading()
     {
         if (sceneToLoad == "")
         {
