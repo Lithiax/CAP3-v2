@@ -16,7 +16,7 @@ public class GameData
     public string mainCharacterName;
 
     public List<Dialogue> loggedWords;
-
+    public SO_InteractibleChoices so_InteractibleChoices;
     public SO_Character cueCharacter;
 
     public bool sideDialogue;
@@ -38,7 +38,7 @@ public class GameData
 
         currentSO_Dialogues = null;
         currentDialogueIndex = -1;
-
+        so_InteractibleChoices = null;
         mainCharacterName = "";
         loggedWords = new List<Dialogue>();
 
