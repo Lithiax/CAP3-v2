@@ -552,7 +552,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 TransitionUI.instance.color = Color.black;
            
             }
-            nextDialogueButton.SetActive(false);
+            //nextDialogueButton.SetActive(false);
             TransitionUI.onFadeTransition.Invoke(1, false, false);
         }
         else if (p_specificEventType == SpecificEventType.fadeOutEffect)

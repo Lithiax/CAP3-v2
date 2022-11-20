@@ -90,7 +90,7 @@ public class TransitionUI : MonoBehaviour
         }
         else
         {
-            //transitionUICanvas.sortingOrder = targetLayer;
+            transitionUICanvas.sortingOrder = targetLayer;
 
         }
         transitionUI.color = new Color(color.r, color.g, color.b, transitionUI.color.a);
