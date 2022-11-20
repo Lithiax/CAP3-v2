@@ -20,6 +20,13 @@ public class ProgressionData
 
     public void ProgressDate()
     {
+        Debug.Log("Progress Date");
+
+        foreach(string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log("Progress Effect: " + s);
+        }
+
         CurrentWeek++;
 
         if (CurrentWeek > 4)
