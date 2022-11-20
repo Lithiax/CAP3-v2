@@ -73,7 +73,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         int tempWeek = Mathf.Clamp(progressionData.CurrentMonth, 1, 3);
 
         //Iterate the month and week up by one if the animation for that transition already played.
-        if (!DialogueSpreadSheetPatternConstants.effects.Any(x => x == "progress"))
+        if (!DialogueSpreadSheetPatternConstants.effects.Any(x => x == "<progress>"))
         {
             tempWeek++;
 
@@ -94,9 +94,9 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
     public void StartAnimation()
     {
         //Dont play animation if the game hasnt progressed recently.
-        if (DialogueSpreadSheetPatternConstants.effects.Any(x => x == "progress"))
+        if (DialogueSpreadSheetPatternConstants.effects.Any(x => x == "<progress>"))
         {
-            DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => x == "progress");
+            DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => x == "<progress>");
             StartCoroutine(MainLoop());
         }
         else

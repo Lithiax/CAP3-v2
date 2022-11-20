@@ -72,7 +72,7 @@ public class MainMenuUI : MonoBehaviour
         //mainCharacter.stageName = "You";
         //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
         //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
-        DialogueSpreadSheetPatternConstants.effects.Add("progress");
+        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
         LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
     }
 
