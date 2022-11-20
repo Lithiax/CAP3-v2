@@ -52,10 +52,13 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (gameData.ProgressionData != null)
         {
-            StaticUserData.ProgressionData = gameData.ProgressionData; 
+            StaticUserData.ProgressionData = gameData.ProgressionData;
         }
 
-        StorylineManager.LoadVisualNovel(gameData.currentSO_Dialogues,gameData.so_InteractibleChoices);
+        if (gameData.CurrentSceneName == "VisualNovel")
+        {
+            StorylineManager.LoadVisualNovel(gameData.currentSO_Dialogues,gameData.so_InteractibleChoices);
+        }
 
         if (gameData.CurrentSceneName != "")
         {

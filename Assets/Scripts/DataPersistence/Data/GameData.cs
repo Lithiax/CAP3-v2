@@ -48,6 +48,8 @@ public class GameData
 
         currentBackgroundMusic = "";
         ChatUserData = new List<ChatUserData>();
+
+        ProgressionData = new ProgressionData(1, 1);
     }
 
     public void DebugLogData()
