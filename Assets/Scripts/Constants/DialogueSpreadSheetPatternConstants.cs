@@ -9,7 +9,7 @@ public class DialogueSpreadSheetPatternConstants
    
         if (p_effect == "<progress>")
         {
-           // StaticUserData.ProgressionData.ProgressDate()
+            StaticUserData.ProgressionData.ProgressDate();
         }
         else
         {
