@@ -75,14 +75,15 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
     }
     public void Init()
     {
-        Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
+        Debug.Log("CURRENTLY LOADING: M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
 
-        int tempMonth = Mathf.Clamp(progressionData.CurrentMonth, 1, 4);
-        int tempWeek = Mathf.Clamp(progressionData.CurrentMonth, 1, 3);
+        int tempMonth = progressionData.CurrentMonth;
+        int tempWeek = progressionData.CurrentWeek;
 
         //Iterate the month and week up by one if the animation for that transition already played.
         if (!DialogueSpreadSheetPatternConstants.effects.Any(x => x == "<progress>"))
         {
+            Debug.Log("Skip Animation");
             tempWeek++;
 
             if (tempWeek > 4)
@@ -104,11 +105,13 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         //Dont play animation if the game hasnt progressed recently.
         if (DialogueSpreadSheetPatternConstants.effects.Any(x => x == "<progress>"))
         {
+            Debug.Log("PlayAnim");
             DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => x == "<progress>");
             StartCoroutine(MainLoop());
         }
         else
         {
+            Debug.Log("Skip Animation");
             OnAnimationDone?.Invoke();
         }
     }
@@ -123,16 +126,21 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
             {
                 if (progressionData.CurrentMonth >= 2 && progressionData.CurrentWeek == 1)
                 {
-                    MoveDatePanel(progressionData.CurrentMonth, () => OnAnimationDone?.Invoke());
+                    MoveDatePanel(progressionData.CurrentMonth, () => StartCoroutine(NextLoop()));
                 }
                 else
                 {
-                    OnAnimationDone?.Invoke();
+                    StartCoroutine(NextLoop());
+                    
                 }
             });
         });
+    }
 
+    IEnumerator NextLoop()
+    {
         yield return new WaitForSeconds(3f);
+        OnAnimationDone?.Invoke();
     }
 
     IEnumerator Debugger()
