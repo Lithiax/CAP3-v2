@@ -81,7 +81,7 @@ public class ChatManagerUI : MonoBehaviour
         oldchatElementsTransform = chatElements.offsetMin;
     }
 
-    //Glorified Hide Respnose getter so bad 
+    //Glorified Hide Respnose getter so bad only used in init
     public void ReplyClicked(int num)
     {
         HideResponse();
@@ -274,6 +274,7 @@ public class ChatManagerUI : MonoBehaviour
         {
             if (ev.EventType != ChatEventTypes.RGaugeEvent)
             {
+                Debug.Log("CURRENT CHAT COMPLETE current events: " + ev.EventType.ToString());
                 EventManager.RegisterEvent(ev);
                 if (ev.EventType != ChatEventTypes.DateEvent)
                 {
@@ -341,6 +342,7 @@ public class ChatManagerUI : MonoBehaviour
 
     public void HandleResponse(ChatUser parent, DialogueGraphAPI Tree)
     {
+        Debug.Log("Handle Respnose: ");
         if (Tree.DialogueTree == null)
         {
             Debug.Log("Tree Is Null");
@@ -367,7 +369,7 @@ public class ChatManagerUI : MonoBehaviour
         ChatCollectionSO ChatCollection = Tree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
 
         //If dialogue tree is over
-        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0)
+        if (Tree.CurrentNode.ConnectedNodesData.Count <= 0 && !ChatCollection.isEvent())
         {
             if (!ChatCollection.isEvent())
             {
@@ -377,6 +379,7 @@ public class ChatManagerUI : MonoBehaviour
             }
             else if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
             {
+                Debug.Log("Not Date Event");
                 OnTreeEnded?.Invoke();
             }
             return;
@@ -395,7 +398,7 @@ public class ChatManagerUI : MonoBehaviour
 
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
-
+            Debug.Log("Chat is event");
             if (ChatCollection.isEvent())
             {
                 if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
@@ -453,6 +456,7 @@ public class ChatManagerUI : MonoBehaviour
         }
         else
         {
+            Debug.Log("Hide");
             HideResponse();
         }
     }

@@ -18,6 +18,7 @@ public class ChatUserData
     public bool CurrentDialogueComplete;
     public float RGMeter;
     public bool WasBranchEffect;
+    public bool ActiveDialogue;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -175,6 +176,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             onlineIndicator.color = offlineColor;
             panelRectTransform.SetAsLastSibling();
             chatManager.ReplyClicked(0);
+            ChatData.ActiveDialogue = false;
 
             if (chatsObj.Count <= 0)
             {
@@ -183,7 +185,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
             return;
         }
-
+        ChatData.ActiveDialogue = true;
         onlineIndicator.color = onlineColor;
         panelRectTransform.SetAsFirstSibling();
         chatManager.StartSpawningChat(this, DialogueTree);
@@ -256,6 +258,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 nextContainer = d;
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
+
+                Debug.Log("Removing Effect: " + s);
+                OnRemoveEffect?.Invoke(s);
 
                 break;
             }
@@ -370,7 +375,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         ChatData = new ChatUserData(userData);
 
         //Set to intial tree if it has one.
-        DialogueTree.SetDialogueTree(userData.dialogueTree);
+
+        if (ChatData.ActiveDialogue)
+            DialogueTree.SetDialogueTree(userData.dialogueTree);
+        else
+            DialogueTree.SetDialogueTree(null);
 
         StaticUserData.ChatUserData.Add(ChatData);
 

@@ -81,12 +81,24 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     private void OnDisable()
     {
+        foreach (string e in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log(e);
+        }
+
+        Debug.Log("Remove Effects " + effectsToRemove.Count);
+        DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
+        
+        foreach(string e in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log(e);
+        }
+
         foreach(ChatUser user in SpawnedUsers)
         {
             user.OnRemoveEffect -= AddToEffectsRemoveLog;
         }
 
-        DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
     }
 
     public void LoadData(GameData data)
