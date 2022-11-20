@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
     {
         isPausingEvent -= IsPausing;
     }
-    private void OnEnable()
+    private void SetInitialPanels()
     {
         foreach (GameObject p in panels)
         {
@@ -45,6 +45,7 @@ public class PauseMenu : MonoBehaviour
     {
 
         paused = !paused;
+        SetInitialPanels();
         Debug.Log("PAUSE MENU IS " + paused);
         PausePanel.SetActive(paused);
     }
