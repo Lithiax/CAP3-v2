@@ -22,18 +22,19 @@ public class SettingsUI : MonoBehaviour
     public void SetMasterAudio()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
-        masterText.text = masterVolumeSlider.value.ToString();
+        masterText.text = masterVolumeSlider.value.ToString("F2");
     }
 
     public void SetSFXAudio()
     {
         audioMixer.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20);
-        sfxText.text = sfxVolumeSlider.value.ToString();
+        sfxText.text = sfxVolumeSlider.value.ToString("F2");
     }
     public void SetBGMAudio()
     {
         audioMixer.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
-        bgmText.text = bgmVolumeSlider.value.ToString();
+
+        bgmText.text = bgmVolumeSlider.value.ToString("F2");
     }
 
     public void SetWindowMode(int value)

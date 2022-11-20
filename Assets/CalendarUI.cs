@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 [System.Serializable]
 public class ProgressionData
@@ -67,14 +68,37 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
     public void Init()
     {
         Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
-        SetDatePanel(progressionData.CurrentMonth);
-        SetXMarks(progressionData.CurrentWeek);
-        SetArrow(progressionData.CurrentWeek);
+
+        int tempMonth = Mathf.Clamp(progressionData.CurrentMonth, 1, 4);
+        int tempWeek = Mathf.Clamp(progressionData.CurrentMonth, 1, 3);
+
+        //Iterate the month and week up by one if the animation for that transition already played.
+        if (!DialogueSpreadSheetPatternConstants.effects.Any(x => x == "progress"))
+        {
+            tempWeek++;
+
+            if (tempWeek > 4)
+            {
+                tempWeek = 1;
+                tempMonth++;
+                tempMonth = Mathf.Clamp(tempMonth, 1, 3);
+            }
+        }
+
+        //This sets it to the previous so its ready for animation.
+        SetDatePanel(tempMonth);
+        SetXMarks(tempWeek);
+        SetArrow(tempWeek);
     }
 
     public void StartAnimation()
     {
-        StartCoroutine(MainLoop());
+        //Dont play animation if the game hasnt progressed recently.
+        if (DialogueSpreadSheetPatternConstants.effects.Any(x => x == "progress"))
+        {
+            DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => x == "progress");
+            StartCoroutine(MainLoop());
+        }
     }
 
     IEnumerator MainLoop()
