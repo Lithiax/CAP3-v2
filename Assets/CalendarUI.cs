@@ -99,6 +99,10 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
             DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => x == "progress");
             StartCoroutine(MainLoop());
         }
+        else
+        {
+            OnAnimationDone?.Invoke();
+        }
     }
 
     IEnumerator MainLoop()
