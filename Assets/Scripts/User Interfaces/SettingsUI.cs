@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 using TMPro;
 public class SettingsUI : MonoBehaviour
 {
-    [Header("Settings")]
+    [Header("Volume Settings")]
     public AudioMixer audioMixer;
     public TMP_Text masterText;
     public Slider masterVolumeSlider;
@@ -14,6 +14,10 @@ public class SettingsUI : MonoBehaviour
     public Slider sfxVolumeSlider;
     public TMP_Text bgmText;
     public Slider bgmVolumeSlider;
+
+    [Header("Window Settings")]
+    public TMP_Dropdown windowModeOptions;
+    public TMP_Dropdown resolutionOptoins;
 
     public void SetMasterAudio()
     {
@@ -30,5 +34,27 @@ public class SettingsUI : MonoBehaviour
     {
         audioMixer.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
         bgmText.text = bgmVolumeSlider.value.ToString();
+    }
+
+    public void SetWindowMode(int value)
+    {
+        Screen.fullScreenMode = (FullScreenMode)value;
+    }
+
+    public void SetResolution(int value)
+    {
+        switch (value)
+        {
+            case 0:
+                Screen.SetResolution(1920, 1080, Screen.fullScreen);
+            break;
+            case 1:
+                Screen.SetResolution(2560, 1440, Screen.fullScreen);
+                break;
+            case 2:
+                Screen.SetResolution(1280, 720, Screen.fullScreen);
+                break;
+        }
+        
     }
 }

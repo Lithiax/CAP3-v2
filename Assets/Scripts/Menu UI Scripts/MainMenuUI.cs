@@ -72,7 +72,8 @@ public class MainMenuUI : MonoBehaviour
         //mainCharacter.stageName = "You";
         //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
         //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
-        SceneManager.LoadScene("VisualNovel");
+
+        LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
     }
 
     public void ExitButton()
@@ -93,6 +94,6 @@ public class MainMenuUI : MonoBehaviour
 
     public void MainMenuButton()
     {
-        SceneManager.LoadScene("MainMenu");
+        LoadingUI.instance.InitializeLoadingScreen("MainMenu");
     }
 }
