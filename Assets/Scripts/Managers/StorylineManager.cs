@@ -28,11 +28,12 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static bool firstTime = false;
     public static Action OnLoadedEvent;
-    public static void LoadVisualNovel(SO_Dialogues so_Dialogue,SO_InteractibleChoices so_interactable)
+    public static void LoadVisualNovel(SO_Dialogues so_Dialogue, SO_InteractibleChoices so_interactable)
     {
+        StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         mainCharacter.stageName = "You";
-
+        StorylineManager.cuesChoices.Clear();
         StorylineManager.currentSO_Dialogues = so_Dialogue;
         StorylineManager.so_InteractibleChoices = so_interactable;
         if (so_InteractibleChoices.deathSheet != null)
@@ -91,11 +92,13 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public static void LoadVisualNovel(string folderField, string sheetField)
     {
+        StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         mainCharacter.stageName = "You";
-        
+        StorylineManager.cuesChoices.Clear();
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
         StorylineManager.so_InteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + "Interactible Choices");
+        Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
         if (so_InteractibleChoices.deathSheet != null)
         {
             StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
@@ -113,7 +116,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         {
             DialogueSpreadSheetPatternConstants.cueCharacter = null;
         }
-   
+
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = 0;
         sideDialogue = false;
@@ -122,22 +125,22 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         currentBackgroundMusic = "";
         paused = false;
-        for (int i = 0; i< so_InteractibleChoices.choiceDatas.Count;i++)
+        for (int i = 0; i < so_InteractibleChoices.choiceDatas.Count; i++)
         {
             CueChoice newCueChoice = new CueChoice();
             StorylineManager.cuesChoices.Add(newCueChoice);
             newCueChoice.cueType = so_InteractibleChoices.choiceDatas[i].cueType;
-            for (int x=0;x<so_InteractibleChoices.choiceDatas[i].choiceDatas.Count;x++)
+            for (int x = 0; x < so_InteractibleChoices.choiceDatas[i].choiceDatas.Count; x++)
             {
                 LocalCueChoice newLocalCueChoice = new LocalCueChoice();
                 newCueChoice.cueChoiceDatas.Add(newLocalCueChoice);
                 newLocalCueChoice.choiceData = so_InteractibleChoices.choiceDatas[i].choiceDatas[x];
                 newLocalCueChoice.wasChosen = false;
             }
-         
-           
+
+
         }
-      
+
         if (StorylineManager.currentSO_Dialogues != null)
         {
             Debug.Log("DIALOGUE LOADED");
@@ -169,11 +172,11 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     public static LocalCueChoice GetLocalCueChoice(ChoiceData p_currentChoiceData)
     {
-        for (int i=0; i<cuesChoices.Count; i++)
+        for (int i = 0; i < cuesChoices.Count; i++)
         {
-            for (int x=0; x<cuesChoices[i].cueChoiceDatas.Count;x++)
+            for (int x = 0; x < cuesChoices[i].cueChoiceDatas.Count; x++)
             {
-               if (cuesChoices[i].cueChoiceDatas[x].choiceData == p_currentChoiceData)
+                if (cuesChoices[i].cueChoiceDatas[x].choiceData == p_currentChoiceData)
                 {
                     return cuesChoices[i].cueChoiceDatas[x];
                 }
@@ -183,6 +186,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     }
     public static StorylineManager instance;
+    public static string CurrentSceneName;
     public SO_Character mainCharacter;
 
     public static SO_Dialogues currentZeroSO_Dialogues;
@@ -194,10 +198,10 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static bool sideDialogue = false;
     public static int savedDialogueIndex;
     public static SO_Dialogues savedSO_Dialogues;
- 
+
     public static List<CueChoice> cuesChoices = new List<CueChoice>();
 
-    public static string currentBackgroundMusic ="";
+    public static string currentBackgroundMusic = "";
 
 
 
@@ -212,7 +216,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         Debug.Log("LOAD " + data.currentDialogueIndex);
-    
+        StorylineManager.CurrentSceneName = data.CurrentSceneName;
         StorylineManager.so_InteractibleChoices = data.so_InteractibleChoices;
         StorylineManager.currentSO_Dialogues = data.currentSO_Dialogues;
         StorylineManager.currentDialogueIndex = data.currentDialogueIndex;
@@ -227,14 +231,14 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         currentBackgroundMusic = data.currentBackgroundMusic;
 
-       // CharacterDialogueUI.onCharacterSpokenTo.Invoke();
+        // CharacterDialogueUI.onCharacterSpokenTo.Invoke();
         //OnLoadedEvent.Invoke();
     }
 
     public void SaveData(ref GameData data)
     {
         Debug.Log("SAVED " + data.currentDialogueIndex);
-        data.CurrentSceneName = "VisualNovel";
+        data.CurrentSceneName = StorylineManager.CurrentSceneName;
         data.currentSO_Dialogues = StorylineManager.currentSO_Dialogues;
         data.currentDialogueIndex = StorylineManager.currentDialogueIndex;
         data.so_InteractibleChoices = StorylineManager.so_InteractibleChoices;
@@ -248,7 +252,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.savedSO_Dialogues = savedSO_Dialogues;
 
         data.currentBackgroundMusic = currentBackgroundMusic;
-    
+
 
     }
     public static void LoadPhone()
@@ -280,5 +284,5 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             onCallBack?.Invoke();
     }
 
-   
+
 }
