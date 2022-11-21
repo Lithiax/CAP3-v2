@@ -73,6 +73,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         datePanelOldLocalPos = panelParent.transform.localPosition;
         xMarksParentOldLocalPos = xMarkParent.transform.localPosition;
     }
+    private void Start()
+    {
+        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
+        Init();
+        StartCoroutine(Debugger());
+    }
     public void Init()
     {
         Debug.Log("CURRENTLY LOADING: M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
@@ -118,7 +124,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     IEnumerator MainLoop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         XMarkFadeIn(progressionData.CurrentWeek, () =>
         {
@@ -135,6 +141,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
                 }
             });
         });
+
+        yield return new WaitForSeconds(3f);
     }
 
     IEnumerator NextLoop()
@@ -147,6 +155,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
     {
         while (progressionData.CurrentWeek <= 5 || progressionData.CurrentMonth != 3)
         {
+            DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
+            Init();
             Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
             yield return new WaitForSeconds(1f);
 
@@ -176,6 +186,10 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         {
             week = 4;
         }
+        else
+        {
+            week -= 1;
+        }
 
         for (int i = 0; i < week - 1; i++)
         {
@@ -198,6 +212,10 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         {
             week = 4;
         }
+        else if (week != 1)
+        {
+            week -= 1;
+        }
 
         float xPos = xMarks[week - 1].gameObject.transform.position.x;
         arrow.transform.position = new Vector3(xPos, arrow.transform.position.y, arrow.transform.position.z);
@@ -207,6 +225,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     void MoveDatePanel(int month, TweenCallback onEnd = null)
     {
+        Debug.Log("Move Date Panel");
+
         float posX = datePanelOldLocalPos.x;
         float posX2 = xMarksParentOldLocalPos.x;
         posX -= (month - 1) * BGDifference;
@@ -229,6 +249,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     void XMarkFadeIn(int week, TweenCallback onEnd = null)
     {
+        Debug.Log("X MarkFade In");
+
         if (week == 1 && progressionData.CurrentMonth == 1)
         {
             onEnd?.Invoke();
@@ -246,6 +268,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     void MoveArrow(int week, TweenCallback onEnd = null)
     {
+        Debug.Log("Move Arrow");
+
         CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
 
         float targetX = xMarks[week-1].gameObject.transform.localPosition.x;
