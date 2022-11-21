@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4742147138534041329, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4742147139394282041, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -181,14 +177,6 @@ PrefabInstance:
     - target: {fileID: 4742147139394282047, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
       propertyPath: m_Name
       value: LoadingController
-      objectReference: {fileID: 0}
-    - target: {fileID: 4742147139394282047, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4742147139629185765, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.7961426
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b980d1dae14c6434289051a2efc0c3b7, type: 3}
