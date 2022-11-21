@@ -73,12 +73,6 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         datePanelOldLocalPos = panelParent.transform.localPosition;
         xMarksParentOldLocalPos = xMarkParent.transform.localPosition;
     }
-    private void Start()
-    {
-        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
-        Init();
-        StartCoroutine(Debugger());
-    }
     public void Init()
     {
         Debug.Log("CURRENTLY LOADING: M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
