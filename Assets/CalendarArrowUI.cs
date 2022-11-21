@@ -22,6 +22,11 @@ public class CalendarArrowUI : MonoBehaviour
         startHover = true;
     }
 
+    public void SetHovering(bool b)
+    {
+        startHover = b;
+    }  
+
     // Update is called once per frame
     void Update()
     {
