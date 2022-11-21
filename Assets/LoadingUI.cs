@@ -63,7 +63,9 @@ public class LoadingUI : MonoBehaviour
             Debug.Log("No Scene To Load!");
             return;
         }
-        
+
+        if (asyncOperation != null) return;
+
         asyncOperation = SceneManager.LoadSceneAsync(sceneToLoad);
         StartCoroutine(LoadProgress());
     }
