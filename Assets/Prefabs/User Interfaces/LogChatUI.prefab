@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 140.06769, y: 39.55062}
-  m_SizeDelta: {x: 270.5714, y: -79.1022}
+  m_AnchoredPosition: {x: 149.05487, y: 62.391}
+  m_SizeDelta: {x: 252.597, y: -121.423}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1449106023599733632
 CanvasRenderer:
@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: MAEVE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
-  m_sharedMaterial: {fileID: -6382025516150767968, guid: 06e965d05b1c0754f82019a8bcdf5680, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 78be24c5e0eb82d449caeaf6acc5332b, type: 2}
+  m_sharedMaterial: {fileID: -671523319085604478, guid: 78be24c5e0eb82d449caeaf6acc5332b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -170,8 +170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 705.198, y: -23.4121}
-  m_SizeDelta: {x: 1329.6039, y: -64.146}
+  m_AnchoredPosition: {x: 711.9282, y: -25.751984}
+  m_SizeDelta: {x: 1316.144, y: -77.472}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1449106023781071079
 CanvasRenderer:
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text here
+  m_text: Hey!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
   m_sharedMaterial: {fileID: 7560753635513707573, guid: c2c5cffd74de0d14cb69970d90b7aa07, type: 2}
@@ -228,12 +228,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
+  m_fontSize: 45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 10
-  m_fontSizeMax: 30
+  m_fontSizeMin: 20
+  m_fontSizeMax: 45
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449106024845267834}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

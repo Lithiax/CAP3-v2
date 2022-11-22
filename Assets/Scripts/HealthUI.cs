@@ -124,6 +124,9 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private List<ColorTransitionData> realBarColorTransitions = new List<ColorTransitionData>();
 
     [SerializeField] private Color32 defaultGhostBarColor;
+    [SerializeField] private Color32 addGhostBarColor;
+    [SerializeField] private Color32 subtractGhostBarColor;
+
     [SerializeField] private FadeTransitionData ghostBarFadeTransition;
     [SerializeField] private FillTransitionData ghostBarFillTransition;
 
@@ -213,6 +216,14 @@ public class HealthUI : MonoBehaviour
     }
     void ModifyHealth(int p_modifier)
     {
+        if (p_modifier >0)
+        {
+            defaultGhostBarColor = addGhostBarColor;
+        }
+        else
+        {
+            defaultGhostBarColor = subtractGhostBarColor;
+        }
         currentHealth += p_modifier;
         if (currentHealth > maxHealth)
         {
