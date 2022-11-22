@@ -257,10 +257,15 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     void SetRGScript(ChatUserData data)
     {
-        if (data.CurrentRGIndex >= data.UserSO.RGScripts.Count) return;
+        if (data.CurrentRGIndex >= data.UserSO.RGScripts.Count)
+        {
+            Debug.Log("Max RGs Reached!");
+            return;
+        }
 
         DialogueTree.SetDialogueTree(data.UserSO.RGScripts[data.CurrentRGIndex]);
         ChatData.CurrentTree = DialogueTree.DialogueTree;
+        data.CurrentRGIndex++;
     }
 
     DialogueContainer SetDialogueContainer()

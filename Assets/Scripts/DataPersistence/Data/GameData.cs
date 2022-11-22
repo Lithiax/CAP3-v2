@@ -28,6 +28,8 @@ public class GameData
 
     public List<ChatUserData> ChatUserData;
     public ProgressionData ProgressionData;
+
+    public List<string> EffectsUsed;
     public GameData()
     {
         CurrentSceneName = "";
@@ -50,6 +52,7 @@ public class GameData
         ChatUserData = new List<ChatUserData>();
 
         ProgressionData = new ProgressionData(1, 1);
+        EffectsUsed = new List<string>();
     }
 
     public void DebugLogData()

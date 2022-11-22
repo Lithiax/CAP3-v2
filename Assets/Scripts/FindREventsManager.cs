@@ -64,7 +64,13 @@ public class FindREventsManager : MonoBehaviour
     IEnumerator InstantDateEvent(string data)
     {
         yield return new WaitForSeconds(5f);
-        LoadVisualNovel(data);
+        if (StaticUserData.ProgressionData == null)
+        {
+            Debug.LogError("Progression Data is Empty!");
+            yield return null;
+        }
+
+        LoadVisualNovel(StaticUserData.ProgressionData.CurrentDateScene);
     }
 
     void GaugeEvent(ChatUserSO userData, string num)

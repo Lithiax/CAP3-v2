@@ -11,11 +11,19 @@ public class ProgressionData
 {
     public int CurrentWeek { get; private set; }
     public int CurrentMonth { get; private set; }
-
+    public string CurrentDateScene;
     public ProgressionData(int month, int week)
     {
         CurrentMonth = Mathf.Clamp(month, 1, 3);
         CurrentWeek = Mathf.Clamp(week % 5, 1, 4);
+
+        SetCurrentDateString();
+    }
+
+    void SetCurrentDateString()
+    {
+        string date = ("M" + CurrentMonth.ToString() + "W" + CurrentWeek.ToString());
+        CurrentDateScene = (date + "," + date);
     }
 
     public void ProgressDate()
@@ -35,6 +43,8 @@ public class ProgressionData
             CurrentMonth++;
             CurrentMonth = Mathf.Clamp(CurrentMonth, 1, 3);
         }
+
+        SetCurrentDateString();
     }
 }
 
@@ -76,6 +86,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     //private void Start()
     //{
+    //    Init();
     //    StartCoroutine(Debugger());
     //}
     public void Init()
@@ -156,7 +167,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         while (progressionData.CurrentWeek <= 5 || progressionData.CurrentMonth != 3)
         {
             DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
-            Init();
+            //Init();
             Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
             yield return new WaitForSeconds(1f);
 
@@ -235,11 +246,14 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         posX2 -= (month - 1) * BGDifference;
 
         Tween tween = panelParent.transform.DOLocalMoveX(posX, 0.5f);
+        CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
+        arrowComp.ChangeColor();
+
         xMarkParent.transform.DOLocalMoveX(posX2, 0.5f).OnComplete(() => 
         {
             for (int i = 0; i < xMarks.Count; i++)
             {
-                xMarks[i].color = new Color(255, 255, 255, 0);
+                xMarks[i].color = new Color(0, 0, 0, 0);
             }
 
             xMarkParent.transform.localPosition = new Vector3(xMarksParentOldLocalPos.x, xMarkParent.transform.localPosition.y,
