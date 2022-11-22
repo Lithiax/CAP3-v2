@@ -98,6 +98,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.chatUsers.Add(this);
         toggle.group = toggleGroup;
 
+        profileName.text = data.profileName;
+        profileImage.sprite = data.profileImage;
+
         isToggled = toggle.isOn;
 
         foreach (ChatUserData d in StaticUserData.ChatUserData)
@@ -170,8 +173,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
         //currentCollection = initialChatCollection;
 
-        profileName.text = data.profileName;
-        profileImage.sprite = data.profileImage;
+
 
 
         if (DialogueTree.DialogueTree == null)
@@ -233,16 +235,21 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     void LoadChatData(ChatUserData data)
     {
+        profileName.text = data.UserSO.profileName;
+        profileImage.sprite = data.UserSO.profileImage;
+
         //Spawn in Previous Chat Objects
         foreach (ChatBubble chat in data.ChatBubbles)
         {
             GameObject obj = chatManager.SpawnChatBubble(chat, this);
             chatsObj.Add(obj);
 
-            PreviousChat = chat;
         }
-        chatManager.RebuildAfterSpawning();
 
+        if (data.ChatBubbles.Count > 0)
+            lastMessageText.text = data.ChatBubbles[data.ChatBubbles.Count - 1].chatText;
+
+        chatManager.RebuildAfterSpawning();
 
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
@@ -251,6 +258,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         if (c == null && data.CanRGText)
         {
+            OnChatComplete();
             SetRGScript(data);
         }
     }
@@ -317,6 +325,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
+        profileName.text = ChatUserSO.profileName;
+        profileImage.sprite = ChatUserSO.profileImage;
+
         ChatData.CurrentDialogueComplete = false;
         chatManager.StartSpawningChat(this, DialogueTree);
     }
@@ -330,6 +341,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
         chatManager.OnSetNextTree += SetNextTree;
         ChatData.WasBranchEffect = true;
+
+        profileName.text = ChatUserSO.profileName;
+        profileImage.sprite = ChatUserSO.profileImage;
 
         ChatData.CurrentDialogueComplete = false;
         chatManager.StartSpawningChat(this, DialogueTree);
@@ -345,6 +359,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.OnSetNextTree -= SetNextTree;
         ChatData.WasBranchEffect = false;
         DialogueTree.OnNodeChanged -= OnNodeChange;
+    }
+
+    public void OnChatComplete()
+    {
+        ChatData.CurrentDialogueIndex = 0;
+        ChatData.CurrentDialogueComplete = false;
     }
 
     public void SetNotif()
@@ -398,6 +418,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         ChatData = new ChatUserData(userData);
 
         //Set to intial tree if it has one.
+
+        profileName.text = userData.profileName;
+        profileImage.sprite = userData.profileImage;
 
         if (ChatData.ActiveDialogue)
             DialogueTree.SetDialogueTree(userData.dialogueTree);

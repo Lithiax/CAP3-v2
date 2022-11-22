@@ -280,7 +280,7 @@ public class ChatManagerUI : MonoBehaviour
                 EventManager.RegisterEvent(ev);
                 if (ev.EventType != ChatEventTypes.DateEvent)
                 {
-                    parent.ChatData.CurrentDialogueIndex = 0;
+                    parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
                 }
             }
@@ -288,7 +288,7 @@ public class ChatManagerUI : MonoBehaviour
 
         if (!ChatCollection.isEvent())
         {
-            parent.ChatData.CurrentDialogueIndex = 0;
+            parent.OnChatComplete();
         }
 
         if (parent.isToggled)

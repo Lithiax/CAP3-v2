@@ -42,7 +42,7 @@ public class FindREventsManager : MonoBehaviour
                 ChatUser u = ChatUsers.First(x => x.ChatUserSO == userData);
                 BeginDateYesButton.onClick.AddListener(() => {
                     LoadVisualNovel(data);
-                    u.ChatData.CurrentDialogueIndex = 0;
+                    u.OnChatComplete();
                 });
                 break;
             case ChatEventTypes.BranchEvent:
