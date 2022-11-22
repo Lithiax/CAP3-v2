@@ -86,19 +86,23 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
             Debug.Log(e);
         }
 
+        RemoveUsedEffects();
+    }
+
+    void RemoveUsedEffects()
+    {
         Debug.Log("Remove Effects " + effectsToRemove.Count);
         DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
-        
-        foreach(string e in DialogueSpreadSheetPatternConstants.effects)
+
+        foreach (string e in DialogueSpreadSheetPatternConstants.effects)
         {
             Debug.Log(e);
         }
 
-        foreach(ChatUser user in SpawnedUsers)
+        foreach (ChatUser user in SpawnedUsers)
         {
             user.OnRemoveEffect -= AddToEffectsRemoveLog;
         }
-
     }
 
     public void LoadData(GameData data)
@@ -119,12 +123,17 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             UserDataTesting.Add(UserDict[id]);
         }
+
+        effectsToRemove = data.EffectsUsed;
+
+        RemoveUsedEffects();
     }
 
     public void SaveData(ref GameData data)
     {
         data.CurrentSceneName = "FindR";
         data.ChatUserIDs = IDs.ToArray();
+        data.EffectsUsed = effectsToRemove;
 
         foreach (int id in data.ChatUserIDs)
         {

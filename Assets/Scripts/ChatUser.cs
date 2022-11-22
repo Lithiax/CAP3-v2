@@ -19,6 +19,8 @@ public class ChatUserData
     public float RGMeter;
     public bool WasBranchEffect;
     public bool ActiveDialogue;
+    public int CurrentRGIndex;
+    public bool CanRGText;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -26,6 +28,7 @@ public class ChatUserData
         CurrentTree = userSO.dialogueTree;
         CurrentDialogueIndex = 0;
         CurrentDialogueComplete = false;
+        CurrentRGIndex = 0;
     }
 }
 
@@ -244,7 +247,25 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
 
-        SetDialogueContainer();
+        DialogueContainer c = SetDialogueContainer();
+
+        if (c == null && data.CanRGText)
+        {
+            SetRGScript(data);
+        }
+    }
+
+    void SetRGScript(ChatUserData data)
+    {
+        if (data.CurrentRGIndex >= data.UserSO.RGScripts.Count)
+        {
+            Debug.Log("Max RGs Reached!");
+            return;
+        }
+
+        DialogueTree.SetDialogueTree(data.UserSO.RGScripts[data.CurrentRGIndex]);
+        ChatData.CurrentTree = DialogueTree.DialogueTree;
+        data.CurrentRGIndex++;
     }
 
     DialogueContainer SetDialogueContainer()
@@ -261,6 +282,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
+
+                ChatData.CanRGText = true;
 
                 break;
             }

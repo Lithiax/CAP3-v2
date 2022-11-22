@@ -15,4 +15,5 @@ public class ChatUserSO : ScriptableObject
     public ChatCollectionSO initialPreviousChat;
 
     public Sprite profileMatchImage;
+    public List<DialogueContainer> RGScripts;
 }

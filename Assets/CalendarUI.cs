@@ -11,11 +11,19 @@ public class ProgressionData
 {
     public int CurrentWeek { get; private set; }
     public int CurrentMonth { get; private set; }
-
+    public string CurrentDateScene;
     public ProgressionData(int month, int week)
     {
         CurrentMonth = Mathf.Clamp(month, 1, 3);
         CurrentWeek = Mathf.Clamp(week % 5, 1, 4);
+
+        SetCurrentDateString();
+    }
+
+    void SetCurrentDateString()
+    {
+        string date = ("M" + CurrentMonth.ToString() + "W" + CurrentWeek.ToString());
+        CurrentDateScene = (date + "," + date);
     }
 
     public void ProgressDate()
@@ -35,6 +43,8 @@ public class ProgressionData
             CurrentMonth++;
             CurrentMonth = Mathf.Clamp(CurrentMonth, 1, 3);
         }
+
+        SetCurrentDateString();
     }
 }
 
@@ -73,6 +83,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         datePanelOldLocalPos = panelParent.transform.localPosition;
         xMarksParentOldLocalPos = xMarkParent.transform.localPosition;
     }
+
+    //private void Start()
+    //{
+    //    Init();
+    //    StartCoroutine(Debugger());
+    //}
     public void Init()
     {
         Debug.Log("CURRENTLY LOADING: M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
@@ -100,6 +116,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         SetArrow(tempWeek);
     }
 
+    //Fix Arrow not animating properly..
     public void StartAnimation()
     {
         //Dont play animation if the game hasnt progressed recently.
@@ -150,7 +167,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         while (progressionData.CurrentWeek <= 5 || progressionData.CurrentMonth != 3)
         {
             DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
-            Init();
+            //Init();
             Debug.Log("M" + progressionData.CurrentMonth + "W" + progressionData.CurrentWeek);
             yield return new WaitForSeconds(1f);
 
@@ -187,7 +204,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
         for (int i = 0; i < week - 1; i++)
         {
-            xMarks[i].color = new Color(255, 255, 255, 1);
+            xMarks[i].color = new Color(0, 0, 0, 0.92f);
         }
     }
 
@@ -211,7 +228,9 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
             week -= 1;
         }
 
+
         float xPos = xMarks[week - 1].gameObject.transform.position.x;
+
         arrow.transform.position = new Vector3(xPos, arrow.transform.position.y, arrow.transform.position.z);
 
         arrow.GetComponent<CalendarArrowUI>().StartHovering();
@@ -227,11 +246,14 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         posX2 -= (month - 1) * BGDifference;
 
         Tween tween = panelParent.transform.DOLocalMoveX(posX, 0.5f);
+        CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
+        arrowComp.ChangeColor();
+
         xMarkParent.transform.DOLocalMoveX(posX2, 0.5f).OnComplete(() => 
         {
             for (int i = 0; i < xMarks.Count; i++)
             {
-                xMarks[i].color = new Color(255, 255, 255, 0);
+                xMarks[i].color = new Color(0, 0, 0, 0);
             }
 
             xMarkParent.transform.localPosition = new Vector3(xMarksParentOldLocalPos.x, xMarkParent.transform.localPosition.y,
@@ -256,7 +278,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         }
 
         Image mark = xMarks[week - 2];
-        Tween tween = mark.DOFade(1, 0.5f);
+        Tween tween = mark.DOFade(0.92f, 0.5f);
         tween.onComplete += onEnd;
     }
 
@@ -266,10 +288,17 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
         CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
 
+        arrowComp.SetHovering(false);
         float targetX = xMarks[week-1].gameObject.transform.localPosition.x;
+
+
+        Debug.Log("Arrow Pos: " + arrow.transform.localPosition);
+        Debug.Log("Target Pos:" + targetX);
+
         Tween tween = arrow.transform.DOLocalMoveX(targetX, 1).OnComplete(() =>
         {
             arrowComp.startPos = new Vector3(arrow.transform.position.x, arrowComp.startPos.y, arrowComp.startPos.z);
+            arrowComp.SetHovering(true);
         });
 
         tween.onComplete += onEnd;
