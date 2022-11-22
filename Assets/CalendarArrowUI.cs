@@ -51,6 +51,5 @@ public class CalendarArrowUI : MonoBehaviour
     {
         if (!startHover) return;
         transform.position = startPos + transform.up * Mathf.Sin(Time.time * frequency + offset) * magnitude;
-        Debug.Log(transform.position);
     }
 }

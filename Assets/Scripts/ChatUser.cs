@@ -147,7 +147,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 Divider = chatManager.SpawnDivider();
             }
         }
-        //If ChatUser is not new (FOR TESTING)
+        //If ChatUser is not new
         else
         {
             ChatData = StaticUserData.ChatUserData.First(x => x.UserSO == data);

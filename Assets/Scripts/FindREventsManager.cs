@@ -32,13 +32,18 @@ public class FindREventsManager : MonoBehaviour
     void HandleEvent(ChatUserSO userData, string data, ChatEventTypes eventType)
     {
         Debug.Log("Call Event");
+
         ClearButtons();
         switch (eventType)
         {
             case ChatEventTypes.DateEvent:
                 Debug.Log("Date Event");
                 BeginDatePanel.SetActive(true);
-                BeginDateYesButton.onClick.AddListener(() => LoadVisualNovel(data));
+                ChatUser u = ChatUsers.First(x => x.ChatUserSO == userData);
+                BeginDateYesButton.onClick.AddListener(() => {
+                    LoadVisualNovel(data);
+                    u.ChatData.CurrentDialogueIndex = 0;
+                });
                 break;
             case ChatEventTypes.BranchEvent:
                 Debug.Log("Branch Event");

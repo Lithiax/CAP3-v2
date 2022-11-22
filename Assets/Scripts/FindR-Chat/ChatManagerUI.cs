@@ -167,7 +167,9 @@ public class ChatManagerUI : MonoBehaviour
         int rand = UnityEngine.Random.Range(-30, 30);
         float CPM = 1050f + rand;
 
-        return ((length / CPM) * 60);
+        float totalTime = (length / CPM) * 60;
+
+        return Mathf.Clamp(totalTime, 0, 3f);
     }
 
     //SO BAD BUT ITS 5AM IDK
@@ -278,9 +280,15 @@ public class ChatManagerUI : MonoBehaviour
                 EventManager.RegisterEvent(ev);
                 if (ev.EventType != ChatEventTypes.DateEvent)
                 {
+                    parent.ChatData.CurrentDialogueIndex = 0;
                     ev.RaiseEvent(parent.ChatUserSO);
                 }
             }
+        }
+
+        if (!ChatCollection.isEvent())
+        {
+            parent.ChatData.CurrentDialogueIndex = 0;
         }
 
         if (parent.isToggled)
