@@ -594,25 +594,33 @@ public class SpreadSheetAPI : MonoBehaviour
                     for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     {
                         string[] sheetDivided = currentSheetSODialogue.choiceDatas[i].effectID.Split('&');
+                        bool vn = false;
                         for (int rr = 0; rr < sheetDivided.Length; rr++)
                         {
-                            Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
+                            Debug.Log("connecting: " + allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name + " -  " +sheetDivided[rr]);
                             if (sheetDivided[rr] == "<VN>")
                             {
-                                string[] sheetDividedrr = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
-
+                                vn = true;
+                                Debug.Log("connecting:SHIT:");
+  
+                                  string[] sheetDividedrr = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
+                                Debug.Log("connecting:sheeeeeeeet: " + sheetDividedrr[0] + " + " + sheetDividedrr[1]);
                                 currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(sheetDividedrr[0], sheetDividedrr[1]);
                             }
                        
                         }
-                        if (currentSheetSODialogue.choiceDatas[i].branchDialogueName != "<Phone>")
+                        if (!vn)
                         {
-                            if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].branchDialogueName))
+                            if (currentSheetSODialogue.choiceDatas[i].branchDialogueName != "<Phone>")
                             {
-                                currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
-                            }
+                                if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].branchDialogueName))
+                                {
+                                    currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
+                                }
 
+                            }
                         }
+                     
 
                         EditorUtility.SetDirty(currentSheetSODialogue);
                     }
@@ -656,11 +664,12 @@ public class SpreadSheetAPI : MonoBehaviour
         SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + p_branchDialogueName);
         if (currentSheetSODialogue != null)
         {
+            Debug.Log("connecting:FOUND");
             return currentSheetSODialogue;
         }
         else
         {
-            Debug.LogWarning("DIDNT FIND ANYTHING FOR: " + spreadSheetFileLocation + p_branchDialogueName);
+            Debug.LogWarning("connecting:DIDNT FIND ANYTHING FOR: " + spreadSheetFileLocation + p_branchDialogueName);
             return null;
         }
 
