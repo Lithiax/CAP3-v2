@@ -58,7 +58,7 @@ public class VisualNovelDatas : MonoBehaviour
 
     public static Sprite FindBackgroundSprite(string p_name)
     {
-        if (p_name != "none")
+        if (p_name != "None")
         {
             for (int i = 0; i < instance.backgroundImages.Count; i++)
             {
@@ -68,7 +68,15 @@ public class VisualNovelDatas : MonoBehaviour
                 }
             }
         }
-        Debug.LogError(p_name + " NONE");
+        if (p_name == "None")
+        {
+          
+        }
+        else
+        {
+            Debug.LogError(p_name + " NONE");
+        }
+         
         return null;
     }
 
