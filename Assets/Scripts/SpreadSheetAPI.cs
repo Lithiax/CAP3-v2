@@ -593,22 +593,27 @@ public class SpreadSheetAPI : MonoBehaviour
                     SO_Dialogues currentSheetSODialogue = Resources.Load<SO_Dialogues>(spreadSheetFileLocation + allso_SpreadSheets[localSpreadSheetIndex].sheetNames[localSheetIndex]);
                     for (int i = 0; i < currentSheetSODialogue.choiceDatas.Count; i++)
                     {
-                        Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
-                        if (currentSheetSODialogue.choiceDatas[i].effectID == "<VN>")
+                        string[] sheetDivided = currentSheetSODialogue.choiceDatas[i].effectID.Split('&');
+                        for (int rr = 0; rr < sheetDivided.Length; rr++)
                         {
-                            string[] sheetDivided = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
+                            Debug.Log(allso_SpreadSheets[localSpreadSheetIndex].name + " - " + currentSheetSODialogue.name);
+                            if (sheetDivided[rr] == "<VN>")
+                            {
+                                string[] sheetDividedrr = currentSheetSODialogue.choiceDatas[i].branchDialogueName.Split('/');
 
-                            currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(sheetDivided[0], sheetDivided[1]);
+                                currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(sheetDividedrr[0], sheetDividedrr[1]);
+                            }
+                       
                         }
-                        else if (currentSheetSODialogue.choiceDatas[i].branchDialogueName != "<Phone>")
+                        if (currentSheetSODialogue.choiceDatas[i].branchDialogueName != "<Phone>")
                         {
                             if (!string.IsNullOrEmpty(currentSheetSODialogue.choiceDatas[i].branchDialogueName))
                             {
                                 currentSheetSODialogue.choiceDatas[i].branchDialogue = FindSODialogue(allso_SpreadSheets[localSpreadSheetIndex].name, currentSheetSODialogue.choiceDatas[i].branchDialogueName);
                             }
-                                
+
                         }
-                      
+
                         EditorUtility.SetDirty(currentSheetSODialogue);
                     }
                 }

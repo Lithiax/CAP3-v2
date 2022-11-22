@@ -145,19 +145,23 @@ public class ChoicesUI : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(p_currentChoiceData.effectID))
             {
-                if (p_currentChoiceData.effectID != "<VN>")
+                string[] sheetDivided = p_currentChoiceData.effectID.Split('&');
+                for (int i = 0; i < sheetDivided.Length; i++)
                 {
-                    Debug.Log("EFFECT ADDED ");
-                    string[] sheetDivided = p_currentChoiceData.effectID.Split('&');
-                    for (int i=0; i< sheetDivided.Length; i++)
+                    if (sheetDivided[i] != "<VN>")
                     {
-                        DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
-                        //DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
-                    }
-                    
-                    
+                        Debug.Log("EFFECT ADDED ");
+              
+                      
+                            DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
+                            //DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
+                        
 
+
+
+                    }
                 }
+                   
                 StorylineManager.LoadPhone();
             }
         }
