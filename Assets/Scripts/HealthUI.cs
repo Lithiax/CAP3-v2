@@ -123,6 +123,7 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private InstantColorData realBarColorFlash;
     [SerializeField] private List<ColorTransitionData> realBarColorTransitions = new List<ColorTransitionData>();
 
+    [SerializeField] private Color32 fakeRealBarColor;
     [SerializeField] private Color32 defaultGhostBarColor;
     [SerializeField] private Color32 addGhostBarColor;
     [SerializeField] private Color32 subtractGhostBarColor;
@@ -217,14 +218,14 @@ public class HealthUI : MonoBehaviour
     }
     void ModifyHealth(int p_modifier)
     {
-        if (p_modifier >0)
-        {
-            defaultGhostBarColor = addGhostBarColor;
-        }
-        else
-        {
-            defaultGhostBarColor = subtractGhostBarColor;
-        }
+        //if (p_modifier >0)
+        //{
+        //    defaultGhostBarColor = addGhostBarColor;
+        //}
+        //else
+        //{
+        //    defaultGhostBarColor = subtractGhostBarColor;
+        //}
         currentHealth += p_modifier;
         if (currentHealth > maxHealth)
         {
@@ -310,7 +311,7 @@ public class HealthUI : MonoBehaviour
     }
     IEnumerator Co_UpdateBar(float p_fill = 0)
     {
-       
+        bool add = false;
         Image currentBar;
         Image currentGhostBar;
         if (savedFill > p_fill) //Decreased, go real bar go first
@@ -347,11 +348,19 @@ public class HealthUI : MonoBehaviour
             currentGhostBar = ghostBarUI;
 
 
+           
+            defaultGhostBarColor = subtractGhostBarColor;
+            ghostBarUI.color = defaultGhostBarColor;
+
+
         }
         else //Increase, fake bar go first
         {
             currentBar = ghostBarUI;
             currentGhostBar = realBarUI;
+            defaultGhostBarColor = addGhostBarColor;
+            add = true;
+
             //realBarTransform.sortingOrder = 4;
             //ghostBarTransform.sortingOrder = 5;
 
@@ -376,7 +385,11 @@ public class HealthUI : MonoBehaviour
 
             if (ghostBarFadeTransition.amount < 900)
             {
-                s.Join(currentGhostBar.DOFade(secondaryBarFadeAmount, ghostBarFadeTransition.transitionTime));
+                if (!add)
+                {
+                    s.Join(currentGhostBar.DOFade(secondaryBarFadeAmount, ghostBarFadeTransition.transitionTime));
+                }
+           
             }
 
         }
@@ -414,10 +427,19 @@ public class HealthUI : MonoBehaviour
         yield return s.WaitForCompletion();
         //realBarTransform.sortingOrder = 5;
         //ghostBarTransform.sortingOrder = 4;
-        ghostBarUI.color = defaultGhostBarColor;
-        realBarUI.color = defaultRealBarColor;
-    
+       
       
+    
+        //if (!add)
+        //{
+            ghostBarUI.color = fakeRealBarColor;
+            realBarUI.color = addGhostBarColor;
+        //}
+        //else
+        //{
+        //    realBarUI.color = fakeRealBarColor;
+        //    ghostBarUI.color = addGhostBarColor;
+        //}
     //    realBarTransform.sortingOrder = 5;
      //   ghostBarTransform.sortingOrder = 4;
     }

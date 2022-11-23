@@ -51,6 +51,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     float avatarFadeTime;
     string currentWords;
     bool canOpen = true;
+    string so = "";
     private void Awake()
     {
         smallDialogueBoxImage = smallDialogueBox.GetComponent<Image>();
@@ -137,7 +138,19 @@ public class SpeakerDialogueUI : MonoBehaviour
 
             }
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
-            SetSpeech(currentDialogue.words);
+            for (int i=0; i< currentDialogue.characterDatas.Count; i++)
+            {
+                if (currentDialogue.characterDatas[i].isSpeaking)
+                {
+                    SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
+                    break;
+                }
+                else
+                {
+                    SetSpeech(currentDialogue.words);
+                }
+            }
+
             StartCoroutine(In());
         }
        
@@ -167,7 +180,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     void Skip()
     {
         
-        AudioManager.instance.ForceStopAudio("typewriting");
+        AudioManager.instance.ForceStopAudio(so);
         StopAllCoroutines();
         SetWords(currentWords);
     }
@@ -177,12 +190,12 @@ public class SpeakerDialogueUI : MonoBehaviour
         currentDialogueText.text = p_words;
     }
 
-    public void SetSpeech(string p_words)
+    public void SetSpeech(string p_words, string character ="")
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
        
-        StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words));
+        StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
         
 
     }
@@ -218,18 +231,30 @@ public class SpeakerDialogueUI : MonoBehaviour
         yield return fadeOutSequence.WaitForCompletion();
         canOpen = true;
     }
-    public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText)
+    public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
-        Debug.Log("TYPE WRITING");
+        Debug.Log("TYPE WRITING " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        so = "";
+        if (!string.IsNullOrEmpty(character))
+        {
+            so = "Typewriting";
+        }
+        else
+        {
+            so = character;
+        }
+
         string p_currentText;
+       
         for (int i = 0; i <= p_fullText.Length; i++)
         {
             p_currentText = p_fullText.Substring(0, i);
             p_textUI.text = p_currentText;
-            AudioManager.instance.AdditivePlayAudio("typewriting");
+            AudioManager.instance.AdditivePlayAudio(so);
             yield return new WaitForSeconds(typewriterSpeed);
         }
+    //    AudioManager.instance.ForceStopAudio(so);
         Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }

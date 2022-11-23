@@ -97,7 +97,12 @@ public class AudioManager : MonoBehaviour
     {
         SoundData sound;
         sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
-        sound.source.Stop();
+        if (sound != null)
+        {
+            Debug.Log("STOPPING " + p_newAudioClip);
+            sound.source.Stop();
+        }
+   
 
     }
 
@@ -113,8 +118,10 @@ public class AudioManager : MonoBehaviour
         SoundData sound;
         sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
         //Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
+        Debug.Log("OUT PLAYING NEW SONG: " + p_newAudioClip);
         if (sound != null)
         {
+            Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
             sound.source.Play();
         }
    
