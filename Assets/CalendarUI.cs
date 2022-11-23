@@ -65,12 +65,15 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     Vector3 datePanelOldLocalPos;
     Vector3 xMarksParentOldLocalPos;
+    CalendarArrowUI arrowUI;
+
 
     readonly int BGDifference = 1920;
 
     public Action OnAnimationDone;
     private void Awake()
     {
+        arrowUI = arrow.GetComponent<CalendarArrowUI>();
         if (StaticUserData.ProgressionData == null)
         {
             progressionData = new ProgressionData(1, 1);
@@ -214,6 +217,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         float posX = datePanelOldLocalPos.x;
         posX -= (month - 1) * BGDifference;
 
+        arrowUI.SetColor(month - 1);
         panelParent.transform.localPosition = new Vector3(posX, panelParent.transform.localPosition.y, panelParent.transform.localPosition.z);
     }
 
@@ -233,7 +237,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
         arrow.transform.position = new Vector3(xPos, arrow.transform.position.y, arrow.transform.position.z);
 
-        arrow.GetComponent<CalendarArrowUI>().StartHovering();
+        arrowUI.StartHovering();
     }
 
     void MoveDatePanel(int month, TweenCallback onEnd = null)
@@ -246,8 +250,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         posX2 -= (month - 1) * BGDifference;
 
         Tween tween = panelParent.transform.DOLocalMoveX(posX, 0.5f);
-        CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
-        arrowComp.ChangeColor();
+
+        arrowUI.ChangeColor();
 
         xMarkParent.transform.DOLocalMoveX(posX2, 0.5f).OnComplete(() => 
         {
@@ -286,9 +290,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
     {
         Debug.Log("Move Arrow");
 
-        CalendarArrowUI arrowComp = arrow.GetComponent<CalendarArrowUI>();
-
-        arrowComp.SetHovering(false);
+        arrowUI.SetHovering(false);
         float targetX = xMarks[week-1].gameObject.transform.localPosition.x;
 
 
@@ -297,8 +299,8 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
         Tween tween = arrow.transform.DOLocalMoveX(targetX, 1).OnComplete(() =>
         {
-            arrowComp.startPos = new Vector3(arrow.transform.position.x, arrowComp.startPos.y, arrowComp.startPos.z);
-            arrowComp.SetHovering(true);
+            arrowUI.startPos = new Vector3(arrow.transform.position.x, arrowUI.startPos.y, arrowUI.startPos.z);
+            arrowUI.SetHovering(true);
         });
 
         tween.onComplete += onEnd;

@@ -46,6 +46,12 @@ public class CalendarArrowUI : MonoBehaviour
         arrowImage.DOColor(arrowColors[currentColorIndex], 0.5f);
     }
 
+    public void SetColor(int i)
+    {
+        currentColorIndex = i;
+        arrowImage.color = arrowColors[i];
+    }    
+
     // Update is called once per frame
     void Update()
     {

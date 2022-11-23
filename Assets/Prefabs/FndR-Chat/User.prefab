@@ -1101,7 +1101,13 @@ MonoBehaviour:
   realBarColorTransitions: []
   defaultGhostBarColor:
     serializedVersion: 2
-    rgba: 4278255471
+    rgba: 4294967295
+  addGhostBarColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  subtractGhostBarColor:
+    serializedVersion: 2
+    rgba: 4278193663
   ghostBarFadeTransition:
     transitionType: 2
     bar: {fileID: 1978956560580580095}
@@ -1109,7 +1115,7 @@ MonoBehaviour:
     waitToFinish: 0
     delayTimeToNextTransition: 0
     amount: -1
-    transitionTime: 9.5
+    transitionTime: 0.5
   ghostBarFillTransition:
     transitionType: 0
     bar: {fileID: 0}
