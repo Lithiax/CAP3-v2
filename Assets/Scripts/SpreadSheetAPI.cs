@@ -70,7 +70,7 @@ public class SpreadSheetAPI : MonoBehaviour
       
  
         string rawJson = "";
-
+        Debug.Log(p_sheetName);
         UnityWebRequest www = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/" + p_spreadSheetID + "/values/" + p_sheetName + "?key=" + apiKey);
         yield return www.SendWebRequest();
         if (www.result == UnityWebRequest.Result.ConnectionError ||
@@ -82,8 +82,8 @@ public class SpreadSheetAPI : MonoBehaviour
             r.spreadSheetID = p_spreadSheetID;
             r.sheetName = p_sheetName;
             redoSpreadSheets.Add(r);
-            //Debug.Log(p_sheetName + " CURRENTLY OFFLINE DUE TO ERROR: " + www.error);
-            //Debug.Log("Spread Sheet Name: " + p_spreadSheetName + " Spread Sheet ID: " + p_spreadSheetID + " Sheet Name: " + p_sheetName);
+  
+            Debug.LogWarning(p_sheetName + " CURRENTLY OFFLINE DUE TO ERROR: " + www.error + " Spread Sheet Name: " + p_spreadSheetName + " Spread Sheet ID: " + p_spreadSheetID + " Sheet Name: " + p_sheetName);
         }
         else//Computer has internet access/can connect to website, opt to update the previous json file saved with new values from web
         {
