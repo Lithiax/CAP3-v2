@@ -172,7 +172,7 @@ public class SpeakerDialogueUI : MonoBehaviour
         }
         else
         {
-            currentSpeakerText.text = "NO CHARACTER ASSIGNED";
+            currentSpeakerText.text = " ";
         }
 
     }

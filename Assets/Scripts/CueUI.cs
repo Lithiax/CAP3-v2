@@ -59,14 +59,21 @@ public class CueUI : MonoBehaviour
                 if (healthUI.OnIsWithinHealthConditionEvent.Invoke(p_choiceDatas[i].choiceData.healthCeilingCondition, p_choiceDatas[i].choiceData.healthFloorCondition))
                 {
                     //Can be selected
-                    newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+                    if (newChoiceUI.GetComponent<Button>() != null)
+                    {
+                        newChoiceUI.GetComponent<Button>().onClick.AddListener(delegate { ChooseChoiceUI(currentChoiceData); });
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(choiceUIsContainerRectTransform);
+                    }
+               
                 }
                 else
                 {
                     //Cant be selected
-                    newChoiceUI.GetComponent<Button>().interactable = false;
-                    newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+                    if (newChoiceUI.GetComponent<Button>() != null)
+                    {
+                        newChoiceUI.GetComponent<Button>().interactable = false;
+                        newChoiceUI.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+                    }
                 }
             }
            

@@ -233,8 +233,20 @@ public class HealthUI : MonoBehaviour
         }
         else if (currentHealth <= 0)
         {
-            currentHealth = 0;
-            OnHealthDeathEvent.Invoke();
+            //Debug.Log("DIE " + currentHealth);
+            if (StorylineManager.currentZeroSO_Dialogues != null)
+            {
+               // Debug.Log("DIE");
+                currentHealth = 0;
+                OnHealthDeathEvent.Invoke();
+            }
+            else
+            {
+               // Debug.Log("NO DIE");
+                currentHealth = 1;
+       
+            }
+               
 
         }
        

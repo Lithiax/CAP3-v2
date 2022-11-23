@@ -151,17 +151,22 @@ public class AudioManager : MonoBehaviour
         string soundName = p_oldAudioClip;
         sound = GetSoundByName(soundName, p_isSoundEffect);
         Debug.Log("try STOP SONG: " + soundName);
-        if (!string.IsNullOrEmpty(soundName))
+  
+        if (!string.IsNullOrEmpty(soundName) || soundName.ToLower() != "none")
         {
-            Sequence fadeOutSequence = DOTween.Sequence();
-            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
-            fadeOutSequence.Play();
-            yield return fadeOutSequence.WaitForCompletion();
-            Debug.Log("STOP SONG: " + soundName);
-            if (sound!=null)
+            if (sound != null)
             {
-                sound.source.Stop();
+                Sequence fadeOutSequence = DOTween.Sequence();
+                fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+                fadeOutSequence.Play();
+                yield return fadeOutSequence.WaitForCompletion();
+                Debug.Log("STOP SONG: " + soundName);
+                if (sound != null)
+                {
+                    sound.source.Stop();
+                }
             }
+         
 
         }
        
@@ -174,17 +179,23 @@ public class AudioManager : MonoBehaviour
             currentSound.source.Play();
         }
 
-        if (!string.IsNullOrEmpty(currentSoundName))
+        if (!string.IsNullOrEmpty(currentSoundName) || currentSoundName.ToLower() != "none")
         {
-            Debug.Log("PLAYING NEW SONG: " + currentSoundName);
-            Sequence fadeInSequence = DOTween.Sequence();
-          
-       
-            if (currentSound != null)
+            if (sound != null)
             {
-                fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
-                fadeInSequence.Play();
+                Debug.Log("PLAYING NEW SONG: " + currentSoundName);
+                Sequence fadeInSequence = DOTween.Sequence();
+
+
+                if (currentSound != null)
+                {
+                    fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
+                    fadeInSequence.Play();
+                }
+
             }
+
+            
            
         }
     }
@@ -194,14 +205,16 @@ public class AudioManager : MonoBehaviour
         string soundName = p_oldAudioClip;
         sound = GetSoundByName(soundName, p_isSoundEffect);
         Debug.Log("try STOP SONG: " + soundName);
-        if (!string.IsNullOrEmpty(soundName))
+        if (!string.IsNullOrEmpty(soundName) || soundName.ToLower() != "none")
         {
-            Sequence fadeOutSequence = DOTween.Sequence();
-            fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
-            fadeOutSequence.Play();
-            yield return fadeOutSequence.WaitForCompletion();
-            sound.source.Stop();
+            if (sound != null)
+            {
+                Sequence fadeOutSequence = DOTween.Sequence();
+                fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
+                fadeOutSequence.Play();
+                yield return fadeOutSequence.WaitForCompletion();
+                sound.source.Stop();
+            }
         }
-     
     }
 }
