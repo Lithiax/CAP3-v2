@@ -27,9 +27,18 @@ public class CueUI : MonoBehaviour
     {
         cueTypeValueText.text = p_cueTypeValue;
         iconImage.sprite = p_iconImage;
-        cueValueText.text = p_cueValueText;
+        string rep = p_cueValueText;
+        if (p_cueValueText.ToLower() == "Eye_Contact")
+        {
+            rep = "Eye Contact";
+        }
+        else if (p_cueValueText.ToLower() == "Body_Posture")
+        {
+            rep = "Body Posture";
+        }
+        cueValueText.text = rep;
         rectTransform.anchoredPosition = p_position;
-        Debug.Log("SEARCHING CUE TYPE : " + p_cueTypeValue);
+       // Debug.Log("SEARCHING CUE TYPE : " + p_cueTypeValue);
         if (StorylineManager.cuesChoices != null)
         {
             List<LocalCueChoice> choice = StorylineManager.GetCueChoiceDatas(p_cueTypeValue);

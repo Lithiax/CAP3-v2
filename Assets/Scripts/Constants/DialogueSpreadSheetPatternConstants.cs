@@ -19,10 +19,10 @@ public class DialogueSpreadSheetPatternConstants
         //}
     }
     public static SO_Character cueCharacter;
-    public static float penelopeHealth = 100;
-    public static float bradHealth = 100;
-    public static float liamHealth = 100;
-    public static float maeveHealth = 100;
+    public static float penelopeHealth = 50;
+    public static float bradHealth = 50;
+    public static float liamHealth = 50;
+    public static float maeveHealth = 50;
 
     public static List<string> effects = new List<string>();
     [Header("Google Sheet")]

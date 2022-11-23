@@ -80,13 +80,13 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            Debug.Log("DIALOGUE LOADED");
+           // Debug.Log("DIALOGUE LOADED");
             CharacterDialogueUI.onCharacterSpokenTo.Invoke();
 
         }
         else
         {
-            Debug.Log("IT DOESNT WORK");
+           // Debug.Log("IT DOESNT WORK");
         }
 
     }
@@ -98,7 +98,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         StorylineManager.cuesChoices.Clear();
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
         StorylineManager.so_InteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + "Interactible Choices");
-        Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
+       // Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
         if (so_InteractibleChoices.deathSheet != null)
         {
             StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
@@ -143,13 +143,13 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            Debug.Log("DIALOGUE LOADED");
+          //  Debug.Log("DIALOGUE LOADED");
             CharacterDialogueUI.onCharacterSpokenTo.Invoke();
 
         }
         else
         {
-            Debug.Log("IT DOESNT WORK");
+          //  Debug.Log("IT DOESNT WORK");
         }
 
     }
@@ -160,12 +160,12 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         {
             if (cuesChoices[i].cueType.ToString().ToLower() == p_cueTypeValue.ToLower())
             {
-                Debug.Log("XXX: RETURN SOMETHING");
+               // Debug.Log("XXX: RETURN SOMETHING");
                 return cuesChoices[i].cueChoiceDatas;
 
             }
         }
-        Debug.Log("XXX: RETURN NOTHING " + p_cueTypeValue);
+   //     Debug.Log("XXX: RETURN NOTHING " + p_cueTypeValue);
 
         return null;
     }
@@ -215,7 +215,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Debug.Log("LOAD " + data.currentDialogueIndex);
+       // Debug.Log("LOAD " + data.currentDialogueIndex);
         StorylineManager.CurrentSceneName = data.CurrentSceneName;
         StorylineManager.so_InteractibleChoices = data.so_InteractibleChoices;
         StorylineManager.currentSO_Dialogues = data.currentSO_Dialogues;
@@ -237,7 +237,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        Debug.Log("SAVED " + data.currentDialogueIndex);
+      //  Debug.Log("SAVED " + data.currentDialogueIndex);
         data.CurrentSceneName = StorylineManager.CurrentSceneName;
         data.currentSO_Dialogues = StorylineManager.currentSO_Dialogues;
         data.currentDialogueIndex = StorylineManager.currentDialogueIndex;
@@ -258,7 +258,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static void LoadPhone()
     {
         paused = true;
-        Debug.Log("LOADING");
+      //  Debug.Log("LOADING");
         SceneManager.LoadSceneAsync("FindR", LoadSceneMode.Additive);
     }
 

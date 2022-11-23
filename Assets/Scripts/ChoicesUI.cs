@@ -150,7 +150,7 @@ public class ChoicesUI : MonoBehaviour
                 {
                     if (sheetDivided[i] != "<VN>")
                     {
-                        Debug.Log("EFFECT ADDED ");
+                      //  Debug.Log("EFFECT ADDED ");
               
                       
                             DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
