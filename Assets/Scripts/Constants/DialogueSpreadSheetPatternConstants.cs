@@ -7,6 +7,7 @@ public class DialogueSpreadSheetPatternConstants
     public static void AddEffect(string p_effect)
     {
         DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
+        Debug.Log("ADDING EFFECT: " + p_effect);
         if (p_effect == "<progress>")
         {
 

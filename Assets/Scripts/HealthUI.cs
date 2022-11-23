@@ -268,6 +268,7 @@ public class HealthUI : MonoBehaviour
 
     public void InstantUpdateBar(float p_current = 0, float p_currentMax = 1, float p_max = 1)
     {
+        ghostBarUI.color = fakeRealBarColor;
         StopAllCoroutines();
         isResetting = false;
 

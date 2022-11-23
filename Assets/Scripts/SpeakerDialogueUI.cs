@@ -99,62 +99,62 @@ public class SpeakerDialogueUI : MonoBehaviour
         currentSpeakerBox.gameObject.SetActive(p_desiredToggle);
         extraButtonsContainer.gameObject.SetActive(p_desiredToggle);
     }
-    public void ToggleExtras()
-    {
-        if (canOpen)
-        {
-            canOpen = false;
-            StartCoroutine(Out());
-            if (!smallDialogueBox.activeSelf)
-            {
-                currentDialogueBox = smallDialogueBox;
-                currentDialogueBoxImage = smallDialogueBoxImage;
-                currentDialogueText = smallDialogueText;
-                smallSpeakerText.text = currentSpeakerText.text;
-                currentSpeakerText = smallSpeakerText;
-            }
-            else if (smallDialogueBox.activeSelf)
-            {
-                currentDialogueBox = bigDialogueBox;
-                currentDialogueBoxImage = bigDialogueBoxImage;
-                currentDialogueText = bigDialogueText;
-                bigSpeakerText.text = currentSpeakerText.text;
-                currentSpeakerText = bigSpeakerText;
+    //public void ToggleExtras()
+    //{
+    //    if (canOpen)
+    //    {
+    //        canOpen = false;
+    //        StartCoroutine(Out());
+    //        if (!smallDialogueBox.activeSelf)
+    //        {
+    //            currentDialogueBox = smallDialogueBox;
+    //            currentDialogueBoxImage = smallDialogueBoxImage;
+    //            currentDialogueText = smallDialogueText;
+    //            smallSpeakerText.text = currentSpeakerText.text;
+    //            currentSpeakerText = smallSpeakerText;
+    //        }
+    //        else if (smallDialogueBox.activeSelf)
+    //        {
+    //            currentDialogueBox = bigDialogueBox;
+    //            currentDialogueBoxImage = bigDialogueBoxImage;
+    //            currentDialogueText = bigDialogueText;
+    //            bigSpeakerText.text = currentSpeakerText.text;
+    //            currentSpeakerText = bigSpeakerText;
 
-            }
+    //        }
 
-            if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
-            {
-                StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
-            }
+    //        if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
+    //        {
+    //            StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
+    //        }
 
-            extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
-            if (characterDialogueUI.runningCoroutines > 0 && !CharacterDialogueUI.isSkipping)
-            {
-                CharacterDialogueUI.isSkipping = true;
-                CharacterDialogueUI.OnIsSkipping.Invoke();
-                StopAllCoroutines();
-                characterDialogueUI.runningCoroutines = 0;
+    //        extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
+    //        if (characterDialogueUI.runningCoroutines > 0 && !CharacterDialogueUI.isSkipping)
+    //        {
+    //            CharacterDialogueUI.isSkipping = true;
+    //            CharacterDialogueUI.OnIsSkipping.Invoke();
+    //            StopAllCoroutines();
+    //            characterDialogueUI.runningCoroutines = 0;
 
-            }
-            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
-            for (int i=0; i< currentDialogue.characterDatas.Count; i++)
-            {
-                if (currentDialogue.characterDatas[i].isSpeaking)
-                {
-                    SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
-                    break;
-                }
-                else
-                {
-                    SetSpeech(currentDialogue.words);
-                }
-            }
+    //        }
+    //        Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
+    //        for (int i=0; i< currentDialogue.characterDatas.Count; i++)
+    //        {
+    //            if (currentDialogue.characterDatas[i].isSpeaking)
+    //            {
+    //                SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                SetSpeech(currentDialogue.words);
+    //            }
+    //        }
 
-            StartCoroutine(In());
-        }
+    //        StartCoroutine(In());
+    //    }
        
-    }
+    //}
 
     public void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
     {
@@ -199,38 +199,38 @@ public class SpeakerDialogueUI : MonoBehaviour
         
 
     }
-    IEnumerator Out()
-    {
-        GameObject save = currentDialogueBox;
-        Image saveI = currentDialogueBoxImage;
-        TMP_Text saveT1 = currentSpeakerText;
-        TMP_Text saveT2 = currentDialogueText;
-        // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
-        var fadeOutSequence = DOTween.Sequence()
-        .Append(saveI.DOFade(0, avatarFadeTime));
-        fadeOutSequence.Join(saveT1.DOFade(0, avatarFadeTime));
-        fadeOutSequence.Join(saveT2.DOFade(0, avatarFadeTime));
-        fadeOutSequence.Play();
-        yield return fadeOutSequence.WaitForCompletion();
-        save.SetActive(false);
-        //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
-    }
-    IEnumerator In()
-    {
-        GameObject save = currentDialogueBox;
-        Image saveI = currentDialogueBoxImage;
-        TMP_Text saveT1 = currentSpeakerText;
-        TMP_Text saveT2 = currentDialogueText;
-        save.SetActive(true);
-        // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
-        var fadeOutSequence = DOTween.Sequence()
-        .Append(saveI.DOFade(1, avatarFadeTime));
-        fadeOutSequence.Join(saveT1.DOFade(1, avatarFadeTime));
-        fadeOutSequence.Join(saveT2.DOFade(1, avatarFadeTime));
-        fadeOutSequence.Play();
-        yield return fadeOutSequence.WaitForCompletion();
-        canOpen = true;
-    }
+    //IEnumerator Out()
+    //{
+    //    GameObject save = currentDialogueBox;
+    //    Image saveI = currentDialogueBoxImage;
+    //    TMP_Text saveT1 = currentSpeakerText;
+    //    TMP_Text saveT2 = currentDialogueText;
+    //    // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+    //    var fadeOutSequence = DOTween.Sequence()
+    //    .Append(saveI.DOFade(0, avatarFadeTime));
+    //    fadeOutSequence.Join(saveT1.DOFade(0, avatarFadeTime));
+    //    fadeOutSequence.Join(saveT2.DOFade(0, avatarFadeTime));
+    //    fadeOutSequence.Play();
+    //    yield return fadeOutSequence.WaitForCompletion();
+    //    save.SetActive(false);
+    //    //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+    //}
+    //IEnumerator In()
+    //{
+    //    GameObject save = currentDialogueBox;
+    //    Image saveI = currentDialogueBoxImage;
+    //    TMP_Text saveT1 = currentSpeakerText;
+    //    TMP_Text saveT2 = currentDialogueText;
+    //    save.SetActive(true);
+    //    // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+    //    var fadeOutSequence = DOTween.Sequence()
+    //    .Append(saveI.DOFade(1, avatarFadeTime));
+    //    fadeOutSequence.Join(saveT1.DOFade(1, avatarFadeTime));
+    //    fadeOutSequence.Join(saveT2.DOFade(1, avatarFadeTime));
+    //    fadeOutSequence.Play();
+    //    yield return fadeOutSequence.WaitForCompletion();
+    //    canOpen = true;
+    //}
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
         Debug.Log("TYPE WRITING " + character);

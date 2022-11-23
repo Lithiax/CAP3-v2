@@ -256,7 +256,7 @@ public class CharacterDialogueUI : MonoBehaviour
     }
     void fadeEnd()
     {
-
+        speakerDialogueUI.ManualToggleSpeakerDialogueUI(true);
         nextDialogueButton.SetActive(true);
 
     }
