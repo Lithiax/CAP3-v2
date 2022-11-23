@@ -180,7 +180,6 @@ public class SpeakerDialogueUI : MonoBehaviour
     public void SetSpeech(string p_words)
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
-        p_words = p_words.Replace("<nl>", "<br>");
         currentWords = p_words;
        
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words));

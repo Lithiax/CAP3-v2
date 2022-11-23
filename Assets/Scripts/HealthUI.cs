@@ -181,6 +181,7 @@ public class HealthUI : MonoBehaviour
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
             }
+            InstantUpdateBar(currentHealth, maxHealth, maxHealth);
         }
     }
     void SaveHealth()

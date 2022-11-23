@@ -506,6 +506,11 @@ public class SpreadSheetAPI : MonoBehaviour
         comma.code = "<comma>";
         comma.replacement = ",";
         codeReplacements.Add(comma);
+        CodeReplacement linesegment = new CodeReplacement();
+        linesegment.code = "<<nl>";
+        linesegment.replacement = "<br>";
+        codeReplacements.Add(linesegment);
+    
         for (int localSpreadSheetIndex = 0; localSpreadSheetIndex < allso_SpreadSheets.Count; localSpreadSheetIndex++)
         {
             for (int localSheetIndex = 0; localSheetIndex < allso_SpreadSheets[localSpreadSheetIndex].sheetNames.Count; localSheetIndex++)
