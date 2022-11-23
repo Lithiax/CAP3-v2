@@ -103,7 +103,7 @@ public class DialogueGraphAPI : MonoBehaviour
     {
         if (!Nodes.Any(x  => x.BaseNodeData.NodeGUID == GUID))
         {
-            Debug.LogError("Node to jump to does not exist!");
+            Debug.Log("Node to jump to does not exist!");
             return;
         }
 

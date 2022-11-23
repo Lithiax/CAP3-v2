@@ -58,6 +58,8 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     void GenerateUser(ChatUserSO data)
     {
+        DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => StaticUserData.UsedEffects.Contains(x));
+
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
             Debug.Log("Active Effects: " + s);
@@ -77,6 +79,11 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     public void AddToEffectsRemoveLog(string s)
     {
         effectsToRemove.Add(s);
+        if (effectsToRemove.Intersect(StaticUserData.UsedEffects).Any())
+        {
+            Debug.LogError("Effect duplication found!");
+        }
+        StaticUserData.UsedEffects.Add(s);
     }
 
     private void OnDisable()
@@ -91,6 +98,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     void RemoveUsedEffects()
     {
+        DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => StaticUserData.UsedEffects.Contains(x));
         Debug.Log("Remove Effects " + effectsToRemove.Count);
         DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
 
