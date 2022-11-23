@@ -1487,8 +1487,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so_Character: {fileID: 11400000, guid: efae06f9e940ea643b4024d637d1148a, type: 2}
-  charAnim: {fileID: 0}
-  expressionController: {fileID: 0}
+  charAnim: {fileID: 1555879247459429639}
+  expressionController: {fileID: 1136363366667375951}
 --- !u!1 &1521014542033881173
 GameObject:
   m_ObjectHideFlags: 0

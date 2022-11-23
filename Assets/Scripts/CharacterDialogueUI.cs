@@ -160,6 +160,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void HealthDeath()
     {
+        Debug.Log("DIED: " + StorylineManager.currentZeroSO_Dialogues.name);
         if (StorylineManager.currentZeroSO_Dialogues != null)
         {
             StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
@@ -724,8 +725,19 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
                 speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
+                for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
+                {
+                    if (currentDialogue.characterDatas[i].isSpeaking)
+                    {
+                        speakerDialogueUI.SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
+                        break;
+                    }
+                    else
+                    {
+                        speakerDialogueUI.SetSpeech(currentDialogue.words);
+                    }
+                }
 
-                speakerDialogueUI.SetSpeech(currentDialogue.words);
                 BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
             }
 
