@@ -1099,6 +1099,9 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4278190080
   realBarColorTransitions: []
+  fakeRealBarColor:
+    serializedVersion: 2
+    rgba: 16777215
   defaultGhostBarColor:
     serializedVersion: 2
     rgba: 4294967295
