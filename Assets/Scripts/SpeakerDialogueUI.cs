@@ -233,7 +233,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     //}
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
-        Debug.Log("TYPE WRITING " + character);
+       // Debug.Log("TYPE WRITING " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         so = "";
         if (!string.IsNullOrEmpty(character))
@@ -255,7 +255,7 @@ public class SpeakerDialogueUI : MonoBehaviour
             yield return new WaitForSeconds(typewriterSpeed);
         }
     //    AudioManager.instance.ForceStopAudio(so);
-        Debug.Log("TYPE WRITING END");
+     //   Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
 }

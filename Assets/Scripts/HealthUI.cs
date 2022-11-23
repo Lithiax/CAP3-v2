@@ -256,7 +256,7 @@ public class HealthUI : MonoBehaviour
     bool IsWithinHealthCondition(int p_healthCeilingCondition, int p_healthFloorCondition)
     {
         if (currentHealth <= p_healthCeilingCondition &&
-            currentHealth > p_healthFloorCondition)
+            currentHealth >= p_healthFloorCondition)
         {
             return true;
         }

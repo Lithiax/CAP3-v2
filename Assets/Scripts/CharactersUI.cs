@@ -12,6 +12,7 @@ public class CharactersUI : MonoBehaviour
     public static Action<List<SO_Character>> onAddCharactersEvent;// = new onLoadAvatarsEvent
     public static Action<List<SO_Character>> onRemoveCharactersEvent;// = new onLoadAvatarsEvent
     public static Action<List<CharacterData>> onUpdateCharacterDatasEvent;// = new onLoadAvatarsEvent
+    public static Action recheck;// = new onLoadAvatarsEvent
     [SerializeField] private Transform characterUIContainerTransform;
     [SerializeField] private Transform live2DCollisionUIContainerTransform;
     [SerializeField] private Transform characterObjectContainerTransform;
@@ -39,6 +40,7 @@ public class CharactersUI : MonoBehaviour
         onAddCharactersEvent += AddAvatar;
         onUpdateCharacterDatasEvent += UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping += Skip;
+        recheck += Recheck;
     }
 
     private void OnDestroy()
@@ -47,6 +49,7 @@ public class CharactersUI : MonoBehaviour
         onAddCharactersEvent -= AddAvatar;
         onUpdateCharacterDatasEvent -= UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping -= Skip;
+        recheck -= Recheck;
     }
 
     void Skip()
@@ -340,11 +343,52 @@ public class CharactersUI : MonoBehaviour
 
     }
 
+    public void Recheck()
+    {
+        if (characterDatas != null)
+        {
+            for (int i = 0; i < characterDatas.Count; i++)
+            {
 
+                if (live2DCollisionUIContainerTransform.childCount == 0)
+                {
+                    if (characterDatas[i] != null)
+                    {
+                        if (characterDatas[i].character.prefab != null) //Live 2D
+                        {
+
+                            //newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
+                            //Check if its the character thats talking
+                            if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                            {
+                                if (characterDatas[i].character == DialogueSpreadSheetPatternConstants.cueCharacter)
+                                {
+                                    if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
+                                    {
+                                        Debug.Log(live2DCollisionUIContainerTransform.childCount);
+
+                                        GameObject newCharacterCollision = Instantiate(characterDatas[i].character.collisionPrefab, live2DCollisionUIContainerTransform);
+
+
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                    }
+
+
+                }
+            }
+        }
+       
+    }
 
     void AddAvatar(List<SO_Character> p_charactersToBeAdded)
     {
-        Debug.Log(" COUNTER " + p_charactersToBeAdded.Count);
+    //    Debug.Log(" COUNTER " + p_charactersToBeAdded.Count);
         for (int i = 0; i < p_charactersToBeAdded.Count; i++)
         {
             Character newCharacter = null;
@@ -362,6 +406,7 @@ public class CharactersUI : MonoBehaviour
                         {
                             if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
                             {
+                                Debug.Log(live2DCollisionUIContainerTransform.childCount);
                                 if (live2DCollisionUIContainerTransform.childCount == 0)
                                 {
                                     GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);

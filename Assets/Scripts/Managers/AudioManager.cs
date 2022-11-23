@@ -99,7 +99,7 @@ public class AudioManager : MonoBehaviour
         sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
         if (sound != null)
         {
-            Debug.Log("STOPPING " + p_newAudioClip);
+           // Debug.Log("STOPPING " + p_newAudioClip);
             sound.source.Stop();
         }
    
@@ -117,11 +117,11 @@ public class AudioManager : MonoBehaviour
     {
         SoundData sound;
         sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
-        //Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
-        Debug.Log("OUT PLAYING NEW SONG: " + p_newAudioClip);
+       // //Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
+     //   Debug.Log("OUT PLAYING NEW SONG: " + p_newAudioClip);
         if (sound != null)
         {
-            Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
+         //   Debug.Log("PLAYING NEW SONG: " + p_newAudioClip);
             sound.source.Play();
         }
    
@@ -150,7 +150,7 @@ public class AudioManager : MonoBehaviour
         SoundData sound;
         string soundName = p_oldAudioClip;
         sound = GetSoundByName(soundName, p_isSoundEffect);
-        Debug.Log("try STOP SONG: " + soundName);
+        //Debug.Log("try STOP SONG: " + soundName);
   
         if (!string.IsNullOrEmpty(soundName) || soundName.ToLower() != "none")
         {
@@ -160,7 +160,7 @@ public class AudioManager : MonoBehaviour
                 fadeOutSequence.Append(sound.source.DOFade(0, 1.25f));
                 fadeOutSequence.Play();
                 yield return fadeOutSequence.WaitForCompletion();
-                Debug.Log("STOP SONG: " + soundName);
+               // Debug.Log("STOP SONG: " + soundName);
                 if (sound != null)
                 {
                     sound.source.Stop();
@@ -173,7 +173,7 @@ public class AudioManager : MonoBehaviour
         SoundData currentSound;
         string currentSoundName = p_newAudioClip;
         currentSound = GetSoundByName(currentSoundName, p_isSoundEffect);
-        Debug.Log("PLAYING NEW SONG: " + currentSound);
+       // Debug.Log("PLAYING NEW SONG: " + currentSound);
         if (currentSound != null)
         {
             currentSound.source.Play();
@@ -183,7 +183,7 @@ public class AudioManager : MonoBehaviour
         {
             if (sound != null)
             {
-                Debug.Log("PLAYING NEW SONG: " + currentSoundName);
+              //  Debug.Log("PLAYING NEW SONG: " + currentSoundName);
                 Sequence fadeInSequence = DOTween.Sequence();
 
 
@@ -204,7 +204,7 @@ public class AudioManager : MonoBehaviour
         SoundData sound;
         string soundName = p_oldAudioClip;
         sound = GetSoundByName(soundName, p_isSoundEffect);
-        Debug.Log("try STOP SONG: " + soundName);
+      //  Debug.Log("try STOP SONG: " + soundName);
         if (!string.IsNullOrEmpty(soundName) || soundName.ToLower() != "none")
         {
             if (sound != null)

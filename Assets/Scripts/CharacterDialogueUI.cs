@@ -242,6 +242,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void popuptest(SO_Dialogues p_currentChoiceData)
     {
+      
         p_currentChoiceDataTest = p_currentChoiceData;
 
         StartCoroutine(Cd());
@@ -510,6 +511,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
         CharactersUI.onRemoveCharactersEvent.Invoke(charactersToBeRemoved);
         CharactersUI.onAddCharactersEvent.Invoke(charactersToBeAdded);
+        CharactersUI.recheck.Invoke();
     }
 
     void CheckIfReady()
@@ -593,12 +595,16 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
+        Debug.Log("next: " + StorylineManager.currentSO_Dialogues.name + " - " + StorylineManager.currentDialogueIndex);
+        bool d = false;
         if (deadsheet)
         {
             deadsheet = false;
+            d = true;
             StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
             Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
             StorylineManager.currentDialogueIndex = 0;
+            p_currentChoiceDataTest = null;
             //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
         }
         if (nextDialDisable)
@@ -610,13 +616,14 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             nextDialogueButton.SetActive(true);
         }
-        if (popUp)
+        if (popUp && !d)
         {
             OnResettingCharacterUIEvent.Invoke();
             popUp = false;
         }
-        if (p_currentChoiceDataTest != null)
+        if (p_currentChoiceDataTest != null && !d)
         {
+            Debug.Log("HMM");
             StorylineManager.currentSO_Dialogues = p_currentChoiceDataTest;
             p_currentChoiceDataTest = null;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
@@ -697,39 +704,41 @@ public class CharacterDialogueUI : MonoBehaviour
 
             }
 
-            //Debug.Log("MIDDLE OF PROCESS CHECK: " + StorylineManager.currentDialogueIndex + " - " + StorylineManager.currentSO_Dialogues.name);
-            if (rarara)
+            if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
             {
-               // Debug.Log("GOT IN");
-                if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
+
+                if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                 {
-                    if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                    for (int i = 0; i < currentDialogue.characterDatas.Count;)
                     {
-                        for (int i = 0; i < currentDialogue.characterDatas.Count;)
+                        if (currentDialogue.characterDatas[i].character == DialogueSpreadSheetPatternConstants.cueCharacter)
                         {
-                            if (currentDialogue.characterDatas[i].character == DialogueSpreadSheetPatternConstants.cueCharacter)
-                            {
-                                cueIndicator.SetActive(true);
-                                break;
-                            }
-                            i++;
-                            if (i >= currentDialogue.characterDatas.Count)
-                            {
-                                cueIndicator.SetActive(false);
-
-                            }
+                            cueIndicator.SetActive(true);
+                            break;
                         }
+                        i++;
+                        if (i >= currentDialogue.characterDatas.Count)
+                        {
+                            cueIndicator.SetActive(false);
 
+                        }
                     }
-                    else
-                    {
-                        cueIndicator.SetActive(false);
-                    }
+
                 }
                 else
                 {
                     cueIndicator.SetActive(false);
                 }
+            }
+            else
+            {
+                cueIndicator.SetActive(false);
+            }
+            //Debug.Log("MIDDLE OF PROCESS CHECK: " + StorylineManager.currentDialogueIndex + " - " + StorylineManager.currentSO_Dialogues.name);
+            if (rarara)
+            {
+                //     Debug.Log("GOT IN");
+                Debug.Log("GOT IN");
                 CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
                 CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
 
@@ -763,6 +772,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void EndOfDialogue()
     {
+        Debug.Log("UNITY ENDED IN");
         if (!isAlreadyEnded)
         {
             isAlreadyEnded = true;
@@ -786,7 +796,7 @@ public class CharacterDialogueUI : MonoBehaviour
                             //No choice, just evaluate
                             for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
                             {
-
+                                Debug.Log("HEATL CODIN: " + healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition));
                                 if (healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
                                 {
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;
@@ -803,7 +813,8 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             //Creating Choices
                             //nextDialogueButton.SetActive(false);
-                          //  Debug.Log("CREATING CHOICE");
+                            //  Debug.Log("CREATING CHOICE");
+                            cueIndicator.SetActive(false);
                             nextDialogueButton.SetActive(false);
                             ChoicesUI.OnChoosingChoiceEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas);
 

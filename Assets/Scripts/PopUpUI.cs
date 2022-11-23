@@ -54,7 +54,7 @@ public class PopUpUI : MonoBehaviour
     }
     public void Initialize(string p_title,string p_content)
     {
-        Debug.Log("POPPING UP " + p_content);
+        //Debug.Log("POPPING UP " + p_content);
 
         detailedTitleText.text = p_title;
         detailedContentText.text = p_content;

@@ -118,13 +118,13 @@ public class TransitionUI : MonoBehaviour
                             Action p_preAction = null,
                             Action p_postAction = null)
     {
-        Debug.Log("transition done");
+     //   Debug.Log("transition done");
         Sequence preSequence = DOTween.Sequence()
 
         .Append(transitionUI.DOFade(p_preOpacity, p_preTransitionTime));
 
         yield return preSequence.WaitForCompletion();
-        Debug.Log("FADINGl: " + p_preOpacity);
+      //  Debug.Log("FADINGl: " + p_preOpacity);
         p_preAction?.Invoke();
         yield return new WaitForSeconds(p_delayTime);
         Sequence postSequence = DOTween.Sequence()

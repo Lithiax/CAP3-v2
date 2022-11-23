@@ -65,10 +65,10 @@ public class ActionUI : MonoBehaviour
     }
     void JustExited()
     {
-        Debug.Log("EVENT CALL");
+     //   Debug.Log("EVENT CALL");
         if (runningCoroutine != null)
         {
-            Debug.Log("EVENT stopped");
+           // Debug.Log("EVENT stopped");
             StopCoroutine(runningCoroutine);
 
             image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
@@ -87,7 +87,7 @@ public class ActionUI : MonoBehaviour
   
     public void EnterFunction()
     {
-        Debug.Log("IS SHOWING: " + ActionUIs.isShowing + " - " + canDoWork);
+     //   Debug.Log("IS SHOWING: " + ActionUIs.isShowing + " - " + canDoWork);
         if (!ActionUIs.isShowing)
         {
             if (canDoWork)
@@ -118,7 +118,7 @@ public class ActionUI : MonoBehaviour
 
     public void PointClickFunction()
     {
-        Debug.Log("ACTIVE: " + canDoWork + " - " + can);
+      //  Debug.Log("ACTIVE: " + canDoWork + " - " + can);
         if (canDoWork)
         {
             if (can)
@@ -139,7 +139,7 @@ public class ActionUI : MonoBehaviour
     }
     IEnumerator OpenTransition()
     {
-        Debug.Log("ENTER");
+       // Debug.Log("ENTER");
   
         var fadeOutSequence = DOTween.Sequence()
             .Append(image.DOFade(0.3f, 1f));
@@ -150,12 +150,12 @@ public class ActionUI : MonoBehaviour
         fadeInSeq = fadeOutSequence;
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
-        Debug.Log("ENTER ended");
+      //  Debug.Log("ENTER ended");
 
     }
     IEnumerator CloseTransition()
     {
-        Debug.Log("EXIT");
+     //   Debug.Log("EXIT");
         if (runningCoroutine != null)
         {
             StopCoroutine(runningCoroutine);
@@ -173,7 +173,7 @@ public class ActionUI : MonoBehaviour
         fadeOutSequence.Play();
    
         yield return fadeOutSequence.WaitForCompletion();
-        Debug.Log("EXIT ended");
+     //   Debug.Log("EXIT ended");
         justExited.Invoke();
         //yield return new WaitForSeconds(0.65f);
      
