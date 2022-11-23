@@ -101,6 +101,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
        // Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
         if (so_InteractibleChoices.deathSheet != null)
         {
+            Debug.Log("DEATH SHEET LOADED");
             StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
         }
         else

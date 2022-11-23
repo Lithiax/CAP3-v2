@@ -86,6 +86,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public bool nextDialDisable = false;
     public GameObject cueIndicator;
+    bool deadsheet = false;
     public void Pause()
     {
         PauseMenu.isPausingEvent.Invoke();
@@ -163,9 +164,11 @@ public class CharacterDialogueUI : MonoBehaviour
         Debug.Log("DIED: " + StorylineManager.currentZeroSO_Dialogues.name);
         if (StorylineManager.currentZeroSO_Dialogues != null)
         {
+            deadsheet = true;
             StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
+            Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
             StorylineManager.currentDialogueIndex = 0;
-            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, ResetCharacterDialogueUI);
+            //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
         }
 
     }
@@ -590,7 +593,14 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
-
+        if (deadsheet)
+        {
+            deadsheet = false;
+            StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
+            Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
+            StorylineManager.currentDialogueIndex = 0;
+            //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
+        }
         if (nextDialDisable)
         {
             nextDialDisable = false;
@@ -874,7 +884,9 @@ public class CharacterDialogueUI : MonoBehaviour
                                 {
                                     if (StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue)
                                     {
-                                      //  Debug.Log("Going Next dialogue");
+                                        //  Debug.Log("Going Next dialogue");
+                                        
+                                       
 
                                         StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogue;
                                         nextDialogueButton.SetActive(true);
