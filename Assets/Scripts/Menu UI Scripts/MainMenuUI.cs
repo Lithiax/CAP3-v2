@@ -14,7 +14,13 @@ public class MainMenuUI : MonoBehaviour
     }
     public IEnumerator Co_AudioFadeOut()
     {
-        Sequence fadeOutSequence = DOTween.Sequence();
+        DialogueSpreadSheetPatternConstants.penelopeHealth = 50;
+        DialogueSpreadSheetPatternConstants.bradHealth = 50;
+        DialogueSpreadSheetPatternConstants.liamHealth = 50;
+        DialogueSpreadSheetPatternConstants.maeveHealth = 50;
+
+        DialogueSpreadSheetPatternConstants.effects.Clear();
+    Sequence fadeOutSequence = DOTween.Sequence();
         fadeOutSequence.Append(audioSource.DOFade(0, 1.25f));
         fadeOutSequence.Play();
         StorylineManager.firstTime = true;
