@@ -327,6 +327,7 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         healthUI.OnSaveHealthEvent.Invoke();
         StorylineManager.loggedWords.Clear();
+
         //Temporary
         if (visualnovel)
         {
@@ -339,6 +340,11 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else
         {
+            //Debug.Log("FINAL");
+            //for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+            //{
+            //    Debug.Log("FINAL ADDING EFFECT: " + DialogueSpreadSheetPatternConstants.effects[i]);
+            //}
             LoadingUI.instance.InitializeLoadingScreen("FindR");
             frame.SetActive(false);
         }
@@ -387,7 +393,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void SetNextDialogue()
     {
-        Debug.Log("SETTING NEXT: " + rarara);
+      //  Debug.Log("SETTING NEXT: " + rarara);
         if (rarara)
         {
             //  Debug.Log("SETTING NEXT DIALOGUE: " + (StorylineManager.currentDialogueIndex + 1) + " WORDS: " + StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].words + " ISSKIPPING: " + isSkipping);
@@ -743,7 +749,7 @@ public class CharacterDialogueUI : MonoBehaviour
             if (rarara)
             {
                 //     Debug.Log("GOT IN");
-                Debug.Log("GOT IN");
+              //  Debug.Log("GOT IN");
                 CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
                 CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
 
@@ -963,6 +969,7 @@ public class CharacterDialogueUI : MonoBehaviour
                     //        OnCloseCharacterDialogueUI();
                     //    }
                     //}
+                  
                 }
 
             }

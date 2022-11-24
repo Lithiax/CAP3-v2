@@ -124,7 +124,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         {
             if (so_InteractibleChoices.deathSheet != null)
             {
-                Debug.Log("DEATH SHEET LOADED");
+           //     Debug.Log("DEATH SHEET LOADED");
                 StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
             }
             else
@@ -134,7 +134,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             if (so_InteractibleChoices.characterData != null)
             {
                 DialogueSpreadSheetPatternConstants.cueCharacter = so_InteractibleChoices.characterData.character;
-                Debug.Log("TARGET CHARACTER FOUND: " + DialogueSpreadSheetPatternConstants.cueCharacter);
+             //   Debug.Log("TARGET CHARACTER FOUND: " + DialogueSpreadSheetPatternConstants.cueCharacter);
             }
             else
             {
