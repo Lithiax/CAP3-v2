@@ -35,12 +35,12 @@ public class LogBoxUI : MonoBehaviour
         if (logBox.activeSelf == false)
         {
             Create();
-            Debug.Log("LOG BOX OPEN");
+          //  Debug.Log("LOG BOX OPEN");
         }
         else
         {
             Destroy();
-            Debug.Log("LOG BOX CLOSE");
+           // Debug.Log("LOG BOX CLOSE");
         }
 
     }

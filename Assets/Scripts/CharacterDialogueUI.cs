@@ -599,14 +599,14 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnNextButtonUIPressed()
     {
-        Debug.Log("next: " + StorylineManager.currentSO_Dialogues.name + " - " + StorylineManager.currentDialogueIndex);
+        //Debug.Log("next: " + StorylineManager.currentSO_Dialogues.name + " - " + StorylineManager.currentDialogueIndex);
         bool d = false;
         if (deadsheet)
         {
             deadsheet = false;
             d = true;
             StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
-            Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
+           // Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
             StorylineManager.currentDialogueIndex = 0;
             p_currentChoiceDataTest = null;
             //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
@@ -627,7 +627,7 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         if (p_currentChoiceDataTest != null && !d)
         {
-            Debug.Log("HMM");
+           // Debug.Log("HMM");
             StorylineManager.currentSO_Dialogues = p_currentChoiceDataTest;
             p_currentChoiceDataTest = null;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
@@ -687,7 +687,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 DoSpecificEvent(currentDialogue.specificEventType, currentDialogue.specificEventParameter);
 
             }
-            Debug.Log("is skip : " + isSkipping + " - " + runningCoroutines);
+        //    Debug.Log("is skip : " + isSkipping + " - " + runningCoroutines);
             if (runningCoroutines > 0 && !isSkipping)
             {
 
@@ -779,7 +779,7 @@ public class CharacterDialogueUI : MonoBehaviour
         else if (StorylineManager.currentDialogueIndex == StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
             nextDialogueButton.SetActive(false);
-            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
+            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentSO_Dialogues.dialogues.Count-1];
 
             CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
             CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
@@ -814,7 +814,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void EndOfDialogue()
     {
-        Debug.Log("UNITY ENDED IN");
+        //Debug.Log("UNITY ENDED IN");
         if (!isAlreadyEnded)
         {
             isAlreadyEnded = true;

@@ -107,7 +107,7 @@ public class CharactersUI : MonoBehaviour
             SetRectTransformToPreset(p_characterDatas[i].characterPosition, foundCharacter);
             SetAvatarFlipOrientation(p_characterDatas[i], foundCharacter);
             SetFacialEmotion(p_characterDatas[i], foundCharacter);
-            SetBodyEmotion(p_characterDatas[i], foundCharacter);
+          //  SetBodyEmotion(p_characterDatas[i], foundCharacter);
             SetSpeakerTint(p_characterDatas[i].isSpeaking, foundCharacter);
         }
     }
@@ -272,35 +272,35 @@ public class CharactersUI : MonoBehaviour
         }
     }
 
-    void SetBodyEmotion(CharacterData p_characterData, Character foundCharacter)
-    {
-        if (foundCharacter != null)
-        {
-            if (foundCharacter is CharacterObject)
-            {
+    //void SetBodyEmotion(CharacterData p_characterData, Character foundCharacter)
+    //{
+    //    if (foundCharacter != null)
+    //    {
+    //        if (foundCharacter is CharacterObject)
+    //        {
 
-                if (p_characterData.bodyEmotion != CharacterEmotionType.none)
-                {
-                    CharacterObject foundPreset = foundCharacter as CharacterObject;
-                    for (int i = 0; i < foundPreset.charAnim.parameters.Length;)
-                    {
-                        if (foundPreset.charAnim.parameters[i].name == p_characterData.bodyEmotion.ToString())
-                        {
-                            foundPreset.charAnim.SetTrigger(p_characterData.bodyEmotion.ToString());
-                            break;
-                        }
-                        i++;
-                        if (i >= foundPreset.charAnim.parameters.Length)
-                        {
-                            Debug.Log(StorylineManager.currentDialogueIndex + " Set Body Emotion is Not available");
-                        }
-                    }
+    //            if (p_characterData.bodyEmotion != CharacterEmotionType.none)
+    //            {
+    //                CharacterObject foundPreset = foundCharacter as CharacterObject;
+    //                for (int i = 0; i < foundPreset.charAnim.parameters.Length;)
+    //                {
+    //                    if (foundPreset.charAnim.parameters[i].name == p_characterData.bodyEmotion.ToString())
+    //                    {
+    //                        foundPreset.charAnim.SetTrigger(p_characterData.bodyEmotion.ToString());
+    //                        break;
+    //                    }
+    //                    i++;
+    //                    if (i >= foundPreset.charAnim.parameters.Length)
+    //                    {
+    //                       // Debug.Log(StorylineManager.currentDialogueIndex + " Set Body Emotion is Not available");
+    //                    }
+    //                }
 
-                }
+    //            }
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     void RemoveAvatar(List<SO_Character> p_charactersToBeRemoved)
     {
@@ -406,7 +406,7 @@ public class CharactersUI : MonoBehaviour
                         {
                             if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
                             {
-                                Debug.Log(live2DCollisionUIContainerTransform.childCount);
+                               // Debug.Log(live2DCollisionUIContainerTransform.childCount);
                                 if (live2DCollisionUIContainerTransform.childCount == 0)
                                 {
                                     GameObject newCharacterCollision = Instantiate(p_charactersToBeAdded[i].collisionPrefab, live2DCollisionUIContainerTransform);

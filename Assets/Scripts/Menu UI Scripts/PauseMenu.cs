@@ -46,7 +46,7 @@ public class PauseMenu : MonoBehaviour
 
         paused = !paused;
         SetInitialPanels();
-        Debug.Log("PAUSE MENU IS " + paused);
+      //  Debug.Log("PAUSE MENU IS " + paused);
         PausePanel.SetActive(paused);
     }
     public void ExitButton()

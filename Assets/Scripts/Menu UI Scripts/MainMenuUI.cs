@@ -17,8 +17,6 @@ public class MainMenuUI : MonoBehaviour
         Sequence fadeOutSequence = DOTween.Sequence();
         fadeOutSequence.Append(audioSource.DOFade(0, 1.25f));
         fadeOutSequence.Play();
-        yield return fadeOutSequence.WaitForCompletion();
-        audioSource.Stop();
         StorylineManager.firstTime = true;
         StorylineManager.LoadVisualNovel("Maeve1", "Week1");
         //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
@@ -27,6 +25,9 @@ public class MainMenuUI : MonoBehaviour
         //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
         DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
         LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+        yield return fadeOutSequence.WaitForCompletion();
+        audioSource.Stop();
+ 
     }
 
     public IEnumerator Co_AudioFadeIn()
