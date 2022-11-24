@@ -146,9 +146,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
                 chatManager.RebuildAfterSpawning();
             }
-               
+
             DialogueTree.SetDialogueTree(data.dialogueTree);
-            
+
             if (DialogueTree.DialogueTree == null)
                 LoadChatData(ChatData);
 
@@ -257,7 +257,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 break;
 
             case "Brad":
-                 DialogueSpreadSheetPatternConstants.bradHealth = data.RGMeter;
+                DialogueSpreadSheetPatternConstants.bradHealth = data.RGMeter;
                 break;
 
             case "Penelope":
@@ -304,7 +304,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         DialogueContainer c = SetDialogueContainer();
 
-        if (c != null) return;
+        if (c != null)
+        {
+            data.StayInTree = false;
+            return;
+        }
+         
     
         if (data.CanRGText && data.RGMeter <= 50)
         {
@@ -361,6 +366,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         return nextContainer;
     }
 
+    public void SetCanRGText(bool b)
+    {
+        ChatData.CanRGText = b;
+    }
+
     public void SetNextTree()
     {
         DialogueContainer nextContainer = null;
@@ -413,6 +423,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     void OnNodeChange()
     {
+        ChatData.CurrentDialogueIndex = 0;
         ChatData.CurrentDialogueComplete = true;
     }
 
@@ -427,7 +438,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public void OnChatComplete()
     {
         ChatData.CurrentDialogueIndex = 0;
-        ChatData.CurrentDialogueComplete = false;
+        ChatData.CurrentDialogueComplete = true;
     }
 
     public void SetNotif()

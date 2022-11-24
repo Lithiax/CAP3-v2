@@ -47,6 +47,9 @@ public class FindREventsManager : MonoBehaviour
                 BeginDateYesButton.onClick.AddListener(() => {
                     LoadVisualNovel(data);
                     user.OnChatComplete();
+
+                    //because it loads the after date next.
+                    user.SetCanRGText(false);
                 });
                 break;
             case ChatEventTypes.BranchEvent:
