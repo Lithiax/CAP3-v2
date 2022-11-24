@@ -19,7 +19,14 @@ public class MainMenuUI : MonoBehaviour
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
         audioSource.Stop();
-        
+        StorylineManager.firstTime = true;
+        StorylineManager.LoadVisualNovel("Maeve1", "Week1");
+        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        //mainCharacter.stageName = "You";
+        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
+        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
+        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
+        LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
     }
 
     public IEnumerator Co_AudioFadeIn()
@@ -88,14 +95,7 @@ public class MainMenuUI : MonoBehaviour
     public void NewGameButton()
     {
         StartCoroutine(Co_AudioFadeOut());
-        StorylineManager.firstTime = true;
-        StorylineManager.LoadVisualNovel("Maeve1", "Week1");
-        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-        //mainCharacter.stageName = "You";
-        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
-        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
-        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
-        LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+
     }
 
     public void ExitButton()

@@ -34,6 +34,11 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public static void LoadVisualNovel(GameData p_gameData)
     {
+        if (StorylineManager.currentBackgroundMusic != null)
+        {
+            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+        }
+
         StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         mainCharacter.stageName = p_gameData.mainCharacterName;
