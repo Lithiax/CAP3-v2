@@ -19,7 +19,10 @@ public class GameData
     public SO_InteractibleChoices so_InteractibleChoices;
     public SO_Character cueCharacter;
 
+    public bool firstTime;
+
     public bool sideDialogue;
+    
     public int savedDialogueIndex;
     public SO_Dialogues savedSO_Dialogues;
 
@@ -28,14 +31,22 @@ public class GameData
 
     public List<ChatUserData> ChatUserData;
     public ProgressionData ProgressionData;
+    public float penelopeHealth = 50;
+    public float bradHealth = 50;
+    public float liamHealth = 50;
+    public float maeveHealth = 50;
 
+    public static List<string> effects = new List<string>();
     public List<string> EffectsUsed;
     public GameData()
     {
         CurrentSceneName = "";
         ChatUserIDs = new int[0];
         GameEffects = new string[0];
-  
+        penelopeHealth = 50;
+        bradHealth = 50;
+        liamHealth = 50;
+        maeveHealth = 50;
         cuesChoices = new List<CueChoice>();
 
         currentSO_Dialogues = null;
@@ -43,7 +54,7 @@ public class GameData
         so_InteractibleChoices = null;
         mainCharacterName = "";
         loggedWords = new List<Dialogue>();
-
+        firstTime = false;
         sideDialogue = false;
         savedDialogueIndex = -1;
         savedSO_Dialogues = null;

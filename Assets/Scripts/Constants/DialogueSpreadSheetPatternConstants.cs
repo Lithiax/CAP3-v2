@@ -2,15 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogueSpreadSheetPatternConstants 
+public class DialogueSpreadSheetPatternConstants
 {
     public static void AddEffect(string p_effect)
     {
-        DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
+        for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+        {
+            if (DialogueSpreadSheetPatternConstants.effects[i] == p_effect)
+            {
+                break;
+            }
+            if (i >= DialogueSpreadSheetPatternConstants.effects.Count)
+            {
+                DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
+            }
+        }
+
+        Debug.Log("ADDING EFFECT: " + p_effect);
         if (p_effect == "<progress>")
         {
 
             StaticUserData.ProgressionData.ProgressDate();
+        }
+        if (p_effect == "<ending>")
+        {
+
+            StorylineManager.GoBackMenu();
         }
         //else
         //{
@@ -77,7 +94,7 @@ public class DialogueSpreadSheetPatternConstants
 
     [Header("Choice Collumn Patterns")]
     public const int choiceNameColumnPattern = 0;
-  
+
     public const int nextDialogueSheetNameColumnPattern = 1;
     public const int healthModifierColumnPattern = 3;
     public const int effectIDColumnPattern = 4;

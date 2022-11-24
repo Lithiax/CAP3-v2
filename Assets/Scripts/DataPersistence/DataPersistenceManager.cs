@@ -57,7 +57,7 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (gameData.CurrentSceneName == "VisualNovel")
         {
-            StorylineManager.LoadVisualNovel(gameData.currentSO_Dialogues,gameData.so_InteractibleChoices);
+            StorylineManager.LoadVisualNovel(gameData);
         }
 
         if (gameData.CurrentSceneName != "")

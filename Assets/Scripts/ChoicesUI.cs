@@ -42,10 +42,10 @@ public class ChoicesUI : MonoBehaviour
 
     void close()
     {
-        for (int i = 0; i < savedchoiceDatas.Count; i++)
-        {
-            Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: " + savedchoiceDatas[i].words);
-        }
+        //for (int i = 0; i < savedchoiceDatas.Count; i++)
+        //{
+        //    Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: " + savedchoiceDatas[i].words);
+        //}
         if (savedchoiceDatas.Count > 0)
         {
             CreateChoiceUIs(savedchoiceDatas);
@@ -131,15 +131,15 @@ public class ChoicesUI : MonoBehaviour
     {
         savedchoiceDatas.Clear();
         StorylineManager.currentDialogueIndex = 0;
-        if (p_currentChoiceData.effectID != "")
-        {
-            Debug.Log(p_currentChoiceData.effectID);
-            for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-            {
-                Debug.Log(DialogueSpreadSheetPatternConstants.effects[i]);
-            }
-           // DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
-        }
+        //if (p_currentChoiceData.effectID != "")
+        //{
+        //    Debug.Log(p_currentChoiceData.effectID);
+        //    for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+        //    {
+        //        Debug.Log(DialogueSpreadSheetPatternConstants.effects[i]);
+        //    }
+        //   // DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
+        //}
 
         if (p_currentChoiceData.isImmediateGoPhone)
         {
@@ -173,10 +173,10 @@ public class ChoicesUI : MonoBehaviour
         healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
       
         //Set Pop Up
-        Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
+        //Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {
-            Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
+           // Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
             PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
             CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
 

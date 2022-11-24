@@ -2,15 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class MainMenuUI : MonoBehaviour
 {
+    [SerializeField] AudioSource audioSource;
     [SerializeField] List<GameObject> panels;
-    void Start()
+    void Awake()
     {
-     //   SetAspect();
+        StartCoroutine(Co_AudioFadeIn());
+    }
+    public IEnumerator Co_AudioFadeOut()
+    {
+        Sequence fadeOutSequence = DOTween.Sequence();
+        fadeOutSequence.Append(audioSource.DOFade(0, 1.25f));
+        fadeOutSequence.Play();
+        StorylineManager.firstTime = true;
+        StorylineManager.LoadVisualNovel("Maeve1", "Week1");
+        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        //mainCharacter.stageName = "You";
+        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
+        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
+        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
+        LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+        yield return fadeOutSequence.WaitForCompletion();
+        audioSource.Stop();
+ 
     }
 
+    public IEnumerator Co_AudioFadeIn()
+    {
+        audioSource.volume = 0;
+        audioSource.Play();
+        Sequence fadeOutSequence = DOTween.Sequence();
+        fadeOutSequence.Append(audioSource.DOFade(1, 1.25f));
+        fadeOutSequence.Play();
+        yield return fadeOutSequence.WaitForCompletion();
+
+    }
     void SetAspect()
     {
         // set the desired aspect ratio (the values in this example are
@@ -66,14 +95,8 @@ public class MainMenuUI : MonoBehaviour
     }
     public void NewGameButton()
     {
-        StorylineManager.firstTime = true;
-        StorylineManager.LoadVisualNovel("Maeve1", "Week1");
-        //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-        //mainCharacter.stageName = "You";
-        //StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Week1");
-        //StorylineManager.currentInteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + "Maeve1" + "/" + "Interactible Choices");
-        DialogueSpreadSheetPatternConstants.effects.Add("<progress>");
-        LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+        StartCoroutine(Co_AudioFadeOut());
+
     }
 
     public void ExitButton()

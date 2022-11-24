@@ -38,10 +38,11 @@ public class BackgroundUI : MonoBehaviour
 
         if (!StorylineManager.sideDialogue)
         {
+            //Debug.Log("BACKGROUND: " + StorylineManager.sideDialogue);
 
             if (p_backgroundSprite != null)
             {
-    
+
                 if (p_backgroundSprite != currentBackgroundImage.sprite)
                 {
                     if (currentBackgroundImage == backgroundImage)
@@ -60,18 +61,51 @@ public class BackgroundUI : MonoBehaviour
                     StartCoroutine(TransitionIm(p_backgroundSprite));
                     //currentBackgroundImage.color = new Color32(255, 255, 255, 255);
                 }
-             
+
             }
             else if (p_backgroundSprite == null)
             {
-      
+
                 //StartCoroutine(TransitionIm(p_backgroundSprite));
                 currentBackgroundImage.sprite = p_backgroundSprite;
                 currentBackgroundImage.color = new Color32(255, 255, 255, 255);
             }
         }
-     
-    }
+        else
+        {
+            Dialogue origDialo = StorylineManager.savedSO_Dialogues.dialogues[StorylineManager.savedDialogueIndex];
+            if (origDialo.backgroundSprite != null)
+            {
+
+                if (origDialo.backgroundSprite != currentBackgroundImage.sprite)
+                {
+                    if (currentBackgroundImage == backgroundImage)
+                    {
+                        currentBackgroundImage = secondaryBackgroundImage;
+                        secondaryBackgroundCanvas.sortingOrder = 0;
+                        backgroundCanvas.sortingOrder = -1;
+                    }
+                    else
+                    {
+                        currentBackgroundImage = backgroundImage;
+                        secondaryBackgroundCanvas.sortingOrder = -1;
+                        backgroundCanvas.sortingOrder = 0;
+                    }
+                    currentBackgroundImage.color = new Color32(255, 255, 255, 0);
+                    StartCoroutine(TransitionIm(origDialo.backgroundSprite));
+                    //currentBackgroundImage.color = new Color32(255, 255, 255, 255);
+                }
+            }
+            else if (origDialo.backgroundSprite == null)
+            {
+
+                //StartCoroutine(TransitionIm(p_backgroundSprite));
+                currentBackgroundImage.sprite = origDialo.backgroundSprite;
+                currentBackgroundImage.color = new Color32(255, 255, 255, 255);
+            }
+        }
+
+        }
 
     IEnumerator TransitionIm(Sprite p_backgroundSprite)
     {
