@@ -6,27 +6,28 @@ public class DialogueSpreadSheetPatternConstants
 {
     public static void AddEffect(string p_effect)
     {
-        if (DialogueSpreadSheetPatternConstants.effects.Count > 0)
-        {
-            for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-            {
-                if (DialogueSpreadSheetPatternConstants.effects[i] == p_effect)
-                {
-                    break;
-                }
-                if (i >= DialogueSpreadSheetPatternConstants.effects.Count)
-                {
+        //if (DialogueSpreadSheetPatternConstants.effects.Count > 0)
+        //{
+        //    for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+        //    {
+        //        if (DialogueSpreadSheetPatternConstants.effects[i] == p_effect)
+        //        {
+        //            break;
+        //        }
+        //        if (i >= DialogueSpreadSheetPatternConstants.effects.Count)
+        //        {
+                    Debug.Log("ADDING EFFECT: " + p_effect);
                     DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
-                }
-            }
-        }
-        else
-        {
-         
+        //        }
+        //    }
+        //}
+        //else
+        //{
+
+        //    Debug.Log("ADDING EFFECT: " + p_effect);
+        //    DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
             
-            DialogueSpreadSheetPatternConstants.effects.Add(p_effect);
-            
-        }
+        //}
         
     
 

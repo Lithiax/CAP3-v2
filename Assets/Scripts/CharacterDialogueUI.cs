@@ -340,11 +340,11 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else
         {
-            //Debug.Log("FINAL");
-            //for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-            //{
-            //    Debug.Log("FINAL ADDING EFFECT: " + DialogueSpreadSheetPatternConstants.effects[i]);
-            //}
+            Debug.Log("FINAL");
+            for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
+            {
+                Debug.Log("FINAL ADDING EFFECT: " + DialogueSpreadSheetPatternConstants.effects[i]);
+            }
             LoadingUI.instance.InitializeLoadingScreen("FindR");
             frame.SetActive(false);
         }
@@ -785,35 +785,39 @@ public class CharacterDialogueUI : MonoBehaviour
         else if (StorylineManager.currentDialogueIndex == StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
             nextDialogueButton.SetActive(false);
-            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentSO_Dialogues.dialogues.Count-1];
-
-            CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
-            CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
-
-
-            speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
-            if (currentDialogue.characterDatas.Count > 0)
+            if (StorylineManager.currentSO_Dialogues.dialogues.Count > 0)
             {
-                for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
+                Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentSO_Dialogues.dialogues.Count - 1];
+
+                CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
+                CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
+
+
+                speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
+                if (currentDialogue.characterDatas.Count > 0)
                 {
-                    if (currentDialogue.characterDatas[i].isSpeaking)
+                    for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
                     {
-                        speakerDialogueUI.SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
-                        break;
-                    }
-                    else
-                    {
-                        speakerDialogueUI.SetSpeech(currentDialogue.words);
+                        if (currentDialogue.characterDatas[i].isSpeaking)
+                        {
+                            speakerDialogueUI.SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
+                            break;
+                        }
+                        else
+                        {
+                            speakerDialogueUI.SetSpeech(currentDialogue.words);
+                        }
                     }
                 }
-            }
-            else
-            {
-                speakerDialogueUI.SetSpeech(currentDialogue.words);
-            }
+                else
+                {
+                    speakerDialogueUI.SetSpeech(currentDialogue.words);
+                }
 
 
-            BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
+                BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
+            }
+          
             EndOfDialogue();
         }
     }
@@ -881,7 +885,7 @@ public class CharacterDialogueUI : MonoBehaviour
                                 if (!string.IsNullOrEmpty(sheetDivided[i]))
                                 {
 
-                                    // Debug.Log("ADDING THE EFFECT: " + sheetDivided[i].ToLower());
+                                    Debug.Log(StorylineManager.currentSO_Dialogues.name + " ADDING THE EFFECT: " + sheetDivided[i].ToLower());
                                     DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
 
 
