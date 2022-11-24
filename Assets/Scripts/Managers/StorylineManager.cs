@@ -28,6 +28,10 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static bool firstTime = false;
     public static Action OnLoadedEvent;
+    public static void GoBackMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
     public static void LoadVisualNovel(GameData p_gameData)
     {
         StorylineManager.CurrentSceneName = "VisualNovel";
@@ -271,7 +275,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static void LoadPhone()
     {
         paused = true;
-      //  Debug.Log("LOADING");
+        //  Debug.Log("LOADING");
         SceneManager.LoadSceneAsync("FindR", LoadSceneMode.Additive);
     }
 

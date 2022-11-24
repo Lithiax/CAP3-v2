@@ -10,7 +10,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     [SerializeField] private float typewriterSpeed = 0.1f;
     [SerializeField] CharacterDialogueUI characterDialogueUI;
     public GameObject frame;
-  
+
     [SerializeField]
     private GameObject currentDialogueBox;
     private Image currentDialogueBoxImage;
@@ -153,7 +153,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     //        StartCoroutine(In());
     //    }
-       
+
     //}
 
     public void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
@@ -165,7 +165,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
                 if (p_characterDatas[i].isSpeaking)
                 {
-                    currentSpeakerText.text = p_characterDatas[i].character.stageName; 
+                    currentSpeakerText.text = p_characterDatas[i].character.stageName;
                 }
 
             }
@@ -179,7 +179,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     void Skip()
     {
-        
+
         AudioManager.instance.ForceStopAudio(so);
         StopAllCoroutines();
         SetWords(currentWords);
@@ -190,13 +190,13 @@ public class SpeakerDialogueUI : MonoBehaviour
         currentDialogueText.text = p_words;
     }
 
-    public void SetSpeech(string p_words, string character ="")
+    public void SetSpeech(string p_words, string character = "")
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
-       
+
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
-        
+
 
     }
     //IEnumerator Out()
@@ -233,7 +233,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     //}
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
-       // Debug.Log("TYPE WRITING " + character);
+        // Debug.Log("TYPE WRITING " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         so = "";
         if (!string.IsNullOrEmpty(character))
@@ -246,16 +246,35 @@ public class SpeakerDialogueUI : MonoBehaviour
         }
 
         string p_currentText;
-       
-        for (int i = 0; i <= p_fullText.Length; i++)
+        bool eve = false;
+        for (int i = 0; i < p_fullText.Length; i++)
         {
-            p_currentText = p_fullText.Substring(0, i);
-            p_textUI.text = p_currentText;
-            AudioManager.instance.AdditivePlayAudio(so);
-            yield return new WaitForSeconds(typewriterSpeed);
+
+            if (p_fullText[i] == '<')
+            {
+
+                eve = true;
+                continue;
+            }
+            else if (p_fullText[i] == '>')
+            {
+
+                eve = false;
+                continue;
+            }
+            if (!eve)
+            {
+
+                p_currentText = p_fullText.Substring(0, i);
+                p_textUI.text = p_currentText;
+                AudioManager.instance.AdditivePlayAudio(so);
+                yield return new WaitForSeconds(typewriterSpeed);
+            }
+
+
         }
-    //    AudioManager.instance.ForceStopAudio(so);
-     //   Debug.Log("TYPE WRITING END");
+        //    AudioManager.instance.ForceStopAudio(so);
+        //   Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
 }
