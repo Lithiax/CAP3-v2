@@ -104,7 +104,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
         foreach (string e in DialogueSpreadSheetPatternConstants.effects)
         {
-            Debug.Log(e);
+            Debug.Log("Remove " + e);
         }
 
         foreach (ChatUser user in SpawnedUsers)

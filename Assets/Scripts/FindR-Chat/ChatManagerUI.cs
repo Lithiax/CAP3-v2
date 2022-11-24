@@ -94,6 +94,13 @@ public class ChatManagerUI : MonoBehaviour
         return g;
     }
 
+    public GameObject SpawnNewBlockedPanel(ChatUserSO userData)
+    {
+        GameObject g = GameObject.Instantiate(newMatchPanelPrefab.gameObject, chatParentTransform);
+        g.GetComponent<NewMatchPanelUI>().SetBlock(userData);
+        return g;
+    }
+
     public GameObject SpawnDivider()
     {
         return GameObject.Instantiate(dividerPrefab, chatParentTransform);
@@ -278,7 +285,7 @@ public class ChatManagerUI : MonoBehaviour
             {
                 Debug.Log("CURRENT CHAT COMPLETE current events: " + ev.EventType.ToString());
                 EventManager.RegisterEvent(ev);
-                if (ev.EventType != ChatEventTypes.DateEvent)
+                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent)
                 {
                     parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
@@ -385,7 +392,8 @@ public class ChatManagerUI : MonoBehaviour
                 OnSetNextTree?.Invoke();
                 Debug.Log("Choice END");
             }
-            else if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
+            else if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent && 
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent)
             {
                 Debug.Log("Not Date Event");
                 OnTreeEnded?.Invoke();
@@ -409,7 +417,8 @@ public class ChatManagerUI : MonoBehaviour
             Debug.Log("Chat is event");
             if (ChatCollection.isEvent())
             {
-                if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent)
+                if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent)
                 {
                     Debug.Log("Not Date Event");
                     HideResponse();

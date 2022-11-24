@@ -9,7 +9,8 @@ public enum ChatEventTypes
     BranchEvent,
     InstantDateEvent,
     RGaugeEvent,
-    ChangeSceneEvent
+    ChangeSceneEvent,
+    AddEffectEvent
 };
 
 [System.Serializable]
@@ -31,6 +32,8 @@ public class ChatEvent
         {
             case ChatEventTypes.DateEvent:
                 return "Begin Date";
+            case ChatEventTypes.InstantDateEvent:
+                return "Proceed to Next Week.";
             default:
                 return "";
         }

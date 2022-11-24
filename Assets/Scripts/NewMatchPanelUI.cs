@@ -13,4 +13,10 @@ public class NewMatchPanelUI : MonoBehaviour
         profileImage.sprite = userData.profileImage;
         matchText.text = "You have matched with " + userData.profileName + "!";
     }
+    
+    public void SetBlock(ChatUserSO userData)
+    {
+        profileImage.sprite = userData.profileImage;
+        matchText.text = userData.profileName + " has unmatched with you.";
+    }
 }

@@ -21,6 +21,7 @@ public class ChatUserData
     public bool ActiveDialogue;
     public int CurrentRGIndex;
     public bool CanRGText;
+    public bool StayInTree;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -29,6 +30,7 @@ public class ChatUserData
         CurrentDialogueIndex = 0;
         CurrentDialogueComplete = false;
         CurrentRGIndex = 0;
+        StayInTree = true;
     }
 }
 
@@ -75,6 +77,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public Action<string> OnRemoveEffect;
 
+    float healthRef;
+
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
@@ -103,9 +107,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         isToggled = toggle.isOn;
 
-        foreach (ChatUserData d in StaticUserData.ChatUserData)
+        if (checkForBlockedEffect())
         {
-            Debug.Log(d.UserSO.profileName);
+            newMatchPanel = chatManager.SpawnNewBlockedPanel(data);
+
+            onlineIndicator.color = Color.red;
+            panelRectTransform.SetAsLastSibling();
+            chatManager.ReplyClicked(0);
+            ChatData.ActiveDialogue = false;
+
+            return;
         }
 
         Debug.Log("Load Data: " + gameData);
@@ -156,8 +167,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             ChatData = StaticUserData.ChatUserData.First(x => x.UserSO == data);
             Debug.Log("Load Chat Data: " + ChatData.name);
 
-            LoadChatData(ChatData);
             LoadRGDataFromStatic(ChatData);
+            if (SetBlocked(ChatData)) return;
+
+            LoadChatData(ChatData);
 
             if (ChatData.CurrentDialogueIndex != 0)
             {
@@ -170,12 +183,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             }
         }
 
+        if (SetBlocked(ChatData)) return;
+
         //initialChatCollection = DialogueTree.CurrentNode.BaseNodeData.chatCollection as ChatCollectionSO;
         //currentCollection = initialChatCollection;
-
-
-
-
         if (DialogueTree.DialogueTree == null)
         {
             onlineIndicator.color = offlineColor;
@@ -196,8 +207,15 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
+    bool checkForBlockedEffect()
+    {
+        string e = ("<" + ChatUserSO.profileName + "blocked>");
+        return DialogueSpreadSheetPatternConstants.effects.Contains(e);
+    }
+
     void LoadRGDataFromStatic(ChatUserData data)
     {
+
         switch (data.UserSO.profileName)
         {
             case "Maeve":
@@ -224,7 +242,33 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         Debug.Log("Load RGMeter: " + data.RGMeter);
         healthUI.currentHealth = data.RGMeter;
         UpdateHealthBar(data.RGMeter);
+    }
 
+    void SaveRGData(ChatUserData data)
+    {
+        switch (data.UserSO.profileName)
+        {
+            case "Maeve":
+                DialogueSpreadSheetPatternConstants.maeveHealth = data.RGMeter;
+                break;
+
+            case "Liam":
+                DialogueSpreadSheetPatternConstants.liamHealth = data.RGMeter;
+                break;
+
+            case "Brad":
+                 DialogueSpreadSheetPatternConstants.bradHealth = data.RGMeter;
+                break;
+
+            case "Penelope":
+                DialogueSpreadSheetPatternConstants.penelopeHealth = data.RGMeter;
+                break;
+
+            default:
+                Debug.Log("User does not have a health bar");
+                break;
+        }
+        Debug.Log("Save RGMeter: " + data.RGMeter);
     }
 
     void UpdateHealthBar(float meter)
@@ -237,6 +281,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     {
         profileName.text = data.UserSO.profileName;
         profileImage.sprite = data.UserSO.profileImage;
+
+        //Check if user is blocked
+        if (SetBlocked(data)) return;
 
         //Spawn in Previous Chat Objects
         foreach (ChatBubble chat in data.ChatBubbles)
@@ -254,12 +301,25 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
 
+
         DialogueContainer c = SetDialogueContainer();
 
-        if (c == null && data.CanRGText)
+        if (c != null) return;
+    
+        if (data.CanRGText && data.RGMeter <= 50)
         {
             OnChatComplete();
             SetRGScript(data);
+            data.StayInTree = false;
+            return;
+        }
+
+        //Check if previous tree is skippable (only RGChats are skippable)
+        if (data.StayInTree && data.CurrentDialogueComplete == false)
+        {
+            DialogueTree.SetDialogueTree(data.CurrentTree);
+            DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
+            Debug.Log("stay in tree");
         }
     }
 
@@ -270,6 +330,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             Debug.Log("Max RGs Reached!");
             return;
         }
+
+        Debug.Log("Set RG " + data.UserSO.profileName);
 
         DialogueTree.SetDialogueTree(data.UserSO.RGScripts[data.CurrentRGIndex]);
         ChatData.CurrentTree = DialogueTree.DialogueTree;
@@ -359,6 +421,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.OnSetNextTree -= SetNextTree;
         ChatData.WasBranchEffect = false;
         DialogueTree.OnNodeChanged -= OnNodeChange;
+        SaveRGData(ChatData);
     }
 
     public void OnChatComplete()
@@ -422,6 +485,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         profileName.text = userData.profileName;
         profileImage.sprite = userData.profileImage;
 
+
         if (ChatData.ActiveDialogue)
             DialogueTree.SetDialogueTree(userData.dialogueTree);
         else
@@ -436,6 +500,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
             healthUI.currentHealth = ChatData.RGMeter;
             UpdateHealthBar(ChatData.RGMeter);
+
+            if (SetBlocked(ChatData)) return;
 
             if (userData.dialogueTree != null)
             {
@@ -452,6 +518,22 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
 
     }
+
+    bool SetBlocked(ChatUserData data)
+    {
+        Debug.Log("Check block: " + data.RGMeter);
+        if (data.RGMeter > 0) return false;
+
+        newMatchPanel = chatManager.SpawnNewBlockedPanel(ChatUserSO);
+
+        onlineIndicator.color = Color.red;
+        panelRectTransform.SetAsLastSibling();
+        chatManager.ReplyClicked(0);
+        ChatData.ActiveDialogue = false;
+
+        return true;
+    }
+
     public void AllowLoadingData(GameData data)
     {
         this.gameData = data;

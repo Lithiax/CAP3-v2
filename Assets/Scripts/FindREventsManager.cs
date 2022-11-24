@@ -12,6 +12,9 @@ public class FindREventsManager : MonoBehaviour
     [SerializeField] GameObject BeginDatePanel;
     [SerializeField] Button BeginDateYesButton;
 
+    [SerializeField] Button GoNextWeekbutton;
+    [SerializeField] GameObject BeginNextWeekPanel;
+
     List<ChatEvent> events = new List<ChatEvent>();
     public List<ChatUser> ChatUsers;
     public void RegisterEvent(ChatEvent chatEvents)
@@ -33,26 +36,32 @@ public class FindREventsManager : MonoBehaviour
     {
         Debug.Log("Call Event");
 
+        ChatUser user = ChatUsers.First(x => x.ChatUserSO == userData);
+
         ClearButtons();
         switch (eventType)
         {
             case ChatEventTypes.DateEvent:
                 Debug.Log("Date Event");
                 BeginDatePanel.SetActive(true);
-                ChatUser u = ChatUsers.First(x => x.ChatUserSO == userData);
                 BeginDateYesButton.onClick.AddListener(() => {
                     LoadVisualNovel(data);
-                    u.OnChatComplete();
+                    user.OnChatComplete();
                 });
                 break;
             case ChatEventTypes.BranchEvent:
                 Debug.Log("Branch Event");
-                ChatUser user = ChatUsers.First(x => x.ChatUserSO == userData);
                 user.SetNewEventTree();
                 break;
             case ChatEventTypes.InstantDateEvent:
                 Debug.Log("Instant Date Event");
-                StartCoroutine(InstantDateEvent(data));
+                BeginNextWeekPanel.SetActive(true);
+                GoNextWeekbutton.onClick.AddListener(() => {
+                    LoadNextWeek();
+                    user.OnChatComplete();
+                });
+                break;
+                //StartCoroutine(InstantDateEvent(data));
                 break;
             case ChatEventTypes.RGaugeEvent:
                 GaugeEvent(userData, data);
@@ -60,10 +69,24 @@ public class FindREventsManager : MonoBehaviour
             case ChatEventTypes.ChangeSceneEvent:
                 StartCoroutine(ChangeSceneEvent(data));
                 break;
+            case ChatEventTypes.AddEffectEvent:
+                AddEffect(data);
+                break;
+
             default:
                 Debug.LogError("Invalid Event");
                 break;
         }
+    }
+
+    void AddEffect(string e)
+    {
+        if (DialogueSpreadSheetPatternConstants.effects.Contains(e))
+        {
+            Debug.Log("effect " + e + " already exists!");
+            return;
+        }
+        DialogueSpreadSheetPatternConstants.effects.Add(e);
     }
 
     IEnumerator InstantDateEvent(string data)
@@ -73,6 +96,17 @@ public class FindREventsManager : MonoBehaviour
         {
             Debug.LogError("Progression Data is Empty!");
             yield return null;
+        }
+
+        LoadVisualNovel(StaticUserData.ProgressionData.CurrentDateScene);
+    }
+
+    void LoadNextWeek()
+    {
+        if (StaticUserData.ProgressionData == null)
+        {
+            Debug.LogError("Progression Data is Empty!");
+            return;
         }
 
         LoadVisualNovel(StaticUserData.ProgressionData.CurrentDateScene);
