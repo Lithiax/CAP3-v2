@@ -778,8 +778,9 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         else if (StorylineManager.currentDialogueIndex == StorylineManager.currentSO_Dialogues.dialogues.Count)
         {
-            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
             nextDialogueButton.SetActive(false);
+            Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
+
             CheckCachedCharacters(currentDialogue.characterDatas); //Rename and chop things into functions
             CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
 
