@@ -95,8 +95,8 @@ public class MainMenuUI : MonoBehaviour
     }
     public void NewGameButton()
     {
+        StaticUserData.Reset();
         StartCoroutine(Co_AudioFadeOut());
-
     }
 
     public void ExitButton()

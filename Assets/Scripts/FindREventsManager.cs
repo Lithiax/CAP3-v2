@@ -47,7 +47,7 @@ public class FindREventsManager : MonoBehaviour
                 BeginDateYesButton.onClick.AddListener(() => {
                     LoadVisualNovel(data);
                     user.OnChatComplete();
-
+                    user.DontStayOnTree();
                     //because it loads the after date next.
                     user.SetCanRGText(false);
                 });
@@ -62,6 +62,7 @@ public class FindREventsManager : MonoBehaviour
                 GoNextWeekbutton.onClick.AddListener(() => {
                     LoadNextWeek();
                     user.OnChatComplete();
+                    user.DontStayOnTree();
                 });
                 break;
                 //StartCoroutine(InstantDateEvent(data));

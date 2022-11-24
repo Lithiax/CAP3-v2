@@ -18,4 +18,12 @@ public static class StaticUserData
     public static ProgressionData ProgressionData;
 
     public static List<string> UsedEffects = new List<string>();
+
+    public static void Reset()
+    {
+        UsedEffects.Clear();
+        ChatUserData.Clear();
+        UserSOs.Clear();
+        ProgressionData = new ProgressionData(1,1);
+    }
 }

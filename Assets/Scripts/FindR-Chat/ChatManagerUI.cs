@@ -110,7 +110,6 @@ public class ChatManagerUI : MonoBehaviour
     {
         parent.currentChatComplete = false;
 
-        Debug.Log("StartSpawning" + this);
         StartCoroutine(SpawnChats(parent, Tree));
     }
 

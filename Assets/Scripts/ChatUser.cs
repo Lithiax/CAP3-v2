@@ -306,12 +306,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         if (c != null)
         {
-            data.StayInTree = false;
+            data.StayInTree = true;
             return;
         }
          
     
-        if (data.CanRGText && data.RGMeter <= 50)
+        if (data.CanRGText && data.RGMeter <= 49)
         {
             OnChatComplete();
             SetRGScript(data);
@@ -320,7 +320,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
 
         //Check if previous tree is skippable (only RGChats are skippable)
-        if (data.StayInTree && data.CurrentDialogueComplete == false)
+        if (data.StayInTree /*&& data.CurrentDialogueComplete == false*/)
         {
             DialogueTree.SetDialogueTree(data.CurrentTree);
             DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
@@ -421,6 +421,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.StartSpawningChat(this, DialogueTree);
     }
 
+    public void DontStayOnTree()
+    {
+        ChatData.StayInTree = false;
+    }
+
     void OnNodeChange()
     {
         ChatData.CurrentDialogueIndex = 0;
@@ -432,13 +437,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.OnSetNextTree -= SetNextTree;
         ChatData.WasBranchEffect = false;
         DialogueTree.OnNodeChanged -= OnNodeChange;
+
         SaveRGData(ChatData);
     }
 
     public void OnChatComplete()
     {
         ChatData.CurrentDialogueIndex = 0;
-        ChatData.CurrentDialogueComplete = true;
+
+        //set to false since it needs to reset loading
+        ChatData.CurrentDialogueComplete = false;
     }
 
     public void SetNotif()
