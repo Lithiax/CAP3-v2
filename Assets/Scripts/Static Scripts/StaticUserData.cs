@@ -30,5 +30,6 @@ public static class StaticUserData
     public static void Save(ref GameData data)
     {
         data.ChatUserData = ChatUserData;
+        data.ProgressionData = ProgressionData;
     }
 }

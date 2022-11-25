@@ -310,7 +310,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
          
-    
+        //if (StaticUserData.ProgressionData.CurrentWeek)
         if (data.CanRGText && data.RGMeter <= 49)
         {
             OnChatComplete();
