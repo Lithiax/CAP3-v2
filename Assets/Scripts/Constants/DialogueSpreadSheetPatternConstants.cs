@@ -34,7 +34,7 @@ public class DialogueSpreadSheetPatternConstants
        // Debug.Log("ADDING EFFECT: " + p_effect);
         if (p_effect == "<progress>")
         {
-
+       
             StaticUserData.ProgressionData.ProgressDate();
         }
         if (p_effect == "<ending>")

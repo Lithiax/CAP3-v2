@@ -35,10 +35,10 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public static void LoadVisualNovel(GameData p_gameData)
     {
-        if (StorylineManager.currentBackgroundMusic != null)
-        {
-            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-        }
+        //if (StorylineManager.currentBackgroundMusic != null)
+        //{
+        //    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+        //}
 
         StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
@@ -127,7 +127,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
  
         paused = false;
-
+        Debug.Log("LOADED: " + DialogueSpreadSheetPatternConstants.maeveHealth);
         if (StorylineManager.currentSO_Dialogues != null)
         {
             // Debug.Log("DIALOGUE LOADED");
@@ -347,7 +347,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.savedSO_Dialogues = savedSO_Dialogues;
 
         data.currentBackgroundMusic = currentBackgroundMusic;
-
+        //StaticUserData.Save(data);
 
     }
     public static void LoadPhone()

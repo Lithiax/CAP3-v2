@@ -338,7 +338,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public void OnCloseCharacterDialogueUI()
     {
-        healthUI.OnSaveHealthEvent.Invoke();
+        //healthUI.OnSaveHealthEvent.Invoke();
         //if (clearlogs)
         //{
         //    StorylineManager.loggedWords.Clear();
