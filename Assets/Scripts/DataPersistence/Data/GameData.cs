@@ -25,8 +25,8 @@ public class GameData
     
     public int savedDialogueIndex;
     public SO_Dialogues savedSO_Dialogues;
+    public SO_Dialogues popUpSO_Dialogues;
 
-  
     public string currentBackgroundMusic;
 
     public List<ChatUserData> ChatUserData;
@@ -53,6 +53,7 @@ public class GameData
         currentSO_Dialogues = null;
         currentDialogueIndex = -1;
         so_InteractibleChoices = null;
+        popUpSO_Dialogues = null;
         mainCharacterName = "";
         renamed = false;
         loggedWords = new List<Dialogue>();

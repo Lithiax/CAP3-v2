@@ -227,7 +227,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
-        Debug.Log("TYPEWRITING: " + character);
+       // Debug.Log("TYPEWRITING: " + character);
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
 
 
@@ -236,7 +236,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
         // Debug.Log("TYPE WRITING " + character);
-        Debug.Log("TYPEWRITING INNIE: " + character);
+       // Debug.Log("TYPEWRITING INNIE: " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         so = "";
         //if (!string.IsNullOrEmpty(character))
@@ -245,7 +245,7 @@ public class SpeakerDialogueUI : MonoBehaviour
         //}
         //else
         //{
-        Debug.Log("TYPEWRITING in: " + character);
+  //      Debug.Log("TYPEWRITING in: " + character);
         if (character.ToLower() == "maeve")
             {
                 so = character;
