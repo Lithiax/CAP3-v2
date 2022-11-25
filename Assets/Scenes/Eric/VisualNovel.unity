@@ -8694,7 +8694,7 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   backgroundMusics:
-  - name: Brad 1 - I knew a guy
+  - name: Brad 1 - I Knew a Guy
     clip: {fileID: 8300000, guid: 79a2054a0cfa7e84394d8c5cd463ee2c, type: 3}
     output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
     volume: 1
@@ -8799,8 +8799,64 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
-  - name: Title Screen - Peasant
+  - name: Title Screen - Pleasant Porrdige
     clip: {fileID: 8300000, guid: f9410f1c497e82541a6932ef78b217ca, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Brad Bad Ending - Night on the Docks - Trumpet
+    clip: {fileID: 8300000, guid: ab3e655a9c19d0b4f8250f6236344ddf, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Brad Good Ending - Apero Hour
+    clip: {fileID: 8300000, guid: 4d266572ca0dbb84d9e4c12a864fa6ba, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Liam Bad Ending - Just As Soon
+    clip: {fileID: 8300000, guid: d9e698b41efc8524aab77020dd0816dd, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Liam Good Ending - Zazie
+    clip: {fileID: 8300000, guid: 9d2a6a41fc5a9804394f7f490e8b00ea, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Maeve Bad Ending - Night on the Docks - Sax
+    clip: {fileID: 8300000, guid: 34fc63f6fb1dc3f4392a746322b84f4f, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Maeve Good Ending - Samba Isobel
+    clip: {fileID: 8300000, guid: c6409f2fbe6066f4ea9207b4e70d24ea, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Penelope Bad Ending - Night on the Docks - Piano
+    clip: {fileID: 8300000, guid: b38e0df4382cc2542a2e877704cb1670, type: 3}
+    output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Penelope Good Ending - Lobby Time
+    clip: {fileID: 8300000, guid: 094ff7bac566cb04b854e1879b945dac, type: 3}
     output: {fileID: -3939149997096469140, guid: 9e30e9198e1cb664d91dff677860a964, type: 2}
     volume: 1
     pitch: 1

@@ -95,8 +95,34 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         sideDialogue = p_gameData.sideDialogue;
         savedDialogueIndex = p_gameData.savedDialogueIndex;
         savedSO_Dialogues = p_gameData.savedSO_Dialogues;
+
         StorylineManager.firstTime = p_gameData.firstTime;
-        currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+        if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+        {
+           
+                if (!string.IsNullOrEmpty(p_gameData.currentBackgroundMusic))
+                {
+                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, p_gameData.currentBackgroundMusic, false);
+                    currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+                }
+                else
+                {
+                    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+                    currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+                }
+
+            
+
+
+        }
+        else
+        {
+            AudioManager.instance.AdditivePlayAudio(p_gameData.currentBackgroundMusic, false);
+            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+          
+        }
+
+ 
         paused = false;
 
         if (StorylineManager.currentSO_Dialogues != null)
@@ -169,8 +195,30 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         sideDialogue = false;
         savedDialogueIndex = -1;
         savedSO_Dialogues = null;
+        if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+        {
+            if (StorylineManager.currentSO_Dialogues != null && StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
+            {
+                if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic))
+                {
+                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
+                }
+                else
+                {
+                    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+                }
+              
+            }
+         
 
-        currentBackgroundMusic = "";
+        }
+        else
+        {
+   
+            currentBackgroundMusic = "";
+        }
+
+   
         paused = false;
       
 
