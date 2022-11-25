@@ -286,7 +286,11 @@ public class CharacterDialogueUI : MonoBehaviour
             TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, true);
             return;
         }
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.AdditivePlayAudio(StorylineManager.currentBackgroundMusic, false);
 
+        }
         rarara = true;
         p_currentChoiceDataTest = null;
         if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
@@ -685,14 +689,22 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             if (currentDialogue.backgroundMusic.ToLower() != "stop")
                             {
-                                if (StorylineManager.currentBackgroundMusic != "")
+                                if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
                                 {
-                                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
+                                    if (StorylineManager.currentBackgroundMusic != currentDialogue.backgroundMusic)
+                                    {
+                                        AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
+                                    }
+                                   
                                 }
                                 else
                                 {
                                     AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
                                 }
+                                //else
+                                //{
+                                //    AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
+                                //}
 
                                 StorylineManager.currentBackgroundMusic = currentDialogue.backgroundMusic;
                             }

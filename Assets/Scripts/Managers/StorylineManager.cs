@@ -120,12 +120,12 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         //}
         //else
         //{
-            AudioManager.instance.AdditivePlayAudio(p_gameData.currentBackgroundMusic, false);
-            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-          
-       // }
+   
 
- 
+        currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+        // }
+
+
         paused = false;
         Debug.Log("LOADED: " + DialogueSpreadSheetPatternConstants.maeveHealth);
         if (StorylineManager.currentSO_Dialogues != null)
