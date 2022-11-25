@@ -27,7 +27,9 @@ public class CueChoice
 public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static bool firstTime = false;
-    public static bool justLoadedVN = false;
+
+    //public static bool justLoadedVN = false;
+    public static bool renamed = false;
     public static Action OnLoadedEvent;
     public static void GoBackMenu()
     {
@@ -46,7 +48,9 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         StorylineManager.cuesChoices.Clear();
         StorylineManager.currentSO_Dialogues = p_gameData.currentSO_Dialogues;
         StorylineManager.so_InteractibleChoices = p_gameData.so_InteractibleChoices;
-        justLoadedVN = true;
+        renamed = p_gameData.renamed;
+     //   justLoadedVN = true;
+     
         if (so_InteractibleChoices != null)
         {
             if (so_InteractibleChoices.deathSheet != null)
@@ -192,8 +196,8 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             StorylineManager.currentZeroSO_Dialogues = null;
         }
 
-      
 
+    
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = 0;
         sideDialogue = false;
@@ -328,7 +332,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         //  Debug.Log("SAVED " + data.currentDialogueIndex);
- 
+        data.renamed = renamed;
         data.penelopeHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
         data.bradHealth = DialogueSpreadSheetPatternConstants.bradHealth;
         data.liamHealth = DialogueSpreadSheetPatternConstants.liamHealth;

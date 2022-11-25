@@ -167,7 +167,26 @@ public class SpeakerDialogueUI : MonoBehaviour
                 {
                     if (p_characterDatas[i].character != null)
                     {
-                        currentSpeakerText.text = p_characterDatas[i].character.stageName;
+
+                      
+                        if (string.IsNullOrEmpty(p_characterDatas[i].character.stageName))
+                        {
+                            
+                            currentSpeakerText.text = "NO CHARACTER SET";
+                            
+                        }
+                        else
+                        {
+                            if (!StorylineManager.renamed)
+                            {
+                                currentSpeakerText.text = "YOU";
+                            }
+                            else
+                            {
+                                currentSpeakerText.text = p_characterDatas[i].character.stageName;
+                            }
+                        }
+                     
                     }
              
                 }
@@ -198,59 +217,52 @@ public class SpeakerDialogueUI : MonoBehaviour
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
-
+        Debug.Log("TYPEWRITING: " + character);
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
 
 
     }
-    //IEnumerator Out()
-    //{
-    //    GameObject save = currentDialogueBox;
-    //    Image saveI = currentDialogueBoxImage;
-    //    TMP_Text saveT1 = currentSpeakerText;
-    //    TMP_Text saveT2 = currentDialogueText;
-    //    // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
-    //    var fadeOutSequence = DOTween.Sequence()
-    //    .Append(saveI.DOFade(0, avatarFadeTime));
-    //    fadeOutSequence.Join(saveT1.DOFade(0, avatarFadeTime));
-    //    fadeOutSequence.Join(saveT2.DOFade(0, avatarFadeTime));
-    //    fadeOutSequence.Play();
-    //    yield return fadeOutSequence.WaitForCompletion();
-    //    save.SetActive(false);
-    //    //CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
-    //}
-    //IEnumerator In()
-    //{
-    //    GameObject save = currentDialogueBox;
-    //    Image saveI = currentDialogueBoxImage;
-    //    TMP_Text saveT1 = currentSpeakerText;
-    //    TMP_Text saveT2 = currentDialogueText;
-    //    save.SetActive(true);
-    //    // CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
-    //    var fadeOutSequence = DOTween.Sequence()
-    //    .Append(saveI.DOFade(1, avatarFadeTime));
-    //    fadeOutSequence.Join(saveT1.DOFade(1, avatarFadeTime));
-    //    fadeOutSequence.Join(saveT2.DOFade(1, avatarFadeTime));
-    //    fadeOutSequence.Play();
-    //    yield return fadeOutSequence.WaitForCompletion();
-    //    canOpen = true;
-    //}
+
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
         // Debug.Log("TYPE WRITING " + character);
+        Debug.Log("TYPEWRITING INNIE: " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         so = "";
-        if (!string.IsNullOrEmpty(character))
-        {
-            so = "Typewriting";
-        }
-        else
-        {
-            so = character;
-        }
+        //if (!string.IsNullOrEmpty(character))
+        //{
+
+        //}
+        //else
+        //{
+        Debug.Log("TYPEWRITING in: " + character);
+        if (character.ToLower() == "maeve")
+            {
+                so = character;
+            }
+            else if (character.ToLower() == "liam")
+            {
+                so = character;
+            }
+            else if (character.ToLower() == "brad")
+            {
+                so = character;
+            }
+            else if (character.ToLower() == "penelope")
+            {
+                so = character;
+            }
+            else
+            {
+                so = "Typewriting";
+            }
+            
+          
+        //}
 
         string p_currentText;
         bool eve = false;
+        
         for (int i = 0; i < p_fullText.Length; i++)
         {
 
@@ -266,18 +278,19 @@ public class SpeakerDialogueUI : MonoBehaviour
                 eve = false;
                 continue;
             }
+
             if (!eve)
             {
-
+                AudioManager.instance.AdditivePlayAudio(so);
                 p_currentText = p_fullText.Substring(0, i);
                 p_textUI.text = p_currentText;
-                AudioManager.instance.AdditivePlayAudio(so);
+                //AudioManager.instance.AdditivePlayAudio(so);
                 yield return new WaitForSeconds(typewriterSpeed);
             }
 
 
         }
-        //    AudioManager.instance.ForceStopAudio(so);
+        //AudioManager.instance.ForceStopAudio(so);
         //   Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
