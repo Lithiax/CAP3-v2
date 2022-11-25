@@ -354,27 +354,31 @@ public class CharactersUI : MonoBehaviour
                 {
                     if (characterDatas[i] != null)
                     {
-                        if (characterDatas[i].character.prefab != null) //Live 2D
+                        if (characterDatas[i].character != null)
                         {
-
-                            //newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
-                            //Check if its the character thats talking
-                            if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
+                            if (characterDatas[i].character.prefab != null) //Live 2D
                             {
-                                if (characterDatas[i].character == DialogueSpreadSheetPatternConstants.cueCharacter)
+
+                                //newCharacter = Instantiate(p_charactersToBeAdded[i].prefab, characterObjectContainerTransform);
+                                //Check if its the character thats talking
+                                if (StorylineManager.currentSO_Dialogues.cueBankData.isEnabled)
                                 {
-                                    if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
+                                    if (characterDatas[i].character == DialogueSpreadSheetPatternConstants.cueCharacter)
                                     {
-                                        Debug.Log(live2DCollisionUIContainerTransform.childCount);
+                                        if (DialogueSpreadSheetPatternConstants.cueCharacter.collisionPrefab != null)
+                                        {
+                                            Debug.Log(live2DCollisionUIContainerTransform.childCount);
 
-                                        GameObject newCharacterCollision = Instantiate(characterDatas[i].character.collisionPrefab, live2DCollisionUIContainerTransform);
+                                            GameObject newCharacterCollision = Instantiate(characterDatas[i].character.collisionPrefab, live2DCollisionUIContainerTransform);
 
 
+                                        }
                                     }
                                 }
-                            }
 
+                            }
                         }
+                      
 
 
                     }
