@@ -27,6 +27,7 @@ public class CueChoice
 public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static bool firstTime = false;
+    public static bool justLoadedVN = false;
     public static Action OnLoadedEvent;
     public static void GoBackMenu()
     {
@@ -45,6 +46,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         StorylineManager.cuesChoices.Clear();
         StorylineManager.currentSO_Dialogues = p_gameData.currentSO_Dialogues;
         StorylineManager.so_InteractibleChoices = p_gameData.so_InteractibleChoices;
+        justLoadedVN = true;
         if (so_InteractibleChoices != null)
         {
             if (so_InteractibleChoices.deathSheet != null)
@@ -90,6 +92,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         DialogueSpreadSheetPatternConstants.bradHealth = p_gameData.bradHealth;
         DialogueSpreadSheetPatternConstants.liamHealth = p_gameData.liamHealth;
         DialogueSpreadSheetPatternConstants.maeveHealth = p_gameData.maeveHealth;
+
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = p_gameData.currentDialogueIndex;
         sideDialogue = p_gameData.sideDialogue;
@@ -97,30 +100,30 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         savedSO_Dialogues = p_gameData.savedSO_Dialogues;
 
         StorylineManager.firstTime = p_gameData.firstTime;
-        if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
-        {
+        //if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+        //{
            
-                if (!string.IsNullOrEmpty(p_gameData.currentBackgroundMusic))
-                {
-                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, p_gameData.currentBackgroundMusic, false);
-                    currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-                }
-                else
-                {
-                    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-                    currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-                }
+        //        if (!string.IsNullOrEmpty(p_gameData.currentBackgroundMusic))
+        //        {
+        //            AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, p_gameData.currentBackgroundMusic, false);
+        //            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+        //        }
+        //        else
+        //        {
+        //            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+        //            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+        //        }
 
             
 
 
-        }
-        else
-        {
+        //}
+        //else
+        //{
             AudioManager.instance.AdditivePlayAudio(p_gameData.currentBackgroundMusic, false);
             currentBackgroundMusic = p_gameData.currentBackgroundMusic;
           
-        }
+       // }
 
  
         paused = false;
@@ -141,8 +144,9 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     {
         StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-        mainCharacter.stageName = "You";
+       // mainCharacter.stageName = "You";
         StorylineManager.cuesChoices.Clear();
+ 
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
         StorylineManager.so_InteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + "Interactible Choices");
         // Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
@@ -195,28 +199,30 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         sideDialogue = false;
         savedDialogueIndex = -1;
         savedSO_Dialogues = null;
-        if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
-        {
-            if (StorylineManager.currentSO_Dialogues != null && StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
-            {
-                if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic))
-                {
-                    AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
-                }
-                else
-                {
-                    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-                }
+        //if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+        //{
+        //    if (StorylineManager.currentSO_Dialogues != null && 
+        //        StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
+        //    {
+        //        if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic))
+        //        {
+        //            AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
+        //        }
+        //        else
+        //        {
+        //            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
+        //            currentBackgroundMusic = "";
+        //        }
               
-            }
+        //    }
          
 
-        }
-        else
-        {
+        //}
+        //else
+        //{
    
             currentBackgroundMusic = "";
-        }
+       // }
 
    
         paused = false;
@@ -322,6 +328,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         //  Debug.Log("SAVED " + data.currentDialogueIndex);
+ 
         data.penelopeHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
         data.bradHealth = DialogueSpreadSheetPatternConstants.bradHealth;
         data.liamHealth = DialogueSpreadSheetPatternConstants.liamHealth;
@@ -334,7 +341,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.firstTime = StorylineManager.firstTime;
         data.mainCharacterName = mainCharacter.stageName;
         data.loggedWords = StorylineManager.loggedWords;
-
+     
         data.sideDialogue = sideDialogue;
         data.savedDialogueIndex = savedDialogueIndex;
         data.savedSO_Dialogues = savedSO_Dialogues;

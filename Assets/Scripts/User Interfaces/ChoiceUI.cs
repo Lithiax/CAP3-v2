@@ -10,7 +10,8 @@ public class ChoiceUI : MonoBehaviour
 
     public void InitializeValues(string p_text)
     {
-        choiceText.text = p_text;
+        string te = p_text.Replace("<comma>", ",");
+        choiceText.text = te;
     }
 
 }

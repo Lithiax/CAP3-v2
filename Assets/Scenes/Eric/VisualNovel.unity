@@ -8894,7 +8894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded5fa744f1eabc4d9efda2825fbaa0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typewriterSpeed: 0.1
+  typewriterSpeed: 0.05
   characterDialogueUI: {fileID: 826183174}
   frame: {fileID: 880572610}
   currentDialogueBox: {fileID: 589179936}
