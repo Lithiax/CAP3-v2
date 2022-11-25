@@ -169,7 +169,7 @@ public class SpeakerDialogueUI : MonoBehaviour
                     {
 
                       
-                        if (string.IsNullOrEmpty(p_characterDatas[i].character.stageName))
+                        if (string.IsNullOrEmpty(p_characterDatas[i].character.stageName) && p_characterDatas[i].character.idName != "You")
                         {
                             
                             currentSpeakerText.text = "NO CHARACTER SET";
@@ -177,14 +177,24 @@ public class SpeakerDialogueUI : MonoBehaviour
                         }
                         else
                         {
-                            if (!StorylineManager.renamed)
-                            {
-                                currentSpeakerText.text = "YOU";
-                            }
-                            else
+                            if (p_characterDatas[i].character.idName != "You")
                             {
                                 currentSpeakerText.text = p_characterDatas[i].character.stageName;
                             }
+                            else
+                            {
+                                if (!StorylineManager.renamed)
+                                {
+
+                                    currentSpeakerText.text = "YOU";
+                                }
+                                else
+                                {
+                                    currentSpeakerText.text = p_characterDatas[i].character.stageName;
+                                }
+                            }
+                            
+                          
                         }
                      
                     }

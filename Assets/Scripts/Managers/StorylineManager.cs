@@ -28,9 +28,17 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 {
     public static bool firstTime = false;
 
-    //public static bool justLoadedVN = false;
+    public static bool justLoadedVN = false;
     public static bool renamed = false;
     public static Action OnLoadedEvent;
+    //float penhealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
+    //float bradhealth = DialogueSpreadSheetPatternConstants.bradHealth;
+    //float liamhealth = DialogueSpreadSheetPatternConstants.liamHealth;
+    //float mavhealth = DialogueSpreadSheetPatternConstants.maeveHealth;
+    public static float penhealth;
+    public static float bradhealth;
+    public static float liamhealth;
+    public static float mavhealth;
     public static void GoBackMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -49,7 +57,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         StorylineManager.currentSO_Dialogues = p_gameData.currentSO_Dialogues;
         StorylineManager.so_InteractibleChoices = p_gameData.so_InteractibleChoices;
         renamed = p_gameData.renamed;
-     //   justLoadedVN = true;
+        justLoadedVN = true;
      
         if (so_InteractibleChoices != null)
         {
@@ -92,10 +100,12 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         {
             StorylineManager.currentZeroSO_Dialogues = null;
         }
-        DialogueSpreadSheetPatternConstants.penelopeHealth = p_gameData.penelopeHealth;
-        DialogueSpreadSheetPatternConstants.bradHealth = p_gameData.bradHealth;
-        DialogueSpreadSheetPatternConstants.liamHealth = p_gameData.liamHealth;
-        DialogueSpreadSheetPatternConstants.maeveHealth = p_gameData.maeveHealth;
+         penhealth = p_gameData.penelopeHealth;
+         bradhealth = p_gameData.bradHealth;
+         liamhealth = p_gameData.liamHealth;
+         mavhealth = p_gameData.maeveHealth;
+      
+   
 
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = p_gameData.currentDialogueIndex;
@@ -305,7 +315,11 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public void LoadData(GameData data)
     {
-
+        DialogueSpreadSheetPatternConstants.penelopeHealth = penhealth;
+          DialogueSpreadSheetPatternConstants.bradHealth = bradhealth;
+          DialogueSpreadSheetPatternConstants.liamHealth = liamhealth;
+          DialogueSpreadSheetPatternConstants.maeveHealth = mavhealth;
+        Debug.Log("LOADED HEALTH: " + DialogueSpreadSheetPatternConstants.maeveHealth);
     }
     //public void LoadData(GameData data)
     //{
@@ -331,12 +345,17 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
+        float penhealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
+        float bradhealth = DialogueSpreadSheetPatternConstants.bradHealth;
+        float liamhealth = DialogueSpreadSheetPatternConstants.liamHealth;
+        float mavhealth = DialogueSpreadSheetPatternConstants.maeveHealth;
+        StaticUserData.Save(ref data);
         //  Debug.Log("SAVED " + data.currentDialogueIndex);
         data.renamed = renamed;
-        data.penelopeHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
-        data.bradHealth = DialogueSpreadSheetPatternConstants.bradHealth;
-        data.liamHealth = DialogueSpreadSheetPatternConstants.liamHealth;
-        data.maeveHealth = DialogueSpreadSheetPatternConstants.maeveHealth;
+        data.penelopeHealth = penhealth;
+        data.bradHealth = bradhealth;
+        data.liamHealth = liamhealth;
+        data.maeveHealth = mavhealth;
         data.CurrentSceneName = StorylineManager.CurrentSceneName;
         data.currentSO_Dialogues = StorylineManager.currentSO_Dialogues;
         data.currentDialogueIndex = StorylineManager.currentDialogueIndex;
@@ -351,7 +370,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.savedSO_Dialogues = savedSO_Dialogues;
 
         data.currentBackgroundMusic = currentBackgroundMusic;
-        StaticUserData.Save(ref data);
+     
 
     }
     public static void LoadPhone()

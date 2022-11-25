@@ -268,15 +268,24 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         Debug.Log("FADE END");
         speakerDialogueUI.ManualToggleSpeakerDialogueUI(true);
-        //if (StorylineManager.justLoadedVN)
-        //{
-        //    StorylineManager.justLoadedVN = false;
-        //    nextDialogueButton.SetActive(false);
-        //}
-        //else
-        //{
+        if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
+        {
+            if (StorylineManager.justLoadedVN)
+            {
+
+                StorylineManager.justLoadedVN = false;
+                nextDialogueButton.SetActive(false);
+            }
+            else
+            {
+                nextDialogueButton.SetActive(true);
+            }
+        }
+         
+        else
+        {
             nextDialogueButton.SetActive(true);
-        //}
+        }
 
 
     }
