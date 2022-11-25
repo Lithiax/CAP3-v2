@@ -26,7 +26,7 @@ public class GameData
     public int savedDialogueIndex;
     public SO_Dialogues savedSO_Dialogues;
 
-
+  
     public string currentBackgroundMusic;
 
     public List<ChatUserData> ChatUserData;
@@ -40,6 +40,7 @@ public class GameData
     public List<string> EffectsUsed;
     public GameData()
     {
+        
         CurrentSceneName = "";
         ChatUserIDs = new int[0];
         GameEffects = new string[0];
@@ -53,6 +54,7 @@ public class GameData
         currentDialogueIndex = -1;
         so_InteractibleChoices = null;
         mainCharacterName = "";
+      
         loggedWords = new List<Dialogue>();
         firstTime = false;
         sideDialogue = false;

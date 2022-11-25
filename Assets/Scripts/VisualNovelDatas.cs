@@ -22,6 +22,7 @@ public class VisualNovelDatas : MonoBehaviour
                 return instance.characters[i];
             }
         }
+        Debug.LogWarning("CANT FIND CHARACTER " + p_name);
         return null;
     }
 

@@ -142,7 +142,7 @@ public class HealthUI : MonoBehaviour
         OnInitializeEvent += OnInitialize;
         OnModifyHealthEvent += ModifyHealth;
         OnIsWithinHealthConditionEvent += IsWithinHealthCondition;
-        OnSaveHealthEvent += SaveHealth;
+       // OnSaveHealthEvent += SaveHealth;
         CharacterDialogueUI.OnInspectingEvent += Open;
         CharacterDialogueUI.OnDeinspectingEvent += Close;
         realBarUI.fillAmount = 0f;
@@ -155,7 +155,7 @@ public class HealthUI : MonoBehaviour
     private void OnDestroy()
     {
         OnInitializeEvent -= OnInitialize;
-        OnSaveHealthEvent -= SaveHealth;
+     ///   OnSaveHealthEvent -= SaveHealth;
         OnModifyHealthEvent -= ModifyHealth;
         OnIsWithinHealthConditionEvent -= IsWithinHealthCondition;
         CharacterDialogueUI.OnInspectingEvent -= Open;
@@ -164,6 +164,7 @@ public class HealthUI : MonoBehaviour
     void OnInitialize(string p_ownerName)
     {
         characterOwnerName = p_ownerName;
+        Debug.Log("HEALTH INITIALIZED " + DialogueSpreadSheetPatternConstants.maeveHealth);
         if (!string.IsNullOrEmpty(characterOwnerName))
         {
             if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Maeve")
@@ -249,7 +250,7 @@ public class HealthUI : MonoBehaviour
                
 
         }
-       
+        SaveHealth();
         UpdateBar(currentHealth, maxHealth);
     }
 

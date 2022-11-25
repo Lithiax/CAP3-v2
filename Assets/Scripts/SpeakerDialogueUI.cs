@@ -165,7 +165,11 @@ public class SpeakerDialogueUI : MonoBehaviour
 
                 if (p_characterDatas[i].isSpeaking)
                 {
-                    currentSpeakerText.text = p_characterDatas[i].character.stageName;
+                    if (p_characterDatas[i].character != null)
+                    {
+                        currentSpeakerText.text = p_characterDatas[i].character.stageName;
+                    }
+             
                 }
 
             }

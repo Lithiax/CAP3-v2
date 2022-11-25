@@ -250,21 +250,41 @@ public class CharactersUI : MonoBehaviour
 
     void SetFacialEmotion(CharacterData p_characterData, Character foundCharacter)
     {
+       // Debug.Log("SET TEST TRIGGER");
         if (foundCharacter != null)
         {
+            //Debug.Log("SET TEST TRIGGER 1");
             if (foundCharacter is CharacterObject)
             {
+              //  Debug.Log("SET TEST TRIGGER 2");
                 if (p_characterData.faceEmotion != CharacterEmotionType.none)
                 {
                     CharacterObject foundPreset = foundCharacter as CharacterObject;
-
-                    for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; i++)
+                   // Debug.Log("SET TEST TRIGGER 3");
+                    for (int i = 0; i < foundPreset.so_Character.faceEmotionDatas.Count; )
                     {
-
+                    //    Debug.Log("SET TEST TRIGGER 4");
                         if (foundPreset.so_Character.faceEmotionDatas[i].type == p_characterData.faceEmotion)
                         {
+           
+                           
+                           // Debug.Log("SET FACE TRIGGER " + foundPreset.so_Character.faceEmotionDatas[i].type);
                             foundPreset.expressionController.CurrentExpressionIndex = foundPreset.so_Character.faceEmotionDatas[i].index;
+                            
+              
                             break;
+                        }
+                        i++;
+                        if (i >= foundPreset.so_Character.faceEmotionDatas.Count)
+                        {
+                         
+                                if (p_characterData.faceEmotion == CharacterEmotionType.idle)
+                                {
+                                   // Debug.Log("SET BODY TRIGGER");
+                                    //foundPreset.charAnim.SetTrigger("idle");
+                                foundPreset.expressionController.CurrentExpressionIndex = -1;
+                            }
+                            
                         }
                     }
                 }
