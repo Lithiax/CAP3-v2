@@ -20,7 +20,7 @@ public class GameData
     public SO_Character cueCharacter;
 
     public bool firstTime;
-
+    public bool renamed = false;
     public bool sideDialogue;
     
     public int savedDialogueIndex;
@@ -54,7 +54,7 @@ public class GameData
         currentDialogueIndex = -1;
         so_InteractibleChoices = null;
         mainCharacterName = "";
-      
+        renamed = false;
         loggedWords = new List<Dialogue>();
         firstTime = false;
         sideDialogue = false;

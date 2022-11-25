@@ -171,6 +171,9 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             deadsheet = true;
             StorylineManager.currentSO_Dialogues = StorylineManager.currentZeroSO_Dialogues;
+            StorylineManager.sideDialogue = false;
+            //StorylineManager.savedDialogueIndex
+            //StorylineManager.savedDialogueIndex = 0;
             Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
             StorylineManager.currentDialogueIndex = 0;
             //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
@@ -265,15 +268,15 @@ public class CharacterDialogueUI : MonoBehaviour
     {
         Debug.Log("FADE END");
         speakerDialogueUI.ManualToggleSpeakerDialogueUI(true);
-        if (StorylineManager.justLoadedVN)
-        {
-            StorylineManager.justLoadedVN = false;
-            nextDialogueButton.SetActive(false);
-        }
-        else
-        {
+        //if (StorylineManager.justLoadedVN)
+        //{
+        //    StorylineManager.justLoadedVN = false;
+        //    nextDialogueButton.SetActive(false);
+        //}
+        //else
+        //{
             nextDialogueButton.SetActive(true);
-        }
+        //}
 
 
     }

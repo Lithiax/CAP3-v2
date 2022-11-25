@@ -24,6 +24,7 @@ public class MainMenuUI : MonoBehaviour
         fadeOutSequence.Append(audioSource.DOFade(0, 1.25f));
         fadeOutSequence.Play();
         StorylineManager.firstTime = true;
+        StorylineManager.renamed = false;
         StorylineManager.LoadVisualNovel("Maeve1", "Week1");
         //SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         //mainCharacter.stageName = "You";

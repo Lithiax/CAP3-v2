@@ -8,6 +8,7 @@ public class InputNameUI : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
     [SerializeField]
     private SO_Character so_Character;
+    
     bool canSubmit = false;
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class InputNameUI : MonoBehaviour
     {
         if (canSubmit)
         {
+            StorylineManager.renamed = true;
             so_Character.stageName = inputField.text;
             StorylineManager.currentDialogueIndex++;
             //CharacterDialogueUI.OnEndEvent.Invoke();
