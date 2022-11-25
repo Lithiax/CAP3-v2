@@ -26,4 +26,9 @@ public static class StaticUserData
         UserSOs.Clear();
         ProgressionData = new ProgressionData(1,1);
     }
+
+    public static void Save(ref GameData data)
+    {
+        data.ChatUserData = ChatUserData;
+    }
 }
