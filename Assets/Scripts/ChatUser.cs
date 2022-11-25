@@ -91,6 +91,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public void ModifyHealth(int health)
     {
         healthUI.OnModifyHealthEvent?.Invoke(health);
+
+        SaveRGData(ChatData);
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -438,7 +440,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         ChatData.WasBranchEffect = false;
         DialogueTree.OnNodeChanged -= OnNodeChange;
 
-        SaveRGData(ChatData);
     }
 
     public void OnChatComplete()
