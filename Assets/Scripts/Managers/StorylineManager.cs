@@ -347,7 +347,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.savedSO_Dialogues = savedSO_Dialogues;
 
         data.currentBackgroundMusic = currentBackgroundMusic;
-        //StaticUserData.Save(data);
+        StaticUserData.Save(ref data);
 
     }
     public static void LoadPhone()

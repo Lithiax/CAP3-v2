@@ -228,6 +228,7 @@ public class HealthUI : MonoBehaviour
         //    defaultGhostBarColor = subtractGhostBarColor;
         //}
         currentHealth += p_modifier;
+        SaveHealth();
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
@@ -250,7 +251,7 @@ public class HealthUI : MonoBehaviour
                
 
         }
-        SaveHealth();
+     
         UpdateBar(currentHealth, maxHealth);
     }
 
