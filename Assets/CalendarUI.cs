@@ -9,8 +9,8 @@ using System.Linq;
 [System.Serializable]
 public class ProgressionData
 {
-    public int CurrentWeek { get; private set; }
-    public int CurrentMonth { get; private set; }
+    public int CurrentWeek;
+    public int CurrentMonth;
     public string CurrentDateScene;
     public ProgressionData(int month, int week)
     {
@@ -78,10 +78,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         {
             progressionData = new ProgressionData(1, 1);
             StaticUserData.ProgressionData = progressionData;
+            Debug.Log("Set new progression data");
         }
         else
         {
             progressionData = StaticUserData.ProgressionData;
+            Debug.Log("Load progression data " + progressionData.CurrentDateScene);
         }
         datePanelOldLocalPos = panelParent.transform.localPosition;
         xMarksParentOldLocalPos = xMarkParent.transform.localPosition;
@@ -114,7 +116,7 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         }
 
         //This sets it to the previous so its ready for animation.
-        SetDatePanel(tempMonth);
+        SetDatePanel(tempMonth, tempWeek);
         SetXMarks(tempWeek);
         SetArrow(tempWeek);
     }
@@ -132,8 +134,14 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         else
         {
             Debug.Log("Skip Animation");
-            OnAnimationDone?.Invoke();
+            StartCoroutine(SkipAnimationDelay());
         }
+    }
+
+    IEnumerator SkipAnimationDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        OnAnimationDone?.Invoke();
     }
 
     IEnumerator MainLoop()
@@ -211,9 +219,9 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
         }
     }
 
-    void SetDatePanel(int month)
+    void SetDatePanel(int month, int week)
     {
-        if (progressionData.CurrentWeek == 1) return;
+        if (week == 1) return;
         float posX = datePanelOldLocalPos.x;
         posX -= (month - 1) * BGDifference;
 

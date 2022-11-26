@@ -301,7 +301,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             lastMessageText.text = data.ChatBubbles[data.ChatBubbles.Count - 1].chatText;
 
         chatManager.RebuildAfterSpawning();
-
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
 

@@ -9,7 +9,7 @@ public enum ChatEventTypes
     BranchEvent,
     InstantDateEvent,
     RGaugeEvent,
-    ChangeSceneEvent,
+    EndingEvent,
     AddEffectEvent
 };
 

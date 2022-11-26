@@ -9,11 +9,18 @@ using System.Linq;
 public class FindREventsManager : MonoBehaviour
 {
     [SerializeField] Image FadeImage;
+
+    [Header("Begin Date Panel")]
     [SerializeField] GameObject BeginDatePanel;
     [SerializeField] Button BeginDateYesButton;
 
+    [Header("Go Next Week Panel")]
     [SerializeField] Button GoNextWeekbutton;
     [SerializeField] GameObject BeginNextWeekPanel;
+
+    [Header("Warning Panel")]
+    [SerializeField] GameObject WarningPanel;
+    [SerializeField] Button GoEndingButton;
 
     List<ChatEvent> events = new List<ChatEvent>();
     public List<ChatUser> ChatUsers;
@@ -70,8 +77,13 @@ public class FindREventsManager : MonoBehaviour
             case ChatEventTypes.RGaugeEvent:
                 GaugeEvent(userData, data);
                 break;
-            case ChatEventTypes.ChangeSceneEvent:
-                StartCoroutine(ChangeSceneEvent(data));
+            case ChatEventTypes.EndingEvent:
+                WarningPanel.SetActive(true);
+                GoEndingButton.onClick.AddListener(() => {
+                    LoadEnding(userData);
+                    user.OnChatComplete();
+                    user.DontStayOnTree();
+                });
                 break;
             case ChatEventTypes.AddEffectEvent:
                 AddEffect(data);
@@ -105,7 +117,7 @@ public class FindREventsManager : MonoBehaviour
         LoadVisualNovel(StaticUserData.ProgressionData.CurrentDateScene);
     }
 
-    void LoadNextWeek()
+    public void LoadNextWeek()
     {
         if (StaticUserData.ProgressionData == null)
         {
@@ -151,10 +163,16 @@ public class FindREventsManager : MonoBehaviour
         });
     }
 
-    IEnumerator ChangeSceneEvent(string data)
+    void LoadEnding(ChatUserSO userSO)
     {
-        yield return new WaitForSeconds(5f);
-        LoadScene(data);
+        string[] subs = { "Endings", userSO.profileName + " Ending"};
+
+        FadeImage.DOFade(1, 1).OnComplete(() =>
+        {
+            StorylineManager.LoadVisualNovel(subs[0], subs[1]);
+
+            LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+        });
     }
 
     void LoadScene(string scene)

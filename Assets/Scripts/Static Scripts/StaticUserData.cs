@@ -15,7 +15,7 @@ public static class StaticUserData
 
     public static List<ChatUserSO> UserSOs = new List<ChatUserSO>();
 
-    public static ProgressionData ProgressionData;
+    public static ProgressionData ProgressionData = new ProgressionData(1, 1);
 
     public static List<string> UsedEffects = new List<string>();
 

@@ -290,7 +290,8 @@ public class ChatManagerUI : MonoBehaviour
             {
                 Debug.Log("CURRENT CHAT COMPLETE current events: " + ev.EventType.ToString());
                 EventManager.RegisterEvent(ev);
-                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent)
+                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent
+                    && ev.EventType != ChatEventTypes.EndingEvent)
                 {
                     parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
@@ -314,7 +315,8 @@ public class ChatManagerUI : MonoBehaviour
         if (ChatCollection.isEvent())
         {
             if (ChatCollection.ChatEvents[0].EventType == ChatEventTypes.DateEvent ||
-            ChatCollection.ChatEvents[0].EventType == ChatEventTypes.InstantDateEvent)
+            ChatCollection.ChatEvents[0].EventType == ChatEventTypes.InstantDateEvent || 
+            ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
             {
                 parent.SetReplyNotif();
                 yield return null;
@@ -417,7 +419,8 @@ public class ChatManagerUI : MonoBehaviour
                 Debug.Log("Choice END");
             }
             else if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent && 
-                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent)
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
             {
                 Debug.Log("Not Date Event");
                 OnTreeEnded?.Invoke();
@@ -442,7 +445,8 @@ public class ChatManagerUI : MonoBehaviour
             if (ChatCollection.isEvent())
             {
                 if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
-                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent)
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
+                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
                 {
                     Debug.Log("Not Date Event");
                     HideResponse();
