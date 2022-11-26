@@ -166,7 +166,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     void HealthDeath()
     {
-        Debug.Log("DIED: " + StorylineManager.currentZeroSO_Dialogues.name);
+      //  Debug.Log("DIED: " + StorylineManager.currentZeroSO_Dialogues.name);
         if (StorylineManager.currentZeroSO_Dialogues != null)
         {
             deadsheet = true;
@@ -174,7 +174,7 @@ public class CharacterDialogueUI : MonoBehaviour
             StorylineManager.sideDialogue = false;
             //StorylineManager.savedDialogueIndex
             //StorylineManager.savedDialogueIndex = 0;
-            Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
+          //  Debug.Log("DIED: " + StorylineManager.currentSO_Dialogues.name);
             StorylineManager.currentDialogueIndex = 0;
             //TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, fadeStart, fadeEnd);
         }
@@ -309,11 +309,16 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             if (string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
             {
-                Debug.Log("EARLY PLAY");
+                //Debug.Log("EARLY PLAY");
                 AudioManager.instance.AdditivePlayAudio(StorylineManager.currentBackgroundMusic, false);
             }
+     
       
 
+        }
+        else
+        {
+            AudioManager.instance.ForceStopAudio();
         }
         rarara = true;
         Debug.Log("START");
@@ -396,7 +401,7 @@ public class CharacterDialogueUI : MonoBehaviour
         else
         {
             StorylineManager.loggedWords.Clear();
-            Debug.Log("FINAL");
+          //  Debug.Log("FINAL");
             for (int i = 0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
             {
                 Debug.Log("FINAL ADDING EFFECT: " + DialogueSpreadSheetPatternConstants.effects[i]);
@@ -713,34 +718,34 @@ public class CharacterDialogueUI : MonoBehaviour
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
             if (!StorylineManager.sideDialogue)
             {
-                Debug.Log("ENTER 0");
+             //   Debug.Log("ENTER 0");
                 if (!string.IsNullOrEmpty(currentDialogue.backgroundMusic))
                 {
-                    Debug.Log("ENTER 1");
+               //     Debug.Log("ENTER 1");
                     if (currentDialogue.backgroundMusic.ToLower() != "error")
                     {
-                        Debug.Log("ENTER 2");
+                   //     Debug.Log("ENTER 2");
                         if (StorylineManager.currentBackgroundMusic.ToLower() != currentDialogue.backgroundMusic.ToLower())
                         {
-                            Debug.Log("ENTER 3");
+                         //   Debug.Log("ENTER 3");
                             if (currentDialogue.backgroundMusic.ToLower() != "stop")
                             {
-                                Debug.Log("ENTER 4");
+                             //   Debug.Log("ENTER 4");
                                 if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic) 
                                     || StorylineManager.currentBackgroundMusic.ToLower() != "none"
                                     || StorylineManager.currentBackgroundMusic.ToLower() != "error")
                                 {
-                                    Debug.Log("ENTER 5");
+                                //    Debug.Log("ENTER 5");
                                     if (StorylineManager.currentBackgroundMusic != currentDialogue.backgroundMusic)
                                     {
-                                        Debug.Log("ENTER 6A");
+                                  //      Debug.Log("ENTER 6A");
                                         AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
                                     }
                                    
                                 }
                                 else
                                 {
-                                    Debug.Log("ENTER 6B");
+                                  //  Debug.Log("ENTER 6B");
                              
                                     AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
                                 }
@@ -924,7 +929,7 @@ public class CharacterDialogueUI : MonoBehaviour
                             //No choice, just evaluate
                             for (int i = 0; i < StorylineManager.currentSO_Dialogues.choiceDatas.Count; i++)
                             {
-                                Debug.Log("HEATL CODIN: " + healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition));
+                            //    Debug.Log("HEATL CODIN: " + healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition));
                                 if (healthUI.OnIsWithinHealthConditionEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[i].healthCeilingCondition, StorylineManager.currentSO_Dialogues.choiceDatas[i].healthFloorCondition))
                                 {
                                     StorylineManager.currentSO_Dialogues = StorylineManager.currentSO_Dialogues.choiceDatas[i].branchDialogue;

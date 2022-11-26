@@ -234,8 +234,16 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         //}
         //else
         //{
-   
-            currentBackgroundMusic = "";
+        if (AudioManager.instance != null)
+        {
+            if (!string.IsNullOrEmpty(currentBackgroundMusic))
+            {
+                Debug.Log("HMMPF");
+                AudioManager.instance.ForceStopAudio(currentBackgroundMusic,false);
+            }
+         
+        }
+        currentBackgroundMusic = "";
        // }
 
    

@@ -165,7 +165,7 @@ public class HealthUI : MonoBehaviour
     void OnInitialize(string p_ownerName)
     {
         characterOwnerName = p_ownerName;
-        Debug.Log("HEALTH INITIALIZED " + DialogueSpreadSheetPatternConstants.maeveHealth);
+      //  Debug.Log("HEALTH INITIALIZED " + DialogueSpreadSheetPatternConstants.maeveHealth);
         if (!string.IsNullOrEmpty(characterOwnerName))
         {
             if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Maeve")
