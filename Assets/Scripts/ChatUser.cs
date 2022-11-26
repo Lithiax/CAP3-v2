@@ -314,12 +314,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         chatManager.RebuildAfterSpawning();
 
-        if (data.DateProgress == 2 && data.RGMeter >= 80)
-        {
-            DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
-            SetDialogueContainer();
-            return;
-        }
+        //if (data.DateProgress == 2 && data.RGMeter >= 80)
+        //{
+        //    DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
+        //    SetDialogueContainer();
+        //    return;
+        //}
 
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
