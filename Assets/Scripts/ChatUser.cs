@@ -22,12 +22,14 @@ public class ChatUserData
     public int CurrentRGIndex;
     public bool CanRGText;
     public bool StayInTree;
+    public int DateProgress;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
         name = userSO.profileName;
         CurrentTree = userSO.dialogueTree;
         CurrentDialogueIndex = 0;
+        DateProgress = 0;
         CurrentDialogueComplete = false;
         CurrentRGIndex = 0;
         StayInTree = true;
@@ -66,6 +68,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public ChatUserSO ChatUserSO { get; private set; }
     [SerializeField] HealthUI healthUI;
+    DateProgressUI dateProgressUI;
     public ChatUserData ChatData { get; private set; }
     GameObject Divider;
     GameObject newMatchPanel;
@@ -85,6 +88,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         toggle = GetComponent<Toggle>();
         DialogueTree = GetComponent<DialogueGraphAPI>();
         panelRectTransform = GetComponent<RectTransform>();
+        dateProgressUI = GetComponentInChildren<DateProgressUI>();
 
         DialogueTree.OnNodeChanged += OnNodeChange;
     }
@@ -94,6 +98,11 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         healthUI.OnModifyHealthEvent?.Invoke(health);
 
         SaveRGData(ChatData);
+    }
+
+    public void ModifyDateProgress()
+    {
+        dateProgressUI.AddHearts(ref ChatData.DateProgress);
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -289,6 +298,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Check if user is blocked
         if (SetBlocked(data)) return;
 
+        //Set Initial Hearts
+        dateProgressUI.SetHearts(data.DateProgress);
+
         //Spawn in Previous Chat Objects
         foreach (ChatBubble chat in data.ChatBubbles)
         {
@@ -301,9 +313,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             lastMessageText.text = data.ChatBubbles[data.ChatBubbles.Count - 1].chatText;
 
         chatManager.RebuildAfterSpawning();
+
+        if (data.DateProgress == 2 && data.RGMeter >= 80)
+        {
+            DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
+            SetDialogueContainer();
+            return;
+        }
+
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
-
 
         DialogueContainer c = SetDialogueContainer();
 
@@ -313,6 +332,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
          
+
         //if (StaticUserData.ProgressionData.CurrentWeek)
         if (data.CanRGText && data.RGMeter <= 49)
         {
@@ -328,6 +348,25 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             DialogueTree.SetDialogueTree(data.CurrentTree);
             //DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
             Debug.Log("stay in tree");
+            return;
+        }
+
+        //Go back to dating if RG meter is good
+        if (data.RGMeter > 49 && data.DateProgress > 2)
+        {
+            int date = 0;
+
+            //Just for the effect naming convention lol
+            /*
+             * 0 - Before Date 1
+             * 2 - Before Date 2
+             */
+            if (data.DateProgress == 1) date = 2;
+
+            string effect = "<" + data.UserSO.profileName + date.ToString() + ">";
+            DialogueSpreadSheetPatternConstants.AddEffect(effect);
+            SetDialogueContainer();
+            return;
         }
     }
 

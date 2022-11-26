@@ -10,7 +10,8 @@ public enum ChatEventTypes
     InstantDateEvent,
     RGaugeEvent,
     EndingEvent,
-    AddEffectEvent
+    AddEffectEvent,
+    AddDateProgressEvent
 };
 
 [System.Serializable]

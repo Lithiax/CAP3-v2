@@ -195,7 +195,7 @@ public class ChatManagerUI : MonoBehaviour
 
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
-            if (ev.EventType == ChatEventTypes.RGaugeEvent)
+            if (ev.EventType == ChatEventTypes.RGaugeEvent || ev.EventType == ChatEventTypes.AddDateProgressEvent)
             {
                 EventManager.RegisterEvent(ev);
                 ev.RaiseEvent(parent.ChatUserSO);
@@ -286,12 +286,11 @@ public class ChatManagerUI : MonoBehaviour
         //if event, register
         foreach (ChatEvent ev in ChatCollection.ChatEvents)
         {
-            if (ev.EventType != ChatEventTypes.RGaugeEvent)
+            if (ev.EventType != ChatEventTypes.RGaugeEvent && ev.EventType != ChatEventTypes.AddDateProgressEvent)
             {
                 Debug.Log("CURRENT CHAT COMPLETE current events: " + ev.EventType.ToString());
                 EventManager.RegisterEvent(ev);
-                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent
-                    && ev.EventType != ChatEventTypes.EndingEvent)
+                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent)
                 {
                     parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
@@ -316,7 +315,7 @@ public class ChatManagerUI : MonoBehaviour
         {
             if (ChatCollection.ChatEvents[0].EventType == ChatEventTypes.DateEvent ||
             ChatCollection.ChatEvents[0].EventType == ChatEventTypes.InstantDateEvent || 
-            ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
+            ChatCollection.ChatEvents[0].EventType == ChatEventTypes.EndingEvent)
             {
                 parent.SetReplyNotif();
                 yield return null;
@@ -383,7 +382,7 @@ public class ChatManagerUI : MonoBehaviour
 
     public void HandleResponse(ChatUser parent, DialogueGraphAPI Tree)
     {
-        Debug.Log("Handle Respnose: ");
+        Debug.Log("Handle Response: ");
         if (Tree.DialogueTree == null)
         {
             Debug.Log("Tree Is Null");
@@ -441,18 +440,17 @@ public class ChatManagerUI : MonoBehaviour
 
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
-            Debug.Log("Chat is event");
-            if (ChatCollection.isEvent())
-            {
-                if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
-                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
-                ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
-                {
-                    Debug.Log("Not Date Event");
-                    HideResponse();
-                    return;
-                }
-            }
+            //if (ChatCollection.isEvent())
+            //{
+            //    if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
+            //    ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
+            //    ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
+            //    {
+            //        Debug.Log("Not Date Event");
+            //        HideResponse();
+            //        return;
+            //    }
+            //}
             //Clear button on click events
             foreach (ReplyButton bData in replyButtonData)
             {

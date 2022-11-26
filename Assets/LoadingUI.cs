@@ -45,6 +45,8 @@ public class LoadingUI : MonoBehaviour
 
     public void InitializeLoadingScreen(string sceneName)
     {
+        if (calendar.isActiveAndEnabled) return;
+
         calendar.gameObject.SetActive(true);
         loadingScreen.SetActive(true);
         calendar.Init();

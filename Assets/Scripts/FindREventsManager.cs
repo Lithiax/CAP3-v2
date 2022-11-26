@@ -59,10 +59,12 @@ public class FindREventsManager : MonoBehaviour
                     user.SetCanRGText(false);
                 });
                 break;
+
             case ChatEventTypes.BranchEvent:
                 Debug.Log("Branch Event");
                 user.SetNewEventTree();
                 break;
+
             case ChatEventTypes.InstantDateEvent:
                 Debug.Log("Instant Date Event");
                 BeginNextWeekPanel.SetActive(true);
@@ -72,11 +74,11 @@ public class FindREventsManager : MonoBehaviour
                     user.DontStayOnTree();
                 });
                 break;
-                //StartCoroutine(InstantDateEvent(data));
-                break;
+
             case ChatEventTypes.RGaugeEvent:
                 GaugeEvent(userData, data);
                 break;
+
             case ChatEventTypes.EndingEvent:
                 WarningPanel.SetActive(true);
                 GoEndingButton.onClick.AddListener(() => {
@@ -87,6 +89,10 @@ public class FindREventsManager : MonoBehaviour
                 break;
             case ChatEventTypes.AddEffectEvent:
                 AddEffect(data);
+                break;
+
+            case ChatEventTypes.AddDateProgressEvent:
+                user.ModifyDateProgress();
                 break;
 
             default:
@@ -127,7 +133,6 @@ public class FindREventsManager : MonoBehaviour
 
         LoadVisualNovel(StaticUserData.ProgressionData.CurrentDateScene);
     }
-
     void GaugeEvent(ChatUserSO userData, string num)
     {
         ChatUser user = ChatUsers.First(x => x.ChatUserSO == userData);
