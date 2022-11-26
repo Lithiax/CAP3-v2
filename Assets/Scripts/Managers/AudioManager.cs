@@ -54,20 +54,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        if (PlayerPrefs.HasKey("MasterVolume"))
-        {
-            mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
-        }
 
-        if (PlayerPrefs.HasKey("MusicVol"))
-        {
-            mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
-        }
-
-        if (PlayerPrefs.HasKey("SFX"))
-        {
-            mixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
-        }
     }
 
     public SoundData GetSoundByName(string p_name, bool p_isSoundEffect)

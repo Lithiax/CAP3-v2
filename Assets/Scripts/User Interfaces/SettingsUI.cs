@@ -19,6 +19,34 @@ public class SettingsUI : MonoBehaviour
     public TMP_Dropdown windowModeOptions;
     public TMP_Dropdown resolutionOptoins;
 
+    private void Awake()
+    {
+        if (PlayerPrefs.HasKey("MasterVolume"))
+        {
+            audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("MasterVolume", 0);
+        }
+
+        if (PlayerPrefs.HasKey("MusicVol"))
+        {
+            audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("MusicVolume", 0);
+        }
+        if (PlayerPrefs.HasKey("SFX"))
+        {
+            audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("SFXVolume", 0);
+        }
+    }
     public void SetMasterAudio()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
