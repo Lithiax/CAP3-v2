@@ -176,19 +176,24 @@ public class AudioManager : MonoBehaviour
        // Debug.Log("PLAYING NEW SONG: " + currentSound);
         if (currentSound != null)
         {
+            Debug.Log("WANT TO PLAY 0" + currentSoundName);
             currentSound.source.Play();
         }
 
+        Debug.Log("WANT TO PLAY " + currentSoundName);
         if (!string.IsNullOrEmpty(currentSoundName) || currentSoundName.ToLower() != "none")
         {
-            if (sound != null)
+            Debug.Log("WANT TO PLAY 1" + currentSoundName );
+            if (currentSound != null)
             {
-              //  Debug.Log("PLAYING NEW SONG: " + currentSoundName);
+                Debug.Log("WANT TO PLAY 2" + currentSoundName);
+                //  Debug.Log("PLAYING NEW SONG: " + currentSoundName);
                 Sequence fadeInSequence = DOTween.Sequence();
 
 
                 if (currentSound != null)
                 {
+                    Debug.Log("WANT TO PLAY 3" + currentSoundName);
                     fadeInSequence.Append(currentSound.source.DOFade(1, 1.25f));
                     fadeInSequence.Play();
                 }

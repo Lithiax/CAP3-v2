@@ -123,6 +123,7 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private InstantColorData realBarColorFlash;
     [SerializeField] private List<ColorTransitionData> realBarColorTransitions = new List<ColorTransitionData>();
 
+    [SerializeField] private Color32 orangeColorBarColor;
     [SerializeField] private Color32 fakeRealBarColor;
     [SerializeField] private Color32 defaultGhostBarColor;
     [SerializeField] private Color32 addGhostBarColor;
@@ -339,7 +340,14 @@ public class HealthUI : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             if (realBarColorFlash != null)
             {
-                realBarUI.color = defaultRealBarColor;
+                if (currentHealth >= 80)
+                {
+                    realBarUI.color = orangeColorBarColor;
+                }
+                else
+                {
+                    realBarUI.color = addGhostBarColor;
+                }
             }
             yield return new WaitForSeconds(0.1f);
             if (realBarColorFlash != null)
@@ -355,7 +363,14 @@ public class HealthUI : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             if (realBarColorFlash != null)
             {
-                realBarUI.color = defaultRealBarColor;
+                if (currentHealth >= 80)
+                {
+                    realBarUI.color = orangeColorBarColor;
+                }
+                else
+                {
+                    realBarUI.color = addGhostBarColor;
+                }
             }
             //realBarTransform.sortingOrder = 5;
             //ghostBarTransform.sortingOrder = 4;
@@ -448,7 +463,15 @@ public class HealthUI : MonoBehaviour
         //if (!add)
         //{
             ghostBarUI.color = fakeRealBarColor;
+        if (currentHealth >= 80)
+        {
+            realBarUI.color = orangeColorBarColor;
+        }
+        else
+        {
             realBarUI.color = addGhostBarColor;
+        }
+        
         //}
         //else
         //{

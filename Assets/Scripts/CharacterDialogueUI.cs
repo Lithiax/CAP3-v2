@@ -307,7 +307,12 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         if (AudioManager.instance != null)
         {
-            AudioManager.instance.AdditivePlayAudio(StorylineManager.currentBackgroundMusic, false);
+            if (string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+            {
+                Debug.Log("EARLY PLAY");
+                AudioManager.instance.AdditivePlayAudio(StorylineManager.currentBackgroundMusic, false);
+            }
+      
 
         }
         rarara = true;
@@ -708,25 +713,35 @@ public class CharacterDialogueUI : MonoBehaviour
             Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
             if (!StorylineManager.sideDialogue)
             {
-
+                Debug.Log("ENTER 0");
                 if (!string.IsNullOrEmpty(currentDialogue.backgroundMusic))
                 {
+                    Debug.Log("ENTER 1");
                     if (currentDialogue.backgroundMusic.ToLower() != "error")
                     {
+                        Debug.Log("ENTER 2");
                         if (StorylineManager.currentBackgroundMusic.ToLower() != currentDialogue.backgroundMusic.ToLower())
                         {
+                            Debug.Log("ENTER 3");
                             if (currentDialogue.backgroundMusic.ToLower() != "stop")
                             {
-                                if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+                                Debug.Log("ENTER 4");
+                                if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic) 
+                                    || StorylineManager.currentBackgroundMusic.ToLower() != "none"
+                                    || StorylineManager.currentBackgroundMusic.ToLower() != "error")
                                 {
+                                    Debug.Log("ENTER 5");
                                     if (StorylineManager.currentBackgroundMusic != currentDialogue.backgroundMusic)
                                     {
+                                        Debug.Log("ENTER 6A");
                                         AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, currentDialogue.backgroundMusic, false);
                                     }
                                    
                                 }
                                 else
                                 {
+                                    Debug.Log("ENTER 6B");
+                             
                                     AudioManager.instance.AdditivePlayAudio(currentDialogue.backgroundMusic, false);
                                 }
                                 //else
@@ -853,25 +868,25 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
                 speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
-                if (currentDialogue.characterDatas.Count > 0)
-                {
-                    for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
-                    {
-                        if (currentDialogue.characterDatas[i].isSpeaking)
-                        {
-                            speakerDialogueUI.SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
-                            break;
-                        }
-                        else
-                        {
-                            speakerDialogueUI.SetSpeech(currentDialogue.words);
-                        }
-                    }
-                }
-                else
-                {
-                    speakerDialogueUI.SetSpeech(currentDialogue.words);
-                }
+                //if (currentDialogue.characterDatas.Count > 0)
+                //{
+                    //for (int i = 0; i < currentDialogue.characterDatas.Count; i++)
+                    //{
+                        //if (currentDialogue.characterDatas[i].isSpeaking)
+                        //{
+                            speakerDialogueUI.SetWords(currentDialogue.words);
+                            //break;
+                        //}
+                        //else
+                        //{
+                        //    speakerDialogueUI.SetSpeech(currentDialogue.words);
+                        //}
+                    //}
+                //}
+                //else
+                //{
+                //    speakerDialogueUI.SetSpeech(currentDialogue.words);
+                //}
 
 
                 BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);

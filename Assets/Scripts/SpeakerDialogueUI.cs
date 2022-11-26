@@ -52,6 +52,7 @@ public class SpeakerDialogueUI : MonoBehaviour
     string currentWords;
     bool canOpen = true;
     string so = "";
+    bool typinLoop = false;
     private void Awake()
     {
         smallDialogueBoxImage = smallDialogueBox.GetComponent<Image>();
@@ -212,22 +213,24 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     void Skip()
     {
-
+        typinLoop = false;
         AudioManager.instance.ForceStopAudio(so);
         StopAllCoroutines();
         SetWords(currentWords);
     }
 
-    void SetWords(string p_words)
+    public void SetWords(string p_words)
     {
         currentDialogueText.text = p_words;
     }
-
+ 
     public void SetSpeech(string p_words, string character = "")
     {
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
-       // Debug.Log("TYPEWRITING: " + character);
+        typinLoop = true;
+        // Debug.Log("TYPEWRITING: " + character);
+        typinLoop = true;
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
 
 
@@ -272,34 +275,46 @@ public class SpeakerDialogueUI : MonoBehaviour
 
         string p_currentText;
         bool eve = false;
-        
-        for (int i = 0; i < p_fullText.Length; i++)
+        int i = 0;
+        while (typinLoop)
         {
-
-            if (p_fullText[i] == '<')
+            if (i < p_fullText.Length)
             {
+                if (p_fullText[i] == '<')
+                {
 
-                eve = true;
-                continue;
+                    eve = true;
+                    continue;
+                }
+                else if (p_fullText[i] == '>')
+                {
+
+                    eve = false;
+                    continue;
+                }
+
+                if (!eve)
+                {
+                    AudioManager.instance.AdditivePlayAudio(so);
+                    p_currentText = p_fullText.Substring(0, i);
+                    p_textUI.text = p_currentText;
+                    //AudioManager.instance.AdditivePlayAudio(so);
+                    yield return new WaitForSeconds(typewriterSpeed);
+                }
+                i++;
             }
-            else if (p_fullText[i] == '>')
+            else
             {
-
-                eve = false;
-                continue;
+                typinLoop = false;
             }
-
-            if (!eve)
-            {
-                AudioManager.instance.AdditivePlayAudio(so);
-                p_currentText = p_fullText.Substring(0, i);
-                p_textUI.text = p_currentText;
-                //AudioManager.instance.AdditivePlayAudio(so);
-                yield return new WaitForSeconds(typewriterSpeed);
-            }
-
-
+  
         }
+      
+
+          
+
+
+        
         //AudioManager.instance.ForceStopAudio(so);
         //   Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
