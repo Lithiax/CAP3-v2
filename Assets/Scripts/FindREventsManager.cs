@@ -121,6 +121,12 @@ public class FindREventsManager : MonoBehaviour
         ChatUser user = ChatUsers.First(x => x.ChatUserSO == userData);
 
         int n = int.Parse(num);
+
+        if (n < 0)
+            AudioManager.instance.AdditivePlayAudio("wrong choice", true);
+        else if (n != 0)
+            AudioManager.instance.AdditivePlayAudio("right choice", true);
+
         user.ModifyHealth(n);
 
         Debug.Log("Date Gauge: " + n);

@@ -15,6 +15,11 @@ public class FindRDataManager : MonoBehaviour
     List<ChatUser> ChatUsers = new List<ChatUser>();
     public List<UserLevelData> UserData;
 
+    private void Start()
+    {
+        AudioManager.instance.AdditivePlayAudio("bgm", false);
+    }
+
     private void OnDisable()
     {
         ChatUsers = ChatUserManager.SpawnedUsers;

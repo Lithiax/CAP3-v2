@@ -116,6 +116,7 @@ public class ChatManagerUI : MonoBehaviour
     void ResponseClicked(ChatUser parent, DialogueGraphAPI Tree, DialogueNodeData nodeData)
     {
         parent.DialogueTree.MoveToNode(nodeData.chatCollection);
+        parent.ResetReplyNotif();
 
         Debug.Log("Clicked" + this);
 
@@ -144,7 +145,6 @@ public class ChatManagerUI : MonoBehaviour
         StartCoroutine(ScrollDown(true));
     }
 
-    //Dont use for now
     void OneResponseButton(ChatBubble currChat, ChatUser parent)
     {
         if (!parent.isToggled)
@@ -163,6 +163,7 @@ public class ChatManagerUI : MonoBehaviour
         replyButtonData[0].replyButtonComp.onClick.AddListener(() => { 
             HideResponse(); 
             parent.SingleResponseChat = null;
+            parent.ResetReplyNotif();
         });
 
         ShowResponseBox();
@@ -223,6 +224,7 @@ public class ChatManagerUI : MonoBehaviour
                 if (chat.isUser &&
                     CheckIsUser(chat == ChatCollection.ChatData[0], Tree.IsFirstNode(Tree.CurrentNode)))
                 {
+                    parent.SetReplyNotif();
                     parent.SingleResponseChat = chat;
                     OneResponseButton(chat, parent);
                     while (parent.SingleResponseChat != null)
@@ -242,8 +244,8 @@ public class ChatManagerUI : MonoBehaviour
                 if (parent.isToggled)
                 {
                     parent.ResetNotif();
-                    StartCoroutine(RebuildUI());
 
+                    StartCoroutine(RebuildUI());
                     StartCoroutine(ScrollDown());
                 }
 
@@ -251,6 +253,7 @@ public class ChatManagerUI : MonoBehaviour
                 if (chat.isUser)
                 {
                     waitTime = 1f;
+                    AudioManager.instance.AdditivePlayAudio("message_pop", true);
                     yield return new WaitForSeconds(waitTime);
                     parent.ChatData.ChatBubbles.Add(chat);
                     continue;
@@ -266,6 +269,7 @@ public class ChatManagerUI : MonoBehaviour
                     parent.ResetNotif();
                     StartCoroutine(RebuildUI());
 
+                    AudioManager.instance.AdditivePlayAudio("message_pop", true);
                     StartCoroutine(ScrollDown());
                 }
                 else if (!chat.isUser)
@@ -303,7 +307,26 @@ public class ChatManagerUI : MonoBehaviour
         {
             HandleResponse(parent, Tree);
         }
-    }   
+
+
+        //Reply Notif setting.
+
+        if (ChatCollection.isEvent())
+        {
+            if (ChatCollection.ChatEvents[0].EventType == ChatEventTypes.DateEvent ||
+            ChatCollection.ChatEvents[0].EventType == ChatEventTypes.InstantDateEvent)
+            {
+                parent.SetReplyNotif();
+                yield return null;
+            }
+        }
+
+        if (Tree.CurrentNode.ConnectedNodesData.Count > 0 && parent.currentChatComplete)
+        {
+            parent.SetReplyNotif();
+            yield return null;
+        }
+    }
 
     public void RebuildAfterSpawning()
     {

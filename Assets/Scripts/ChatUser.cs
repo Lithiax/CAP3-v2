@@ -57,6 +57,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     [Header("Notification")]
     [SerializeField] GameObject notifObj;
     [SerializeField] TextMeshProUGUI notifText;
+    [SerializeField] GameObject replyNotifObj;
 
     [Header("Online Indicator")]
     [SerializeField] Image onlineIndicator;
@@ -460,6 +461,17 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         notifText.text = notifNum.ToString();
         notifObj.SetActive(true);
+    }
+
+    public void SetReplyNotif()
+    {
+        replyNotifObj.SetActive(true);
+        AudioManager.instance.AdditivePlayAudio("reply notif", true);
+    }
+
+    public void ResetReplyNotif()
+    {
+        replyNotifObj.SetActive(false);
     }
 
     public void ResetNotif()
