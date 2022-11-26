@@ -8,10 +8,11 @@ using UnityEngine.Video;
 public class Splashscreen : MonoBehaviour
 {
     [SerializeField] private VideoPlayer splashcreenVideo;
+    [SerializeField] private GameObject splashcreenFrame;
+    [SerializeField] private MainMenuUI mainMenuUI;
     [SerializeField]
     private GameObject titlescreen;
-    [SerializeField]
-    private GameObject background;
+
     [SerializeField]
     private BlinkEffect tip;
   IEnumerator runningCoroutine;
@@ -72,8 +73,9 @@ public class Splashscreen : MonoBehaviour
         tip.Stop();
         TransitionUI.onFadeTransition.Invoke(1);
         yield return new WaitForSeconds(0.5f);
+        splashcreenFrame.SetActive(false);
         titlescreen.SetActive(true);
-        background.SetActive(true);
+        mainMenuUI.menuLoaded();
         TransitionUI.onFadeTransition.Invoke(0);
 
 

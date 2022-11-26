@@ -35,10 +35,10 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     //float bradhealth = DialogueSpreadSheetPatternConstants.bradHealth;
     //float liamhealth = DialogueSpreadSheetPatternConstants.liamHealth;
     //float mavhealth = DialogueSpreadSheetPatternConstants.maeveHealth;
-    public static float penhealth;
-    public static float bradhealth;
-    public static float liamhealth;
-    public static float mavhealth;
+    //public static float penhealth;
+    //public static float bradhealth;
+    //public static float liamhealth;
+    //public static float mavhealth;
     public static void GoBackMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -100,14 +100,14 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         {
             StorylineManager.currentZeroSO_Dialogues = null;
         }
-         penhealth = p_gameData.penelopeHealth;
-         bradhealth = p_gameData.bradHealth;
-         liamhealth = p_gameData.liamHealth;
-         mavhealth = p_gameData.maeveHealth;
-      
-   
+         DialogueSpreadSheetPatternConstants.penelopeHealth = p_gameData.penelopeHealth;
+        DialogueSpreadSheetPatternConstants.bradHealth = p_gameData.bradHealth;
+        DialogueSpreadSheetPatternConstants.liamHealth = p_gameData.liamHealth;
+        DialogueSpreadSheetPatternConstants.maeveHealth = p_gameData.maeveHealth;
+        popUpSO_Dialogues = p_gameData.popUpSO_Dialogues;
+        StorylineManager.loggedWords = p_gameData.loggedWords;
 
-        StorylineManager.loggedWords.Clear();
+        //StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = p_gameData.currentDialogueIndex;
         sideDialogue = p_gameData.sideDialogue;
         savedDialogueIndex = p_gameData.savedDialogueIndex;
@@ -184,7 +184,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             {
                 DialogueSpreadSheetPatternConstants.cueCharacter = null;
             }
-
+            popUpSO_Dialogues = null;
             for (int i = 0; i < so_InteractibleChoices.choiceDatas.Count; i++)
             {
                 CueChoice newCueChoice = new CueChoice();
@@ -234,8 +234,16 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         //}
         //else
         //{
-   
-            currentBackgroundMusic = "";
+        if (AudioManager.instance != null)
+        {
+            if (!string.IsNullOrEmpty(currentBackgroundMusic))
+            {
+                Debug.Log("HMMPF");
+                AudioManager.instance.ForceStopAudio(currentBackgroundMusic,false);
+            }
+         
+        }
+        currentBackgroundMusic = "";
        // }
 
    
@@ -299,7 +307,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static bool sideDialogue = false;
     public static int savedDialogueIndex;
     public static SO_Dialogues savedSO_Dialogues;
-
+    public static SO_Dialogues popUpSO_Dialogues;
     public static List<CueChoice> cuesChoices = new List<CueChoice>();
 
     public static string currentBackgroundMusic = "";
@@ -315,11 +323,11 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public void LoadData(GameData data)
     {
-        DialogueSpreadSheetPatternConstants.penelopeHealth = penhealth;
-          DialogueSpreadSheetPatternConstants.bradHealth = bradhealth;
-          DialogueSpreadSheetPatternConstants.liamHealth = liamhealth;
-          DialogueSpreadSheetPatternConstants.maeveHealth = mavhealth;
-        Debug.Log("LOADED HEALTH: " + DialogueSpreadSheetPatternConstants.maeveHealth);
+        //DialogueSpreadSheetPatternConstants.penelopeHealth = penhealth;
+        //  DialogueSpreadSheetPatternConstants.bradHealth = bradhealth;
+        //  DialogueSpreadSheetPatternConstants.liamHealth = liamhealth;
+        //  DialogueSpreadSheetPatternConstants.maeveHealth = mavhealth;
+        //Debug.Log("LOADED HEALTH: " + DialogueSpreadSheetPatternConstants.maeveHealth);
     }
     //public void LoadData(GameData data)
     //{
@@ -356,6 +364,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         data.bradHealth = bradhealth;
         data.liamHealth = liamhealth;
         data.maeveHealth = mavhealth;
+        data.popUpSO_Dialogues = popUpSO_Dialogues;
         data.CurrentSceneName = StorylineManager.CurrentSceneName;
         data.currentSO_Dialogues = StorylineManager.currentSO_Dialogues;
         data.currentDialogueIndex = StorylineManager.currentDialogueIndex;

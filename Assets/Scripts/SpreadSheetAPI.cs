@@ -212,7 +212,7 @@ public class SpreadSheetAPI : MonoBehaviour
             for (int i = 0; i < currentSheetRows.Length; i++)
             {
 
-                if (currentSheetRows[i].ToLower().Contains(target))
+                if (currentSheetRows[i].ToLower().Contains("[" + (target) + "]"))
                 {
                     for (int y = i; y < currentSheetRows.Length; y++)
                     {
@@ -225,8 +225,8 @@ public class SpreadSheetAPI : MonoBehaviour
                         {
                             for (int r = 0; r < CueType.GetValues(typeof(CueType)).Length - 1; r++)
                             {
-                                string rtarget = ((CueType)r).ToString().ToLower();
-                                if (rtarget != target)
+                                string rtarget = (((CueType)r).ToString()).ToLower();
+                                if (rtarget!= (target).ToLower())
                                 {
                                     if (currentSheetRows[y].ToLower().Contains(rtarget))
                                     {

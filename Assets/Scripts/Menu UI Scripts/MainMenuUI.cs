@@ -8,7 +8,9 @@ public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
     [SerializeField] List<GameObject> panels;
-    void Awake()
+
+
+    public void menuLoaded()
     {
         StartCoroutine(Co_AudioFadeIn());
     }
