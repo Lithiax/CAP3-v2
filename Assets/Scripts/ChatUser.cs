@@ -160,6 +160,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
             if (DialogueTree.DialogueTree != null)
             {
+                ChatData.StayInTree = true;
                 Divider = chatManager.SpawnDivider();
             }
         }
@@ -325,7 +326,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (data.StayInTree /*&& data.CurrentDialogueComplete == false*/)
         {
             DialogueTree.SetDialogueTree(data.CurrentTree);
-            DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
+            //DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
             Debug.Log("stay in tree");
         }
     }
@@ -356,6 +357,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 nextContainer = d;
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
+                ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
@@ -385,6 +387,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
+                ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
@@ -431,6 +434,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     void OnNodeChange()
     {
         ChatData.CurrentDialogueIndex = 0;
+        ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
         ChatData.CurrentDialogueComplete = true;
     }
 
@@ -526,6 +530,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             if (userData.dialogueTree != null)
             {
                 DialogueTree.SetDialogueTree(ChatData.CurrentTree);
+
                 if (ChatData.WasBranchEffect == true)
                 {
                     chatManager.OnSetNextTree += SetNextTree;

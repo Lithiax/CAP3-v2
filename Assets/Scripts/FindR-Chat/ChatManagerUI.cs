@@ -210,6 +210,8 @@ public class ChatManagerUI : MonoBehaviour
             {
                 int index = i;
                 Tree.CurrentNode.CurrentIndex = index;
+                parent.ChatData.CurrentDialogueIndex = index;
+
                 Debug.Log("Current Index: " + Tree.CurrentNode.CurrentIndex);
                 ChatBubble chat = ChatCollection.ChatData[index];
                 //chat != ChatCollection.ChatData[0] so it doesnt trigger twice. 
