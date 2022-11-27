@@ -19,11 +19,12 @@ public class DateProgressUI : MonoBehaviour
         }
     }
 
-    public void AddHearts(ref int dateProgress)
+    public void AddHearts(ref int dateProgress, string data)
     {
+        int num = int.Parse(data);
         if (dateProgress == 2) return;
 
-        dateProgress++;
+        dateProgress = num;
         hearts[dateProgress-1].DOScale(1.1f, 0.5f);
     }
 }

@@ -23,6 +23,7 @@ public class ChatUserData
     public bool CanRGText;
     public bool StayInTree;
     public int DateProgress;
+    public DialogueContainer NotSkippableDialogue;
     public ChatUserData(ChatUserSO userSO)
     {
         UserSO = userSO;
@@ -33,6 +34,7 @@ public class ChatUserData
         CurrentDialogueComplete = false;
         CurrentRGIndex = 0;
         StayInTree = true;
+        NotSkippableDialogue = null;
     }
 }
 
@@ -100,9 +102,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         SaveRGData(ChatData);
     }
 
-    public void ModifyDateProgress()
+    public void ModifyDateProgress(string data)
     {
-        dateProgressUI.AddHearts(ref ChatData.DateProgress);
+        dateProgressUI.AddHearts(ref ChatData.DateProgress, data);
     }
 
     public void Init(ChatUserSO data, FindREventsManager eventManager, ChatManagerUI manager, ToggleGroup toggleGroup)
@@ -171,6 +173,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             if (DialogueTree.DialogueTree != null)
             {
                 ChatData.StayInTree = true;
+                ChatData.NotSkippableDialogue = DialogueTree.DialogueTree;
                 Divider = chatManager.SpawnDivider();
             }
         }
@@ -314,6 +317,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         chatManager.RebuildAfterSpawning();
 
+        //ADD MONTH AND WEEK CHECKER TOMORROW
         //if (data.DateProgress == 2 && data.RGMeter >= 80)
         //{
         //    DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
@@ -324,12 +328,27 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
 
+        //Check if previous tree is skippable (only RGChats are skippable)
+        if (data.StayInTree && data.NotSkippableDialogue != null /*&& data.CurrentDialogueComplete == false*/)
+        {
+            DialogueTree.SetDialogueTree(data.NotSkippableDialogue);
+            DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
+            Debug.Log("stay in tree");
+            return;
+        }
+
         DialogueContainer c = SetDialogueContainer();
 
         if (c != null)
         {
             data.StayInTree = true;
+            data.NotSkippableDialogue = c;
             return;
+        }
+        else
+        {
+            data.StayInTree = false;
+            data.NotSkippableDialogue = null;
         }
          
 
@@ -342,17 +361,9 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
-        //Check if previous tree is skippable (only RGChats are skippable)
-        if (data.StayInTree /*&& data.CurrentDialogueComplete == false*/)
-        {
-            DialogueTree.SetDialogueTree(data.CurrentTree);
-            //DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
-            Debug.Log("stay in tree");
-            return;
-        }
 
         //Go back to dating if RG meter is good
-        if (data.RGMeter > 49 && data.DateProgress > 2)
+        if (data.RGMeter > 49 && data.DateProgress < 2)
         {
             int date = 0;
 
@@ -561,7 +572,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
 
         if (ChatData.ActiveDialogue)
-            DialogueTree.SetDialogueTree(userData.dialogueTree);
+            DialogueTree.SetDialogueTree(ChatData.CurrentTree);
         else
             DialogueTree.SetDialogueTree(null);
 
@@ -577,7 +588,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
             if (SetBlocked(ChatData)) return;
 
-            if (userData.dialogueTree != null)
+            if (ChatData.CurrentTree != null)
             {
                 DialogueTree.SetDialogueTree(ChatData.CurrentTree);
 

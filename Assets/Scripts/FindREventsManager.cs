@@ -92,7 +92,7 @@ public class FindREventsManager : MonoBehaviour
                 break;
 
             case ChatEventTypes.AddDateProgressEvent:
-                user.ModifyDateProgress();
+                user.ModifyDateProgress(data);
                 break;
 
             default:
