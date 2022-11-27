@@ -220,14 +220,7 @@ public class HealthUI : MonoBehaviour
     }
     void ModifyHealth(int p_modifier)
     {
-        //if (p_modifier >0)
-        //{
-        //    defaultGhostBarColor = addGhostBarColor;
-        //}
-        //else
-        //{
-        //    defaultGhostBarColor = subtractGhostBarColor;
-        //}
+
         currentHealth += p_modifier;
         SaveHealth();
         if (currentHealth > maxHealth)
@@ -346,7 +339,7 @@ public class HealthUI : MonoBehaviour
                 }
                 else
                 {
-                    realBarUI.color = addGhostBarColor;
+                    realBarUI.color = defaultRealBarColor;
                 }
             }
             yield return new WaitForSeconds(0.1f);
@@ -369,18 +362,16 @@ public class HealthUI : MonoBehaviour
                 }
                 else
                 {
-                    realBarUI.color = addGhostBarColor;
+                    realBarUI.color = defaultRealBarColor;
                 }
             }
-            //realBarTransform.sortingOrder = 5;
-            //ghostBarTransform.sortingOrder = 4;
+
             currentBar = realBarUI;
             currentGhostBar = ghostBarUI;
 
 
            
-            defaultGhostBarColor = subtractGhostBarColor;
-            ghostBarUI.color = defaultGhostBarColor;
+            ghostBarUI.color = subtractGhostBarColor;
 
 
         }
@@ -388,11 +379,8 @@ public class HealthUI : MonoBehaviour
         {
             currentBar = ghostBarUI;
             currentGhostBar = realBarUI;
-            defaultGhostBarColor = addGhostBarColor;
+            ghostBarUI.color = addGhostBarColor;
             add = true;
-
-            //realBarTransform.sortingOrder = 4;
-            //ghostBarTransform.sortingOrder = 5;
 
         }
         currentBar.fillAmount = p_fill;
@@ -455,30 +443,16 @@ public class HealthUI : MonoBehaviour
 
         s.Play();
         yield return s.WaitForCompletion();
-        //realBarTransform.sortingOrder = 5;
-        //ghostBarTransform.sortingOrder = 4;
-       
-      
-    
-        //if (!add)
-        //{
-            ghostBarUI.color = fakeRealBarColor;
+
+        ghostBarUI.color = fakeRealBarColor;
         if (currentHealth >= 80)
         {
             realBarUI.color = orangeColorBarColor;
         }
         else
         {
-            realBarUI.color = addGhostBarColor;
+            realBarUI.color = defaultRealBarColor;
         }
-        
-        //}
-        //else
-        //{
-        //    realBarUI.color = fakeRealBarColor;
-        //    ghostBarUI.color = addGhostBarColor;
-        //}
-    //    realBarTransform.sortingOrder = 5;
-     //   ghostBarTransform.sortingOrder = 4;
+
     }
 }

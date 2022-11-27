@@ -418,14 +418,12 @@ public class SpreadSheetAPI : MonoBehaviour
             newDialogue.words = finalWords;
 
             //Setting Backgounrd
-            //Debug.LogError(SpreadSheetAPI.GetCellString(backgroundIndexInSheet[i]+1, DialogueSpreadSheetPatternConstants.backgroundCollumnPattern));
             newDialogue.backgroundSprite = VisualNovelDatas.FindBackgroundSprite(GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundColumnPattern));
             newDialogue.specificEventType = VisualNovelDatas.FindEventType(GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.eventTypeColumnPattern));
             newDialogue.specificEventParameter = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.eventParameterColumnPattern);
             newDialogue.backgroundMusic = GetCellString(backgroundIndexInSheet[i] + 1, DialogueSpreadSheetPatternConstants.backgroundMusicColumnPattern);
         }
-  
-        //p_soDialogue.isAutomaticHealthEvaluation = TranslateToBool(GetCellString(DialogueSpreadSheetPatternConstants.cueBankRowPattern, DialogueSpreadSheetPatternConstants.isAutomaticHealthEvaluation));
+ 
         SetChoice(p_soDialogue,p_soDialogue.choiceDatas, choiceIndexInSheet);
         EditorUtility.SetDirty(p_soDialogue);
         SaveNextSheet();
@@ -471,9 +469,6 @@ public class SpreadSheetAPI : MonoBehaviour
                     currentSpreadSheetIndex = 0;
                     currentSheetIndex = 0;
 
-
-                    //TranslateCodeToReplacements();
-                    //ConnectAllSheetsBranchDialogue();
                 }
             }
             

@@ -19,10 +19,38 @@ public class SettingsUI : MonoBehaviour
     public TMP_Dropdown windowModeOptions;
     public TMP_Dropdown resolutionOptoins;
 
+    private void Awake()
+    {
+        if (PlayerPrefs.HasKey("MasterVolume"))
+        {
+            audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("MasterVolume", 0);
+        }
+
+        if (PlayerPrefs.HasKey("MusicVol"))
+        {
+            audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("MusicVolume", 0);
+        }
+        if (PlayerPrefs.HasKey("SFX"))
+        {
+            audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
+        }
+        else
+        {
+            audioMixer.SetFloat("SFXVolume", 0);
+        }
+    }
     public void SetMasterAudio()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
-
+        PlayerPrefs.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
         int tempValue = Mathf.CeilToInt(masterVolumeSlider.value * 100f);
         masterText.text = tempValue.ToString();
     }
@@ -30,14 +58,14 @@ public class SettingsUI : MonoBehaviour
     public void SetSFXAudio()
     {
         audioMixer.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20);
-
+        PlayerPrefs.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20);
         int tempValue = Mathf.CeilToInt(sfxVolumeSlider.value * 100f);
         sfxText.text = tempValue.ToString();
     }
     public void SetBGMAudio()
     {
         audioMixer.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
-
+        PlayerPrefs.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
         int tempValue = Mathf.CeilToInt(bgmVolumeSlider.value * 100f);
         bgmText.text = tempValue.ToString();
     }

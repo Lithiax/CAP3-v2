@@ -25,18 +25,21 @@ public class CueUI : MonoBehaviour
     }
     public void Initialize(string p_cueTypeValue, Sprite p_iconImage, string p_cueValueText, Vector2 p_position)
     {
-        cueTypeValueText.text = p_cueTypeValue;
-        iconImage.sprite = p_iconImage;
-        string rep = p_cueValueText;
-        if (p_cueValueText.ToLower() == "Eye_Contact")
+        string rep = p_cueTypeValue;
+
+        if (rep.ToLower() == "eye_contact")
         {
             rep = "Eye Contact";
         }
-        else if (p_cueValueText.ToLower() == "Body_Posture")
+        else if (rep.ToLower() == "body_posture")
         {
             rep = "Body Posture";
         }
-        cueValueText.text = rep;
+        cueTypeValueText.text = rep;
+        iconImage.sprite = p_iconImage;
+  
+     
+        cueValueText.text = p_cueValueText;
         rectTransform.anchoredPosition = p_position;
        // Debug.Log("SEARCHING CUE TYPE : " + p_cueTypeValue);
         if (StorylineManager.cuesChoices != null)
@@ -95,7 +98,7 @@ public class CueUI : MonoBehaviour
     }
     public void ChooseChoiceUI(ChoiceData p_currentChoiceData)
     {
-        Debug.Log("CUE CHOSEN");
+        //Debug.Log("CUE CHOSEN");
         LocalCueChoice t = StorylineManager.GetLocalCueChoice(p_currentChoiceData);
         t.wasChosen = true;
         StorylineManager.savedDialogueIndex = StorylineManager.currentDialogueIndex;
@@ -114,10 +117,10 @@ public class CueUI : MonoBehaviour
         //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);
         //}
         //Set Pop Up
-        Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
+        //Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {
-            Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
+           // Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
             PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
             CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
             //CharacterDialogueUI.OnContinueEvent.Invoke();
@@ -127,7 +130,7 @@ public class CueUI : MonoBehaviour
         }
         else
         {
-            Debug.Log("CHOSEN");
+          //  Debug.Log("CHOSEN");
             StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
             CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
         
