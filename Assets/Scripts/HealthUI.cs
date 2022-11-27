@@ -339,7 +339,7 @@ public class HealthUI : MonoBehaviour
                 }
                 else
                 {
-                    realBarUI.color = addGhostBarColor;
+                    realBarUI.color = defaultRealBarColor;
                 }
             }
             yield return new WaitForSeconds(0.1f);
@@ -362,7 +362,7 @@ public class HealthUI : MonoBehaviour
                 }
                 else
                 {
-                    realBarUI.color = addGhostBarColor;
+                    realBarUI.color = defaultRealBarColor;
                 }
             }
 
@@ -371,8 +371,7 @@ public class HealthUI : MonoBehaviour
 
 
            
-            defaultGhostBarColor = subtractGhostBarColor;
-            ghostBarUI.color = defaultGhostBarColor;
+            ghostBarUI.color = subtractGhostBarColor;
 
 
         }
@@ -380,7 +379,7 @@ public class HealthUI : MonoBehaviour
         {
             currentBar = ghostBarUI;
             currentGhostBar = realBarUI;
-            defaultGhostBarColor = addGhostBarColor;
+            ghostBarUI.color = addGhostBarColor;
             add = true;
 
         }
