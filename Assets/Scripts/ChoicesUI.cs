@@ -33,7 +33,14 @@ public class ChoicesUI : MonoBehaviour
         StorylineManager.OnLoadedEvent += ResetChoiceManager;
 
     }
-     
+    private void OnDestroy()
+    {
+
+        CharacterDialogueUI.OnInspectingEvent -= open;
+        CharacterDialogueUI.OnDeinspectingEvent -= close;
+        OnChoosingChoiceEvent -= Initialize;
+        StorylineManager.OnLoadedEvent -= ResetChoiceManager;
+    }
     void open()
     {
         Destroy();
@@ -52,14 +59,7 @@ public class ChoicesUI : MonoBehaviour
         }
 
     }
-    private void OnDestroy()
-    {
-     
-        CharacterDialogueUI.OnInspectingEvent -= open;
-        CharacterDialogueUI.OnDeinspectingEvent -= close;
-        OnChoosingChoiceEvent -= Initialize;
-        StorylineManager.OnLoadedEvent -= ResetChoiceManager;
-    }
+ 
   
     void Destroy()
     {

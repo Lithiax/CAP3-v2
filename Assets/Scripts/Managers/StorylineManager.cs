@@ -31,14 +31,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static bool justLoadedVN = false;
     public static bool renamed = false;
     public static Action OnLoadedEvent;
-    //float penhealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
-    //float bradhealth = DialogueSpreadSheetPatternConstants.bradHealth;
-    //float liamhealth = DialogueSpreadSheetPatternConstants.liamHealth;
-    //float mavhealth = DialogueSpreadSheetPatternConstants.maeveHealth;
-    //public static float penhealth;
-    //public static float bradhealth;
-    //public static float liamhealth;
-    //public static float mavhealth;
+
     public static void GoBackMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -111,8 +104,16 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         StorylineManager.firstTime = p_gameData.firstTime;
 
+        if (AudioManager.instance != null)
+        {
+            if (!string.IsNullOrEmpty(currentBackgroundMusic))
+            {
+                //Debug.Log("HMMPF");
+                AudioManager.instance.ForceStopAudio(currentBackgroundMusic, false);
+            }
 
-        currentBackgroundMusic = p_gameData.currentBackgroundMusic;
+        }
+        currentBackgroundMusic = "";
 
 
         paused = false;
