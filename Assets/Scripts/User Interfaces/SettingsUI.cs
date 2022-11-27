@@ -21,51 +21,68 @@ public class SettingsUI : MonoBehaviour
 
     private void Awake()
     {
-        if (PlayerPrefs.HasKey("MasterVolume"))
+        if (PlayerPrefs.HasKey("MasterVol"))
         {
-            audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+            audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVol"));
+            masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVol");
         }
         else
         {
-            audioMixer.SetFloat("MasterVolume", 0);
+            PlayerPrefs.SetFloat("MasterVol", 1);
+            audioMixer.SetFloat("MasterVolume", Mathf.Log10(1)*20f);
+            masterVolumeSlider.value = 1;
         }
+        int tempValue = Mathf.CeilToInt(masterVolumeSlider.value * 100f);
+        masterText.text = tempValue.ToString();
 
         if (PlayerPrefs.HasKey("MusicVol"))
         {
-            audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
+            audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVol"));
+            bgmVolumeSlider.value = PlayerPrefs.GetFloat("MusicVol");
         }
         else
         {
-            audioMixer.SetFloat("MusicVolume", 0);
+            PlayerPrefs.SetFloat("MusicVolume", 1);
+            audioMixer.SetFloat("MusicVolume", Mathf.Log10(1) * 20f);
+            bgmVolumeSlider.value = 1;
         }
-        if (PlayerPrefs.HasKey("SFX"))
+        tempValue = Mathf.CeilToInt(bgmVolumeSlider.value * 100f);
+        bgmText.text = tempValue.ToString();
+
+        if (PlayerPrefs.HasKey("SFXVol"))
         {
-            audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
+            audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVol"));
+            sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVol");
         }
         else
         {
-            audioMixer.SetFloat("SFXVolume", 0);
+            PlayerPrefs.SetFloat("SFXVolume", 1);
+            audioMixer.SetFloat("SFXVolume", Mathf.Log10(1) * 20f);
+            sfxVolumeSlider.value = 1;
         }
+
+        tempValue = Mathf.CeilToInt(sfxVolumeSlider.value * 100f);
+        sfxText.text = tempValue.ToString();
     }
     public void SetMasterAudio()
     {
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
-        PlayerPrefs.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20);
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(masterVolumeSlider.value) * 20f);
+        PlayerPrefs.SetFloat("MasterVol", masterVolumeSlider.value);
         int tempValue = Mathf.CeilToInt(masterVolumeSlider.value * 100f);
         masterText.text = tempValue.ToString();
     }
 
     public void SetSFXAudio()
     {
-        audioMixer.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20);
-        PlayerPrefs.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20);
+        audioMixer.SetFloat("SFXVolume", Mathf.Log10(sfxVolumeSlider.value) * 20f);
+        PlayerPrefs.SetFloat("SFXVol", sfxVolumeSlider.value);
         int tempValue = Mathf.CeilToInt(sfxVolumeSlider.value * 100f);
         sfxText.text = tempValue.ToString();
     }
     public void SetBGMAudio()
     {
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
-        PlayerPrefs.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20);
+        audioMixer.SetFloat("MusicVolume", Mathf.Log10(bgmVolumeSlider.value) * 20f);
+        PlayerPrefs.SetFloat("MusicVol", bgmVolumeSlider.value);
         int tempValue = Mathf.CeilToInt(bgmVolumeSlider.value * 100f);
         bgmText.text = tempValue.ToString();
     }

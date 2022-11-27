@@ -302,7 +302,7 @@ public class CharacterDialogueUI : MonoBehaviour
             if (string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
             {
                 //Debug.Log("EARLY PLAY");
-                AudioManager.instance.AdditivePlayAudio(StorylineManager.currentBackgroundMusic, false);
+                AudioManager.instance.AdditivePlayAudio(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
             }
      
       
