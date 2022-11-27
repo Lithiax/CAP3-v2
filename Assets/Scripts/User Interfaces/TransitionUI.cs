@@ -65,7 +65,6 @@ public class TransitionUI : MonoBehaviour
     public IEnumerator Co_TransitionFade(float p_opacity, bool p_isActiveOnEnd = true)
 
     {
-        Debug.Log("transition fade");
         transitionUI.raycastTarget = (true);
 
         Sequence fadeSequence = DOTween.Sequence()

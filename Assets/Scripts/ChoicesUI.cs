@@ -51,7 +51,6 @@ public class ChoicesUI : MonoBehaviour
             CreateChoiceUIs(savedchoiceDatas);
         }
 
-        //choiceUIsContainer.SetActive(true);
     }
     private void OnDestroy()
     {
@@ -131,15 +130,6 @@ public class ChoicesUI : MonoBehaviour
     {
         savedchoiceDatas.Clear();
         StorylineManager.currentDialogueIndex = 0;
-        //if (p_currentChoiceData.effectID != "")
-        //{
-        //    Debug.Log(p_currentChoiceData.effectID);
-        //    for (int i=0; i < DialogueSpreadSheetPatternConstants.effects.Count; i++)
-        //    {
-        //        Debug.Log(DialogueSpreadSheetPatternConstants.effects[i]);
-        //    }
-        //   // DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID.ToLower());
-        //}
 
         if (p_currentChoiceData.isImmediateGoPhone)
         {
@@ -150,15 +140,7 @@ public class ChoicesUI : MonoBehaviour
                 {
                     if (sheetDivided[i] != "<VN>")
                     {
-                      //  Debug.Log("EFFECT ADDED ");
-              
-                      
                             DialogueSpreadSheetPatternConstants.AddEffect(sheetDivided[i].ToLower());
-                            //DialogueSpreadSheetPatternConstants.effects.Add(sheetDivided[i].ToLower());
-                        
-
-
-
                     }
                 }
                    
@@ -173,10 +155,8 @@ public class ChoicesUI : MonoBehaviour
         healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
       
         //Set Pop Up
-        //Debug.Log("1 POP UP TEXT " + p_currentChoiceData.popUpContent);
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {
-           // Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
             PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
             CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
 

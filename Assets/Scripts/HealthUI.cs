@@ -220,14 +220,7 @@ public class HealthUI : MonoBehaviour
     }
     void ModifyHealth(int p_modifier)
     {
-        //if (p_modifier >0)
-        //{
-        //    defaultGhostBarColor = addGhostBarColor;
-        //}
-        //else
-        //{
-        //    defaultGhostBarColor = subtractGhostBarColor;
-        //}
+
         currentHealth += p_modifier;
         SaveHealth();
         if (currentHealth > maxHealth)

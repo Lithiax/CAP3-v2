@@ -45,10 +45,7 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     }
     public static void LoadVisualNovel(GameData p_gameData)
     {
-        //if (StorylineManager.currentBackgroundMusic != null)
-        //{
-        //    AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-        //}
+
 
         StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
@@ -107,50 +104,23 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         popUpSO_Dialogues = p_gameData.popUpSO_Dialogues;
         StorylineManager.loggedWords = p_gameData.loggedWords;
 
-        //StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = p_gameData.currentDialogueIndex;
         sideDialogue = p_gameData.sideDialogue;
         savedDialogueIndex = p_gameData.savedDialogueIndex;
         savedSO_Dialogues = p_gameData.savedSO_Dialogues;
 
         StorylineManager.firstTime = p_gameData.firstTime;
-        //if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
-        //{
-           
-        //        if (!string.IsNullOrEmpty(p_gameData.currentBackgroundMusic))
-        //        {
-        //            AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, p_gameData.currentBackgroundMusic, false);
-        //            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-        //        }
-        //        else
-        //        {
-        //            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-        //            currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-        //        }
 
-            
-
-
-        //}
-        //else
-        //{
-   
 
         currentBackgroundMusic = p_gameData.currentBackgroundMusic;
-        // }
 
 
         paused = false;
-        Debug.Log("LOADED: " + DialogueSpreadSheetPatternConstants.maeveHealth);
+
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            // Debug.Log("DIALOGUE LOADED");
             CharacterDialogueUI.onCharacterSpokenTo.Invoke();
 
-        }
-        else
-        {
-            // Debug.Log("IT DOESNT WORK");
         }
 
     }
@@ -158,17 +128,14 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     {
         StorylineManager.CurrentSceneName = "VisualNovel";
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
-       // mainCharacter.stageName = "You";
         StorylineManager.cuesChoices.Clear();
  
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
         StorylineManager.so_InteractibleChoices = Resources.Load<SO_InteractibleChoices>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + "Interactible Choices");
-        // Debug.Log("INTELLIGIENCE: " + StorylineManager.so_InteractibleChoices);
         if (so_InteractibleChoices != null)
         {
             if (so_InteractibleChoices.deathSheet != null)
             {
-           //     Debug.Log("DEATH SHEET LOADED");
                 StorylineManager.currentZeroSO_Dialogues = so_InteractibleChoices.deathSheet;
             }
             else
@@ -178,7 +145,6 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
             if (so_InteractibleChoices.characterData != null)
             {
                 DialogueSpreadSheetPatternConstants.cueCharacter = so_InteractibleChoices.characterData.character;
-             //   Debug.Log("TARGET CHARACTER FOUND: " + DialogueSpreadSheetPatternConstants.cueCharacter);
             }
             else
             {
@@ -213,52 +179,25 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         sideDialogue = false;
         savedDialogueIndex = -1;
         savedSO_Dialogues = null;
-        //if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
-        //{
-        //    if (StorylineManager.currentSO_Dialogues != null && 
-        //        StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
-        //    {
-        //        if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic))
-        //        {
-        //            AudioManager.instance.SmoothPlayAudio(StorylineManager.currentBackgroundMusic, StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
-        //        }
-        //        else
-        //        {
-        //            AudioManager.instance.SmoothStopAudio(StorylineManager.currentBackgroundMusic, false);
-        //            currentBackgroundMusic = "";
-        //        }
-              
-        //    }
-         
 
-        //}
-        //else
-        //{
         if (AudioManager.instance != null)
         {
             if (!string.IsNullOrEmpty(currentBackgroundMusic))
             {
-                Debug.Log("HMMPF");
+                //Debug.Log("HMMPF");
                 AudioManager.instance.ForceStopAudio(currentBackgroundMusic,false);
             }
          
         }
         currentBackgroundMusic = "";
-       // }
-
    
         paused = false;
       
 
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            //  Debug.Log("DIALOGUE LOADED");
             CharacterDialogueUI.onCharacterSpokenTo.Invoke();
 
-        }
-        else
-        {
-            //  Debug.Log("IT DOESNT WORK");
         }
 
     }
@@ -319,37 +258,12 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     private void Awake()
     {
         instance = this;
-        //StartCoroutine(AsyncLoadScene("PauseMenu", Finished));
     }
     public void LoadData(GameData data)
     {
-        //DialogueSpreadSheetPatternConstants.penelopeHealth = penhealth;
-        //  DialogueSpreadSheetPatternConstants.bradHealth = bradhealth;
-        //  DialogueSpreadSheetPatternConstants.liamHealth = liamhealth;
-        //  DialogueSpreadSheetPatternConstants.maeveHealth = mavhealth;
-        //Debug.Log("LOADED HEALTH: " + DialogueSpreadSheetPatternConstants.maeveHealth);
+
     }
-    //public void LoadData(GameData data)
-    //{
-    //   // Debug.Log("LOAD " + data.currentDialogueIndex);
-    //    StorylineManager.CurrentSceneName = data.CurrentSceneName;
-    //    StorylineManager.so_InteractibleChoices = data.so_InteractibleChoices;
-    //    StorylineManager.currentSO_Dialogues = data.currentSO_Dialogues;
-    //    StorylineManager.currentDialogueIndex = data.currentDialogueIndex;
-    //    StorylineManager.cuesChoices = data.cuesChoices;
-
-    //    mainCharacter.stageName = data.mainCharacterName;
-    //    StorylineManager.loggedWords = data.loggedWords;
-
-    //    sideDialogue = data.sideDialogue;
-    //    savedDialogueIndex = data.savedDialogueIndex;
-    //    savedSO_Dialogues = data.savedSO_Dialogues;
-
-    //    currentBackgroundMusic = data.currentBackgroundMusic;
-
-    //    // CharacterDialogueUI.onCharacterSpokenTo.Invoke();
-    //    //OnLoadedEvent.Invoke();
-    //}
+ 
 
     public void SaveData(ref GameData data)
     {
@@ -358,7 +272,6 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         float liamhealth = DialogueSpreadSheetPatternConstants.liamHealth;
         float mavhealth = DialogueSpreadSheetPatternConstants.maeveHealth;
         StaticUserData.Save(ref data);
-        //  Debug.Log("SAVED " + data.currentDialogueIndex);
         data.renamed = renamed;
         data.penelopeHealth = penhealth;
         data.bradHealth = bradhealth;
@@ -385,7 +298,6 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static void LoadPhone()
     {
         paused = true;
-        //  Debug.Log("LOADING");
         SceneManager.LoadSceneAsync("FindR", LoadSceneMode.Additive);
     }
 

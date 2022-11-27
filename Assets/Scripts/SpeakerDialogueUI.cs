@@ -100,63 +100,6 @@ public class SpeakerDialogueUI : MonoBehaviour
         currentSpeakerBox.gameObject.SetActive(p_desiredToggle);
         extraButtonsContainer.gameObject.SetActive(p_desiredToggle);
     }
-    //public void ToggleExtras()
-    //{
-    //    if (canOpen)
-    //    {
-    //        canOpen = false;
-    //        StartCoroutine(Out());
-    //        if (!smallDialogueBox.activeSelf)
-    //        {
-    //            currentDialogueBox = smallDialogueBox;
-    //            currentDialogueBoxImage = smallDialogueBoxImage;
-    //            currentDialogueText = smallDialogueText;
-    //            smallSpeakerText.text = currentSpeakerText.text;
-    //            currentSpeakerText = smallSpeakerText;
-    //        }
-    //        else if (smallDialogueBox.activeSelf)
-    //        {
-    //            currentDialogueBox = bigDialogueBox;
-    //            currentDialogueBoxImage = bigDialogueBoxImage;
-    //            currentDialogueText = bigDialogueText;
-    //            bigSpeakerText.text = currentSpeakerText.text;
-    //            currentSpeakerText = bigSpeakerText;
-
-    //        }
-
-    //        if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
-    //        {
-    //            StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 1;
-    //        }
-
-    //        extraButtonsContainer.SetActive(!extraButtonsContainer.activeSelf);
-    //        if (characterDialogueUI.runningCoroutines > 0 && !CharacterDialogueUI.isSkipping)
-    //        {
-    //            CharacterDialogueUI.isSkipping = true;
-    //            CharacterDialogueUI.OnIsSkipping.Invoke();
-    //            StopAllCoroutines();
-    //            characterDialogueUI.runningCoroutines = 0;
-
-    //        }
-    //        Dialogue currentDialogue = StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex];
-    //        for (int i=0; i< currentDialogue.characterDatas.Count; i++)
-    //        {
-    //            if (currentDialogue.characterDatas[i].isSpeaking)
-    //            {
-    //                SetSpeech(currentDialogue.words, currentDialogue.characterDatas[i].character.idName);
-    //                break;
-    //            }
-    //            else
-    //            {
-    //                SetSpeech(currentDialogue.words);
-    //            }
-    //        }
-
-    //        StartCoroutine(In());
-    //    }
-
-    //}
-
     public void SetSpeakerName(List<CharacterData> p_characterDatas) // work on this
     {
         if (p_characterDatas.Count > 0)
@@ -229,7 +172,6 @@ public class SpeakerDialogueUI : MonoBehaviour
         p_words = p_words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
         currentWords = p_words;
         typinLoop = true;
-        // Debug.Log("TYPEWRITING: " + character);
         typinLoop = true;
         StartCoroutine(Co_TypeWriterEffect(currentDialogueText, p_words, character));
 
@@ -238,17 +180,9 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
-        // Debug.Log("TYPE WRITING " + character);
-       // Debug.Log("TYPEWRITING INNIE: " + character);
         CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
         so = "";
-        //if (!string.IsNullOrEmpty(character))
-        //{
 
-        //}
-        //else
-        //{
-  //      Debug.Log("TYPEWRITING in: " + character);
         if (character.ToLower() == "maeve")
             {
                 so = character;
@@ -269,15 +203,13 @@ public class SpeakerDialogueUI : MonoBehaviour
             {
                 so = "Typewriting";
             }
-            
-          
-        //}
 
         string p_currentText;
         bool eve = false;
         int i = 0;
-        while (typinLoop)
+        while (typinLoop && i < 500)
         {
+
             if (i < p_fullText.Length)
             {
                 if (p_fullText[i] == '<')
@@ -298,7 +230,6 @@ public class SpeakerDialogueUI : MonoBehaviour
                     AudioManager.instance.AdditivePlayAudio(so);
                     p_currentText = p_fullText.Substring(0, i);
                     p_textUI.text = p_currentText;
-                    //AudioManager.instance.AdditivePlayAudio(so);
                     yield return new WaitForSeconds(typewriterSpeed);
                 }
                 i++;
@@ -310,13 +241,6 @@ public class SpeakerDialogueUI : MonoBehaviour
   
         }
       
-
-          
-
-
-        
-        //AudioManager.instance.ForceStopAudio(so);
-        //   Debug.Log("TYPE WRITING END");
         CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
     }
 }
