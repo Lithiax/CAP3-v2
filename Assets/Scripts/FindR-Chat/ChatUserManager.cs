@@ -122,6 +122,8 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         UserDataTesting.Clear();
         UserDict.Clear();
 
+        DialogueSpreadSheetPatternConstants.effects = data.GameEffects.ToList();
+
         DataLoaded = true;
         if (data.ChatUserIDs.Length <= 0) return;
 

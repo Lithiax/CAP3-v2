@@ -355,6 +355,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         if (c != null)
         {
+            Debug.Log("Set with effect");
             data.StayInTree = true;
             data.NotSkippableDialogue = c;
             return;
@@ -460,6 +461,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
                 ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
+                ChatData.NotSkippableDialogue = DialogueTree.DialogueTree;
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
@@ -478,6 +480,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
                 ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
+                ChatData.NotSkippableDialogue = DialogueTree.DialogueTree;
             }
             else
             {
@@ -504,6 +507,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
 
         ChatData.WasBranchEffect = true;
+
+        ChatData.CurrentTree = DialogueTree.DialogueTree;
+        ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
+        ChatData.NotSkippableDialogue = DialogueTree.DialogueTree;
 
         profileName.text = ChatUserSO.profileName;
         profileImage.sprite = ChatUserSO.profileImage;
@@ -616,8 +623,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
         {
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
-
-            ChatData.StayInTree = false;
 
             profileName.text = userData.profileName;
             profileImage.sprite = userData.profileImage;
