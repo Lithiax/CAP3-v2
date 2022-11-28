@@ -179,7 +179,7 @@ public class ActionUIs : MonoBehaviour
         yield return new WaitForSeconds(1f);
         ActionUIs.isShowing = true;
         currentCueUI.gameObject.SetActive(true);
-        CharacterDialogueUI.OnInspectingEvent.Invoke();
+        CharacterDialogueUI.OnInspectingEvent?.Invoke();
        //actionsContainer.SetActive(true);
     }
 
@@ -190,7 +190,7 @@ public class ActionUIs : MonoBehaviour
         {
             ActionUIs.isShowing = false;
            
-            CharacterDialogueUI.OnDeinspectingEvent.Invoke();
+            CharacterDialogueUI.OnDeinspectingEvent?.Invoke();
             currentCueUI.gameObject.SetActive(false);
             currentCueUI.ResetChoiceManager();
         }
@@ -202,7 +202,7 @@ public class ActionUIs : MonoBehaviour
         canExit = true;
         ActionUIs.isShowing = false;
         StopAllCoroutines();
-        CharacterDialogueUI.OnDeinspectingEvent.Invoke();
+        CharacterDialogueUI.OnDeinspectingEvent?.Invoke();
         currentCueUI.gameObject.SetActive(false);
         currentCueUI.ResetChoiceManager();
         

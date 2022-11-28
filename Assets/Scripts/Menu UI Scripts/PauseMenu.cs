@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject PausePanel;
     [SerializeField] GameObject logSheet;
 
-    [SerializeField] List<GameObject> panels;
+    [SerializeField] List<GameObject> panels = new List<GameObject>();
     public static Action isPausingEvent;
     bool paused = false;
 
@@ -34,7 +34,7 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isPausingEvent.Invoke();
+            isPausingEvent?.Invoke();
 
             //paused = !paused;
             //PausePanel.SetActive(paused);

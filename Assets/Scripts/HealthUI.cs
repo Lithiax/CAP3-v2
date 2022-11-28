@@ -234,7 +234,7 @@ public class HealthUI : MonoBehaviour
             {
                // Debug.Log("DIE");
                 currentHealth = 0;
-                OnHealthDeathEvent.Invoke();
+                OnHealthDeathEvent?.Invoke();
             }
             else
             {

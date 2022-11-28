@@ -104,23 +104,23 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
 
         StorylineManager.firstTime = p_gameData.firstTime;
 
-        if (AudioManager.instance != null)
-        {
-            if (!string.IsNullOrEmpty(currentBackgroundMusic))
-            {
-                //Debug.Log("HMMPF");
-                AudioManager.instance.ForceStopAudio(currentBackgroundMusic, false);
-            }
+        //if (AudioManager.instance != null)
+        //{
+        //    if (!string.IsNullOrEmpty(currentBackgroundMusic))
+        //    {
+        //        //Debug.Log("HMMPF");
+        //        AudioManager.instance.ForceStopAudio(currentBackgroundMusic, false);
+        //    }
 
-        }
-        currentBackgroundMusic = "";
+        //}
+        //currentBackgroundMusic = "";
 
 
         paused = false;
 
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            CharacterDialogueUI.onCharacterSpokenTo.Invoke();
+            CharacterDialogueUI.onCharacterSpokenTo?.Invoke();
 
         }
 
@@ -181,23 +181,23 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
         savedDialogueIndex = -1;
         savedSO_Dialogues = null;
 
-        if (AudioManager.instance != null)
-        {
-            if (!string.IsNullOrEmpty(currentBackgroundMusic))
-            {
-                //Debug.Log("HMMPF");
-                AudioManager.instance.ForceStopAudio(currentBackgroundMusic,false);
-            }
+        //if (AudioManager.instance != null)
+        //{
+        //    if (!string.IsNullOrEmpty(currentBackgroundMusic))
+        //    {
+        //        //Debug.Log("HMMPF");
+        //        AudioManager.instance.ForceStopAudio(currentBackgroundMusic,false);
+        //    }
          
-        }
-        currentBackgroundMusic = "";
+        //}
+       // currentBackgroundMusic = "";
    
         paused = false;
       
 
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            CharacterDialogueUI.onCharacterSpokenTo.Invoke();
+            CharacterDialogueUI.onCharacterSpokenTo?.Invoke();
 
         }
 

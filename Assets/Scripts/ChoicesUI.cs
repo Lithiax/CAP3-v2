@@ -147,24 +147,31 @@ public class ChoicesUI : MonoBehaviour
                 StorylineManager.LoadPhone();
             }
         }
-        CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
+        CharacterDialogueUI.OnStartChooseChoiceEvent?.Invoke();
         //Reset Choice Manager
         ResetChoiceManager();
 
         //Set Choice Damage
-        healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
-      
+        healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
+        if (p_currentChoiceData.healthModifier > 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("right");
+        }
+        else if (p_currentChoiceData.healthModifier < 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("wrong");
+        }
         //Set Pop Up
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {
-            PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
-            CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
+            PopUpUI.OnPopUpEvent?.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
+            CharacterDialogueUI.OnPopUpEvent?.Invoke(p_currentChoiceData.branchDialogue);
 
         }
         else
         {
             StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
-            CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+            CharacterDialogueUI.OnEndChooseChoiceEvent?.Invoke();
         }
 
     }

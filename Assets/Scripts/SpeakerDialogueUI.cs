@@ -73,10 +73,7 @@ public class SpeakerDialogueUI : MonoBehaviour
         CharacterDialogueUI.OnDeinspectingEvent -= close;
     }
 
-    public void LogBox()
-    {
-        PauseMenu.isPausingEvent.Invoke();
-    }
+  
 
     void open()
     {
@@ -180,7 +177,7 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
-        CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        CharacterDialogueUI.OnAddNewTransitionEvent?.Invoke();
         so = "";
 
         if (character.ToLower() == "maeve")
@@ -199,10 +196,6 @@ public class SpeakerDialogueUI : MonoBehaviour
             {
                 so = character;
             }
-        else if (character.ToLower() == "you")
-        {
-            so = character;
-        }
         else
             {
                 so = "Typewriting";
@@ -211,9 +204,11 @@ public class SpeakerDialogueUI : MonoBehaviour
         string p_currentText;
         bool eve = false;
         int i = 0;
-        while (typinLoop && i < 500)
+        int backupI = 0;
+        while (typinLoop && backupI < 500)
         {
-
+            backupI++;
+            
             if (i < p_fullText.Length)
             {
                 if (p_fullText[i] == '<')
@@ -242,9 +237,9 @@ public class SpeakerDialogueUI : MonoBehaviour
             {
                 typinLoop = false;
             }
-  
+      
         }
       
-        CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+        CharacterDialogueUI.OnFinishTransitionEvent?.Invoke();
     }
 }

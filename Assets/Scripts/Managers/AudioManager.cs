@@ -36,6 +36,7 @@ public class AudioManager : MonoBehaviour
             currentSoundData.source.outputAudioMixerGroup = currentSoundData.output;
             currentSoundData.source.clip = currentSoundData.clip;
             currentSoundData.source.volume = currentSoundData.volume;
+            currentSoundData.defaultVolume = currentSoundData.volume;
             currentSoundData.source.pitch = currentSoundData.pitch;
             currentSoundData.source.loop = currentSoundData.loop;
         }
@@ -46,6 +47,7 @@ public class AudioManager : MonoBehaviour
             currentSoundData.source.outputAudioMixerGroup = currentSoundData.output;
             currentSoundData.source.clip = currentSoundData.clip;
             currentSoundData.source.volume = currentSoundData.volume;
+            currentSoundData.defaultVolume = currentSoundData.volume;
             currentSoundData.source.pitch = currentSoundData.pitch;
             currentSoundData.source.loop = currentSoundData.loop;
         }
@@ -98,7 +100,7 @@ public class AudioManager : MonoBehaviour
         sound = GetSoundByName(p_newAudioClip, p_isSoundEffect);
         if (sound != null)
         {
-
+            sound.source.volume = sound.defaultVolume;
             sound.source.Play();
         }
    
