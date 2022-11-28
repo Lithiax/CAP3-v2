@@ -427,15 +427,21 @@ public class ChatManagerUI : MonoBehaviour
             return;
         }
 
-        if( Tree.CurrentNode.ConnectedNodesData.Count == 1)
+        if( Tree.CurrentNode.ConnectedNodesData.Count >= 1)
         {
-            ChatCollectionSO coll = Tree.CurrentNode.ConnectedNodesData[0].chatCollection as ChatCollectionSO;
-            if (String.IsNullOrEmpty(coll.PromptText))
+            for (int i = 0; i > Tree.CurrentNode.ConnectedNodesData.Count; i++)
             {
-                Debug.Log("Skip");
-                ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
-                return;
+                ChatCollectionSO coll = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
+
+                if (String.IsNullOrEmpty(coll.PromptText))
+                {
+                    Debug.Log("Skip");
+                    ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
+                    return;
+                }
             }
+
+
         }
 
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
