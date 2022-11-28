@@ -46,7 +46,7 @@ public class InputNameUI : MonoBehaviour
             so_Character.stageName = inputField.text;
             StorylineManager.currentDialogueIndex++;
             //CharacterDialogueUI.OnEndEvent.Invoke();
-            CharacterDialogueUI.OnContinueEvent.Invoke();
+            CharacterDialogueUI.OnContinueEvent?.Invoke();
             ToggleUI();
         }
    

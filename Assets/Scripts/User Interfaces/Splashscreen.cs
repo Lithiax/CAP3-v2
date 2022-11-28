@@ -39,7 +39,7 @@ public class Splashscreen : MonoBehaviour
     IEnumerator Co_InitializeSplashscreen(float p_videoLength)
     {
 
-        TransitionUI.onFadeTransition.Invoke(0, false);
+        TransitionUI.onFadeTransition?.Invoke(0, false);
         yield return new WaitForSeconds(0.5f);
         
         splashcreenVideo.Play();
@@ -71,12 +71,12 @@ public class Splashscreen : MonoBehaviour
     IEnumerator Co_OpenTitlescreen()
     {
         tip.Stop();
-        TransitionUI.onFadeTransition.Invoke(1);
+        TransitionUI.onFadeTransition?.Invoke(1);
         yield return new WaitForSeconds(0.5f);
         splashcreenFrame.SetActive(false);
         titlescreen.SetActive(true);
         mainMenuUI.menuLoaded();
-        TransitionUI.onFadeTransition.Invoke(0);
+        TransitionUI.onFadeTransition?.Invoke(0);
 
 
 

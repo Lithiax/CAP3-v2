@@ -85,10 +85,7 @@ public class CharacterDialogueUI : MonoBehaviour
     public GameObject cueIndicator;
     bool deadsheet = false;
     bool clearlogs = false;
-    public void Pause()
-    {
-        PauseMenu.isPausingEvent.Invoke();
-    }
+ 
     public void NextTutorial()
     {
         tutorialImageIndex++;
@@ -101,7 +98,7 @@ public class CharacterDialogueUI : MonoBehaviour
         {
             StartCoroutine(tutorialtemp());
             StorylineManager.firstTime = false;
-            CharacterDialogueUI.onCharacterSpokenTo.Invoke();
+            CharacterDialogueUI.onCharacterSpokenTo?.Invoke();
         }
 
     }
@@ -232,7 +229,7 @@ public class CharacterDialogueUI : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (StorylineManager.currentSO_Dialogues != null)
         {
-            onCharacterSpokenTo.Invoke();
+            onCharacterSpokenTo?.Invoke();
         }
     }
     void DisableNextDialogueButton()
@@ -273,7 +270,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 {
                     nextDialogueButton.SetActive(false);
                 }
-    
+              
             }
             else
             {
@@ -294,7 +291,7 @@ public class CharacterDialogueUI : MonoBehaviour
         {
 
             tutorial.SetActive(true);
-            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, true);
+            TransitionUI.onFadeInAndOutTransition?.Invoke(1, 0.5f, 1, 0, 0.5f, true);
             return;
         }
         if (AudioManager.instance != null)
@@ -316,7 +313,15 @@ public class CharacterDialogueUI : MonoBehaviour
        // Debug.Log("START");
         if (StorylineManager.justLoadedVN)
         {
-
+            if (AudioManager.instance != null)
+            {
+                if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+                {
+                    //Debug.Log("HMMPF");
+                    AudioManager.instance.ForceStopAudio(StorylineManager.currentBackgroundMusic, false);
+                }
+                StorylineManager.currentBackgroundMusic = "";
+            }
         }
         else
         {
@@ -325,12 +330,12 @@ public class CharacterDialogueUI : MonoBehaviour
 
         if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
         {
-            healthUI.OnInitializeEvent.Invoke(DialogueSpreadSheetPatternConstants.cueCharacter.idName);
+            healthUI.OnInitializeEvent?.Invoke(DialogueSpreadSheetPatternConstants.cueCharacter.idName);
         }
 
         //Debug.Log("start trans false");
         nextDialogueButton.SetActive(false);
-        TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 1, 0, 0.5f, true, fadeStart, fadeEnd);
+        TransitionUI.onFadeInAndOutTransition?.Invoke(1, 0.5f, 1, 0, 0.5f, true, fadeStart, fadeEnd);
 
     
 
@@ -384,7 +389,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count - 2)
                 {
                     StorylineManager.currentDialogueIndex = StorylineManager.currentSO_Dialogues.dialogues.Count - 2;
-                    OnResettingCharacterUIEvent.Invoke();
+                    OnResettingCharacterUIEvent?.Invoke();
                     popUp = false;
                     rarara = true;
                     OnNextButtonUIPressed();
@@ -527,9 +532,9 @@ public class CharacterDialogueUI : MonoBehaviour
         //Mark the Characters to Remove
         IdentifyCharactersToRemove(oldCharacters, newCharacters, charactersToBeRemoved);
 
-        CharactersUI.onRemoveCharactersEvent.Invoke(charactersToBeRemoved);
-        CharactersUI.onAddCharactersEvent.Invoke(charactersToBeAdded);
-        CharactersUI.recheck.Invoke();
+        CharactersUI.onRemoveCharactersEvent?.Invoke(charactersToBeRemoved);
+        CharactersUI.onAddCharactersEvent?.Invoke(charactersToBeAdded);
+        CharactersUI.recheck?.Invoke();
     }
 
     void CheckIfReady()
@@ -537,7 +542,7 @@ public class CharacterDialogueUI : MonoBehaviour
         if (runningCoroutines <= 0)
         {
 
-            OnIsSkipping.Invoke();
+            OnIsSkipping?.Invoke();
         }
     }
     public void DoSpecificEvent(SpecificEventType p_specificEventType, string p_eventName)
@@ -561,7 +566,7 @@ public class CharacterDialogueUI : MonoBehaviour
             }
 
             nextDialogueButton.SetActive(false);
-            TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.5f, 2, 0, 0.5f, false, HideSpeaker, fadeEnd);
+            TransitionUI.onFadeInAndOutTransition?.Invoke(1, 0.5f, 2, 0, 0.5f, false, HideSpeaker, fadeEnd);
         }
         else if (p_specificEventType == SpecificEventType.fadeInEffect)
         {
@@ -575,7 +580,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 TransitionUI.instance.color = Color.black;
 
             }
-            TransitionUI.onFadeTransition.Invoke(1, false, false);
+            TransitionUI.onFadeTransition?.Invoke(1, false, false);
         }
         else if (p_specificEventType == SpecificEventType.fadeOutEffect)
         {
@@ -587,7 +592,7 @@ public class CharacterDialogueUI : MonoBehaviour
             {
                 TransitionUI.instance.color = Color.black;
             }
-            TransitionUI.onFadeTransition.Invoke(0, false, false);
+            TransitionUI.onFadeTransition?.Invoke(0, false, false);
         }
         else if (p_specificEventType == SpecificEventType.inputNameEvent)
         {
@@ -632,7 +637,7 @@ public class CharacterDialogueUI : MonoBehaviour
         }
         if (popUp && !d)
         {
-            OnResettingCharacterUIEvent.Invoke();
+            OnResettingCharacterUIEvent?.Invoke();
             popUp = false;
         }
         if (StorylineManager.popUpSO_Dialogues != null && !d)
@@ -640,7 +645,7 @@ public class CharacterDialogueUI : MonoBehaviour
            // Debug.Log("HMM");
             StorylineManager.currentSO_Dialogues = StorylineManager.popUpSO_Dialogues;
             StorylineManager.popUpSO_Dialogues = null;
-            CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+            CharacterDialogueUI.OnEndChooseChoiceEvent?.Invoke();
 
             return;
 
@@ -707,7 +712,7 @@ public class CharacterDialogueUI : MonoBehaviour
             {
 
                 StopAllCoroutines();
-                OnIsSkipping.Invoke();
+                OnIsSkipping?.Invoke();
                 runningCoroutines = 0;
                 return;
 
@@ -716,7 +721,7 @@ public class CharacterDialogueUI : MonoBehaviour
             else if (isSkipping)
             {
                 frame.SetActive(true);
-                onNewDialogueEvent.Invoke(currentDialogue);
+                onNewDialogueEvent?.Invoke(currentDialogue);
                 StorylineManager.loggedWords.Add(currentDialogue);
                 SetNextDialogue();
 
@@ -783,7 +788,7 @@ public class CharacterDialogueUI : MonoBehaviour
                 }
 
 
-                BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
+                BackgroundUI.onSetBackgroundEvent?.Invoke(currentDialogue.backgroundSprite);
 
             }
 
@@ -807,7 +812,7 @@ public class CharacterDialogueUI : MonoBehaviour
   
 
 
-                BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
+                BackgroundUI.onSetBackgroundEvent?.Invoke(currentDialogue.backgroundSprite);
             }
           
             EndOfDialogue();
@@ -855,7 +860,7 @@ public class CharacterDialogueUI : MonoBehaviour
                             //Debug.Log("CREATING CHOICE");
                             cueIndicator.SetActive(false);
                             nextDialogueButton.SetActive(false);
-                            ChoicesUI.OnChoosingChoiceEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas);
+                            ChoicesUI.OnChoosingChoiceEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas);
 
 
                         }
@@ -891,7 +896,7 @@ public class CharacterDialogueUI : MonoBehaviour
                         {
                             //Set Choice Damage
 
-                            healthUI.OnModifyHealthEvent.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                            healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
 
                             StorylineManager.currentDialogueIndex = 0;
                             for (int i = 0; i < sheetDivided.Length; i++)
@@ -912,7 +917,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
                                     nextDialogueButton.SetActive(false);
-                                    TransitionUI.onFadeInAndOutTransition.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
+                                    TransitionUI.onFadeInAndOutTransition?.Invoke(1, 0.25f, 1, 0, 0.25f, true, p_postAction: OnCloseCharacterDialogueUI);
                                     
                                 }
                                 else if (!string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.choiceDatas[0].branchDialogueName))

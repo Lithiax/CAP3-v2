@@ -60,7 +60,7 @@ public class ActionUI : MonoBehaviour
     {
         canDoWork = false;
         can = false;
-        ActionUIs.onExitEvent.Invoke();
+        ActionUIs.onExitEvent?.Invoke();
         JustExited();
     }
     void JustExited()
@@ -92,7 +92,7 @@ public class ActionUI : MonoBehaviour
         {
             if (canDoWork)
             {
-                ActionUIs.onEnterEvent.Invoke(this);
+                ActionUIs.onEnterEvent?.Invoke(this);
                 if (runningCoroutine != null)
                 {
                     StopCoroutine(runningCoroutine);
@@ -107,7 +107,7 @@ public class ActionUI : MonoBehaviour
 
     public void ExitFunction()
     {
-        ActionUIs.onExitEvent.Invoke();
+        ActionUIs.onExitEvent?.Invoke();
         //if (runningCoroutine != null)
         //{
         //    StopCoroutine(runningCoroutine);
@@ -131,7 +131,7 @@ public class ActionUI : MonoBehaviour
                 }
                 runningCDCoroutine = cd();
                 StartCoroutine(runningCDCoroutine);
-                ActionUIs.onPointClickEvent.Invoke(this);
+                ActionUIs.onPointClickEvent?.Invoke(this);
             }
         }
             
@@ -174,7 +174,7 @@ public class ActionUI : MonoBehaviour
    
         yield return fadeOutSequence.WaitForCompletion();
      //   Debug.Log("EXIT ended");
-        justExited.Invoke();
+        justExited?.Invoke();
         //yield return new WaitForSeconds(0.65f);
      
 

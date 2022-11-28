@@ -88,7 +88,7 @@ public class CameraManager : MonoBehaviour
         if (!tutorialOn)
         {
             //Debug.Log("Invoked: " + defaultRoom.transform.position + ", " + panLimit);
-            onCameraMovedEvent.Invoke(new Vector2(0,0));
+            onCameraMovedEvent?.Invoke(new Vector2(0,0));
         }
 
     }

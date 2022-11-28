@@ -105,13 +105,13 @@ public class CueUI : MonoBehaviour
         StorylineManager.savedSO_Dialogues = StorylineManager.currentSO_Dialogues;
         StorylineManager.currentDialogueIndex = 0;
         StorylineManager.sideDialogue = true;
-        CharacterDialogueUI.OnStartChooseChoiceEvent.Invoke();
-        onChoiceChosenEvent.Invoke();
+        CharacterDialogueUI.OnStartChooseChoiceEvent?.Invoke();
+        onChoiceChosenEvent?.Invoke();
         //Reset Choice Manager
         ResetChoiceManager();
 
         //Set Choice Damage
-        healthUI.OnModifyHealthEvent.Invoke(p_currentChoiceData.healthModifier);
+        healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
         //if (p_currentChoiceData.effectID != "")
         //{
         //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);
@@ -121,8 +121,8 @@ public class CueUI : MonoBehaviour
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {
            // Debug.Log("2 POP UP TEXT " + p_currentChoiceData.popUpContent);
-            PopUpUI.OnPopUpEvent.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
-            CharacterDialogueUI.OnPopUpEvent.Invoke(p_currentChoiceData.branchDialogue);
+            PopUpUI.OnPopUpEvent?.Invoke(p_currentChoiceData.popUpTitle, p_currentChoiceData.popUpContent);
+            CharacterDialogueUI.OnPopUpEvent?.Invoke(p_currentChoiceData.branchDialogue);
             //CharacterDialogueUI.OnContinueEvent.Invoke();
             //StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
             //StorylineManager.currentDialogueIndex = 0;
@@ -132,7 +132,7 @@ public class CueUI : MonoBehaviour
         {
           //  Debug.Log("CHOSEN");
             StorylineManager.currentSO_Dialogues = p_currentChoiceData.branchDialogue;
-            CharacterDialogueUI.OnEndChooseChoiceEvent.Invoke();
+            CharacterDialogueUI.OnEndChooseChoiceEvent?.Invoke();
         
         }
 

@@ -147,22 +147,22 @@ public class CharactersUI : MonoBehaviour
 
     IEnumerator SpeakerTintIn(Image p_avatarImage)
     {
-        CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        CharacterDialogueUI.OnAddNewTransitionEvent?.Invoke();
         var fadeOutSequence = DOTween.Sequence()
         .Append(p_avatarImage.DOColor(Color.white, avatarFadeTime));
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
-        CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+        CharacterDialogueUI.OnFinishTransitionEvent?.Invoke();
     }
 
     IEnumerator SpeakerTintOut(Image p_avatarImage)
     {
-        CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        CharacterDialogueUI.OnAddNewTransitionEvent?.Invoke();
         var fadeInSequence = DOTween.Sequence()
         .Append(p_avatarImage.DOColor(nonSpeakerTintColor, avatarFadeTime));
         fadeInSequence.Play();
         yield return fadeInSequence.WaitForCompletion();
-        CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+        CharacterDialogueUI.OnFinishTransitionEvent?.Invoke();
     }
 
     void SetRectTransformToPreset(CharacterPositionType p_characterPositionType, Character foundCharacter)
@@ -467,7 +467,7 @@ public class CharactersUI : MonoBehaviour
 
     public IEnumerator AvatarFlipSequence(Image p_avatarImage, RectTransform p_avatarRectTransform, Quaternion p_quaternion)
     {
-        CharacterDialogueUI.OnAddNewTransitionEvent.Invoke();
+        CharacterDialogueUI.OnAddNewTransitionEvent?.Invoke();
         var fadeOutSequence = DOTween.Sequence()
         .Append(p_avatarImage.DOFade(0, avatarFadeTime));
         fadeOutSequence.Play();
@@ -479,7 +479,7 @@ public class CharactersUI : MonoBehaviour
         .Append(p_avatarImage.DOFade(1, avatarFadeTime));
         fadeInSequence.Play();
         yield return fadeInSequence.WaitForCompletion();
-        CharacterDialogueUI.OnFinishTransitionEvent.Invoke();
+        CharacterDialogueUI.OnFinishTransitionEvent?.Invoke();
     }
 
 
