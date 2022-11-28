@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-
+using UnityEngine.Audio;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
     [SerializeField] List<GameObject> panels;
-
+    public AudioMixer audioMixer;
 
     public void menuLoaded()
     {
@@ -16,6 +16,7 @@ public class MainMenuUI : MonoBehaviour
     }
     public IEnumerator Co_AudioFadeOut()
     {
+
         DialogueSpreadSheetPatternConstants.penelopeHealth = 50;
         DialogueSpreadSheetPatternConstants.bradHealth = 50;
         DialogueSpreadSheetPatternConstants.liamHealth = 50;
@@ -45,6 +46,37 @@ public class MainMenuUI : MonoBehaviour
         audioSource.Play();
         Sequence fadeOutSequence = DOTween.Sequence();
         fadeOutSequence.Append(audioSource.DOFade(1, 1.25f));
+        if (PlayerPrefs.HasKey("MasterVol"))
+        {
+            audioMixer.SetFloat("MasterVolume", Mathf.Log10(PlayerPrefs.GetFloat("MasterVol")) * 100f);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("MasterVol", 1);
+            audioMixer.SetFloat("MasterVolume", Mathf.Log10(1) * 100f);
+        }
+
+
+        if (PlayerPrefs.HasKey("MusicVol"))
+        {
+            audioMixer.SetFloat("MusicVolume", Mathf.Log10(PlayerPrefs.GetFloat("MusicVol")) * 100f);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("MusicVolume", 1);
+            audioMixer.SetFloat("MusicVolume", Mathf.Log10(1) * 100f);
+        }
+
+
+        if (PlayerPrefs.HasKey("SFXVol"))
+        {
+            audioMixer.SetFloat("SFXVolume", Mathf.Log10(PlayerPrefs.GetFloat("SFXVol")) * 100f);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("SFXVolume", 1);
+            audioMixer.SetFloat("SFXVolume", Mathf.Log10(1) * 100f);
+        }
         fadeOutSequence.Play();
         yield return fadeOutSequence.WaitForCompletion();
 

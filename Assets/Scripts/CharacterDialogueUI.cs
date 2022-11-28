@@ -759,7 +759,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
                 CheckCachedCharacters(currentDialogue.characterDatas); 
                 CharactersUI.onUpdateCharacterDatasEvent(currentDialogue.characterDatas);
-
+                //UpdateDialogueLog(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex]);
 
                 speakerDialogueUI.SetSpeakerName(currentDialogue.characterDatas);
                 if (currentDialogue.characterDatas.Count > 0)
@@ -784,6 +784,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
 
                 BackgroundUI.onSetBackgroundEvent.Invoke(currentDialogue.backgroundSprite);
+
             }
 
 
