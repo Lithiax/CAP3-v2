@@ -153,7 +153,14 @@ public class ChoicesUI : MonoBehaviour
 
         //Set Choice Damage
         healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
-      
+        if (p_currentChoiceData.healthModifier > 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("right");
+        }
+        else if (p_currentChoiceData.healthModifier < 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("wrong");
+        }
         //Set Pop Up
         if (!string.IsNullOrEmpty(p_currentChoiceData.popUpContent))
         {

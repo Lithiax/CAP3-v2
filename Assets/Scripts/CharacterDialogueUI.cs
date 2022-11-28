@@ -897,7 +897,14 @@ public class CharacterDialogueUI : MonoBehaviour
                             //Set Choice Damage
 
                             healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-
+                            if (StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier > 0)
+                            {
+                                AudioManager.instance.AdditivePlayAudio("right");
+                            }
+                            else if (StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier < 0)
+                            {
+                                AudioManager.instance.AdditivePlayAudio("wrong");
+                            }
                             StorylineManager.currentDialogueIndex = 0;
                             for (int i = 0; i < sheetDivided.Length; i++)
                             {

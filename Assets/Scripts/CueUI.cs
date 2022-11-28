@@ -112,6 +112,14 @@ public class CueUI : MonoBehaviour
 
         //Set Choice Damage
         healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
+        if (p_currentChoiceData.healthModifier > 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("right");
+        }
+        else if (p_currentChoiceData.healthModifier < 0)
+        {
+            AudioManager.instance.AdditivePlayAudio("wrong");
+        }
         //if (p_currentChoiceData.effectID != "")
         //{
         //    DialogueSpreadSheetPatternConstants.effects.Add(p_currentChoiceData.effectID);

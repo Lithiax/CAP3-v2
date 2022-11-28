@@ -11,6 +11,7 @@ public class SoundData
     public AudioMixerGroup output;
     [Range(0f, 1f)]
     public float volume;
+    [HideInInspector] public float defaultVolume;
     [Range(0.1f, 3f)]
     public float pitch;
 
