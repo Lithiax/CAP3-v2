@@ -235,7 +235,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     void LoadRGDataFromStatic(ChatUserData data)
     {
-
         switch (data.UserSO.profileName)
         {
             case "Maeve":
@@ -537,6 +536,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         //set to false since it needs to reset loading
         ChatData.CurrentDialogueComplete = false;
+        ChatData.CurrentTree = null;
     }
 
     public void SetNotif()

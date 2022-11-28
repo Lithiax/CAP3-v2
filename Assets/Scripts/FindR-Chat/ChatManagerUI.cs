@@ -440,23 +440,22 @@ public class ChatManagerUI : MonoBehaviour
                     return;
                 }
             }
-
-
         }
 
         if (Tree.CurrentNode.ConnectedNodesData.Count > 0 || ChatCollection.isEvent())
         {
-            //if (ChatCollection.isEvent())
-            //{
-            //    if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
-            //    ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
-            //    ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
-            //    {
-            //        Debug.Log("Not Date Event");
-            //        HideResponse();
-            //        return;
-            //    }
-            //}
+            if (ChatCollection.isEvent())
+            {
+                //This was commented but I dont remember why
+                //if (ChatCollection.ChatEvents[0].EventType != ChatEventTypes.DateEvent &&
+                //ChatCollection.ChatEvents[0].EventType != ChatEventTypes.InstantDateEvent &&
+                //ChatCollection.ChatEvents[0].EventType != ChatEventTypes.EndingEvent)
+                //{
+                //    Debug.Log("Not Date Event");
+                //    HideResponse();
+                //    return;
+                //}
+            }
             //Clear button on click events
             foreach (ReplyButton bData in replyButtonData)
             {
@@ -473,9 +472,6 @@ public class ChatManagerUI : MonoBehaviour
 
                 replyButtonData[copy].replyButtonComp.onClick.
                     AddListener(delegate { ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[copy]); });
-
-                //replyButtonData[i].replyButtonComp.onClick.
-                //    AddListener(delegate { ResponseClicked(parent, ChatCollection.Prompts[i]); });
             }
 
             //Add events
