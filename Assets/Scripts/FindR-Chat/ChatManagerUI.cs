@@ -115,6 +115,11 @@ public class ChatManagerUI : MonoBehaviour
 
     void ResponseClicked(ChatUser parent, DialogueGraphAPI Tree, DialogueNodeData nodeData)
     {
+        if (nodeData == null)
+        {
+            Debug.Log("ResponseClicked nodeData is null");
+            return;
+        }
         parent.DialogueTree.MoveToNode(nodeData.chatCollection);
         parent.ResetReplyNotif();
 
@@ -292,7 +297,7 @@ public class ChatManagerUI : MonoBehaviour
                 EventManager.RegisterEvent(ev);
                 if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent)
                 {
-                    parent.OnChatComplete();
+                    //parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
                 }
             }
@@ -300,7 +305,7 @@ public class ChatManagerUI : MonoBehaviour
 
         if (!ChatCollection.isEvent())
         {
-            parent.OnChatComplete();
+            //parent.OnChatComplete();
         }
 
         if (parent.isToggled)
@@ -464,6 +469,37 @@ public class ChatManagerUI : MonoBehaviour
                 bData.buttonObj.SetActive(false);
             }
 
+            //#region set text
+            for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
+            {
+                ChatCollectionSO collectionSO = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
+                replyButtonData[i].replyButtonText.text = collectionSO.PromptText;
+                replyButtonData[i].buttonObj.SetActive(true);
+
+                if (String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text))
+                {
+                    Debug.Log("Empty response text");
+
+                    HideResponse();
+                    ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
+                    return;
+                }
+            }
+
+            for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
+            {
+                replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
+                replyButtonData[i].buttonObj.SetActive(true);
+
+                if (String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text))
+                {
+                    Debug.Log("Empty response text");
+                    HideResponse();
+                    return;
+                }
+            }
+            //#endregion
+
             //Set button on click functions
             for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
             {
@@ -483,19 +519,7 @@ public class ChatManagerUI : MonoBehaviour
                     AddListener(delegate { EventClicked(parent, ChatCollection.ChatEvents[copy]); });
             }
 
-            for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
-            {
-                ChatCollectionSO collectionSO = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
-                replyButtonData[i].replyButtonText.text = collectionSO.PromptText;
-                replyButtonData[i].buttonObj.SetActive(true);
-            }
-
-            for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
-            {
-                replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
-                replyButtonData[i].buttonObj.SetActive(true);
-            }
-
+            Debug.Log("show response normally");
  
             ShowResponseBox();
         }
@@ -504,6 +528,8 @@ public class ChatManagerUI : MonoBehaviour
             Debug.Log("Hide");
             HideResponse();
         }
+
+        Debug.Log("No conditions were met");
     }
 
     void ShowResponseBox()

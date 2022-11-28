@@ -344,10 +344,13 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
             ChatData.CanRGText = true;
 
-            Debug.Log("stay in tree");
+            data.StayInTree = true;
+
+            Debug.Log(profileName.text + " stay in tree");
             return;
         }
 
+        //Set dialogue based on effect if not.
         DialogueContainer c = SetDialogueContainer(out data.CurrentEffect);
 
         if (c != null)
@@ -364,7 +367,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
          
 
         //if (StaticUserData.ProgressionData.CurrentWeek)
-        if (data.CanRGText && data.RGMeter < 80)
+        if (data.CanRGText && data.RGMeter < 80 && data.DateProgress == 2)
         {
             OnChatComplete();
             SetRGScript(data);
@@ -373,7 +376,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         }
 
         return;
-        //Go back to dating if RG meter is good
+        //Go back to dating if RG meter is good, NOT NEEDED
         if (data.RGMeter > 49 && data.DateProgress < 2)
         {
             int date = 0;
@@ -511,11 +514,13 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public void DontStayOnTree()
     {
+        Debug.Log("DontStayOnTree CALLED IN " + profileName.text);
         ChatData.StayInTree = false;
     }
 
     void OnNodeChange()
     {
+        Debug.Log("OnNodeChange CALLED IN " + profileName.text);
         ChatData.CurrentDialogueIndex = 0;
         ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
         ChatData.CurrentDialogueComplete = true;
@@ -532,7 +537,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
     public void OnChatComplete()
     {
-        ChatData.CurrentDialogueIndex = 0;
+        Debug.Log("CHAT COMPLETE CALLED IN " + profileName.text);
+        //ChatData.CurrentDialogueIndex = 0;
 
         //set to false since it needs to reset loading
         ChatData.CurrentDialogueComplete = false;

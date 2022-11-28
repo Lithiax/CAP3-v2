@@ -89,12 +89,13 @@ public class DialogueGraphAPI : MonoBehaviour
     {
         if (CurrentNode.ConnectedNodesData.Count <= 0) return;
 
-        OnNodeChanged?.Invoke();
 
         //Get node chosen
         DialogueNodeData node = CurrentNode.ConnectedNodesData.First(x => x.chatCollection == chatCollection);
         //Move Tree into Node Chosen
         CurrentNode = Nodes.First(x => x.BaseNodeData == node);
+
+        OnNodeChanged?.Invoke();
         jumped = false;
     }
      
@@ -109,7 +110,7 @@ public class DialogueGraphAPI : MonoBehaviour
 
         CurrentNode = Nodes.First(x => x.BaseNodeData.NodeGUID == GUID);
         CurrentNode.CurrentIndex = index;
-        Debug.Log("JUMP TO NODE");
+        Debug.Log("JUMP TO NODE " + GUID);
         jumped = true;
     }
 }
