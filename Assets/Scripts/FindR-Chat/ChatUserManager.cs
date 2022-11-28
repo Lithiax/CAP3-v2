@@ -16,6 +16,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     [SerializeField] ToggleGroup toggleGroup;
     [SerializeField] ChatManagerUI chatManager;
     [SerializeField] FindREventsManager eventsManager;
+    [SerializeField] GameObject SkipButton;
 
     //To set a new user, just add it in the static script
     [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
@@ -45,6 +46,11 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
             UserDataTesting.Add(so);
         }
 
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            Debug.Log("Active Effects: " + s);
+        }
+
         foreach (ChatUserSO user in UserDataTesting)
         {
             GenerateUser(user);
@@ -54,16 +60,18 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             SpawnedUsers[0].toggle.Select();
         }
+
+        if (StaticUserData.ProgressionData.CurrentMonth == 1 &&
+            StaticUserData.ProgressionData.CurrentWeek == 2)
+        {
+            SkipButton.SetActive(false);
+        }
     }
 
     void GenerateUser(ChatUserSO data)
     {
         DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => StaticUserData.UsedEffects.Contains(x));
 
-        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
-        {
-            Debug.Log("Active Effects: " + s);
-        }
         GameObject UserObj = Instantiate(UserPrefab, UserParent.transform);
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
@@ -81,18 +89,13 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         effectsToRemove.Add(s);
         if (effectsToRemove.Intersect(StaticUserData.UsedEffects).Any())
         {
-            Debug.LogError("Effect duplication found!");
+            Debug.Log("Effect duplication found!");
         }
         StaticUserData.UsedEffects.Add(s);
     }
 
     private void OnDisable()
     {
-        foreach (string e in DialogueSpreadSheetPatternConstants.effects)
-        {
-            Debug.Log(e);
-        }
-
         RemoveUsedEffects();
     }
 
@@ -102,7 +105,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         Debug.Log("Remove Effects " + effectsToRemove.Count);
         DialogueSpreadSheetPatternConstants.effects.RemoveAll(x => effectsToRemove.Contains(x));
 
-        foreach (string e in DialogueSpreadSheetPatternConstants.effects)
+        foreach (string e in effectsToRemove)
         {
             Debug.Log("Remove " + e);
         }
@@ -133,6 +136,8 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         }
 
         effectsToRemove = data.EffectsUsed;
+
+        StaticUserData.UsedEffects = data.EffectsUsed;
 
         RemoveUsedEffects();
     }

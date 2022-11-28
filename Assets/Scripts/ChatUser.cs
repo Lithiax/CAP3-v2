@@ -95,6 +95,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         dateProgressUI = GetComponentInChildren<DateProgressUI>();
 
         DialogueTree.OnNodeChanged += OnNodeChange;
+
     }
 
     public void ModifyHealth(int health)
@@ -118,6 +119,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.chatUsers.Add(this);
         toggle.group = toggleGroup;
 
+        chatManager.OnSetNextTree += SetNextTree;
+
         profileName.text = data.profileName;
         profileImage.sprite = data.profileImage;
 
@@ -135,7 +138,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
-        Debug.Log("Load Data: " + gameData);
         if (gameData != null)
         {
             //We clear StaticUserData since its temporary, we reset it to this current save state.
@@ -303,14 +305,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Check if user is blocked
         if (SetBlocked(data)) return;
 
-
         //Set Initial Hearts
         dateProgressUI.SetHearts(data.DateProgress);
-
-        if (ChatData.WasBranchEffect == true)
-        {
-            chatManager.OnSetNextTree += SetNextTree;
-        }
 
         //Spawn in Previous Chat Objects
         foreach (ChatBubble chat in data.ChatBubbles)
@@ -339,7 +335,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Check if previous tree is skippable (only RGChats are skippable)
         if (data.StayInTree && data.NotSkippableDialogue != null /*&& data.CurrentDialogueComplete == false*/)
         {
-            DialogueSpreadSheetPatternConstants.effects.Add(data.CurrentEffect);
+            //DialogueSpreadSheetPatternConstants.effects.Add(data.CurrentEffect);
 
             DialogueTree.SetDialogueTree(data.NotSkippableDialogue);
             DialogueTree.ForceJumpToNode(data.CurrentNodeGUID, data.CurrentDialogueIndex);
@@ -369,7 +365,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
          
 
         //if (StaticUserData.ProgressionData.CurrentWeek)
-        if (data.CanRGText && data.RGMeter <= 49)
+        if (data.CanRGText && data.RGMeter < 80)
         {
             OnChatComplete();
             SetRGScript(data);
@@ -377,7 +373,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
-
+        return;
         //Go back to dating if RG meter is good
         if (data.RGMeter > 49 && data.DateProgress < 2)
         {
@@ -424,6 +420,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             {
                 nextContainer = d;
                 DialogueTree.SetDialogueTree(nextContainer);
+
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
                 ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
 
@@ -452,6 +449,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         DialogueContainer nextContainer = null;
         foreach (string s in DialogueSpreadSheetPatternConstants.effects)
         {
+            Debug.Log("NEXT TREE: " + s);
             DialogueContainer d = ChatUserSO.dialogueBranches.GetPostBranch(s);
             if (d)
             {
@@ -460,8 +458,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
                 ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
-
-                ChatData.WasBranchEffect = false;
 
                 Debug.Log("Removing Effect: " + s);
                 OnRemoveEffect?.Invoke(s);
@@ -480,15 +476,13 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 DialogueTree.SetDialogueTree(nextContainer);
                 ChatData.CurrentTree = DialogueTree.DialogueTree;
                 ChatData.CurrentNodeGUID = DialogueTree.CurrentNode.BaseNodeData.NodeGUID;
-
-
-                ChatData.WasBranchEffect = false;
             }
             else
             {
                 Debug.Log("NO NEXT BRANCH FOUND!");
                 return;
             }
+
         }
 
         profileName.text = ChatUserSO.profileName;
@@ -503,9 +497,10 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (SetDialogueContainer(out ChatData.BranchEffect) == null)
         {
             Debug.Log("NO EVENT FOUND!");
+            chatManager.ReplyClicked(0);
             return;
         }
-        chatManager.OnSetNextTree += SetNextTree;
+
         ChatData.WasBranchEffect = true;
 
         profileName.text = ChatUserSO.profileName;
@@ -530,6 +525,8 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     private void OnDisable()
     {
         chatManager.OnSetNextTree -= SetNextTree;
+        ChatData.WasBranchEffect = false;
+
         DialogueTree.OnNodeChanged -= OnNodeChange;
 
     }
@@ -605,14 +602,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         //Set to intial tree if it has one.
 
-        profileName.text = userData.profileName;
-        profileImage.sprite = userData.profileImage;
-
-
-        if (ChatData.ActiveDialogue)
-            DialogueTree.SetDialogueTree(ChatData.CurrentTree);
-        else
-            DialogueTree.SetDialogueTree(null);
 
         StaticUserData.ChatUserData.Add(ChatData);
 
@@ -621,6 +610,18 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
         {
             ChatData = data.ChatUserData.First(x => x.name == ChatUserSO.profileName);
+
+            ChatData.StayInTree = false;
+
+            profileName.text = userData.profileName;
+            profileImage.sprite = userData.profileImage;
+
+            if (ChatData.ActiveDialogue)
+                DialogueTree.SetDialogueTree(ChatData.CurrentTree);
+            else
+                DialogueTree.SetDialogueTree(null);
+
+
             healthUI.currentHealth = ChatData.RGMeter;
             UpdateHealthBar(ChatData.RGMeter);
 

@@ -53,6 +53,7 @@ public class DataPersistenceManager : MonoBehaviour
         if (gameData.ProgressionData != null)
         {
             StaticUserData.ProgressionData = gameData.ProgressionData;
+
         }
 
         if (gameData.CurrentSceneName == "VisualNovel")
