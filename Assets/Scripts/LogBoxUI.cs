@@ -31,17 +31,17 @@ public class LogBoxUI : MonoBehaviour
     }
     public void ToggleLogBox()
     {
-        couldUpdate = !couldUpdate;
-        if (logBox.activeSelf == false)
-        {
-            Create();
-          //  Debug.Log("LOG BOX OPEN");
-        }
-        else
-        {
-            Destroy();
-           // Debug.Log("LOG BOX CLOSE");
-        }
+        //couldUpdate = !couldUpdate;
+        //if (logBox.activeSelf == false)
+        //{
+        //    Create();
+        //  //  Debug.Log("LOG BOX OPEN");
+        //}
+        //else
+        //{
+        //    Destroy();
+        //   // Debug.Log("LOG BOX CLOSE");
+        //}
 
     }
 
@@ -56,6 +56,18 @@ public class LogBoxUI : MonoBehaviour
 
             }
         }
+        if (StorylineManager.currentSO_Dialogues != null)
+        {
+            if (StorylineManager.currentDialogueIndex  < StorylineManager.currentSO_Dialogues.dialogues.Count)
+            {
+                UpdateDialogueLog(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex]);
+            }
+            else if (StorylineManager.currentDialogueIndex >= StorylineManager.currentSO_Dialogues.dialogues.Count)
+            {
+                UpdateDialogueLog(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentSO_Dialogues.dialogues.Count-1]);
+            }
+        }
+
     }
     private void Destroy()
     {
@@ -67,21 +79,29 @@ public class LogBoxUI : MonoBehaviour
     }
     public void UpdateDialogueLog(Dialogue p_dialogue)
     {
-        if(couldUpdate)
+        //if(couldUpdate)
+        //{
+        LogTextUI newPrefab = Instantiate(prefab, containerTransform);
+        //Find Speaker
+        string speakerFound = "";
+        for (int x = 0; x < p_dialogue.characterDatas.Count; x++)
         {
-            LogTextUI newPrefab = Instantiate(prefab, containerTransform);
-            //Find Speaker
-            string speakerFound = "";
-            for (int x = 0; x < p_dialogue.characterDatas.Count; x++)
+            if (p_dialogue.characterDatas[x].isSpeaking)
             {
-                if (p_dialogue.characterDatas[x].isSpeaking)
+                if (string.IsNullOrEmpty(p_dialogue.characterDatas[x].character.stageName))
+                {
+                    speakerFound = "YOU";
+                }
+                else
                 {
                     speakerFound = p_dialogue.characterDatas[x].character.stageName;
                 }
+
             }
-            string words = p_dialogue.words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
-            newPrefab.Initialize(speakerFound, words);
         }
+        string words = p_dialogue.words.Replace("<MC>", StorylineManager.instance.mainCharacter.stageName);
+        newPrefab.Initialize(speakerFound, words);
+        //}
       
     }
 

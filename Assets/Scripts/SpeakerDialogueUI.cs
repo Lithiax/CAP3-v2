@@ -199,7 +199,11 @@ public class SpeakerDialogueUI : MonoBehaviour
             {
                 so = character;
             }
-            else
+        else if (character.ToLower() == "you")
+        {
+            so = character;
+        }
+        else
             {
                 so = "Typewriting";
             }
