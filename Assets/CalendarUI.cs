@@ -107,12 +107,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
             Debug.Log("Skip Animation");
             tempWeek++;
 
-            if (tempWeek > 4)
-            {
-                tempWeek = 1;
-                tempMonth++;
-                tempMonth = Mathf.Clamp(tempMonth, 1, 3);
-            }
+            //if (tempWeek > 4)
+            //{
+            //    tempWeek = 1;
+            //    tempMonth++;
+            //    tempMonth = Mathf.Clamp(tempMonth, 1, 3);
+            //}
         }
 
         //This sets it to the previous so its ready for animation.
@@ -221,7 +221,12 @@ public class CalendarUI : MonoBehaviour, IDataPersistence
 
     void SetDatePanel(int month, int week)
     {
-        if (week == 1) return;
+        if (week == 1 && month == 1) return;
+        else if (week == 1)
+        {
+            month -= 1;
+        }
+
         float posX = datePanelOldLocalPos.x;
         posX -= (month - 1) * BGDifference;
 
