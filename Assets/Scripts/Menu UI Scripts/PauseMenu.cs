@@ -7,6 +7,8 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject PausePanel;
     [SerializeField] GameObject logSheet;
+    [SerializeField] AudioSource hoverSoundAudioSource;
+    [SerializeField] AudioSource clickSoundAudioSource;
 
     [SerializeField] List<GameObject> panels = new List<GameObject>();
     public static Action isPausingEvent;
@@ -40,9 +42,18 @@ public class PauseMenu : MonoBehaviour
             //PausePanel.SetActive(paused);
         }
     }
+    public void PlayHoverSound()
+    {
+        hoverSoundAudioSource.Play();
+    }
 
+    public void PlayClickSound()
+    {
+        clickSoundAudioSource.Play();
+    }
     void IsPausing()
     {
+        PlayHoverSound();
 
         paused = !paused;
         SetInitialPanels();

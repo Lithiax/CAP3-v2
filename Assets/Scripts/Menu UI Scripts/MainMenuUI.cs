@@ -7,6 +7,7 @@ using UnityEngine.Audio;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource clickSFXSource;
     [SerializeField] List<GameObject> panels;
     public AudioMixer audioMixer;
 
@@ -123,7 +124,10 @@ public class MainMenuUI : MonoBehaviour
             camera.rect = rect;
         }
     }
-
+    public void ClickSound()
+    {
+        clickSFXSource.Play();
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -136,17 +140,20 @@ public class MainMenuUI : MonoBehaviour
     }
     public void NewGameButton()
     {
+      
         StaticUserData.Reset();
         StartCoroutine(Co_AudioFadeOut());
     }
 
     public void ExitButton()
     {
+
         Application.Quit();
     }
 
     public void ActivatePanel(GameObject panel)
     {
+
         foreach (GameObject p in panels)
         {
             p.SetActive(false);
@@ -158,6 +165,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void MainMenuButton()
     {
+
         LoadingUI.instance.InitializeLoadingScreen("MainMenu");
     }
 }

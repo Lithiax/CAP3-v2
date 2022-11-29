@@ -88,6 +88,7 @@ public class CharacterDialogueUI : MonoBehaviour
  
     public void NextTutorial()
     {
+        AudioManager.instance.AdditivePlayAudio("Click");
         tutorialImageIndex++;
         if (tutorialImageIndex < tutorialImages.Count)
         {
