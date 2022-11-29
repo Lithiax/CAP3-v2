@@ -162,6 +162,10 @@ public class SpeakerDialogueUI : MonoBehaviour
     public void SetWords(string p_words)
     {
         currentDialogueText.text = p_words;
+        if (!string.IsNullOrEmpty(so))
+        {
+            AudioManager.instance.ForceStopAudio(so);
+        }
     }
  
     public void SetSpeech(string p_words, string character = "")

@@ -7,7 +7,7 @@ using TMPro;
 using System;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.Video;
 public class CharacterSpokenTo : UnityEvent { }
 public class NewDialogueEvent : UnityEvent<Dialogue> { }
 public class FirstTimeFoodOnEndEvent : UnityEvent { }
@@ -61,6 +61,7 @@ public class CharacterDialogueUI : MonoBehaviour
 
     public static System.Action OnInspectingEvent;
     public static System.Action OnDeinspectingEvent;
+    public static Action creditsRoll;
     [SerializeField]
     private SpeakerDialogueUI speakerDialogueUI;
 
@@ -85,7 +86,10 @@ public class CharacterDialogueUI : MonoBehaviour
     public GameObject cueIndicator;
     bool deadsheet = false;
     bool clearlogs = false;
- 
+
+    public VideoPlayer credits;
+    public GameObject framez;
+    public GameObject creditspanel;
     public void NextTutorial()
     {
         AudioManager.instance.AdditivePlayAudio("Click");
@@ -102,6 +106,31 @@ public class CharacterDialogueUI : MonoBehaviour
             CharacterDialogueUI.onCharacterSpokenTo?.Invoke();
         }
 
+    }
+    public void cred()
+    {
+        if (!string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
+        {
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.ForceStopAudio(StorylineManager.currentBackgroundMusic,false);
+            }
+ 
+        }
+            framez.SetActive(false);
+        creditspanel.SetActive(true);
+        TransitionUI.onFadeTransition?.Invoke(0, false, false);
+        credits.Play();
+        StartCoroutine(Credi());
+ 
+    }
+
+    IEnumerator Credi()
+    {
+        yield return new WaitForSeconds(8f);
+        TransitionUI.onFadeTransition?.Invoke(1, false, false);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("MainMenu");
     }
     void skip()
     {
@@ -123,7 +152,7 @@ public class CharacterDialogueUI : MonoBehaviour
     private void Awake()
     {
         savedCharacters.Clear();
-
+        creditsRoll += cred;
         ActionUIs.onEnterEvent += open;
         OnDeinspectingEvent += close;
         onCharacterSpokenTo.AddListener(OnCharacterSpokenTo);
@@ -144,6 +173,7 @@ public class CharacterDialogueUI : MonoBehaviour
     private void OnDestroy()
     {
         //EVENTS
+        creditsRoll -= cred;
         ActionUIs.onEnterEvent -= open;
         OnDeinspectingEvent -= close;
         OnStartChooseChoiceEvent -= DisableNextDialogueButton;
@@ -340,6 +370,13 @@ public class CharacterDialogueUI : MonoBehaviour
         if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
         {
             healthUI.OnInitializeEvent?.Invoke(DialogueSpreadSheetPatternConstants.cueCharacter.idName);
+      
+        }
+        else
+        {
+             healthUI.OnInitializeEvent?.Invoke("");
+    
+
         }
 
         //Debug.Log("start trans false");
@@ -904,8 +941,12 @@ public class CharacterDialogueUI : MonoBehaviour
                         else
                         {
                             //Set Choice Damage
+                            if (healthUI.gameObject.activeSelf)
+                            {
+                                healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
 
-                            healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                            }
+      
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier > 0)
                             {
                                 AudioManager.instance.AdditivePlayAudio("right");

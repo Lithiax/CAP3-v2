@@ -119,14 +119,19 @@ public class HealthUI : MonoBehaviour
     private bool isCurrentlyResettingCoroutine = false;
     [SerializeField] private float resetTransitionTime;
 
+    //[SerializeField]
+    //public Sprite heart;
+    //[SerializeField]
+    //public Sprite friend;
+    //[SerializeField]
+    //public Sprite enemy;
+
     [SerializeField]
-    private Sprite heart;
+    private GameObject heart;
     [SerializeField]
-    private Sprite friend;
+    private GameObject friend;
     [SerializeField]
-    private Sprite enemy;
-    [SerializeField]
-    private Image relationshipIcon;
+    private GameObject enemy;
     [SerializeField] private Color32 defaultRealBarColor;
     [SerializeField] private Color32 belowRealBarColor;
     [SerializeField] private InstantColorData realBarColorFlash;
@@ -142,7 +147,7 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private FillTransitionData ghostBarFillTransition;
 
     [SerializeField] private float delayTime = 0;
-
+    public bool iconEnabled;
     private float current = 0;
     private float currentMax = 1;
     private float savedFill = 0;
@@ -182,29 +187,29 @@ public class HealthUI : MonoBehaviour
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.maeveHealth;
                 InstantUpdateBar(currentHealth, maxHealth, maxHealth);
-                Open();
+                Close();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Penelope")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
                 InstantUpdateBar(currentHealth, maxHealth, maxHealth);
-                Open();
+                Close();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Brad")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.bradHealth;
                 InstantUpdateBar(currentHealth, maxHealth, maxHealth);
-                Open();
+                Close();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Liam")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
                 InstantUpdateBar(currentHealth, maxHealth, maxHealth);
-                Open();
+                Close();
             }
             else
             {
-                Close();
+                Open();
             }
         
         }
@@ -233,12 +238,12 @@ public class HealthUI : MonoBehaviour
         }
 
     }
-    void Open()
+    public void Open()
     {
         frame.SetActive(false);
     }
 
-    void Close()
+    public void Close()
     {
         frame.SetActive(true);
     }
@@ -270,7 +275,11 @@ public class HealthUI : MonoBehaviour
 
         }
      
-        UpdateBar(currentHealth, maxHealth);
+        if (gameObject.activeSelf && frame.activeSelf)
+        {
+            UpdateBar(currentHealth, maxHealth);
+        }
+      
     }
 
     bool IsWithinHealthCondition(int p_healthCeilingCondition, int p_healthFloorCondition)
@@ -302,26 +311,33 @@ public class HealthUI : MonoBehaviour
             realBarUI.DOFillAmount(savedFill, 0.01f);
             if (currentHealth >= 80)
             {
-                if (relationshipIcon != null)
+                if (iconEnabled)
                 {
-                    relationshipIcon.sprite = heart;
+ 
+                    heart.SetActive(true);
+                    friend.SetActive(false);
+                    enemy.SetActive(false);
                 }
 
                 realBarUI.color = orangeColorBarColor;
             }
             else if (currentHealth < 80 && currentHealth >= 15)
             {
-                if (relationshipIcon != null)
+                if (iconEnabled)
                 {
-                    relationshipIcon.sprite = friend;
+                    heart.SetActive(false);
+                    friend.SetActive(true);
+                    enemy.SetActive(false);
                 }
                 realBarUI.color = defaultRealBarColor;
             }
             else
             {
-                if (relationshipIcon != null)
+                if (iconEnabled)
                 {
-                    relationshipIcon.sprite = enemy;
+                    heart.SetActive(false);
+                    friend.SetActive(false);
+                    enemy.SetActive(true);
                 }
                 realBarUI.color = belowRealBarColor;
             }
@@ -362,7 +378,7 @@ public class HealthUI : MonoBehaviour
             }
         }
 
-        if (gameObject.activeSelf)
+        if (gameObject.activeSelf != false)
         {
             StartCoroutine(Co_UpdateBar(fill));
         }
@@ -384,25 +400,31 @@ public class HealthUI : MonoBehaviour
             {
                 if (currentHealth >= 80)
                 {
-                    if (relationshipIcon != null)
+                    if (iconEnabled)
                     {
-                        relationshipIcon.sprite = heart;
+                        heart.SetActive(true);
+                        friend.SetActive(false);
+                        enemy.SetActive(false);
                     }
                     realBarUI.color = orangeColorBarColor;
                 }
                 else if (currentHealth < 80 && currentHealth >= 15)
                 {
-                    if (relationshipIcon != null)
+                    if (iconEnabled)
                     {
-                        relationshipIcon.sprite = friend;
+                        heart.SetActive(false);
+                        friend.SetActive(true);
+                        enemy.SetActive(false);
                     }
                     realBarUI.color = defaultRealBarColor;
                 }
                 else
                 {
-                    if (relationshipIcon != null)
+                    if (iconEnabled)
                     {
-                        relationshipIcon.sprite = enemy;
+                        heart.SetActive(false);
+                        friend.SetActive(false);
+                        enemy.SetActive(true);
                     }
                     realBarUI.color = belowRealBarColor;
                 }
@@ -423,14 +445,32 @@ public class HealthUI : MonoBehaviour
             {
                 if (currentHealth >= 80)
                 {
+                    if (iconEnabled)
+                    {
+                        heart.SetActive(true);
+                        friend.SetActive(false);
+                        enemy.SetActive(false);
+                    }
                     realBarUI.color = orangeColorBarColor;
                 }
                 else if (currentHealth < 80 && currentHealth >= 15)
                 {
+                    if (iconEnabled)
+                    {
+                        heart.SetActive(false);
+                        friend.SetActive(true);
+                        enemy.SetActive(false);
+                    }
                     realBarUI.color = defaultRealBarColor;
                 }
                 else
                 {
+                    if (iconEnabled)
+                    {
+                        heart.SetActive(false);
+                        friend.SetActive(false);
+                        enemy.SetActive(true);
+                    }
                     realBarUI.color = belowRealBarColor;
                 }
             }
@@ -516,14 +556,38 @@ public class HealthUI : MonoBehaviour
         ghostBarUI.color = fakeRealBarColor;
         if (currentHealth >= 80)
         {
+            Debug.Log("IN DA");
+            if (iconEnabled)
+            {
+                Debug.Log("IN DA");
+                heart.SetActive(true);
+                friend.SetActive(false);
+                enemy.SetActive(false);
+            }
             realBarUI.color = orangeColorBarColor;
         }
         else if (currentHealth < 80 && currentHealth >= 15)
         {
+            Debug.Log("IN FRIEND");
+            if (iconEnabled)
+            {
+                Debug.Log("IN FRIEND");
+                heart.SetActive(false);
+                friend.SetActive(true);
+                enemy.SetActive(false);
+            }
             realBarUI.color = defaultRealBarColor;
         }
         else
         {
+            Debug.Log("IN ENEMY");
+            if (iconEnabled)
+            {
+                Debug.Log("IN ENEMY");
+                heart.SetActive(false);
+                friend.SetActive(false);
+                enemy.SetActive(true);
+            }
             realBarUI.color = belowRealBarColor;
         }
 

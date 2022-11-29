@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 [System.Serializable]
 public class CodeReplacement
 {
@@ -32,11 +33,15 @@ public class StorylineManager : MonoBehaviour, IDataPersistence
     public static bool renamed = false;
     public static Action OnLoadedEvent;
 
+
+
     public static void GoBackMenu()
     {
+  
         SceneManager.LoadScene("MainMenu");
     }
-    public static void LoadVisualNovel(GameData p_gameData)
+
+public static void LoadVisualNovel(GameData p_gameData)
     {
 
 
