@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Linq;
 
 public class ChatUserManager : MonoBehaviour, IDataPersistence
@@ -25,10 +26,13 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     List<string> effectsToRemove = new List<string>();
     [HideInInspector] public bool DataLoaded = false;
 
+    public Action<List<ChatUser>> OnSpawnedUsers;
+
     GameData gameData = null;
     private void Awake()
     {
         chatManager.InitializeTransforms();
+        SpawnedUsers.Clear();
     }
     private void Start()
     {
@@ -59,6 +63,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         if (SpawnedUsers.Count > 0)
         {
             SpawnedUsers[0].toggle.Select();
+            OnSpawnedUsers?.Invoke(SpawnedUsers);
         }
 
         if (StaticUserData.ProgressionData.CurrentMonth == 1 &&

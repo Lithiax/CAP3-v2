@@ -2,22 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class UserLevelData
-{
-    public int level;
-    public List<ChatUser> ChatUsers;
-}
-
 public class FindRDataManager : MonoBehaviour
 {
     public ChatUserManager ChatUserManager;
     List<ChatUser> ChatUsers = new List<ChatUser>();
-    public List<UserLevelData> UserData;
+
+    private void Awake()
+    {
+        ChatUserManager.OnSpawnedUsers += OnUsersSpawned;
+    }
 
     private void Start()
     {
         AudioManager.instance.AdditivePlayAudio("bgm", false);
+    }
+
+    void OnUsersSpawned(List<ChatUser> users)
+    {
+        ChatUsers = users;
     }
 
     private void OnDisable()
