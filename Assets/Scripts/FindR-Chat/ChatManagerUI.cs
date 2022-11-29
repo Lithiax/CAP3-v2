@@ -295,7 +295,8 @@ public class ChatManagerUI : MonoBehaviour
             {
                 Debug.Log("CURRENT CHAT COMPLETE current events: " + ev.EventType.ToString());
                 EventManager.RegisterEvent(ev);
-                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent)
+                if (ev.EventType != ChatEventTypes.DateEvent && ev.EventType != ChatEventTypes.InstantDateEvent &&
+                    ev.EventType != ChatEventTypes.EndingEvent)
                 {
                     //parent.OnChatComplete();
                     ev.RaiseEvent(parent.ChatUserSO);
