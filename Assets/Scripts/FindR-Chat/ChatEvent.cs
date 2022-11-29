@@ -35,6 +35,8 @@ public class ChatEvent
                 return "Begin Date";
             case ChatEventTypes.InstantDateEvent:
                 return "Proceed to Next Week.";
+            case ChatEventTypes.EndingEvent:
+                return "Proceed.";
             default:
                 return "";
         }

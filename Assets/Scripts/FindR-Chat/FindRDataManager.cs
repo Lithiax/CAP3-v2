@@ -7,19 +7,9 @@ public class FindRDataManager : MonoBehaviour
     public ChatUserManager ChatUserManager;
     List<ChatUser> ChatUsers = new List<ChatUser>();
 
-    private void Awake()
-    {
-        ChatUserManager.OnSpawnedUsers += OnUsersSpawned;
-    }
-
     private void Start()
     {
         AudioManager.instance.AdditivePlayAudio("bgm", false);
-    }
-
-    void OnUsersSpawned(List<ChatUser> users)
-    {
-        ChatUsers = users;
     }
 
     private void OnDisable()

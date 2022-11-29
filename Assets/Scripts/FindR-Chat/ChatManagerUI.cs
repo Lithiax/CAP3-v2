@@ -483,21 +483,14 @@ public class ChatManagerUI : MonoBehaviour
 
                     HideResponse();
                     ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
-                    return;
+                    break;
                 }
             }
 
             for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
             {
                 replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
-                replyButtonData[i].buttonObj.SetActive(true);
-
-                if (String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text))
-                {
-                    Debug.Log("Empty response text");
-                    HideResponse();
-                    return;
-                }
+                replyButtonData[i].buttonObj.SetActive(!String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text));
             }
             //#endregion
 

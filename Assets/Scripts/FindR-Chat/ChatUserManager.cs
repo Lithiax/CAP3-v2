@@ -26,8 +26,6 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     List<string> effectsToRemove = new List<string>();
     [HideInInspector] public bool DataLoaded = false;
 
-    public Action<List<ChatUser>> OnSpawnedUsers;
-
     GameData gameData = null;
     private void Awake()
     {
@@ -63,7 +61,6 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         if (SpawnedUsers.Count > 0)
         {
             SpawnedUsers[0].toggle.Select();
-            OnSpawnedUsers?.Invoke(SpawnedUsers);
         }
 
         if (StaticUserData.ProgressionData.CurrentMonth == 1 &&
