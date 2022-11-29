@@ -133,6 +133,7 @@ public class MainMenuUI : MonoBehaviour
 
         frame.SetActive(false);
         creditframe.SetActive(true);
+        audioSource.Stop();
         credits.Play();
         StartCoroutine(Credi());
     }
@@ -140,6 +141,8 @@ public class MainMenuUI : MonoBehaviour
     IEnumerator Credi()
     {
         yield return new WaitForSeconds(8f);
+        audioSource.Play();
+        credits.Stop();
         frame.SetActive(true);
         creditframe.SetActive(false);
     }
