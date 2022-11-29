@@ -143,7 +143,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         if (gameData != null)
         {
             //We clear StaticUserData since its temporary, we reset it to this current save state.
-            StaticUserData.ChatUserData.Clear();
+
             LoadGameData(data, gameData);
         }
         //If ChatUser is new
@@ -619,8 +619,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //Set to intial tree if it has one.
 
 
-        StaticUserData.ChatUserData.Add(ChatData);
-
         //Spawn in chats that were already done before.
 
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
@@ -648,9 +646,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
                 Divider = chatManager.SpawnDivider();
             }
-           
+
+            StaticUserData.ChatUserData.Add(ChatData);
+
             LoadChatData(ChatData);
             DialogueTree.ForceJumpToNode(ChatData.CurrentNodeGUID, ChatData.CurrentDialogueIndex);
+
         }
 
     }

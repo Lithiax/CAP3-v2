@@ -53,7 +53,6 @@ public class DataPersistenceManager : MonoBehaviour
         if (gameData.ProgressionData != null)
         {
             StaticUserData.ProgressionData = gameData.ProgressionData;
-
         }
 
         if (gameData.CurrentSceneName == "VisualNovel")
@@ -63,7 +62,8 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (gameData.CurrentSceneName != "")
         {
-            SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
+            //SceneManager.LoadSceneAsync(gameData.CurrentSceneName);
+            LoadingUI.instance.InitializeLoadingScreen(gameData.CurrentSceneName);
         }
 
         SceneManager.sceneLoaded += GetAndLoadData;
