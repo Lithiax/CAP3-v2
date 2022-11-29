@@ -174,31 +174,41 @@ public class HealthUI : MonoBehaviour
     void OnInitialize(string p_ownerName)
     {
         characterOwnerName = p_ownerName;
-      //  Debug.Log("HEALTH INITIALIZED " + DialogueSpreadSheetPatternConstants.maeveHealth);
+        //  Debug.Log("HEALTH INITIALIZED " + DialogueSpreadSheetPatternConstants.maeveHealth);
+        //Debug.Log("INITIALIZING HEALTH " + characterOwnerName);
         if (!string.IsNullOrEmpty(characterOwnerName))
         {
             if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Maeve")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.maeveHealth;
+                InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+                Open();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Penelope")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.penelopeHealth;
+                InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+                Open();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Brad")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.bradHealth;
+                InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+                Open();
             }
             else if (DialogueSpreadSheetPatternConstants.cueCharacter.idName == "Liam")
             {
                 currentHealth = DialogueSpreadSheetPatternConstants.liamHealth;
+                InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+                Open();
             }
-            InstantUpdateBar(currentHealth, maxHealth, maxHealth);
+            else
+            {
+                Close();
+            }
+        
         }
-        else
-        {
-            Close();
-        }
+      
     }
     void SaveHealth()
     {
@@ -292,17 +302,27 @@ public class HealthUI : MonoBehaviour
             realBarUI.DOFillAmount(savedFill, 0.01f);
             if (currentHealth >= 80)
             {
-                relationshipIcon.sprite = heart;
+                if (relationshipIcon != null)
+                {
+                    relationshipIcon.sprite = heart;
+                }
+
                 realBarUI.color = orangeColorBarColor;
             }
             else if (currentHealth < 80 && currentHealth >= 15)
             {
-                relationshipIcon.sprite = friend;
+                if (relationshipIcon != null)
+                {
+                    relationshipIcon.sprite = friend;
+                }
                 realBarUI.color = defaultRealBarColor;
             }
             else
             {
-                relationshipIcon.sprite = enemy;
+                if (relationshipIcon != null)
+                {
+                    relationshipIcon.sprite = enemy;
+                }
                 realBarUI.color = belowRealBarColor;
             }
            // realBarUI.color = new Color(realBarUI.color.r, realBarUI.color.g, realBarUI.color.b, 1);
@@ -364,17 +384,26 @@ public class HealthUI : MonoBehaviour
             {
                 if (currentHealth >= 80)
                 {
-                    relationshipIcon.sprite = heart;
+                    if (relationshipIcon != null)
+                    {
+                        relationshipIcon.sprite = heart;
+                    }
                     realBarUI.color = orangeColorBarColor;
                 }
                 else if (currentHealth < 80 && currentHealth >= 15)
                 {
-                    relationshipIcon.sprite = friend;
+                    if (relationshipIcon != null)
+                    {
+                        relationshipIcon.sprite = friend;
+                    }
                     realBarUI.color = defaultRealBarColor;
                 }
                 else
                 {
-                    relationshipIcon.sprite = enemy;
+                    if (relationshipIcon != null)
+                    {
+                        relationshipIcon.sprite = enemy;
+                    }
                     realBarUI.color = belowRealBarColor;
                 }
             }
