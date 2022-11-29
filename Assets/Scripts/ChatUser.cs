@@ -523,6 +523,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     {
         Debug.Log("DontStayOnTree CALLED IN " + profileName.text);
         ChatData.StayInTree = false;
+        ChatData.CurrentDialogueIndex = 0;
     }
 
     void OnNodeChange()
