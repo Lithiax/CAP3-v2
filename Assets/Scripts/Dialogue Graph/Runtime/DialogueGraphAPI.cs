@@ -88,7 +88,11 @@ public class DialogueGraphAPI : MonoBehaviour
     public void MoveToNode(ScriptableObject chatCollection)
     {
         if (CurrentNode.ConnectedNodesData.Count <= 0) return;
-
+        if (CurrentNode.ConnectedNodesData.Any(x => x.chatCollection == chatCollection) == false)
+        {
+            Debug.Log("Node to move to does not exist!!");
+            return;
+        }
 
         //Get node chosen
         DialogueNodeData node = CurrentNode.ConnectedNodesData.First(x => x.chatCollection == chatCollection);
