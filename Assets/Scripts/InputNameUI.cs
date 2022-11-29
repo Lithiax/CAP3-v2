@@ -45,6 +45,7 @@ public class InputNameUI : MonoBehaviour
             StorylineManager.renamed = true;
             so_Character.stageName = inputField.text;
             StorylineManager.currentDialogueIndex++;
+            AudioManager.instance.AdditivePlayAudio("Click");
             //CharacterDialogueUI.OnEndEvent.Invoke();
             CharacterDialogueUI.OnContinueEvent?.Invoke();
             ToggleUI();

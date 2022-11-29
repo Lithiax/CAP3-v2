@@ -88,6 +88,7 @@ public class CharacterDialogueUI : MonoBehaviour
  
     public void NextTutorial()
     {
+        AudioManager.instance.AdditivePlayAudio("Click");
         tutorialImageIndex++;
         if (tutorialImageIndex < tutorialImages.Count)
         {
@@ -299,7 +300,15 @@ public class CharacterDialogueUI : MonoBehaviour
             if (string.IsNullOrEmpty(StorylineManager.currentBackgroundMusic))
             {
                 //Debug.Log("EARLY PLAY");
-                AudioManager.instance.AdditivePlayAudio(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
+                if (StorylineManager.currentDialogueIndex < StorylineManager.currentSO_Dialogues.dialogues.Count)
+                {
+                    if (string.IsNullOrEmpty(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic))
+                    {
+                        AudioManager.instance.AdditivePlayAudio(StorylineManager.currentSO_Dialogues.dialogues[StorylineManager.currentDialogueIndex].backgroundMusic, false);
+                    }
+            
+                }
+     
             }
      
       

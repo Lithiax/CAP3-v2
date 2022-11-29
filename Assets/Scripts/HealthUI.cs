@@ -119,7 +119,16 @@ public class HealthUI : MonoBehaviour
     private bool isCurrentlyResettingCoroutine = false;
     [SerializeField] private float resetTransitionTime;
 
+    [SerializeField]
+    private Sprite heart;
+    [SerializeField]
+    private Sprite friend;
+    [SerializeField]
+    private Sprite enemy;
+    [SerializeField]
+    private Image relationshipIcon;
     [SerializeField] private Color32 defaultRealBarColor;
+    [SerializeField] private Color32 belowRealBarColor;
     [SerializeField] private InstantColorData realBarColorFlash;
     [SerializeField] private List<ColorTransitionData> realBarColorTransitions = new List<ColorTransitionData>();
 
@@ -186,6 +195,10 @@ public class HealthUI : MonoBehaviour
             }
             InstantUpdateBar(currentHealth, maxHealth, maxHealth);
         }
+        else
+        {
+            Close();
+        }
     }
     void SaveHealth()
     {
@@ -208,6 +221,7 @@ public class HealthUI : MonoBehaviour
                 DialogueSpreadSheetPatternConstants.liamHealth = currentHealth;
             }
         }
+
     }
     void Open()
     {
@@ -276,7 +290,22 @@ public class HealthUI : MonoBehaviour
         if (realBarUI)
         {
             realBarUI.DOFillAmount(savedFill, 0.01f);
-            realBarUI.color = new Color(realBarUI.color.r, realBarUI.color.g, realBarUI.color.b, 1);
+            if (currentHealth >= 80)
+            {
+                relationshipIcon.sprite = heart;
+                realBarUI.color = orangeColorBarColor;
+            }
+            else if (currentHealth < 80 && currentHealth >= 15)
+            {
+                relationshipIcon.sprite = friend;
+                realBarUI.color = defaultRealBarColor;
+            }
+            else
+            {
+                relationshipIcon.sprite = enemy;
+                realBarUI.color = belowRealBarColor;
+            }
+           // realBarUI.color = new Color(realBarUI.color.r, realBarUI.color.g, realBarUI.color.b, 1);
         }
         //else
         //{
@@ -335,11 +364,18 @@ public class HealthUI : MonoBehaviour
             {
                 if (currentHealth >= 80)
                 {
+                    relationshipIcon.sprite = heart;
                     realBarUI.color = orangeColorBarColor;
+                }
+                else if (currentHealth < 80 && currentHealth >= 15)
+                {
+                    relationshipIcon.sprite = friend;
+                    realBarUI.color = defaultRealBarColor;
                 }
                 else
                 {
-                    realBarUI.color = defaultRealBarColor;
+                    relationshipIcon.sprite = enemy;
+                    realBarUI.color = belowRealBarColor;
                 }
             }
             yield return new WaitForSeconds(0.1f);
@@ -360,9 +396,13 @@ public class HealthUI : MonoBehaviour
                 {
                     realBarUI.color = orangeColorBarColor;
                 }
-                else
+                else if (currentHealth < 80 && currentHealth >= 15)
                 {
                     realBarUI.color = defaultRealBarColor;
+                }
+                else
+                {
+                    realBarUI.color = belowRealBarColor;
                 }
             }
 
@@ -449,9 +489,13 @@ public class HealthUI : MonoBehaviour
         {
             realBarUI.color = orangeColorBarColor;
         }
-        else
+        else if (currentHealth < 80 && currentHealth >= 15)
         {
             realBarUI.color = defaultRealBarColor;
+        }
+        else
+        {
+            realBarUI.color = belowRealBarColor;
         }
 
     }
