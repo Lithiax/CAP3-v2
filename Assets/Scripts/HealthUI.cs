@@ -213,7 +213,10 @@ public class HealthUI : MonoBehaviour
             }
         
         }
-      
+        else
+        {
+            Open();
+        }
     }
     void SaveHealth()
     {
