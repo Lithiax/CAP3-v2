@@ -84,6 +84,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     GameData gameData;
 
     public Action<string> OnRemoveEffect;
+    public Action<ChatUserSO> OnBlockedUser;
 
     float healthRef;
 
@@ -131,6 +132,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             newMatchPanel = chatManager.SpawnNewBlockedPanel(data);
 
             onlineIndicator.color = Color.red;
+            OnBlockedUser?.Invoke(data);
             panelRectTransform.SetAsLastSibling();
             chatManager.ReplyClicked(0);
             ChatData.ActiveDialogue = false;
@@ -660,6 +662,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         newMatchPanel = chatManager.SpawnNewBlockedPanel(ChatUserSO);
 
+        OnBlockedUser?.Invoke(data.UserSO);
         onlineIndicator.color = Color.red;
         panelRectTransform.SetAsLastSibling();
         chatManager.ReplyClicked(0);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 using System.Linq;
 
 public class ChatUserManager : MonoBehaviour, IDataPersistence
@@ -18,6 +19,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     [SerializeField] ChatManagerUI chatManager;
     [SerializeField] FindREventsManager eventsManager;
     [SerializeField] GameObject SkipButton;
+    [SerializeField] Image FadeImage;
 
     //To set a new user, just add it in the static script
     [HideInInspector] public List<ChatUser> SpawnedUsers = new List<ChatUser>();
@@ -27,6 +29,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     [HideInInspector] public bool DataLoaded = false;
 
     GameData gameData = null;
+    List<ChatUserSO> blockedUsers = new List<ChatUserSO>();
     private void Awake()
     {
         chatManager.InitializeTransforms();
@@ -78,12 +81,35 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         ChatUser UserComp = UserObj.GetComponent<ChatUser>();
         SpawnedUsers.Add(UserComp);
         UserComp.OnRemoveEffect += AddToEffectsRemoveLog;
+        UserComp.OnBlockedUser += CheckUserBlocked;
         UserComp.AllowLoadingData(gameData);
 
 
         IDs.Add(data.ID);
 
         UserComp.Init(data, eventsManager, chatManager, toggleGroup);
+    }
+    
+    void CheckUserBlocked(ChatUserSO user)
+    {
+        if (blockedUsers.Contains(user)) return;
+
+        blockedUsers.Add(user);
+
+        if (blockedUsers.Count == 4)
+        {
+            StartCoroutine(BlockedEnding());
+        }
+    }
+
+    IEnumerator BlockedEnding()
+    {
+        yield return new WaitForSeconds(5f);
+        FadeImage.DOFade(1, 1).OnComplete(() =>
+        {
+            //TODO: Ending
+            //LoadingUI.instance.InitializeLoadingScreen(scene);
+        });
     }
 
     public void AddToEffectsRemoveLog(string s)
@@ -115,6 +141,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         foreach (ChatUser user in SpawnedUsers)
         {
             user.OnRemoveEffect -= AddToEffectsRemoveLog;
+            user.OnBlockedUser -= CheckUserBlocked;
         }
     }
 
