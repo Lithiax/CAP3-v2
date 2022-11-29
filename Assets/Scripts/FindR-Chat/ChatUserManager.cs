@@ -104,11 +104,15 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
 
     IEnumerator BlockedEnding()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
         FadeImage.DOFade(1, 1).OnComplete(() =>
         {
-            //TODO: Ending
-            //LoadingUI.instance.InitializeLoadingScreen(scene);
+            FadeImage.DOFade(1, 1).OnComplete(() =>
+            {
+                StorylineManager.LoadVisualNovel("Ending", "Alone Ending");
+
+                LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
+            });
         });
     }
 
