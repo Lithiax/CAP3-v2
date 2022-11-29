@@ -323,12 +323,16 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         chatManager.RebuildAfterSpawning();
 
         //ADD MONTH AND WEEK CHECKER TOMORROW
-        //if (data.DateProgress == 2 && data.RGMeter >= 80)
-        //{
-        //    DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
-        //    SetDialogueContainer();
-        //    return;
-        //}
+        if (data.DateProgress == 2 && data.RGMeter >= 80)
+        {
+            if (StaticUserData.ProgressionData.CurrentMonth == 3 &&
+            StaticUserData.ProgressionData.CurrentWeek == 4)
+            {
+                //DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
+                SetDialogueContainer(out data.CurrentEffect);
+                return;
+            }
+        }
 
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
