@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.Audio;
+using UnityEngine.Video;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioSource clickSFXSource;
     [SerializeField] List<GameObject> panels;
     public AudioMixer audioMixer;
-
+    public VideoPlayer credits;
+    public GameObject creditframe;
+    public GameObject frame;
+    GameObject creditspanel;
     public void menuLoaded()
     {
         StartCoroutine(Co_AudioFadeIn());
@@ -123,6 +127,21 @@ public class MainMenuUI : MonoBehaviour
 
             camera.rect = rect;
         }
+    }
+    public void PlayCredits()
+    {
+
+        frame.SetActive(false);
+        creditframe.SetActive(true);
+        credits.Play();
+        StartCoroutine(Credi());
+    }
+
+    IEnumerator Credi()
+    {
+        yield return new WaitForSeconds(8f);
+        frame.SetActive(true);
+        creditframe.SetActive(false);
     }
     public void ClickSound()
     {

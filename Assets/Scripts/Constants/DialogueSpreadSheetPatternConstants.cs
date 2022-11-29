@@ -40,7 +40,7 @@ public class DialogueSpreadSheetPatternConstants
         if (p_effect == "<ending>")
         {
 
-            StorylineManager.GoBackMenu();
+            CharacterDialogueUI.creditsRoll.Invoke();//.GoBackMenu();
         }
         //else
         //{
