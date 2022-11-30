@@ -71,6 +71,14 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             SkipButton.SetActive(false);
         }
+
+        if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
+            StaticUserData.ProgressionData.CurrentWeek == 4)
+        {
+            //DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
+            CheckForEnding();
+            return;
+        }
     }
 
     void GenerateUser(ChatUserSO data)
@@ -90,6 +98,23 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         UserComp.Init(data, eventsManager, chatManager, toggleGroup);
     }
     
+    void CheckForEnding()
+    {
+        int count = 0;
+        foreach(ChatUser user in SpawnedUsers)
+        {
+            if (user.ChatData.CurrentTree == null)
+            {
+                count++;
+            }
+        }
+
+        if (count == SpawnedUsers.Count)
+        {
+            StartCoroutine(BlockedEnding());
+        }
+    }
+
     void CheckUserBlocked(ChatUserSO user)
     {
         if (blockedUsers.Contains(user)) return;

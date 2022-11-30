@@ -335,6 +335,12 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             return;
         }
 
+        if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
+            StaticUserData.ProgressionData.CurrentWeek == 4)
+        {
+            return;
+        }
+
         //Get appropriate dialogue tree
         if (ChatUserSO.dialogueBranches == null) return;
 
