@@ -133,7 +133,7 @@ public static void LoadVisualNovel(GameData p_gameData)
     public static void LoadVisualNovel(string folderField, string sheetField)
     {
         StorylineManager.CurrentSceneName = "VisualNovel";
-        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+    
         StorylineManager.cuesChoices.Clear();
  
         StorylineManager.currentSO_Dialogues = Resources.Load<SO_Dialogues>("Scriptable Objects/Dialogues/Visual Novel/" + folderField + "/" + sheetField);
@@ -267,7 +267,19 @@ public static void LoadVisualNovel(GameData p_gameData)
     }
     public void LoadData(GameData data)
     {
+        SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
+        if (mainCharacter)
+        {
+            if (mainCharacter.stageName != "YOU" || !string.IsNullOrEmpty(mainCharacter.stageName))
+            {
+                mainCharacter.stageName = data.mainCharacterName;
+            }
+            else
+            {
+                mainCharacter.stageName = "YOU";
+            }
 
+        }
     }
  
 
