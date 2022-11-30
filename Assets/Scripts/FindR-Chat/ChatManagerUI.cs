@@ -470,12 +470,13 @@ public class ChatManagerUI : MonoBehaviour
                 bData.buttonObj.SetActive(false);
             }
 
+            string textCheck = "";
             //#region set text
             for (int i = 0; i < Tree.CurrentNode.ConnectedNodesData.Count; i++)
             {
                 ChatCollectionSO collectionSO = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
                 replyButtonData[i].replyButtonText.text = collectionSO.PromptText;
-
+                textCheck = collectionSO.PromptText;
                 replyButtonData[i].buttonObj.SetActive(true);
                 if (String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text))
                 {
@@ -487,7 +488,6 @@ public class ChatManagerUI : MonoBehaviour
                 }
             }
 
-            string textCheck = "";
             for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
             {
                 replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
