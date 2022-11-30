@@ -14,7 +14,7 @@ public class ProgressionData
     public string CurrentDateScene;
     public ProgressionData(int month, int week)
     {
-        CurrentMonth = Mathf.Clamp(month, 1, 3);
+        CurrentMonth = Mathf.Clamp(month, 1, 2);
         CurrentWeek = Mathf.Clamp(week % 5, 1, 4);
 
         SetCurrentDateString();

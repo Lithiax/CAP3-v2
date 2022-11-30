@@ -325,7 +325,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         //ADD MONTH AND WEEK CHECKER TOMORROW
         if (data.DateProgress == 2 && data.RGMeter >= 80)
         {
-            if (StaticUserData.ProgressionData.CurrentMonth == 3 &&
+            if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
             StaticUserData.ProgressionData.CurrentWeek == 4)
             {
                 //DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
