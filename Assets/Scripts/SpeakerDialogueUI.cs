@@ -181,6 +181,10 @@ public class SpeakerDialogueUI : MonoBehaviour
 
     public IEnumerator Co_TypeWriterEffect(TMP_Text p_textUI, string p_fullText, string character)
     {
+        if (!string.IsNullOrEmpty(so))
+        {
+            AudioManager.instance.ForceStopAudio(so);
+        }
         CharacterDialogueUI.OnAddNewTransitionEvent?.Invoke();
         so = "";
 
@@ -200,7 +204,7 @@ public class SpeakerDialogueUI : MonoBehaviour
             {
                 so = character;
             }
-        else
+            else
             {
                 so = "Typewriting";
             }
