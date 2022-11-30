@@ -332,6 +332,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 SetDialogueContainer(out data.CurrentEffect);
                 return;
             }
+            return;
         }
 
         //Get appropriate dialogue tree
