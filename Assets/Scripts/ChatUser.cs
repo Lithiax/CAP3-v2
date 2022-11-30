@@ -30,7 +30,7 @@ public class ChatUserData
     {
         UserSO = userSO;
         name = userSO.profileName;
-        CurrentTree = userSO.dialogueTree;
+        CurrentTree = null;
         CurrentDialogueIndex = 0;
         DateProgress = 0;
         CurrentDialogueComplete = false;
