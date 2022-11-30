@@ -111,7 +111,7 @@ public class HealthUI : MonoBehaviour
     public Action OnSaveHealthEvent;
     public IsWithinHealthCondition OnIsWithinHealthConditionEvent;
 
-    [SerializeField] private GameObject frame;
+    [SerializeField] public GameObject frame;
     [SerializeField] private Image realBarUI; //colored
     [SerializeField] private Image ghostBarUI; //white
 
@@ -243,11 +243,13 @@ public class HealthUI : MonoBehaviour
     }
     public void Open()
     {
+        Debug.Log("OPEN HMM");
         frame.SetActive(false);
     }
 
     public void Close()
     {
+        Debug.Log("CLOSE RAA");
         frame.SetActive(true);
     }
     void ModifyHealth(int p_modifier)

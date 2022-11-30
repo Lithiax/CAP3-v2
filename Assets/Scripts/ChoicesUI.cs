@@ -152,7 +152,11 @@ public class ChoicesUI : MonoBehaviour
         ResetChoiceManager();
 
         //Set Choice Damage
-        healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
+        if (DialogueSpreadSheetPatternConstants.cueCharacter)
+        {
+            healthUI.OnModifyHealthEvent?.Invoke(p_currentChoiceData.healthModifier);
+        }
+    
         if (p_currentChoiceData.healthModifier > 0)
         {
             AudioManager.instance.AdditivePlayAudio("right");

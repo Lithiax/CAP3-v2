@@ -941,10 +941,12 @@ public class CharacterDialogueUI : MonoBehaviour
                         else
                         {
                             //Set Choice Damage
-                            if (healthUI.gameObject.activeSelf)
+                            if (healthUI.frame.activeSelf)
                             {
-                                healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
-
+                                if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
+                                {
+                                    healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                                }
                             }
       
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier > 0)
