@@ -109,7 +109,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             FadeImage.DOFade(1, 1).OnComplete(() =>
             {
-                StorylineManager.LoadVisualNovel("Ending", "Alone Ending");
+                StorylineManager.LoadVisualNovel("endings", "alone ending");
 
                 LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
             });
@@ -154,6 +154,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         this.gameData = data;
         UserDataTesting.Clear();
         UserDict.Clear();
+        StaticUserData.ChatUserData.Clear();
 
         DialogueSpreadSheetPatternConstants.effects = data.GameEffects.ToList();
 

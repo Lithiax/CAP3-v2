@@ -475,23 +475,36 @@ public class ChatManagerUI : MonoBehaviour
             {
                 ChatCollectionSO collectionSO = Tree.CurrentNode.ConnectedNodesData[i].chatCollection as ChatCollectionSO;
                 replyButtonData[i].replyButtonText.text = collectionSO.PromptText;
-                replyButtonData[i].buttonObj.SetActive(true);
 
+                replyButtonData[i].buttonObj.SetActive(true);
                 if (String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text))
                 {
                     Debug.Log("Empty response text");
 
                     HideResponse();
                     ResponseClicked(parent, Tree, Tree.CurrentNode.ConnectedNodesData[0]);
-                    break;
+                    return;
                 }
             }
 
+            string textCheck = "";
             for (int i = 0; i < ChatCollection.ChatEvents.Count; i++)
             {
                 replyButtonData[i].replyButtonText.text += ChatCollection.ChatEvents[i].GetResponse();
-                replyButtonData[i].buttonObj.SetActive(!String.IsNullOrEmpty(replyButtonData[i].replyButtonText.text));
+
+                textCheck += ChatCollection.ChatEvents[i].GetResponse();
+                replyButtonData[i].buttonObj.SetActive(!String.IsNullOrEmpty(ChatCollection.ChatEvents[i].GetResponse()));
             }
+
+            if (String.IsNullOrEmpty(textCheck) && ChatCollection.ChatEvents.Count > 0)
+            {
+                Debug.Log("Empty event text");
+
+                HideResponse();
+                return;
+            }
+
+            Debug.Log("TEXT CHECK " + textCheck);
             //#endregion
 
             //Set button on click functions
