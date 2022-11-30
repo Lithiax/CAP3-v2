@@ -16,7 +16,7 @@ public class SODialogueLoader : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        if (Input.GetKeyDown(KeyCode.BackQuote) || Input.GetKeyDown(KeyCode.Backslash))
         {
             Debug.Log("CHEAT PRESSED");
             frame.SetActive(!frame.activeSelf);

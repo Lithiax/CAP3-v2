@@ -65,7 +65,11 @@ public class ActionUIs : MonoBehaviour
     void startchoose()
     {
         canDoWork = false;
-        ClosedUIButton();
+        if (DialogueSpreadSheetPatternConstants.cueCharacter!=null)
+        {
+            ClosedUIButton();
+        }
+    
     }
     CueUIPresetData GetCueUIPresetData(CueType p_cueType)
     {
@@ -202,6 +206,7 @@ public class ActionUIs : MonoBehaviour
         canExit = true;
         ActionUIs.isShowing = false;
         StopAllCoroutines();
+
         CharacterDialogueUI.OnDeinspectingEvent?.Invoke();
         currentCueUI.gameObject.SetActive(false);
         currentCueUI.ResetChoiceManager();
