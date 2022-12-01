@@ -117,7 +117,7 @@ public class CharacterDialogueUI : MonoBehaviour
             }
  
         }
-            framez.SetActive(false);
+        //    framez.SetActive(false);
         creditspanel.SetActive(true);
         TransitionUI.onFadeTransition?.Invoke(0, false, false);
         credits.Play();
