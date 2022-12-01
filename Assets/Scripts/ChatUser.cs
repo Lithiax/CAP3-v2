@@ -102,7 +102,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     public void ModifyHealth(int health)
     {
         healthUI.OnModifyHealthEvent?.Invoke(health);
-
+        ChatData.RGMeter = healthUI.currentHealth;
         SaveRGData(ChatData);
     }
 
