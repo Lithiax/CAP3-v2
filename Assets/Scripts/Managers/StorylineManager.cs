@@ -269,6 +269,10 @@ public static void LoadVisualNovel(GameData p_gameData)
     {
         StaticUserData.ChatUserData.Clear();
         StaticUserData.ChatUserData = data.ChatUserData;
+        DialogueSpreadSheetPatternConstants.penelopeHealth = data.penelopeHealth;
+        DialogueSpreadSheetPatternConstants.bradHealth = data.bradHealth;
+        DialogueSpreadSheetPatternConstants.liamHealth = data.liamHealth;
+        DialogueSpreadSheetPatternConstants.maeveHealth = data.maeveHealth;
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         if (mainCharacter)
         {
