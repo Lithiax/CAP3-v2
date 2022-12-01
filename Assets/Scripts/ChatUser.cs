@@ -171,6 +171,20 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
             if (DialogueTree.DialogueTree == null)
                 LoadChatData(ChatData);
+            else
+            {
+                DialogueContainer cont = DialogueTree.DialogueTree;
+                foreach (DialogueNodeData d in cont.DialogueNodeData)
+                {
+                    ChatCollectionSO chatcol = (ChatCollectionSO)d.chatCollection;
+                    ChatEvent ev = chatcol.ChatEvents.FirstOrDefault(x => x.EventType == ChatEventTypes.AddDateProgressEvent);
+                    if (ev != null)
+                    {
+                        dateProgressUI.AddHearts(ref ChatData.DateProgress, ev.EventData);
+                        break;
+                    }
+                }
+            }
 
             LoadRGDataFromStatic(ChatData);
 
@@ -322,17 +336,36 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         chatManager.RebuildAfterSpawning();
 
+        //The worst code I have ever written in my life, check for date progress event so it executes on time.
+        DialogueContainer cont = GetDialogueContainer();
 
-        if (data.CanRGText && data.RGMeter < 80 && data.DateProgress == 2)
+        if (cont && data.DateProgress < 2)
+        {
+            foreach (DialogueNodeData d in cont.DialogueNodeData)
+            {
+                ChatCollectionSO chatcol = (ChatCollectionSO)d.chatCollection;
+                ChatEvent ev = chatcol.ChatEvents.FirstOrDefault(x => x.EventType == ChatEventTypes.AddDateProgressEvent);
+                if (ev != null)
+                {
+                    dateProgressUI.AddHearts(ref ChatData.DateProgress, ev.EventData);
+                    break;
+                }
+            }
+        }
+
+        //End
+
+        if (data.CanRGText && data.RGMeter < 80 && data.DateProgress >= 2)
         {
             OnChatComplete();
             SetRGScript(data);
             data.StayInTree = false;
             return;
         }
+   
 
         //ADD MONTH AND WEEK CHECKER TOMORROW
-        if (data.DateProgress == 2)
+        if (data.DateProgress >= 2)
         {
             if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
             StaticUserData.ProgressionData.CurrentWeek == 4 && data.RGMeter >= 80)
@@ -429,6 +462,23 @@ public class ChatUser : MonoBehaviour, IDataPersistence
         DialogueTree.SetDialogueTree(data.UserSO.RGScripts[data.CurrentRGIndex]);
         ChatData.CurrentTree = DialogueTree.DialogueTree;
         data.CurrentRGIndex++;
+    }
+
+    DialogueContainer GetDialogueContainer()
+    {
+        DialogueContainer nextContainer = null;
+        foreach (string s in DialogueSpreadSheetPatternConstants.effects)
+        {
+            DialogueContainer d = ChatUserSO.dialogueBranches.GetBranch(s);
+            if (d)
+            {
+                nextContainer = d;
+
+                break;
+            }
+        }
+
+        return nextContainer;
     }
 
     DialogueContainer SetDialogueContainer(out string effect)

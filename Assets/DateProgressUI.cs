@@ -25,6 +25,23 @@ public class DateProgressUI : MonoBehaviour
         if (dateProgress == 2) return;
 
         dateProgress = num;
-        hearts[dateProgress-1].DOScale(1.1f, 0.5f);
+        //hearts[dateProgress-1].DOScale(1.1f, 0.5f);
+        StartCoroutine(HeartAnim(dateProgress));
+    }
+
+    public void IncHearts(ref int dateProgress)
+    {
+        if (dateProgress == 2) return;
+
+        dateProgress++;
+
+        //hearts[dateProgress - 1].DOScale(1.1f, 0.5f);
+        StartCoroutine(HeartAnim(dateProgress));
+    }
+
+    IEnumerator HeartAnim(int dateProgress)
+    {
+        yield return new WaitForSeconds(1f);
+        hearts[dateProgress - 1].DOScale(1.1f, 0.5f);
     }
 }

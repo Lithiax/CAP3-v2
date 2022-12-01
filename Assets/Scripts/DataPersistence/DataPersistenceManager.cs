@@ -55,6 +55,11 @@ public class DataPersistenceManager : MonoBehaviour
             StaticUserData.ProgressionData = gameData.ProgressionData;
         }
 
+        if (gameData.EffectsUsed != null)
+        {
+            StaticUserData.UsedEffects = gameData.EffectsUsed;
+        }
+
         if (gameData.CurrentSceneName == "VisualNovel")
         {
             StorylineManager.LoadVisualNovel(gameData);
@@ -91,6 +96,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         gameData.GameEffects = DialogueSpreadSheetPatternConstants.effects.ToArray();
         gameData.ProgressionData = StaticUserData.ProgressionData;
+        gameData.EffectsUsed = StaticUserData.UsedEffects;
 
         foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjets)
         {

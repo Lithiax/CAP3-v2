@@ -267,6 +267,8 @@ public static void LoadVisualNovel(GameData p_gameData)
     }
     public void LoadData(GameData data)
     {
+        StaticUserData.ChatUserData.Clear();
+        StaticUserData.ChatUserData = data.ChatUserData;
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         if (mainCharacter)
         {
