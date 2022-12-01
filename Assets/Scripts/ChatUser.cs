@@ -322,17 +322,27 @@ public class ChatUser : MonoBehaviour, IDataPersistence
 
         chatManager.RebuildAfterSpawning();
 
+
+        if (data.CanRGText && data.RGMeter < 80 && data.DateProgress == 2)
+        {
+            OnChatComplete();
+            SetRGScript(data);
+            data.StayInTree = false;
+            return;
+        }
+
         //ADD MONTH AND WEEK CHECKER TOMORROW
-        if (data.DateProgress == 2 && data.RGMeter >= 80)
+        if (data.DateProgress == 2)
         {
             if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
-            StaticUserData.ProgressionData.CurrentWeek == 4)
+            StaticUserData.ProgressionData.CurrentWeek == 4 && data.RGMeter >= 80)
             {
                 //DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
                 SetDialogueContainer(out data.CurrentEffect);
                 return;
             }
-
+                Debug.Log("load ending");
+            DialogueTree.EmptyTree();
             return;
         }
 
@@ -383,13 +393,7 @@ public class ChatUser : MonoBehaviour, IDataPersistence
          
 
         //if (StaticUserData.ProgressionData.CurrentWeek)
-        if (data.CanRGText && data.RGMeter < 80 && data.DateProgress == 2)
-        {
-            OnChatComplete();
-            SetRGScript(data);
-            data.StayInTree = false;
-            return;
-        }
+
 
         return;
         //Go back to dating if RG meter is good, NOT NEEDED
