@@ -56,7 +56,7 @@ public class FindREventsManager : MonoBehaviour
                     user.OnChatComplete();
                     user.DontStayOnTree();
                     //because it loads the after date next.
-                    user.SetCanRGText(false);
+                    user.SetCanRGText(true);
                 });
                 break;
 

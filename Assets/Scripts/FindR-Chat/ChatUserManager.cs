@@ -77,6 +77,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         {
             //DialogueSpreadSheetPatternConstants.AddEffect("<ending" + data.UserSO.profileName + ">");
             CheckForEnding();
+            SkipButton.SetActive(false);
             return;
         }
     }

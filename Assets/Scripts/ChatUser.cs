@@ -627,9 +627,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
     {
         ChatData = new ChatUserData(userData);
 
-        //Set to intial tree if it has one.
-
-
         //Spawn in chats that were already done before.
 
         if (data.ChatUserData.Any(x => x.name == ChatUserSO.profileName))
