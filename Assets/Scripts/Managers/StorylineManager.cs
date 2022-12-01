@@ -178,8 +178,8 @@ public static void LoadVisualNovel(GameData p_gameData)
             StorylineManager.currentZeroSO_Dialogues = null;
         }
 
+   
 
-    
         StorylineManager.loggedWords.Clear();
         StorylineManager.currentDialogueIndex = 0;
         sideDialogue = false;
@@ -267,6 +267,10 @@ public static void LoadVisualNovel(GameData p_gameData)
     }
     public void LoadData(GameData data)
     {
+        DialogueSpreadSheetPatternConstants.penelopeHealth = data.penelopeHealth;
+        DialogueSpreadSheetPatternConstants.bradHealth = data.bradHealth;
+        DialogueSpreadSheetPatternConstants.liamHealth = data.liamHealth;
+        DialogueSpreadSheetPatternConstants.maeveHealth = data.maeveHealth;
         SO_Character mainCharacter = Resources.Load<SO_Character>("Scriptable Objects/Characters/You");
         if (mainCharacter)
         {
