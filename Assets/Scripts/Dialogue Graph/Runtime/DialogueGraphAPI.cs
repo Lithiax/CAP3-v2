@@ -26,6 +26,11 @@ public class DialogueGraphAPI : MonoBehaviour
         return node.BaseNodeData.NodeGUID == DialogueTree.NodeLinks.First(x => x.PortName == "Next").TargetNodeGuid; 
     }
 
+    public void EmptyTree()
+    {
+        DialogueTree = null;
+    }
+
     public void SetDialogueTree(DialogueContainer tree)
     {
         if (tree == null) return;

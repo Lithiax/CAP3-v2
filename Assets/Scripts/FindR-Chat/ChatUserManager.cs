@@ -104,7 +104,7 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
         int count = 0;
         foreach(ChatUser user in SpawnedUsers)
         {
-            if (user.ChatData.CurrentTree == null)
+            if (user.DialogueTree.DialogueTree == null)
             {
                 count++;
             }
@@ -131,14 +131,12 @@ public class ChatUserManager : MonoBehaviour, IDataPersistence
     IEnumerator BlockedEnding()
     {
         yield return new WaitForSeconds(4f);
+
         FadeImage.DOFade(1, 1).OnComplete(() =>
         {
-            FadeImage.DOFade(1, 1).OnComplete(() =>
-            {
-                StorylineManager.LoadVisualNovel("endings", "alone ending");
+            StorylineManager.LoadVisualNovel("endings", "alone ending");
 
-                LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
-            });
+            LoadingUI.instance.InitializeLoadingScreen("VisualNovel");
         });
     }
 

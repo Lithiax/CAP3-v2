@@ -332,12 +332,14 @@ public class ChatUser : MonoBehaviour, IDataPersistence
                 SetDialogueContainer(out data.CurrentEffect);
                 return;
             }
+
             return;
         }
 
         if (StaticUserData.ProgressionData.CurrentMonth == 2 &&
             StaticUserData.ProgressionData.CurrentWeek == 4)
         {
+            DialogueTree.EmptyTree();
             return;
         }
 
@@ -650,7 +652,6 @@ public class ChatUser : MonoBehaviour, IDataPersistence
             if (ChatData.CurrentTree != null)
             {
                 DialogueTree.SetDialogueTree(ChatData.CurrentTree);
-
 
                 Divider = chatManager.SpawnDivider();
             }
