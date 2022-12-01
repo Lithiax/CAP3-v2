@@ -50,6 +50,7 @@ public class CharactersUI : MonoBehaviour
         onUpdateCharacterDatasEvent -= UpdateCharacterDatas;
         CharacterDialogueUI.OnIsSkipping -= Skip;
         recheck -= Recheck;
+        StopAllCoroutines();
     }
 
     void Skip()

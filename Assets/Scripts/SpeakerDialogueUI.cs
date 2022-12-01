@@ -71,6 +71,7 @@ public class SpeakerDialogueUI : MonoBehaviour
         CharacterDialogueUI.OnIsSkipping -= Skip;
         CharacterDialogueUI.OnInspectingEvent -= open;
         CharacterDialogueUI.OnDeinspectingEvent -= close;
+        StopAllCoroutines();
     }
 
   

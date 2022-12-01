@@ -175,6 +175,7 @@ public class HealthUI : MonoBehaviour
         OnIsWithinHealthConditionEvent -= IsWithinHealthCondition;
         CharacterDialogueUI.OnInspectingEvent -= Open;
         CharacterDialogueUI.OnDeinspectingEvent -= Close;
+        StopAllCoroutines();
     }
     void OnInitialize(string p_ownerName)
     {
