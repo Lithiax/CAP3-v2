@@ -117,7 +117,7 @@ public class CharacterDialogueUI : MonoBehaviour
             }
  
         }
-            framez.SetActive(false);
+        //framez.SetActive(false);
         creditspanel.SetActive(true);
         TransitionUI.onFadeTransition?.Invoke(0, false, false);
         credits.Play();
@@ -186,6 +186,7 @@ public class CharacterDialogueUI : MonoBehaviour
         OnFinishTransitionEvent -= FinishTransitionEvent;
         OnCheckIfSkippableEvent -= CheckIfReady;
         healthUI.OnHealthDeathEvent -= HealthDeath;
+        StopAllCoroutines();
 
     }
 
@@ -941,13 +942,17 @@ public class CharacterDialogueUI : MonoBehaviour
                         else
                         {
                             //Set Choice Damage
-                            if (healthUI.frame.activeSelf)
+                            if (healthUI != null)
                             {
-                                if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
+                                if (healthUI.frame.activeSelf)
                                 {
-                                    healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                                    if (DialogueSpreadSheetPatternConstants.cueCharacter != null)
+                                    {
+                                        healthUI.OnModifyHealthEvent?.Invoke(StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier);
+                                    }
                                 }
                             }
+                        
       
                             if (StorylineManager.currentSO_Dialogues.choiceDatas[0].healthModifier > 0)
                             {
